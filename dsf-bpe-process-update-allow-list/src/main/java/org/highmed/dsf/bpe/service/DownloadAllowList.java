@@ -10,7 +10,7 @@ import javax.ws.rs.WebApplicationException;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.ConstantsUpdateAllowlist;
+import org.highmed.dsf.bpe.variables.ConstantsUpdateAllowList;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.fhir.client.FhirWebserviceClient;
@@ -24,13 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.context.FhirContext;
 
-public class DownloadAllowlist extends AbstractServiceDelegate
+public class DownloadAllowList extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(DownloadAllowlist.class);
+	private static final Logger logger = LoggerFactory.getLogger(DownloadAllowList.class);
 
 	private final FhirContext context;
 
-	public DownloadAllowlist(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper, FhirContext context)
+	public DownloadAllowList(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper, FhirContext context)
 	{
 		super(clientProvider, taskHelper);
 		this.context = context;
@@ -90,26 +90,26 @@ public class DownloadAllowlist extends AbstractServiceDelegate
 	private IdType getBundleId(Task task)
 	{
 		List<Reference> bundleReferences = getTaskHelper()
-				.getInputParameterReferenceValues(task, ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST,
-						ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST_VALUE_ALLOWLIST)
+				.getInputParameterReferenceValues(task, ConstantsUpdateAllowList.CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST,
+						ConstantsUpdateAllowList.CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST)
 				.collect(Collectors.toList());
 
 		if (bundleReferences.size() != 1)
 		{
 			logger.error("Task input parameter {} contains unexpected number of Bundle IDs, expected 1, got {}",
-					ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST_VALUE_ALLOWLIST,
+					ConstantsUpdateAllowList.CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST,
 					bundleReferences.size());
 			throw new RuntimeException("Task input parameter "
-					+ ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST_VALUE_ALLOWLIST
+					+ ConstantsUpdateAllowList.CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST
 					+ " contains unexpected number of Bundle IDs, expected 1, got " + bundleReferences.size());
 		}
 		else if (!bundleReferences.get(0).hasReference()
 				|| !bundleReferences.get(0).getReference().contains("/Bundle/"))
 		{
 			logger.error("Task input parameter {} has no Bundle reference",
-					ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST_VALUE_ALLOWLIST);
+					ConstantsUpdateAllowList.CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST);
 			throw new RuntimeException("Task input parameter "
-					+ ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST_VALUE_ALLOWLIST
+					+ ConstantsUpdateAllowList.CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST
 					+ " has no Bundle reference");
 		}
 

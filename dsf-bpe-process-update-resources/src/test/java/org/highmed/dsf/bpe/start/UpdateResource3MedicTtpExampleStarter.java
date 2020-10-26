@@ -44,9 +44,9 @@ public class UpdateResource3MedicTtpExampleStarter
 				keyStorePassword, null, null, null, 0, 0, null, context, referenceCleaner);
 
 		Bundle searchResult = client.searchWithStrictHandling(Bundle.class, Map.of("identifier",
-				Collections.singletonList("http://highmed.org/fhir/CodeSystem/update-allowlist|highmed_allowlist")));
+				Collections.singletonList("http://highmed.org/fhir/CodeSystem/update-allow-list|highmed_allow_list")));
 		if (searchResult.getTotal() != 1 && searchResult.getEntryFirstRep().getResource() instanceof Bundle)
-			throw new IllegalStateException("Expected a single Allow-List Bundle");
+			throw new IllegalStateException("Expected a single allow list Bundle");
 		Bundle allowList = (Bundle) searchResult.getEntryFirstRep().getResource();
 
 		System.out.println(context.newXmlParser().encodeResourceToString(allowList));

@@ -23,7 +23,7 @@ import ca.uhn.fhir.context.FhirContext;
 import de.rwh.utils.crypto.CertificateHelper;
 import de.rwh.utils.crypto.io.CertificateReader;
 
-public class UpdateAllowlist3MedicTtpExampleStarter
+public class UpdateAllowList3MedicTtpExampleStarter
 {
 	public static void main(String[] args)
 			throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException
@@ -40,8 +40,8 @@ public class UpdateAllowlist3MedicTtpExampleStarter
 				keyStorePassword, null, null, null, 0, 0, null, context, referenceCleaner);
 
 		Task task = new Task();
-		task.getMeta().addProfile("http://highmed.org/fhir/StructureDefinition/highmed-task-update-allowlist");
-		task.setInstantiatesUri("http://highmed.org/bpe/Process/updateAllowlist/0.3.0");
+		task.getMeta().addProfile("http://highmed.org/fhir/StructureDefinition/highmed-task-update-allow-list");
+		task.setInstantiatesUri("http://highmed.org/bpe/Process/updateAllowList/0.3.0");
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
@@ -50,7 +50,7 @@ public class UpdateAllowlist3MedicTtpExampleStarter
 		task.getRestriction().addRecipient().setType("Organization").getIdentifier()
 				.setSystem("http://highmed.org/fhir/NamingSystem/organization-identifier").setValue("Test_TTP");
 
-		task.addInput().setValue(new StringType("updateAllowlistMessage")).getType().addCoding()
+		task.addInput().setValue(new StringType("updateAllowListMessage")).getType().addCoding()
 				.setSystem("http://highmed.org/fhir/CodeSystem/bpmn-message").setCode("message-name");
 
 		client.withMinimalReturn().create(task);
