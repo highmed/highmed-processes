@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.ConstantsUpdateWhitelist;
+import org.highmed.dsf.bpe.variables.ConstantsUpdateAllowlist;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -34,13 +34,13 @@ import org.springframework.beans.factory.InitializingBean;
 
 import ca.uhn.fhir.context.FhirContext;
 
-public class UpdateWhitelist extends AbstractServiceDelegate implements InitializingBean
+public class UpdateAllowlist extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(UpdateWhitelist.class);
+	private static final Logger logger = LoggerFactory.getLogger(UpdateAllowlist.class);
 
 	private final OrganizationProvider organizationProvider;
 
-	public UpdateWhitelist(OrganizationProvider organizationProvider, FhirWebserviceClientProvider clientProvider,
+	public UpdateAllowlist(OrganizationProvider organizationProvider, FhirWebserviceClientProvider clientProvider,
 			TaskHelper taskHelper)
 	{
 		super(clientProvider, taskHelper);
@@ -69,27 +69,27 @@ public class UpdateWhitelist extends AbstractServiceDelegate implements Initiali
 		Bundle transaction = new Bundle().setType(BundleType.TRANSACTION);
 		transaction.getMeta().addTag().setSystem("http://highmed.org/fhir/CodeSystem/authorization-role")
 				.setCode("REMOTE");
-		transaction.getIdentifier().setSystem(ConstantsUpdateWhitelist.CODESYSTEM_HIGHMED_UPDATE_WHITELIST)
-				.setValue(ConstantsUpdateWhitelist.CODESYSTEM_HIGHMED_UPDATE_WHITELIST_VALUE_WHITE_LIST);
+		transaction.getIdentifier().setSystem(ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST)
+				.setValue(ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST_VALUE_ALLOWLIST);
 		searchSet.getEntry().stream()
 				.filter(e -> e.hasSearch() && SearchEntryMode.MATCH.equals(e.getSearch().getMode()) && e.hasResource()
 						&& e.getResource() instanceof Organization).map(e -> (Organization) e.getResource())
-				.forEach(addWhiteListEntry(transaction, searchSet));
+				.forEach(addAllowListEntry(transaction, searchSet));
 
-		logger.debug("Uploading new white-list transaction bundle: {}",
+		logger.debug("Uploading new allowlist transaction bundle: {}",
 				FhirContext.forR4().newJsonParser().encodeResourceToString(transaction));
 
 		IdType result = client.withMinimalReturn().updateConditionaly(transaction, Map.of("identifier", Collections
-				.singletonList(ConstantsUpdateWhitelist.CODESYSTEM_HIGHMED_UPDATE_WHITELIST + "|"
-						+ ConstantsUpdateWhitelist.CODESYSTEM_HIGHMED_UPDATE_WHITELIST_VALUE_WHITE_LIST)));
+				.singletonList(ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST + "|"
+						+ ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST_VALUE_ALLOWLIST)));
 
 		Task task = (Task) execution.getVariable(ConstantsBase.VARIABLE_LEADING_TASK);
 		task.addOutput().setValue(new Reference(new IdType("Bundle", result.getIdPart(), result.getVersionIdPart())))
-				.getType().addCoding().setSystem(ConstantsUpdateWhitelist.CODESYSTEM_HIGHMED_UPDATE_WHITELIST)
-				.setCode(ConstantsUpdateWhitelist.CODESYSTEM_HIGHMED_UPDATE_WHITELIST_VALUE_WHITE_LIST);
+				.getType().addCoding().setSystem(ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST)
+				.setCode(ConstantsUpdateAllowlist.CODESYSTEM_HIGHMED_UPDATE_ALLOWLIST_VALUE_ALLOWLIST);
 	}
 
-	private Consumer<? super Organization> addWhiteListEntry(Bundle transaction, Bundle searchSet)
+	private Consumer<? super Organization> addAllowListEntry(Bundle transaction, Bundle searchSet)
 	{
 		return organization -> {
 			Identifier identifier = getDefaultIdentifier(organization).get();
@@ -105,12 +105,12 @@ public class UpdateWhitelist extends AbstractServiceDelegate implements Initiali
 			organizationEntry.setResource(organization);
 
 			organization.setEndpoint(organization.getEndpoint().stream()
-					.map(addWhiteListEntryReturnReference(transaction, organizationId, searchSet))
+					.map(addAllowListEntryReturnReference(transaction, organizationId, searchSet))
 					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList()));
 		};
 	}
 
-	private Function<Reference, Optional<Reference>> addWhiteListEntryReturnReference(Bundle transaction,
+	private Function<Reference, Optional<Reference>> addAllowListEntryReturnReference(Bundle transaction,
 			String organizationId, Bundle searchSet)
 	{
 		return endpointRef -> getEndpoint(endpointRef, searchSet).map(endpoint -> {
