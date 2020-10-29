@@ -1,8 +1,9 @@
 package org.highmed.dsf.bpe.spring.config;
 
 import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.highmed.dsf.bpe.plugin.UpdateWhitelistPlugin;
-import org.highmed.dsf.bpe.service.UpdateWhitelist;
+import org.highmed.dsf.bpe.plugin.UpdateAllowListPlugin;
+import org.highmed.dsf.bpe.service.DownloadAllowList;
+import org.highmed.dsf.bpe.service.UpdateAllowList;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import ca.uhn.fhir.context.FhirContext;
+
 @Configuration
-public class UpdateWhitelistConfig
+public class UpdateAllowListConfig
 {
 	@Autowired
 	private FhirWebserviceClientProvider clientProvider;
@@ -22,15 +25,24 @@ public class UpdateWhitelistConfig
 	@Autowired
 	private TaskHelper taskHelper;
 
+	@Autowired
+	private FhirContext fhirContext;
+
 	@Bean
-	public ProcessEnginePlugin updateWhiteListPlugin()
+	public ProcessEnginePlugin updateAllowListPlugin()
 	{
-		return new UpdateWhitelistPlugin();
+		return new UpdateAllowListPlugin();
 	}
 
 	@Bean
-	public UpdateWhitelist updateWhiteList()
+	public UpdateAllowList updateAllowList()
 	{
-		return new UpdateWhitelist(organizationProvider, clientProvider, taskHelper);
+		return new UpdateAllowList(organizationProvider, clientProvider, taskHelper);
+	}
+
+	@Bean
+	public DownloadAllowList downloadAllowList()
+	{
+		return new DownloadAllowList(clientProvider, taskHelper, fhirContext);
 	}
 }
