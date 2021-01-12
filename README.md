@@ -1,5 +1,7 @@
 # HiGHmed Processes 
 
+![Java CI Build with Maven](https://github.com/highmed/highmed-processes/workflows/Java%20CI%20Build%20with%20Maven/badge.svg)
+
 In this repository you will find the processes of the HiGHmed consortia, that can be deployed on the [HiGHmed DSF](https://github.com/highmed/highmed-dsf).
 
 ## Development
