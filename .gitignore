@@ -1,0 +1,10 @@
+###
+# dsf processes common ignores
+###
+**/.classpath
+**/.project
+**/.idea/
+**/.settings/
+**/target/
+
+**/*.iml
