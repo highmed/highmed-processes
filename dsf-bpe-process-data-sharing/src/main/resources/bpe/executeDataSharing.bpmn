@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.1">
+  <bpmn:process id="executeDataSharing" isExecutable="true" camunda:versionTag="0.4.0">
+    <bpmn:serviceTask id="checkResults" name="check results" camunda:class="org.highmed.dsf.bpe.service.CheckSingleMedicResults">
+      <bpmn:incoming>SequenceFlow_0q803rh</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_04ouilq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="checkDataSharingRequest" name="check data sharing request" camunda:class="org.highmed.dsf.bpe.service.CheckDataSharingResources">
+      <bpmn:incoming>SequenceFlow_1etju4m</bpmn:incoming>
+      <bpmn:outgoing>Flow_1kp6eaq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="StartEvent" name="start">
+      <bpmn:outgoing>SequenceFlow_14cn0vs</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0sjtzj6" messageRef="Message_1yz2a31" />
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1rmqv20" sourceRef="executeQueries" targetRef="provideLocalPseudonyms" />
+    <bpmn:sequenceFlow id="SequenceFlow_14cn0vs" sourceRef="StartEvent" targetRef="downloadDataSharingResources" />
+    <bpmn:sequenceFlow id="SequenceFlow_1etju4m" sourceRef="downloadDataSharingResources" targetRef="checkDataSharingRequest" />
+    <bpmn:serviceTask id="downloadDataSharingResources" name="download data sharing resources" camunda:class="org.highmed.dsf.bpe.service.DownloadDataSharingResources">
+      <bpmn:incoming>SequenceFlow_14cn0vs</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1etju4m</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent" name="send result to TTP">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="messageName">resultSingleMedicDataSharingMessage</camunda:inputParameter>
+          <camunda:inputParameter name="versionTag">0.4.0</camunda:inputParameter>
+          <camunda:inputParameter name="processDefinitionKey">computeDataSharing</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-data-sharing</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0ascyjc</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_13swtie" messageRef="Message_1dr71re" camunda:class="org.highmed.dsf.bpe.message.SendSingleMedicResults" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_04ouilq" sourceRef="checkResults" targetRef="selectResponseTargetTtp" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0bq7zdz">
+      <bpmn:incoming>Flow_0fabwum</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_05r9whd</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0isxkuy</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_05r9whd" name="else" sourceRef="ExclusiveGateway_0bq7zdz" targetRef="ExclusiveGateway_0lecmy5">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!needsConsentCheck}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0isxkuy" name="needs consent check" sourceRef="ExclusiveGateway_0bq7zdz" targetRef="filterByConsent">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsConsentCheck}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="filterByConsent" name="filter by consent" camunda:class="org.highmed.dsf.bpe.service.FilterQueryResultsByConsent">
+      <bpmn:incoming>SequenceFlow_0isxkuy</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0kzp6tl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0lecmy5">
+      <bpmn:incoming>SequenceFlow_05r9whd</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0kzp6tl</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1b4h5qz</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1b4h5qz" sourceRef="ExclusiveGateway_0lecmy5" targetRef="ExclusiveGateway_0sff9xb" />
+    <bpmn:sequenceFlow id="SequenceFlow_0kzp6tl" sourceRef="filterByConsent" targetRef="ExclusiveGateway_0lecmy5" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0sff9xb">
+      <bpmn:incoming>SequenceFlow_1b4h5qz</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1futlo2</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_17otl7p</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1futlo2" name="needs record linkage" sourceRef="ExclusiveGateway_0sff9xb" targetRef="generateBloomFilters">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsRecordLinkage}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="generateBloomFilters" name="generate bloom filters" camunda:class="org.highmed.dsf.bpe.service.GenerateBloomFilters">
+      <bpmn:incoming>SequenceFlow_1futlo2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1ug2kru</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_002t87f">
+      <bpmn:incoming>SequenceFlow_1ug2kru</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_17otl7p</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0q803rh</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0q803rh" sourceRef="ExclusiveGateway_002t87f" targetRef="checkResults" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ug2kru" sourceRef="generateBloomFilters" targetRef="ExclusiveGateway_002t87f" />
+    <bpmn:sequenceFlow id="SequenceFlow_0ascyjc" sourceRef="selectResponseTargetTtp" targetRef="EndEvent" />
+    <bpmn:serviceTask id="selectResponseTargetTtp" name="select response target TTP" camunda:class="org.highmed.dsf.bpe.service.SelectResponseTargetTtp">
+      <bpmn:incoming>SequenceFlow_04ouilq</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0ascyjc</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="executeQueries" name="execute queries" camunda:class="org.highmed.dsf.bpe.service.ExecuteQueries">
+      <bpmn:incoming>Flow_0qsitvp</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1rmqv20</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1kp6eaq" sourceRef="checkDataSharingRequest" targetRef="addIdSelectionIfMissing" />
+    <bpmn:sequenceFlow id="SequenceFlow_17otl7p" name="else" sourceRef="ExclusiveGateway_0sff9xb" targetRef="ExclusiveGateway_002t87f">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!needsRecordLinkage}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0qsitvp" sourceRef="addIdSelectionIfMissing" targetRef="executeQueries" />
+    <bpmn:serviceTask id="addIdSelectionIfMissing" name="Add id selection if missing" camunda:class="org.highmed.dsf.bpe.service.ModifyQueries">
+      <bpmn:incoming>Flow_1kp6eaq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qsitvp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0fabwum" sourceRef="EncryptMdat" targetRef="ExclusiveGateway_0bq7zdz" />
+    <bpmn:serviceTask id="EncryptMdat" name="encrypt MDAT" camunda:class="org.highmed.dsf.bpe.service.EncryptMdat">
+      <bpmn:incoming>Flow_0bkkg7n</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fabwum</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0bkkg7n" sourceRef="provideLocalPseudonyms" targetRef="EncryptMdat" />
+    <bpmn:serviceTask id="provideLocalPseudonyms" name="provide local pseudonyms" camunda:class="org.highmed.dsf.bpe.service.ProvideLocalPseudonyms">
+      <bpmn:incoming>SequenceFlow_1rmqv20</bpmn:incoming>
+      <bpmn:outgoing>Flow_0bkkg7n</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:textAnnotation id="TextAnnotation_0euut3n">
+      <bpmn:text>uac check, study definiton validity, type of cohort, ethics commitee vote, included medics, user authentication, rate limit, etc.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1ncewqu" sourceRef="checkDataSharingRequest" targetRef="TextAnnotation_0euut3n" />
+  </bpmn:process>
+  <bpmn:message id="Message_1yz2a31" name="executeDataSharingMessage" />
+  <bpmn:message id="Message_1dr71re" name="resultSingleMedicDataSharingMessage" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="executeDataSharing">
+      <bpmndi:BPMNEdge id="Flow_0bkkg7n_di" bpmnElement="Flow_0bkkg7n">
+        <di:waypoint x="1030" y="212" />
+        <di:waypoint x="1100" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fabwum_di" bpmnElement="Flow_0fabwum">
+        <di:waypoint x="1200" y="212" />
+        <di:waypoint x="1265" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qsitvp_di" bpmnElement="Flow_0qsitvp">
+        <di:waypoint x="690" y="212" />
+        <di:waypoint x="760" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_17otl7p_di" bpmnElement="SequenceFlow_17otl7p">
+        <di:waypoint x="1575" y="212" />
+        <di:waypoint x="1678" y="212" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1577" y="194" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kp6eaq_di" bpmnElement="Flow_1kp6eaq">
+        <di:waypoint x="520" y="212" />
+        <di:waypoint x="590" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ascyjc_di" bpmnElement="SequenceFlow_0ascyjc">
+        <di:waypoint x="2090" y="212" />
+        <di:waypoint x="2162" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ug2kru_di" bpmnElement="SequenceFlow_1ug2kru">
+        <di:waypoint x="1703" y="315" />
+        <di:waypoint x="1703" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0q803rh_di" bpmnElement="SequenceFlow_0q803rh">
+        <di:waypoint x="1728" y="212" />
+        <di:waypoint x="1810" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1futlo2_di" bpmnElement="SequenceFlow_1futlo2">
+        <di:waypoint x="1550" y="237" />
+        <di:waypoint x="1550" y="355" />
+        <di:waypoint x="1653" y="355" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1557" y="320" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0kzp6tl_di" bpmnElement="SequenceFlow_0kzp6tl">
+        <di:waypoint x="1450" y="315" />
+        <di:waypoint x="1450" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1b4h5qz_di" bpmnElement="SequenceFlow_1b4h5qz">
+        <di:waypoint x="1475" y="212" />
+        <di:waypoint x="1525" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0isxkuy_di" bpmnElement="SequenceFlow_0isxkuy">
+        <di:waypoint x="1290" y="237" />
+        <di:waypoint x="1290" y="355" />
+        <di:waypoint x="1400" y="355" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1297" y="323" width="72" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_05r9whd_di" bpmnElement="SequenceFlow_05r9whd">
+        <di:waypoint x="1315" y="212" />
+        <di:waypoint x="1425" y="212" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1321" y="195" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_04ouilq_di" bpmnElement="SequenceFlow_04ouilq">
+        <di:waypoint x="1910" y="212" />
+        <di:waypoint x="1990" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1etju4m_di" bpmnElement="SequenceFlow_1etju4m">
+        <di:waypoint x="350" y="212" />
+        <di:waypoint x="420" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_14cn0vs_di" bpmnElement="SequenceFlow_14cn0vs">
+        <di:waypoint x="178" y="212" />
+        <di:waypoint x="250" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1rmqv20_di" bpmnElement="SequenceFlow_1rmqv20">
+        <di:waypoint x="860" y="212" />
+        <di:waypoint x="930" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0t2s0v7_di" bpmnElement="checkResults">
+        <dc:Bounds x="1810" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0jna5l2_di" bpmnElement="checkDataSharingRequest">
+        <dc:Bounds x="420" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1fzso6r_di" bpmnElement="StartEvent">
+        <dc:Bounds x="142" y="194" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="150" y="237" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0b8j3ka_di" bpmnElement="downloadDataSharingResources">
+        <dc:Bounds x="250" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_10xdh63_di" bpmnElement="EndEvent">
+        <dc:Bounds x="2162" y="194" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2136" y="237" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0bq7zdz_di" bpmnElement="ExclusiveGateway_0bq7zdz" isMarkerVisible="true">
+        <dc:Bounds x="1265" y="187" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0l3b9as_di" bpmnElement="filterByConsent">
+        <dc:Bounds x="1400" y="315" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0lecmy5_di" bpmnElement="ExclusiveGateway_0lecmy5" isMarkerVisible="true">
+        <dc:Bounds x="1425" y="187" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0sff9xb_di" bpmnElement="ExclusiveGateway_0sff9xb" isMarkerVisible="true">
+        <dc:Bounds x="1525" y="187" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0akkess_di" bpmnElement="generateBloomFilters">
+        <dc:Bounds x="1653" y="315" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_002t87f_di" bpmnElement="ExclusiveGateway_002t87f" isMarkerVisible="true">
+        <dc:Bounds x="1678" y="187" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_15aifhd_di" bpmnElement="selectResponseTargetTtp">
+        <dc:Bounds x="1990" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0u5pb4i_di" bpmnElement="executeQueries">
+        <dc:Bounds x="760" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ok9q8j_di" bpmnElement="addIdSelectionIfMissing">
+        <dc:Bounds x="590" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1e2gm4u_di" bpmnElement="EncryptMdat">
+        <dc:Bounds x="1100" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0attf5g_di" bpmnElement="provideLocalPseudonyms">
+        <dc:Bounds x="930" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
+        <dc:Bounds x="310" y="80" width="267" height="56" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1ncewqu_di" bpmnElement="Association_1ncewqu">
+        <di:waypoint x="460" y="172" />
+        <di:waypoint x="451" y="136" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
