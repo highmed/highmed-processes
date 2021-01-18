@@ -54,19 +54,8 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 		var aExe = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeDataSharing.xml");
 		var aReq = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-requestDataSharing.xml");
 
-		var cF = CodeSystemResource.file("fhir/CodeSystem/highmed-data-sharing.xml");
-		var cQT = CodeSystemResource.file("fhir/CodeSystem/highmed-query-type.xml");
+		var cDS = CodeSystemResource.file("fhir/CodeSystem/highmed-data-sharing.xml");
 
-		var n = NamingSystemResource.file("fhir/NamingSystem/highmed-research-study-identifier.xml");
-
-		var sExtG = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-extension-group-id.xml");
-		var sExtPartMeDic = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-extension-participating-medic.xml");
-		var sExtPartTtp = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-extension-participating-ttp.xml");
-		var sExtQ = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-extension-query.xml");
-		var sG = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-group.xml");
-		var sR = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-research-study-data-sharing.xml");
 		var sTCom = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-compute-data-sharing.xml");
 		var sTExe = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-execute-data-sharing.xml");
 		var sTErr = StructureDefinitionResource
@@ -77,13 +66,12 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 		var sTResS = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-single-medic-result-data-sharing.xml");
 
-		var vF = ValueSetResource.file("fhir/ValueSet/highmed-data-sharing.xml");
-		var vQT = ValueSetResource.file("fhir/ValueSet/highmed-query-type.xml");
+		var vDS = ValueSetResource.file("fhir/ValueSet/highmed-data-sharing.xml");
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"computeDataSharing/" + VERSION, Arrays.asList(aCom, cF, sExtG, sG, sTCom, sTResS, vF),
-				"executeDataSharing/" + VERSION, Arrays.asList(aExe, cF, cQT, n, sR, sExtPartMeDic, sExtPartTtp, sExtQ, sG, sTExe, vF, vQT),
-				"requestDataSharing/" + VERSION, Arrays.asList(aReq, cF, cQT, n, sExtG, sExtPartMeDic, sExtPartTtp, sG, sR, sExtQ, sTReq, sTResM, sTErr, vF, vQT));
+				"computeDataSharing/" + VERSION, Arrays.asList(aCom, cDS, sTCom, sTResS, vDS),
+				"executeDataSharing/" + VERSION, Arrays.asList(aExe, cDS, sTExe, vDS),
+				"requestDataSharing/" + VERSION, Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
 
 		return ResourceProvider
 				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,

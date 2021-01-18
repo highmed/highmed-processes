@@ -12,9 +12,6 @@ public interface ConstantsDataSharing
 	String BPMN_EXECUTION_VARIABLE_COHORTS = "cohorts";
 	String BPMN_EXECUTION_VARIABLE_QUERIES = "queries";
 
-	String PROFILE_HIGHMED_GROUP = "http://highmed.org/fhir/StructureDefinition/group";
-	String PROFILE_HIGHMED_RESEARCH_STUDY_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/research-study-data-sharing";
-
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/task-request-data-sharing";
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI = PROCESS_HIGHMED_URI_BASE + "requestDataSharing/";
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI_AND_LATEST_VERSION =

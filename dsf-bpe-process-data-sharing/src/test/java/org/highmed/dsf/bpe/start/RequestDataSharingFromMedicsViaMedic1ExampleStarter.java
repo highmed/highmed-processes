@@ -4,6 +4,8 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsBase.CODE_TYPE_AQL_QUERY;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
+import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHMED_GROUP;
+import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHEMD_RESEARCH_STUDY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
@@ -12,8 +14,6 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICI
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_TTP;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_QUERY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_GROUP;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_RESEARCH_STUDY_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI_AND_LATEST_VERSION;
@@ -97,7 +97,7 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 		ResearchStudy researchStudy = new ResearchStudy();
 		researchStudy.setIdElement(new IdType("urn:uuid:" + UUID.randomUUID().toString()));
 
-		researchStudy.getMeta().addProfile(PROFILE_HIGHMED_RESEARCH_STUDY_DATA_SHARING);
+		researchStudy.getMeta().addProfile(PROFILE_HIGHEMD_RESEARCH_STUDY);
 		researchStudy.addIdentifier().setSystem(NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER)
 				.setValue(UUID.randomUUID().toString());
 		researchStudy.setStatus(ResearchStudy.ResearchStudyStatus.ACTIVE);
