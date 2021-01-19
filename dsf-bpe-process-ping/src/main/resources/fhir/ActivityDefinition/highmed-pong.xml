@@ -5,7 +5,7 @@
 			<code value="REMOTE" />
 		</tag>
 	</meta>
-	<extension url="http://highmed.org/fhir/StructureDefinition/process-authorization">
+	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
 			<valueString value="pingMessage" />
 		</extension>
@@ -46,12 +46,12 @@
 			</extension>
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/highmed-task-ping" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-ping" />
 		</extension>
 	</extension>
 	<url value="http://highmed.org/bpe/Process/pong" />
 	<!-- version managed by bpe -->
-	<version value="bpe-managed" />
+	<version value="${version}" />
 	<name value="pong" />
 	<title value="PONG process" />
 	<subtitle value="Communication Testing Process" />

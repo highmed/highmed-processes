@@ -5,15 +5,15 @@
 			<code value="REMOTE" />
 		</tag>
 	</meta>
-	<extension url="http://highmed.org/fhir/StructureDefinition/process-authorization">
+	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="computeSimpleFeasibilityMessage" />
+			<valueString value="requestFeasibilityMessage" />
 		</extension>
 		<extension url="authorization-roles">
 			<extension url="authorization-role">
 				<valueCoding>
 					<system value="http://highmed.org/fhir/CodeSystem/authorization-role" />
-					<code value="REMOTE" />
+					<code value="LOCAL" />
 				</valueCoding>
 			</extension>
 		</extension>
@@ -29,17 +29,17 @@
 			<extension url="recipient-organization-type">
 				<valueCoding>
 					<system value="http://highmed.org/fhir/CodeSystem/organization-type" />
-					<code value="TTP" />
+					<code value="MeDIC" />
 				</valueCoding>
 			</extension>
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/highmed-task-compute-simple-feasibility" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/highmed-task-request-feasibility" />
 		</extension>
 	</extension>
-	<extension url="http://highmed.org/fhir/StructureDefinition/process-authorization">
+	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="resultSingleMedicSimpleFeasibilityMessage" />
+			<valueString value="resultMultiMedicFeasibilityMessage" />
 		</extension>
 		<extension url="authorization-roles">
 			<extension url="authorization-role">
@@ -53,7 +53,7 @@
 			<extension url="requester-organization-type">
 				<valueCoding>
 					<system value="http://highmed.org/fhir/CodeSystem/organization-type" />
-					<code value="MeDIC" />
+					<code value="TTP" />
 				</valueCoding>
 			</extension>
 		</extension>
@@ -61,20 +61,52 @@
 			<extension url="recipient-organization-type">
 				<valueCoding>
 					<system value="http://highmed.org/fhir/CodeSystem/organization-type" />
-					<code value="TTP" />
+					<code value="MeDIC" />
 				</valueCoding>
 			</extension>
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/highmed-task-single-medic-result-simple-feasibility" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility" />
 		</extension>
 	</extension>
-	<url value="http://highmed.org/bpe/Process/computeSimpleFeasibility" />
+	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
+		<extension url="message-name">
+			<valueString value="errorMultiMedicFeasibilityMessage" />
+		</extension>
+		<extension url="authorization-roles">
+			<extension url="authorization-role">
+				<valueCoding>
+					<system value="http://highmed.org/fhir/CodeSystem/authorization-role" />
+					<code value="REMOTE" />
+				</valueCoding>
+			</extension>
+		</extension>
+		<extension url="requester-organization-types">
+			<extension url="requester-organization-type">
+				<valueCoding>
+					<system value="http://highmed.org/fhir/CodeSystem/organization-type" />
+					<code value="TTP" />
+				</valueCoding>
+			</extension>
+		</extension>
+		<extension url="recipient-organization-types">
+			<extension url="recipient-organization-type">
+				<valueCoding>
+					<system value="http://highmed.org/fhir/CodeSystem/organization-type" />
+					<code value="MeDIC" />
+				</valueCoding>
+			</extension>
+		</extension>
+		<extension url="task-profile">
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility" />
+		</extension>
+	</extension>
+	<url value="http://highmed.org/bpe/Process/requestFeasibility" />
 	<!-- version managed by bpe -->
-	<version value="bpe-managed" />
-	<name value="computeSimpleFeasibility" />
-	<title value="Compute Simple Feasibility" />
-	<subtitle value="Process to compute simple feasibility result" />
+	<version value="${version}" />
+	<name value="requestFeasibility" />
+	<title value="Request feasibility" />
+	<subtitle value="Feasibility Request Process" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
@@ -87,6 +119,6 @@
 			<value value="pmo@highmed.org" />
 		</telecom>
 	</contact>
-	<description value="Process to compute a simple fesibility result and to send the result back to the requesting organization" />
+	<description value="Process to start a feasibility, process sends messages to all MeDICs and a TTP, receives result from TTP" />
 	<kind value="Task" />
 </ActivityDefinition>
