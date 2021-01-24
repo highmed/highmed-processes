@@ -7,7 +7,7 @@
 	<artifactId>dsf-bpe-process-local-services</artifactId>
 
 	<parent>
-		<artifactId>dsf-bpe-pom</artifactId>
+		<artifactId>dsf-bpe-highmed-processes-pom</artifactId>
 		<groupId>org.highmed.dsf</groupId>
 		<version>0.4.0-SNAPSHOT</version>
 	</parent>
