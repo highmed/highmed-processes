@@ -21,7 +21,7 @@ import java.util.Random;
 import javax.crypto.KeyGenerator;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.highmed.dsf.bpe.variables.BloomFilterConfig;
+import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.hl7.fhir.r4.model.Base64BinaryType;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.ResourceType;

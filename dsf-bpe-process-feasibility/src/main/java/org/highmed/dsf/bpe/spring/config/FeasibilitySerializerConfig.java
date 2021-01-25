@@ -1,6 +1,6 @@
 package org.highmed.dsf.bpe.spring.config;
 
-import org.highmed.dsf.bpe.variables.BloomFilterConfigSerializer;
+import org.highmed.dsf.bpe.variable.BloomFilterConfigSerializer;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResultSerializer;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsSerializer;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultSerializer;

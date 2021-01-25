@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.BloomFilterConfig;
+import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;

@@ -18,6 +18,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.highmed.dsf</groupId>
+			<artifactId>dsf-bpe-process-highmed-base</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<scope>provided</scope>
@@ -40,6 +45,26 @@
 			<type>test-jar</type>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<createDependencyReducedPom>false</createDependencyReducedPom>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	
 	<profiles>
 		<profile>

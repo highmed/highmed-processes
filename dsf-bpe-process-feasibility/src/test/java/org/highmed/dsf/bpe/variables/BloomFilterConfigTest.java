@@ -7,6 +7,7 @@ import java.util.Base64;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
