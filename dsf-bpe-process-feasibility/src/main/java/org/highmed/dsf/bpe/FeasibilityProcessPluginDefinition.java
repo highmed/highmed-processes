@@ -18,7 +18,7 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class FeasibilityProcessPluginDefinition implements ProcessPluginDefinition
 {
-	public static final String VERSION = "0.4.0";
+	public static final String VERSION = "0.5.0";
 
 	@Override
 	public String getName()
