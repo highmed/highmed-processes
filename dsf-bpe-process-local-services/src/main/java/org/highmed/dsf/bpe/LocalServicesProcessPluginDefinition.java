@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.highmed.dsf.bpe.spring.config.DataSharingSerializerConfig;
 import org.highmed.dsf.bpe.spring.config.FeasibilitySerializerConfig;
 import org.highmed.dsf.bpe.spring.config.LocalServicesConfig;
 import org.highmed.dsf.fhir.resources.AbstractResource;
@@ -20,7 +21,8 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 {
 	public static final String VERSION = "0.5.0";
 
-	private static final String DEPENDENCY_FEASIBILITY_VERSION = "0.5.0";
+	private static final String DEPENDENCY_DATA_SHARING_VERSION = "0.5.0";
+	private static final String DEPENDENCY_DATA_SHARING_NAME_AND_VERSION = "dsf-bpe-process-data-sharing-0.5.0";
 	private static final String DEPENDENCY_FEASIBILITY_NAME_AND_VERSION = "dsf-bpe-process-feasibility-0.5.0";
 
 	@Override
@@ -44,13 +46,13 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 	@Override
 	public Stream<Class<?>> getSpringConfigClasses()
 	{
-		return Stream.of(LocalServicesConfig.class, FeasibilitySerializerConfig.class);
+		return Stream.of(LocalServicesConfig.class, FeasibilitySerializerConfig.class, DataSharingSerializerConfig.class);
 	}
 
 	@Override
 	public List<String> getDependencyNamesAndVersions()
 	{
-		return Arrays.asList(DEPENDENCY_FEASIBILITY_NAME_AND_VERSION);
+		return Arrays.asList(DEPENDENCY_FEASIBILITY_NAME_AND_VERSION, DEPENDENCY_DATA_SHARING_NAME_AND_VERSION);
 	}
 
 	@Override
@@ -61,11 +63,11 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 				.file("fhir/StructureDefinition/highmed-task-local-services-integration.xml");
 
 		var vF = ValueSetResource
-				.dependency(DEPENDENCY_FEASIBILITY_NAME_AND_VERSION, "http://highmed.org/fhir/ValueSet/feasibility",
-						DEPENDENCY_FEASIBILITY_VERSION);
+				.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION, "http://highmed.org/fhir/ValueSet/data-sharing",
+						DEPENDENCY_DATA_SHARING_VERSION);
 		var cF = CodeSystemResource
-				.dependency(DEPENDENCY_FEASIBILITY_NAME_AND_VERSION, "http://highmed.org/fhir/CodeSystem/feasibility",
-						DEPENDENCY_FEASIBILITY_VERSION);
+				.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION, "http://highmed.org/fhir/CodeSystem/data-sharing",
+						DEPENDENCY_DATA_SHARING_VERSION);
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
 				.of("localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, vF, cF));

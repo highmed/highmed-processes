@@ -93,7 +93,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:single-medic-result.type.coding">
@@ -104,7 +104,7 @@
     <element id="Task.input:single-medic-result.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:single-medic-result.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -152,7 +152,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:single-medic-result-reference.type.coding">
@@ -163,7 +163,7 @@
     <element id="Task.input:single-medic-result-reference.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:single-medic-result-reference.type.coding.code">
       <path value="Task.input.type.coding.code" />

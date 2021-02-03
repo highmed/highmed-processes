@@ -7,10 +7,12 @@ public interface ConstantsDataSharing
 {
 	String BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY = "researchStudy";
 	String BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK = "needsConsentCheck";
-	String BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE = "needsRecordLinkage";
+	String BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE = "needsRecordLinkage";
 	String BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG = "bloomFilterConfig";
 	String BPMN_EXECUTION_VARIABLE_COHORTS = "cohorts";
 	String BPMN_EXECUTION_VARIABLE_QUERIES = "queries";
+	String BPMN_EXECUTION_VARIABLE_QUERY_RESULTS = "queryResults";
+	String BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS = "finalQueryResults";
 
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/task-request-data-sharing";
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI = PROCESS_HIGHMED_URI_BASE + "requestDataSharing/";

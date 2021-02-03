@@ -1,5 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +32,7 @@ public class CheckSingleMedicResults extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
-				.getVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		Task currentTask = getCurrentTaskFromExecutionVariables();
 		List<FeasibilityQueryResult> filteredResults = filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(results,
@@ -38,7 +40,7 @@ public class CheckSingleMedicResults extends AbstractServiceDelegate
 
 		// TODO: add percentage filter over results
 
-		execution.setVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(filteredResults)));
 	}
 

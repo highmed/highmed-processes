@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>dsf-bpe-process-feasibility</artifactId>
@@ -19,7 +20,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.highmed.dsf</groupId>
-			<artifactId>dsf-bpe-process-highmed-base</artifactId>
+			<artifactId>dsf-bpe-process-data-sharing</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -46,26 +48,6 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-	
 	<profiles>
 		<profile>
 			<id>copy-to-highmed-dsf-process</id>
@@ -89,7 +71,8 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup/bpe/app/process</outputDirectory>
+									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup/bpe/app/process
+									</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
@@ -106,7 +89,9 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic1/bpe/app/process</outputDirectory>
+									<outputDirectory>
+										../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic1/bpe/app/process
+									</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
@@ -123,7 +108,9 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic2/bpe/app/process</outputDirectory>
+									<outputDirectory>
+										../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic2/bpe/app/process
+									</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
@@ -140,7 +127,9 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic3/bpe/app/process</outputDirectory>
+									<outputDirectory>
+										../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic3/bpe/app/process
+									</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
@@ -157,7 +146,9 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/ttp/bpe/app/process</outputDirectory>
+									<outputDirectory>
+										../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/ttp/bpe/app/process
+									</outputDirectory>
 								</configuration>
 							</execution>
 						</executions>
@@ -175,28 +166,35 @@
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic1/bpe/app/process</directory>
+									<directory>
+										../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic1/bpe/app/process
+									</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic2/bpe/app/process</directory>
+									<directory>
+										../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic2/bpe/app/process
+									</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic3/bpe/app/process</directory>
+									<directory>
+										../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic3/bpe/app/process
+									</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/ttp/bpe/app/process</directory>
+									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/ttp/bpe/app/process
+									</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>

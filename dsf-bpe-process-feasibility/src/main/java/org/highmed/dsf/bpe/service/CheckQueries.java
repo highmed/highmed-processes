@@ -1,5 +1,8 @@
 package org.highmed.dsf.bpe.service;
 
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_COHORTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +46,7 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		List<Group> cohorts = ((FhirResourcesList) execution
-				.getVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_COHORTS)).getResourcesAndCast();
+				.getVariable(BPMN_EXECUTION_VARIABLE_COHORTS)).getResourcesAndCast();
 
 		Map<String, String> queries = new HashMap<>();
 
@@ -69,6 +72,6 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 			}
 		});
 
-		execution.setVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERIES, queries);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERIES, queries);
 	}
 }

@@ -1,7 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY;
@@ -37,7 +37,7 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(new Targets(targets)));
 
 		boolean needsRecordLinkage = getNeedsRecordLinkageCheck(task);
-		execution.setVariable(BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 	}
 
 	private boolean getNeedsRecordLinkageCheck(Task task)

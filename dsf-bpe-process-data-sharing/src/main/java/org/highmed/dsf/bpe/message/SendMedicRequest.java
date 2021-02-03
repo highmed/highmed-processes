@@ -1,6 +1,6 @@
 package org.highmed.dsf.bpe.message;
 
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
@@ -49,7 +49,7 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 				.createInput(CODESYSTEM_HIGHMED_DATA_SHARING, CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK,
 						needsConsentCheck);
 
-		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
+		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
 		ParameterComponent inputNeedsRecordLinkage = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 

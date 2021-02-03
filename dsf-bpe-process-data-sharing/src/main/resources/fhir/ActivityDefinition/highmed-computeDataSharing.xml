@@ -71,7 +71,7 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/computeDataSharing" />
 	<!-- version managed by bpe -->
-	<version value="bpe-managed" />
+	<version value="${version}" />
 	<name value="ComputeDataSharing" />
 	<title value="Compute Data Sharing" />
 	<subtitle value="Process to compute a data sharing result" />

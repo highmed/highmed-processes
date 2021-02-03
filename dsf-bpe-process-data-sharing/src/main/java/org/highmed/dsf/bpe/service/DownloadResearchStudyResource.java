@@ -1,6 +1,6 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
@@ -59,7 +59,7 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY, researchStudy);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK, needsConsentCheck);
-		execution.setVariable(BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 	}
 
 	private IdType getResearchStudyId(Task task)

@@ -45,7 +45,7 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/executeDataSharing" />
 	<!-- version managed by bpe -->
-	<version value="bpe-managed" />
+	<version value="${version}" />
 	<name value="ExecuteDataSharing" />
 	<title value="Execute Data Sharing" />
 	<subtitle value="Process to execute a data sharing query" />

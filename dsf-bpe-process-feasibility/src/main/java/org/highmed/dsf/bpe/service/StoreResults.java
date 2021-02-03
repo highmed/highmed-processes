@@ -1,11 +1,11 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,8 +71,8 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 
 		if (needsRecordLinkage)
 		{
-			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-					CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE, EXTENSION_HIGHMED_GROUP_ID)
+			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE, EXTENSION_HIGHMED_GROUP_ID)
 					.map(input -> {
 						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 						String resultSetUrl = ((Reference) input.getValue()).getReference();
@@ -83,8 +83,8 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		}
 		else
 		{
-			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-					CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT, EXTENSION_HIGHMED_GROUP_ID).map(input -> {
+			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT, EXTENSION_HIGHMED_GROUP_ID).map(input -> {
 				String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 				int cohortSize = ((UnsignedIntType) input.getValue()).getValue();
 

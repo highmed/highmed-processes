@@ -7,7 +7,7 @@
 	</meta>
 	<url value="http://highmed.org/fhir/CodeSystem/data-sharing"/>
 	<!-- version managed by bpe -->
-	<version value="bpe-managed" />
+	<version value="${version}" />
 	<name value="HiGHmed_Data_Sharing"/>
 	<title value="HiGHmed Data Sharing"/>
 	<!-- status managed by bpe -->
@@ -37,7 +37,7 @@
 	</concept>
 	<concept>
 		<code value="bloom-filter-configuration"/>
-		<display value="Bloom Filter Cconfiguration"/>
+		<display value="Bloom Filter Configuration"/>
 		<definition value="Base64 binary encoded bloom filter configuration"/>
 	</concept>
 	<concept>

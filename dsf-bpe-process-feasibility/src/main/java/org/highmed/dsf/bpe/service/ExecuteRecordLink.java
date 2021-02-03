@@ -1,5 +1,8 @@
 package org.highmed.dsf.bpe.service;
 
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -50,7 +53,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
-				.getVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		Map<String, List<FeasibilityQueryResult>> byCohortId = results.getResults().stream()
 				.collect(Collectors.groupingBy(FeasibilityQueryResult::getCohortId));
@@ -60,7 +63,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 		List<FinalFeasibilityQueryResult> matchedResults = byCohortId.entrySet().stream()
 				.map(e -> match(matcher, e.getKey(), e.getValue())).collect(Collectors.toList());
 
-		execution.setVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS,
 				FinalFeasibilityQueryResultsValues.create(new FinalFeasibilityQueryResults(matchedResults)));
 	}
 

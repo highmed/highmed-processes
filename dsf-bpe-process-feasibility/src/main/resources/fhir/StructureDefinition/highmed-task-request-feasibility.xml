@@ -75,7 +75,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:research-study-reference.type.coding">
@@ -86,7 +86,7 @@
     <element id="Task.input:research-study-reference.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:research-study-reference.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -124,7 +124,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:needs-record-linkage.type.coding">
@@ -135,7 +135,7 @@
     <element id="Task.input:needs-record-linkage.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:needs-record-linkage.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -164,7 +164,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:needs-consent-check.type.coding">
@@ -175,7 +175,7 @@
     <element id="Task.input:needs-consent-check.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:needs-consent-check.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -218,7 +218,7 @@
           <valueString value="TaskOutputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.output:participating-medics.type.coding">
@@ -229,7 +229,7 @@
     <element id="Task.output:participating-medics.type.coding.system">
       <path value="Task.output.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.output:participating-medics.type.coding.code">
       <path value="Task.output.type.coding.code" />
@@ -272,7 +272,7 @@
           <valueString value="TaskOutputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.output:multi-medic-result.type.coding">
@@ -283,7 +283,7 @@
     <element id="Task.output:multi-medic-result.type.coding.system">
       <path value="Task.output.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.output:multi-medic-result.type.coding.code">
       <path value="Task.output.type.coding.code" />

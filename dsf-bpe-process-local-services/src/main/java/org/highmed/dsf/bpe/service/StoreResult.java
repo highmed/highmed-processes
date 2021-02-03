@@ -1,6 +1,10 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.ConstantsFeasibility;
@@ -30,7 +34,7 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 	{
 		Task task = getCurrentTaskFromExecutionVariables();
 		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
-				.getVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		addOutputs(task, results);
 	}
@@ -45,8 +49,8 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 		if (result.isCohortSizeResult())
 		{
 			Task.TaskOutputComponent output = getTaskHelper()
-					.createOutputUnsignedInt(ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-							ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT,
+					.createOutputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
+							CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT,
 							result.getCohortSize());
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
@@ -54,8 +58,8 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 		else if (result.isIdResultSetUrlResult())
 		{
 			Task.TaskOutputComponent output = getTaskHelper()
-					.createOutput(ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-							ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE,
+					.createOutput(CODESYSTEM_HIGHMED_DATA_SHARING,
+							CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE,
 							new Reference(result.getResultSetUrl()));
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);

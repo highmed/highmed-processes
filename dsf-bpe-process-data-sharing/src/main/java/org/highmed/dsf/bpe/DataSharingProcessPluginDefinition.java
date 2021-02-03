@@ -19,7 +19,7 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class DataSharingProcessPluginDefinition implements ProcessPluginDefinition
 {
-	public static final String VERSION = "0.4.0";
+	public static final String VERSION = "0.5.0";
 
 	@Override
 	public String getName()
@@ -48,8 +48,6 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 	@Override
 	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader)
 	{
-		// Some FHIR resource files are located in the module 'dsf-bpe-process-highmed-base'
-
 		var aCom = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-computeDataSharing.xml");
 		var aExe = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeDataSharing.xml");
 		var aReq = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-requestDataSharing.xml");

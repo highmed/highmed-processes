@@ -103,7 +103,7 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/requestDataSharing" />
 	<!-- version managed by bpe -->
-	<version value="bpe-managed" />
+	<version value="${version}" />
 	<name value="RequestDataSharing" />
 	<title value="Request Data Sharing" />
 	<subtitle value="Process to request data sharing" />

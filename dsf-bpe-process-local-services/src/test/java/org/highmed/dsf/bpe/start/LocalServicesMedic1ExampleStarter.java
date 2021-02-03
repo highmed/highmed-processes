@@ -5,10 +5,10 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ME
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_QUERY_TYPE;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGMED_QUERY_TYPE_VALUE_AQL;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES;
 import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI_AND_LATEST_VERSION;
@@ -21,6 +21,7 @@ import java.util.Random;
 import javax.crypto.KeyGenerator;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.hl7.fhir.r4.model.Base64BinaryType;
 import org.hl7.fhir.r4.model.BooleanType;
@@ -66,11 +67,11 @@ public class LocalServicesMedic1ExampleStarter
 		task.addInput().setValue(new StringType("SELECT COUNT(e) FROM EHR e;")).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_QUERY_TYPE).setCode(CODESYSTEM_HIGMED_QUERY_TYPE_VALUE_AQL);
 		task.addInput().setValue(new BooleanType(NEEDS_CONSENT_CHECK)).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_FEASIBILITY)
-				.setCode(CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK);
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK);
 		task.addInput().setValue(new BooleanType(NEEDS_RECORD_LINKAGE)).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_FEASIBILITY)
-				.setCode(CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE);
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE);
 
 		if (NEEDS_RECORD_LINKAGE)
 		{
@@ -82,8 +83,8 @@ public class LocalServicesMedic1ExampleStarter
 						KeyGenerator.getInstance("HmacSHA3-256", bouncyCastleProvider).generateKey());
 
 				task.addInput().setValue(new Base64BinaryType(bloomFilterConfig.toBytes())).getType().addCoding()
-						.setSystem(CODESYSTEM_HIGHMED_FEASIBILITY)
-						.setCode(CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG);
+						.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+						.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG);
 			}
 			catch (Exception exception)
 			{

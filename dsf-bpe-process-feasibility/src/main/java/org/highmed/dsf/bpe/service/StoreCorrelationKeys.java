@@ -1,10 +1,10 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,8 +33,8 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 	{
 		Task task = getCurrentTaskFromExecutionVariables();
 
-		List<Target> targets = getTaskHelper().getInputParameterStringValues(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY)
+		List<Target> targets = getTaskHelper().getInputParameterStringValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY)
 				.map(correlationKey -> Target.createBiDirectionalTarget("", correlationKey))
 				.collect(Collectors.toList());
 
@@ -50,8 +50,8 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
-		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
+		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
 				() -> new IllegalArgumentException(
 						"NeedsRecordLinkage boolean is not set in task with id='" + task.getId()
 								+ "', this error should " + "have been caught by resource validation"));

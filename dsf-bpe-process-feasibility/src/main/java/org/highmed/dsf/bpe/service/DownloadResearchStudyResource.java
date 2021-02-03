@@ -3,13 +3,13 @@ package org.highmed.dsf.bpe.service;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_MEDIC;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
 
 import java.util.List;
 import java.util.Objects;
@@ -74,8 +74,8 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 	private IdType getResearchStudyId(Task task)
 	{
 		Reference researchStudyReference = getTaskHelper()
-				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE).findFirst().orElseThrow(
+				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE).findFirst().orElseThrow(
 						() -> new IllegalArgumentException(
 								"ResearchStudy reference is not set in task with id='" + task.getId()
 										+ "', this error should " + "have been caught by resource validation"));
@@ -146,8 +146,8 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 
 	private boolean getNeedsConsentCheck(Task task)
 	{
-		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK).orElseThrow(
+		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK).orElseThrow(
 				() -> new IllegalArgumentException(
 						"NeedsConsentCheck boolean is not set in task with id='" + task.getId()
 								+ "', this error should " + "have been caught by resource validation"));
@@ -155,8 +155,8 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
-		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
+		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
 				() -> new IllegalArgumentException(
 						"NeedsRecordLinkage boolean is not set in task with id='" + task.getId()
 								+ "', this error should " + "have been caught by resource validation"));

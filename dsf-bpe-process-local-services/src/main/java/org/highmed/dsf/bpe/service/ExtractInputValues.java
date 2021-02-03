@@ -4,8 +4,14 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_QUERY_TYPE;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGMED_QUERY_TYPE_VALUE_AQL;
 import static org.highmed.dsf.bpe.ConstantsBase.CODE_TYPE_AQL_QUERY;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_QUERY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_COHORTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_COHORTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +19,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsFeasibility;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
@@ -46,12 +51,12 @@ public class ExtractInputValues extends AbstractServiceDelegate implements Initi
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK, needsConsentCheck);
 
 		boolean needsRecordLinkage = getNeedsRecordLinkageCheck(task);
-		execution.setVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 
 		if (needsRecordLinkage)
 		{
 			BloomFilterConfig bloomFilterConfig = getBloomFilterConfig(task);
-			execution.setVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG,
+			execution.setVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG,
 					BloomFilterConfigValues.create(bloomFilterConfig));
 		}
 	}
@@ -75,29 +80,27 @@ public class ExtractInputValues extends AbstractServiceDelegate implements Initi
 
 	private boolean getNeedsConsentCheck(Task task)
 	{
-		return getTaskHelper()
-				.getFirstInputParameterBooleanValue(task, ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK).orElseThrow(
-						() -> new IllegalArgumentException(
-								"NeedsConsentCheck boolean is not set in task with id='" + task.getId()
-										+ "', this error should " + "have been caught by resource validation"));
+		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK).orElseThrow(
+				() -> new IllegalArgumentException(
+						"NeedsConsentCheck boolean is not set in task with id='" + task.getId()
+								+ "', this error should " + "have been caught by resource validation"));
 	}
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
-		return getTaskHelper()
-				.getFirstInputParameterBooleanValue(task, ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
-						() -> new IllegalArgumentException(
-								"NeedsRecordLinkage boolean is not set in task with id='" + task.getId()
-										+ "', this error should " + "have been caught by resource validation"));
+		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
+				() -> new IllegalArgumentException(
+						"NeedsRecordLinkage boolean is not set in task with id='" + task.getId()
+								+ "', this error should " + "have been caught by resource validation"));
 	}
 
 	private BloomFilterConfig getBloomFilterConfig(Task task)
 	{
 		return BloomFilterConfig.fromBytes(getTaskHelper()
-				.getFirstInputParameterByteValue(task, ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG).orElseThrow(
+				.getFirstInputParameterByteValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG).orElseThrow(
 						() -> new IllegalArgumentException(
 								"BloomFilterConfig byte[] is not set in task with id='" + task.getId()
 										+ "', this error should " + "have been caught by resource validation")));

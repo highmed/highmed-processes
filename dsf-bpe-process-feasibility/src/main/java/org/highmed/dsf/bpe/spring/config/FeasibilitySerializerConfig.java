@@ -1,6 +1,5 @@
 package org.highmed.dsf.bpe.spring.config;
 
-import org.highmed.dsf.bpe.variable.BloomFilterConfigSerializer;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResultSerializer;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsSerializer;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultSerializer;
@@ -39,11 +38,5 @@ public class FeasibilitySerializerConfig
 	public FinalFeasibilityQueryResultsSerializer finalFeasibilityQueryResultsSerializer()
 	{
 		return new FinalFeasibilityQueryResultsSerializer(objectMapper);
-	}
-
-	@Bean
-	public BloomFilterConfigSerializer bloomFilterConfigSerializer()
-	{
-		return new BloomFilterConfigSerializer(objectMapper);
 	}
 }

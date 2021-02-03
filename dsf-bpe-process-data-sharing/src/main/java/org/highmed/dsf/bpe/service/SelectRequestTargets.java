@@ -2,7 +2,7 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
@@ -76,7 +76,7 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(getMedicTargets(researchStudy)));
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(getTtpTarget(researchStudy)));
 
-		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXCEUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
+		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
 
 		if (Boolean.TRUE.equals(needsRecordLinkage))
 		{
