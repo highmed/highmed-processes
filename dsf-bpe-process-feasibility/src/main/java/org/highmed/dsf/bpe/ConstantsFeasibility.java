@@ -9,8 +9,8 @@ public interface ConstantsFeasibility
 
 	// Must be 3 or larger, as otherwise it is possible to draw conclusions about the individual MeDICs
 	// (if I already know the cohort size in my MeDIC)
-	int MIN_PARTICIPATING_MEDICS = 3;
-	int MIN_COHORT_DEFINITIONS = 1;
+	int MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY = 3;
+	int MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY = 1;
 	String FEASIBILITY_QUERY_PREFIX = "select count";
 
 	String PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY = "http://highmed.org/fhir/StructureDefinition/task-request-feasibility";

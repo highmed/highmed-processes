@@ -7,7 +7,6 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsFeasibility;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;

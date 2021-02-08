@@ -17,6 +17,7 @@ import org.highmed.dsf.bpe.service.DownloadResultSets;
 import org.highmed.dsf.bpe.service.EncryptMdat;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
 import org.highmed.dsf.bpe.service.ExecuteRecordLink;
+import org.highmed.dsf.bpe.service.ExtractQueries;
 import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
 import org.highmed.dsf.bpe.service.GenerateBloomFilters;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
@@ -28,12 +29,16 @@ import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
 import org.highmed.dsf.bpe.service.StoreCorrelationKeys;
 import org.highmed.dsf.bpe.service.StoreResults;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
+import org.highmed.dsf.fhir.group.GroupHelper;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
+import org.highmed.openehr.client.OpenEhrClient;
+import org.highmed.openehr.client.OpenEhrClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -45,16 +50,25 @@ public class DataSharingConfig
 	private FhirWebserviceClientProvider fhirClientProvider;
 
 	@Autowired
+	private OpenEhrClientFactory openEhrClientFactory;
+
+	@Autowired
 	private OrganizationProvider organizationProvider;
 
 	@Autowired
 	private TaskHelper taskHelper;
 
 	@Autowired
+	private GroupHelper groupHelper;
+
+	@Autowired
 	private FhirContext fhirContext;
 
 	@Value("${org.highmed.dsf.bpe.openehr.subject_external_id.path:/ehr_status/subject/external_ref/id/value}")
 	private String ehrIdColumnPath;
+
+	@Autowired
+	private Environment environment;
 
 	@Bean
 	public DownloadResearchStudyResource downloadResearchStudyResourceDS()
@@ -167,15 +181,27 @@ public class DataSharingConfig
 	}
 
 	@Bean
+	public ExtractQueries extractQueries()
+	{
+		return new ExtractQueries(fhirClientProvider, taskHelper, groupHelper);
+	}
+
+	@Bean
 	public ModifyQueries modifyQueries()
 	{
-		return new ModifyQueries(fhirClientProvider, taskHelper);
+		return new ModifyQueries(fhirClientProvider, taskHelper, ehrIdColumnPath);
+	}
+
+	@Bean
+	public OpenEhrClient openEhrClient()
+	{
+		return openEhrClientFactory.createClient(environment::getProperty);
 	}
 
 	@Bean
 	public ExecuteQueries executeQueries()
 	{
-		return new ExecuteQueries(fhirClientProvider, taskHelper);
+		return new ExecuteQueries(fhirClientProvider, openEhrClient(), taskHelper, organizationProvider);
 	}
 
 	@Bean

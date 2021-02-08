@@ -3,7 +3,6 @@ package org.highmed.dsf.bpe.service;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;

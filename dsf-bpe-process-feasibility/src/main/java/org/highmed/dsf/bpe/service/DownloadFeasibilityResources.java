@@ -1,5 +1,6 @@
 package org.highmed.dsf.bpe.service;
 
+import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_COHORTS;
@@ -19,7 +20,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
@@ -76,7 +76,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_COHORTS, FhirResourcesListValues.create(cohortDefinitions));
 
 		String ttpIdentifier = getTtpIdentifier(researchStudy, client);
-		execution.setVariable(ConstantsBase.BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER, ttpIdentifier);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER, ttpIdentifier);
 
 		boolean needsConsentCheck = getNeedsConsentCheck(task);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK, needsConsentCheck);

@@ -4,8 +4,8 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsBase.CODE_TYPE_AQL_QUERY;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHMED_GROUP;
 import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHEMD_RESEARCH_STUDY;
+import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHMED_GROUP;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
@@ -43,6 +43,18 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 
 public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 {
+	private static final String QUERY =
+			"SELECT "
+				+ "e/ehr_status/subject/external_ref/id/value as EHRID, "
+				+ "v/items[at0024,'Bezeichnung']/value, "
+				+ "v/items [at0001,'Messwert'], "
+				+ "v/items[at0006,'Dokumentationsdatum Untersuchung']/value "
+			+ "FROM EHR e "
+			+ "CONTAINS COMPOSITION c "
+			+ "CONTAINS CLUSTER v[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1] "
+			+ "WHERE v/items[at0024,'Bezeichnung']/value/value = 'Natrium' "
+			+ "OFFSET 0 LIMIT 15";
+
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
 	//    highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PASSWORD" or args[1]: the password of the client-certificate
@@ -85,8 +97,8 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 		group.setType(Group.GroupType.PERSON);
 		group.setActual(false);
 		group.setActive(true);
-		group.addExtension().setUrl(EXTENSION_HIGHMED_QUERY).setValue(
-				new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression("SELECT COUNT(e) FROM EHR e"));
+		group.addExtension().setUrl(EXTENSION_HIGHMED_QUERY)
+				.setValue(new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression(QUERY));
 		group.setName(name);
 
 		return group;

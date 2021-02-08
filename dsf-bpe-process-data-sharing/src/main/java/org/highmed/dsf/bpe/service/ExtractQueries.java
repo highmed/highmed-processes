@@ -1,10 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
-import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_COHORTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.FEASIBILITY_QUERY_PREFIX;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,18 +15,13 @@ import org.highmed.dsf.fhir.group.GroupHelper;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.FhirResourcesList;
 import org.hl7.fhir.r4.model.Group;
-import org.hl7.fhir.r4.model.Task;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class CheckQueries extends AbstractServiceDelegate implements InitializingBean
+public class ExtractQueries extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(CheckQueries.class);
-
 	private final GroupHelper groupHelper;
 
-	public CheckQueries(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper, GroupHelper groupHelper)
+	public ExtractQueries(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper, GroupHelper groupHelper)
 	{
 		super(clientProvider, taskHelper);
 		this.groupHelper = groupHelper;
@@ -48,28 +40,14 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 		List<Group> cohorts = ((FhirResourcesList) execution.getVariable(BPMN_EXECUTION_VARIABLE_COHORTS))
 				.getResourcesAndCast();
 
+		// <groupId, query>
 		Map<String, String> queries = new HashMap<>();
 
-		Task leadingTask = getLeadingTaskFromExecutionVariables();
 		cohorts.forEach(group -> {
-			String aqlQuery = groupHelper.extractAqlQuery(group).toLowerCase();
-
+			String aqlQuery = groupHelper.extractAqlQuery(group);
 			String groupId = group.getId();
-			if (!aqlQuery.startsWith(FEASIBILITY_QUERY_PREFIX))
-			{
-				String errorMessage =
-						"Single medic feasibility query check failed, wrong format for query of group with id '"
-								+ groupId + "', expected query to start with '" + FEASIBILITY_QUERY_PREFIX
-								+ "' but got '" + aqlQuery + "'";
 
-				logger.info(errorMessage);
-				leadingTask.getOutput().add(getTaskHelper()
-						.createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, errorMessage));
-			}
-			else
-			{
-				queries.put(groupId, aqlQuery);
-			}
+			queries.put(groupId, aqlQuery);
 		});
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERIES, queries);

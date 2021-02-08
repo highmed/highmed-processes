@@ -6,7 +6,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_CO
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_RESULT;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,7 +62,7 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 				CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY).orElse(null);
 
 		return results.getResults().stream().filter(result -> {
-			if (result.getParticipatingMedics() < MIN_PARTICIPATING_MEDICS)
+			if (result.getParticipatingMedics() < MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY)
 			{
 				logger.warn("Removed result with cohort id='{}' from feasibility request with task-id='{}', "
 								+ "business-key='{}' and correlation-key='{}' because of not enough participating MeDICs",

@@ -4,8 +4,8 @@ import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_COHORTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_COHORT_DEFINITIONS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY;
 
 import java.util.List;
 
@@ -46,10 +46,10 @@ public class CheckFeasibilityResources extends AbstractServiceDelegate
 				.filter(i -> NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER.equals(i.getSystem())).map(i -> i.getValue())
 				.distinct().count();
 
-		if (medics < MIN_PARTICIPATING_MEDICS)
+		if (medics < MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY)
 		{
 			throw new RuntimeException(
-					"Number of distinct participanting MeDICs is < " + MIN_PARTICIPATING_MEDICS + ", got " + medics);
+					"Number of distinct participanting MeDICs is < " + MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY + ", got " + medics);
 		}
 	}
 
@@ -64,10 +64,10 @@ public class CheckFeasibilityResources extends AbstractServiceDelegate
 	private void checkNumberOfCohortDefinitions(List<Group> cohorts)
 	{
 		int size = cohorts.size();
-		if (size < MIN_COHORT_DEFINITIONS)
+		if (size < MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY)
 		{
 			throw new RuntimeException(
-					"Number of defined cohorts is < " + MIN_COHORT_DEFINITIONS + ", got " + cohorts.size());
+					"Number of defined cohorts is < " + MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY + ", got " + cohorts.size());
 		}
 	}
 }
