@@ -19,4 +19,4 @@ jobs:
     - name: Build with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: mvn -B verify --file pom.xml
+      run: mvn -B verify -fae --file pom.xml
