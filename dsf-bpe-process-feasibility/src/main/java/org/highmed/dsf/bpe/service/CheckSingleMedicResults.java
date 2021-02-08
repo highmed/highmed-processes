@@ -8,11 +8,10 @@ import java.util.Optional;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.ConstantsBase;
-import org.highmed.dsf.bpe.ConstantsFeasibility;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Task;
@@ -31,24 +30,24 @@ public class CheckSingleMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
+		QueryResults results = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		Task currentTask = getCurrentTaskFromExecutionVariables();
-		List<FeasibilityQueryResult> filteredResults = filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(results,
+		List<QueryResult> filteredResults = filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(results,
 				currentTask);
 
 		// TODO: add percentage filter over results
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(filteredResults)));
+				QueryResultsValues.create(new QueryResults(filteredResults)));
 	}
 
-	private List<FeasibilityQueryResult> filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(
-			FeasibilityQueryResults results, Task task)
+	private List<QueryResult> filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(
+			QueryResults results, Task task)
 	{
-		List<FeasibilityQueryResult> filteredResults = new ArrayList<>();
-		for (FeasibilityQueryResult result : results.getResults())
+		List<QueryResult> filteredResults = new ArrayList<>();
+		for (QueryResult result : results.getResults())
 		{
 			Optional<String> errorReason = testResultAndReturnErrorReason(result);
 			if (errorReason.isPresent())
@@ -60,7 +59,7 @@ public class CheckSingleMedicResults extends AbstractServiceDelegate
 		return filteredResults;
 	}
 
-	protected Optional<String> testResultAndReturnErrorReason(FeasibilityQueryResult result)
+	protected Optional<String> testResultAndReturnErrorReason(QueryResult result)
 	{
 		// TODO: implement check
 		// cohort size > 0

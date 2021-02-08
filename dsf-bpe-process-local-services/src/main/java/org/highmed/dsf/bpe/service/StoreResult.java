@@ -8,8 +8,8 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Extension;
@@ -32,25 +32,25 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		Task task = getCurrentTaskFromExecutionVariables();
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
+		QueryResults results = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		addOutputs(task, results);
 	}
 
-	private void addOutputs(Task task, FeasibilityQueryResults results)
+	private void addOutputs(Task task, QueryResults results)
 	{
 		results.getResults().forEach(result -> addOutput(task, result));
 	}
 
-	private void addOutput(Task task, FeasibilityQueryResult result)
+	private void addOutput(Task task, QueryResult result)
 	{
 		if (result.isCohortSizeResult())
 		{
 			Task.TaskOutputComponent output = getTaskHelper()
 					.createOutputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
 							CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT,
-							result.getCohortSize());
+							result.getCount());
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
 		}

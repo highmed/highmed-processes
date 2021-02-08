@@ -1,4 +1,4 @@
-package org.highmed.dsf.bpe.variables;
+package org.highmed.dsf.bpe.variable;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -6,20 +6,20 @@ import java.util.Objects;
 import org.camunda.bpm.engine.impl.variable.serializer.PrimitiveValueSerializer;
 import org.camunda.bpm.engine.impl.variable.serializer.ValueFields;
 import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues.FeasibilityQueryResultsValue;
+import org.highmed.dsf.bpe.variable.QueryResultsValues.FeasibilityQueryResultsValue;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class FeasibilityQueryResultsSerializer extends PrimitiveValueSerializer<FeasibilityQueryResultsValue>
+public class QueryResultsSerializer extends PrimitiveValueSerializer<FeasibilityQueryResultsValue>
 		implements InitializingBean
 {
 	private final ObjectMapper objectMapper;
 
-	public FeasibilityQueryResultsSerializer(ObjectMapper objectMapper)
+	public QueryResultsSerializer(ObjectMapper objectMapper)
 	{
-		super(FeasibilityQueryResultsValues.VALUE_TYPE);
+		super(QueryResultsValues.VALUE_TYPE);
 
 		this.objectMapper = objectMapper;
 	}
@@ -33,7 +33,7 @@ public class FeasibilityQueryResultsSerializer extends PrimitiveValueSerializer<
 	@Override
 	public void writeValue(FeasibilityQueryResultsValue value, ValueFields valueFields)
 	{
-		FeasibilityQueryResults results = value.getValue();
+		QueryResults results = value.getValue();
 		try
 		{
 			if (results != null)
@@ -48,7 +48,7 @@ public class FeasibilityQueryResultsSerializer extends PrimitiveValueSerializer<
 	@Override
 	public FeasibilityQueryResultsValue convertToTypedValue(UntypedValueImpl untypedValue)
 	{
-		return FeasibilityQueryResultsValues.create((FeasibilityQueryResults) untypedValue.getValue());
+		return QueryResultsValues.create((QueryResults) untypedValue.getValue());
 	}
 
 	@Override
@@ -58,9 +58,9 @@ public class FeasibilityQueryResultsSerializer extends PrimitiveValueSerializer<
 
 		try
 		{
-			FeasibilityQueryResults results = (bytes == null || bytes.length <= 0) ? null
-					: objectMapper.readValue(bytes, FeasibilityQueryResults.class);
-			return FeasibilityQueryResultsValues.create(results);
+			QueryResults results = (bytes == null || bytes.length <= 0) ? null
+					: objectMapper.readValue(bytes, QueryResults.class);
+			return QueryResultsValues.create(results);
 		}
 		catch (IOException e)
 		{

@@ -13,9 +13,9 @@ import javax.ws.rs.core.MediaType;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.fhir.client.FhirWebserviceClient;
@@ -51,21 +51,21 @@ public class DownloadResultSets extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
+		QueryResults results = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
-		List<FeasibilityQueryResult> resultsWithResultSets = download(results);
+		List<QueryResult> resultsWithResultSets = download(results);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(resultsWithResultSets)));
+				QueryResultsValues.create(new QueryResults(resultsWithResultSets)));
 	}
 
-	private List<FeasibilityQueryResult> download(FeasibilityQueryResults results)
+	private List<QueryResult> download(QueryResults results)
 	{
 		return results.getResults().stream().map(r -> download(r)).collect(Collectors.toList());
 	}
 
-	private FeasibilityQueryResult download(FeasibilityQueryResult result)
+	private QueryResult download(QueryResult result)
 	{
 		IdType id = new IdType(result.getResultSetUrl());
 		FhirWebserviceClient client = getFhirWebserviceClientProvider().getRemoteWebserviceClient(id.getBaseUrl());
@@ -73,7 +73,7 @@ public class DownloadResultSets extends AbstractServiceDelegate
 		InputStream binary = readBinaryResource(client, id.getIdPart());
 		ResultSet resultSet = deserializeResultSet(binary);
 
-		return FeasibilityQueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSet);
+		return QueryResult.resultSet(result.getOrganizationIdentifier(), result.getCohortId(), resultSet);
 	}
 
 	private InputStream readBinaryResource(FhirWebserviceClient client, String id)

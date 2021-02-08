@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -48,7 +48,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
+		QueryResults results = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		boolean needsRecordLinkage = Boolean.TRUE
@@ -56,15 +56,15 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 
 		Task task = getCurrentTaskFromExecutionVariables();
 
-		List<FeasibilityQueryResult> extendedResults = new ArrayList<>();
+		List<QueryResult> extendedResults = new ArrayList<>();
 		extendedResults.addAll(results.getResults());
 		extendedResults.addAll(getResults(task, needsRecordLinkage));
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(extendedResults)));
+				QueryResultsValues.create(new QueryResults(extendedResults)));
 	}
 
-	private List<FeasibilityQueryResult> getResults(Task task, boolean needsRecordLinkage)
+	private List<QueryResult> getResults(Task task, boolean needsRecordLinkage)
 	{
 		TaskHelper taskHelper = getTaskHelper();
 		Reference requester = task.getRequester();
@@ -77,8 +77,8 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 						String resultSetUrl = ((Reference) input.getValue()).getReference();
 
-						return FeasibilityQueryResult
-								.idResult(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
+						return QueryResult
+								.resultSet(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
 					}).collect(Collectors.toList());
 		}
 		else
@@ -88,7 +88,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 				int cohortSize = ((UnsignedIntType) input.getValue()).getValue();
 
-				return FeasibilityQueryResult.countResult(requester.getIdentifier().getValue(), cohortId, cohortSize);
+				return QueryResult.count(requester.getIdentifier().getValue(), cohortId, cohortSize);
 			}).collect(Collectors.toList());
 		}
 	}

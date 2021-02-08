@@ -41,12 +41,12 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 		@SuppressWarnings("unchecked")
 		Map<String, String> queries = (Map<String, String>) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERIES);
 
-		Map<String, String> modifiedQueries = checkAndModifyQueries(queries);
+		Map<String, String> modifiedQueries = modifyQueries(queries);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERIES, modifiedQueries);
 	}
 
-	private Map<String, String> checkAndModifyQueries(Map<String, String> queries)
+	private Map<String, String> modifyQueries(Map<String, String> queries)
 	{
 		Map<String, String> modifiedQueries = new HashMap<>();
 

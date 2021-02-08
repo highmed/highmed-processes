@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsFeasibility;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 
@@ -24,23 +23,23 @@ public class GenerateCountFromIds extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
+		QueryResults results = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
-		List<FeasibilityQueryResult> filteredResults = count(results.getResults());
+		List<QueryResult> filteredResults = count(results.getResults());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(filteredResults)));
+				QueryResultsValues.create(new QueryResults(filteredResults)));
 	}
 
-	private List<FeasibilityQueryResult> count(List<FeasibilityQueryResult> results)
+	private List<QueryResult> count(List<QueryResult> results)
 	{
 		return results.stream().map(this::count).collect(Collectors.toList());
 	}
 
-	protected FeasibilityQueryResult count(FeasibilityQueryResult result)
+	protected QueryResult count(QueryResult result)
 	{
-		return FeasibilityQueryResult.countResult(result.getOrganizationIdentifier(), result.getCohortId(),
+		return QueryResult.count(result.getOrganizationIdentifier(), result.getCohortId(),
 				result.getResultSet().getRows().size());
 	}
 }

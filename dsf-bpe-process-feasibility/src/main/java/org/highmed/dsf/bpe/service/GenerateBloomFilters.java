@@ -16,9 +16,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.mpi.client.MasterPatientIndexClient;
@@ -83,7 +83,7 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
+		QueryResults results = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		String securityIdentifier = getSecurityIdentifier(execution);
@@ -93,12 +93,12 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 
 		ResultSetTranslatorToTtpRbfOnly resultSetTranslator = createResultSetTranslator(bloomFilterConfig);
 
-		List<FeasibilityQueryResult> translatedResults = results.getResults().stream()
+		List<QueryResult> translatedResults = results.getResults().stream()
 				.map(result -> translateAndCreateBinary(resultSetTranslator, result, securityIdentifier))
 				.collect(Collectors.toList());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(translatedResults)));
+				QueryResultsValues.create(new QueryResults(translatedResults)));
 	}
 
 	private String getSecurityIdentifier(DelegateExecution execution)
@@ -127,13 +127,13 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 						bouncyCastleProvider));
 	}
 
-	private FeasibilityQueryResult translateAndCreateBinary(ResultSetTranslatorToTtpRbfOnly resultSetTranslator,
-			FeasibilityQueryResult result, String ttpIdentifier)
+	private QueryResult translateAndCreateBinary(ResultSetTranslatorToTtpRbfOnly resultSetTranslator,
+			QueryResult result, String ttpIdentifier)
 	{
 		ResultSet translatedResultSet = translate(resultSetTranslator, result.getResultSet());
 		String resultSetUrl = saveResultSetAsBinaryForTtp(translatedResultSet, ttpIdentifier);
 
-		return FeasibilityQueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSetUrl);
+		return QueryResult.resultSet(result.getOrganizationIdentifier(), result.getCohortId(), resultSetUrl);
 	}
 
 	private ResultSet translate(ResultSetTranslatorToTtpRbfOnly resultSetTranslator, ResultSet resultSet)
