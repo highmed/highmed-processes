@@ -73,23 +73,28 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		{
 			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_FEASIBILITY,
 					CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE, EXTENSION_HIGHMED_GROUP_ID)
-					.map(input -> {
+					.map(input ->
+					{
 						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 						String resultSetUrl = ((Reference) input.getValue()).getReference();
 
-						return FeasibilityQueryResult
-								.idResult(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
+						return FeasibilityQueryResult.idResult(requester.getIdentifier().getValue(), cohortId,
+								resultSetUrl);
 					}).collect(Collectors.toList());
 		}
 		else
 		{
-			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-					CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT, EXTENSION_HIGHMED_GROUP_ID).map(input -> {
-				String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
-				int cohortSize = ((UnsignedIntType) input.getValue()).getValue();
+			return taskHelper
+					.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_FEASIBILITY,
+							CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT, EXTENSION_HIGHMED_GROUP_ID)
+					.map(input ->
+					{
+						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
+						int cohortSize = ((UnsignedIntType) input.getValue()).getValue();
 
-				return FeasibilityQueryResult.countResult(requester.getIdentifier().getValue(), cohortId, cohortSize);
-			}).collect(Collectors.toList());
+						return FeasibilityQueryResult.countResult(requester.getIdentifier().getValue(), cohortId,
+								cohortSize);
+					}).collect(Collectors.toList());
 		}
 	}
 

@@ -65,9 +65,8 @@ public class UpdateResources extends AbstractServiceDelegate implements Initiali
 		{
 			logger.error("Error while reading Bundle with id {} from organization {}: {}", bundleId.getValue(),
 					task.getRequester().getReference(), e.getMessage());
-			throw new RuntimeException(
-					"Error while reading Bundle with id " + bundleId.getValue() + " from organization " + task
-							.getRequester().getReference() + ", " + e.getMessage(), e);
+			throw new RuntimeException("Error while reading Bundle with id " + bundleId.getValue()
+					+ " from organization " + task.getRequester().getReference() + ", " + e.getMessage(), e);
 		}
 
 		if (!EnumSet.of(BundleType.TRANSACTION, BundleType.BATCH).contains(bundle.getType()))
@@ -85,17 +84,16 @@ public class UpdateResources extends AbstractServiceDelegate implements Initiali
 		{
 			logger.error("Error while executing Bundle with id {} from organization {} locally: {}",
 					bundleId.getValue(), task.getRequester().getReference(), e.getMessage());
-			throw new RuntimeException(
-					"Error while executing Bundle with id " + bundleId.getValue() + " from organization " + task
-							.getRequester().getReference() + " locally, " + e.getMessage(), e);
+			throw new RuntimeException("Error while executing Bundle with id " + bundleId.getValue()
+					+ " from organization " + task.getRequester().getReference() + " locally, " + e.getMessage(), e);
 		}
 	}
 
 	private IdType getBundleId(Task task)
 	{
-		List<Reference> bundleReferences = getTaskHelper()
-				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_UPDATE_RESOURCE,
-						CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE).collect(Collectors.toList());
+		List<Reference> bundleReferences = getTaskHelper().getInputParameterReferenceValues(task,
+				CODESYSTEM_HIGHMED_UPDATE_RESOURCE, CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE)
+				.collect(Collectors.toList());
 
 		if (bundleReferences.size() != 1)
 		{
@@ -105,14 +103,13 @@ public class UpdateResources extends AbstractServiceDelegate implements Initiali
 					"Task input parameter " + CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE
 							+ " contains unexpected number of Bundle IDs, expected 1, got " + bundleReferences.size());
 		}
-		else if (!bundleReferences.get(0).hasReference() || !bundleReferences.get(0).getReference()
-				.contains("/Bundle/"))
+		else if (!bundleReferences.get(0).hasReference()
+				|| !bundleReferences.get(0).getReference().contains("/Bundle/"))
 		{
 			logger.error("Task input parameter {} has no Bundle reference",
 					CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE);
-			throw new RuntimeException(
-					"Task input parameter " + CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE
-							+ " has no Bundle reference");
+			throw new RuntimeException("Task input parameter "
+					+ CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE + " has no Bundle reference");
 		}
 
 		return new IdType(bundleReferences.get(0).getReference());

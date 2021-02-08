@@ -20,9 +20,9 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 public class UpdateAllowList3MedicTtpExampleStarter
 {
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
-	//    highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
+	// highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PASSWORD" or args[1]: the password of the client-certificate
-	//    password
+	// password
 	public static void main(String[] args) throws Exception
 	{
 		Task task = createStartResource();

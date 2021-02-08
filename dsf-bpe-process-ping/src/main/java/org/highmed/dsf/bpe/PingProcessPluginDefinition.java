@@ -51,12 +51,10 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 				.file("fhir/StructureDefinition/highmed-task-start-ping-process.xml");
 		var tPong = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-ping.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
-				.of("ping/" + VERSION, Arrays.asList(aPing, tPong, tStartPing), "pong/" + VERSION,
-						Arrays.asList(aPong, tPing));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("ping/" + VERSION,
+				Arrays.asList(aPing, tPong, tStartPing), "pong/" + VERSION, Arrays.asList(aPong, tPing));
 
-		return ResourceProvider
-				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,
-						resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
+				classLoader, resourcesByProcessKeyAndVersion);
 	}
 }

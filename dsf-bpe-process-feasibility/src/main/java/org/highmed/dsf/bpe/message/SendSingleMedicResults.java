@@ -62,11 +62,11 @@ public class SendSingleMedicResults extends AbstractTaskMessageSend
 		}
 		else
 		{
-			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-					.getCohortId());
+			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+					+ result.getCohortId());
 			throw new RuntimeException(
-					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-							.getCohortId());
+					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+							+ result.getCohortId());
 		}
 	}
 

@@ -39,8 +39,8 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	@Override
 	public void doExecute(DelegateExecution execution) throws Exception
 	{
-		List<Target> targets = organizationProvider.getRemoteIdentifiers().stream().map(identifier -> Target
-				.createBiDirectionalTarget(identifier.getValue(), UUID.randomUUID().toString()))
+		List<Target> targets = organizationProvider.getRemoteIdentifiers().stream().map(
+				identifier -> Target.createBiDirectionalTarget(identifier.getValue(), UUID.randomUUID().toString()))
 				.collect(Collectors.toList());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(new Targets(targets)));

@@ -64,13 +64,12 @@ public class FeasibilityProcessPluginDefinition implements ProcessPluginDefiniti
 
 		var vF = ValueSetResource.file("fhir/ValueSet/highmed-feasibility.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"computeFeasibility/" + VERSION, Arrays.asList(aCom, cF, sTCom, sTResS, vF),
-				"executeFeasibility/" + VERSION, Arrays.asList(aExe, cF, sTExe, vF),
-				"requestFeasibility/" + VERSION, Arrays.asList(aReq, cF, sTReq, sTResM, sTErr, vF));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("computeFeasibility/" + VERSION,
+				Arrays.asList(aCom, cF, sTCom, sTResS, vF), "executeFeasibility/" + VERSION,
+				Arrays.asList(aExe, cF, sTExe, vF), "requestFeasibility/" + VERSION,
+				Arrays.asList(aReq, cF, sTReq, sTResM, sTErr, vF));
 
-		return ResourceProvider
-				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,
-						resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
+				classLoader, resourcesByProcessKeyAndVersion);
 	}
 }

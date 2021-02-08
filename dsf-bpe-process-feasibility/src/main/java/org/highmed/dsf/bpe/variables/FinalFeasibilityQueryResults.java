@@ -13,7 +13,8 @@ public class FinalFeasibilityQueryResults
 	private final List<FinalFeasibilityQueryResult> results = new ArrayList<>();
 
 	@JsonCreator
-	public FinalFeasibilityQueryResults(@JsonProperty("results") Collection<? extends FinalFeasibilityQueryResult> results)
+	public FinalFeasibilityQueryResults(
+			@JsonProperty("results") Collection<? extends FinalFeasibilityQueryResult> results)
 	{
 		if (results != null)
 			this.results.addAll(results);
