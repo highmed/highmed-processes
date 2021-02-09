@@ -55,12 +55,11 @@ public class UpdateResourcesProcessPluginDefinition implements ProcessPluginDefi
 				.file("fhir/StructureDefinition/highmed-task-request-update-resources.xml");
 		var v = ValueSetResource.file("fhir/ValueSet/highmed-update-resources.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
-				.of("executeUpdateResources/" + VERSION, Arrays.asList(aExec, c, sExec, v),
-						"requestUpdateResources/" + VERSION, Arrays.asList(aReq, c, sReq, v));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
+				"executeUpdateResources/" + VERSION, Arrays.asList(aExec, c, sExec, v),
+				"requestUpdateResources/" + VERSION, Arrays.asList(aReq, c, sReq, v));
 
-		return ResourceProvider
-				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,
-						resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
+				classLoader, resourcesByProcessKeyAndVersion);
 	}
 }

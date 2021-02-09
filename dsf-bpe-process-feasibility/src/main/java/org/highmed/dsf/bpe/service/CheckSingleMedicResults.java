@@ -71,8 +71,7 @@ public class CheckSingleMedicResults extends AbstractServiceDelegate
 		String errorMessage = "Feasibility query result check failed for group with id '" + cohortId + "': " + error;
 		logger.info(errorMessage);
 
-		task.getOutput().add(getTaskHelper()
-				.createOutput(ConstantsBase.CODESYSTEM_HIGHMED_BPMN, ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
-						errorMessage));
+		task.getOutput().add(getTaskHelper().createOutput(ConstantsBase.CODESYSTEM_HIGHMED_BPMN,
+				ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, errorMessage));
 	}
 }

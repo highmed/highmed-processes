@@ -53,12 +53,10 @@ public class UpdateAllowListProcessPluginDefinition implements ProcessPluginDefi
 		var sUp = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-update-allow-list.xml");
 		var v = ValueSetResource.file("fhir/ValueSet/highmed-update-allow-list.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
-				.of("downloadAllowList/" + VERSION, Arrays.asList(aDown, c, sDown, v), "updateAllowList/" + VERSION,
-						Arrays.asList(aUp, c, sUp, v));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("downloadAllowList/" + VERSION,
+				Arrays.asList(aDown, c, sDown, v), "updateAllowList/" + VERSION, Arrays.asList(aUp, c, sUp, v));
 
-		return ResourceProvider
-				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,
-						resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
+				classLoader, resourcesByProcessKeyAndVersion);
 	}
 }

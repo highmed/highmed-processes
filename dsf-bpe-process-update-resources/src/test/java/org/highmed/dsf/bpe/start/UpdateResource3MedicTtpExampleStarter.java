@@ -29,9 +29,9 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 public class UpdateResource3MedicTtpExampleStarter
 {
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
-	//    highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
+	// highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PASSWORD" or args[1]: the password of the client-certificate
-	//    password
+	// password
 	public static void main(String[] args) throws Exception
 	{
 		ExampleStarter starter = ExampleStarter.forServer(args, TTP_FHIR_BASE_URL);
@@ -59,10 +59,10 @@ public class UpdateResource3MedicTtpExampleStarter
 		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES_MESSAGE_NAME)).getType()
 				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
 
-		task.addInput().setValue(new Reference(
-				new IdType(ResourceType.Bundle.name(), allowList.getIdElement().getIdPart(),
-						allowList.getIdElement().getVersionIdPart()))).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_UPDATE_RESOURCE)
+		task.addInput()
+				.setValue(new Reference(new IdType(ResourceType.Bundle.name(), allowList.getIdElement().getIdPart(),
+						allowList.getIdElement().getVersionIdPart())))
+				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_UPDATE_RESOURCE)
 				.setCode(CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE);
 
 		task.addInput().setValue(new StringType("http://highmed.org/fhir/NamingSystem/organization-identifier|"))

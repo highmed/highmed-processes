@@ -44,29 +44,29 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 	{
 		if (result.isCohortSizeResult())
 		{
-			Task.TaskOutputComponent output = getTaskHelper()
-					.createOutputUnsignedInt(ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-							ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT,
-							result.getCohortSize());
+			Task.TaskOutputComponent output = getTaskHelper().createOutputUnsignedInt(
+					ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
+					ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT,
+					result.getCohortSize());
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
 		}
 		else if (result.isIdResultSetUrlResult())
 		{
-			Task.TaskOutputComponent output = getTaskHelper()
-					.createOutput(ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-							ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE,
-							new Reference(result.getResultSetUrl()));
+			Task.TaskOutputComponent output = getTaskHelper().createOutput(
+					ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
+					ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE,
+					new Reference(result.getResultSetUrl()));
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
 		}
 		else
 		{
-			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-					.getCohortId());
+			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+					+ result.getCohortId());
 			throw new RuntimeException(
-					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-							.getCohortId());
+					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+							+ result.getCohortId());
 		}
 	}
 

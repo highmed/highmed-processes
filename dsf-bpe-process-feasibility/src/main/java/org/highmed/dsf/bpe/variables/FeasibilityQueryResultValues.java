@@ -37,7 +37,8 @@ public class FeasibilityQueryResultValues
 		@Override
 		public TypedValue createValue(Object value, Map<String, Object> valueInfo)
 		{
-			return new FeasibilityQueryResultValues.FeasibilityQueryResultValueImpl((FeasibilityQueryResult) value, VALUE_TYPE);
+			return new FeasibilityQueryResultValues.FeasibilityQueryResultValueImpl((FeasibilityQueryResult) value,
+					VALUE_TYPE);
 		}
 	}
 

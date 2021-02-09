@@ -75,10 +75,10 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 	{
 		Reference researchStudyReference = getTaskHelper()
 				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE).findFirst().orElseThrow(
-						() -> new IllegalArgumentException(
-								"ResearchStudy reference is not set in task with id='" + task.getId()
-										+ "', this error should " + "have been caught by resource validation"));
+						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE)
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("ResearchStudy reference is not set in task with id='"
+						+ task.getId() + "', this error should " + "have been caught by resource validation"));
 
 		return new IdType(researchStudyReference.getReference());
 	}
@@ -113,15 +113,15 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 
 		if (!identifiers.isEmpty())
 		{
-			identifiers.forEach(identifier -> {
+			identifiers.forEach(identifier ->
+			{
 				logger.warn(
 						"Adding missing organization with identifier='{}' to feasibility research study with id='{}'",
 						identifier, researchStudy.getId());
 
 				researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
-						new Reference().setType(ResourceType.Organization.name()).setIdentifier(
-								new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
-										.setValue(identifier)));
+						new Reference().setType(ResourceType.Organization.name()).setIdentifier(new Identifier()
+								.setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue(identifier)));
 
 			});
 
@@ -146,19 +146,20 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 
 	private boolean getNeedsConsentCheck(Task task)
 	{
-		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK).orElseThrow(
-				() -> new IllegalArgumentException(
-						"NeedsConsentCheck boolean is not set in task with id='" + task.getId()
-								+ "', this error should " + "have been caught by resource validation"));
+		return getTaskHelper()
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
+						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK)
+				.orElseThrow(() -> new IllegalArgumentException("NeedsConsentCheck boolean is not set in task with id='"
+						+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
-		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
-				() -> new IllegalArgumentException(
-						"NeedsRecordLinkage boolean is not set in task with id='" + task.getId()
-								+ "', this error should " + "have been caught by resource validation"));
+		return getTaskHelper()
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
+						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE)
+				.orElseThrow(
+						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
+								+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 }

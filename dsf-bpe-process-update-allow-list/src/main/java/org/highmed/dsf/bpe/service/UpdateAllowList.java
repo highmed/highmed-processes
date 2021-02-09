@@ -75,14 +75,14 @@ public class UpdateAllowList extends AbstractServiceDelegate implements Initiali
 				.setValue(CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST);
 		searchSet.getEntry().stream()
 				.filter(e -> e.hasSearch() && SearchEntryMode.MATCH.equals(e.getSearch().getMode()) && e.hasResource()
-						&& e.getResource() instanceof Organization).map(e -> (Organization) e.getResource())
-				.forEach(addAllowListEntry(transaction, searchSet));
+						&& e.getResource() instanceof Organization)
+				.map(e -> (Organization) e.getResource()).forEach(addAllowListEntry(transaction, searchSet));
 
 		logger.debug("Uploading new allow list transaction bundle: {}",
 				FhirContext.forR4().newJsonParser().encodeResourceToString(transaction));
 
-		IdType result = client.withMinimalReturn().updateConditionaly(transaction, Map.of("identifier", Collections
-				.singletonList(CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST + "|"
+		IdType result = client.withMinimalReturn().updateConditionaly(transaction,
+				Map.of("identifier", Collections.singletonList(CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST + "|"
 						+ CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST)));
 
 		Task task = getLeadingTaskFromExecutionVariables();
@@ -93,7 +93,8 @@ public class UpdateAllowList extends AbstractServiceDelegate implements Initiali
 
 	private Consumer<? super Organization> addAllowListEntry(Bundle transaction, Bundle searchSet)
 	{
-		return organization -> {
+		return organization ->
+		{
 			Identifier identifier = getDefaultIdentifier(organization).get();
 
 			BundleEntryComponent organizationEntry = transaction.addEntry();
@@ -115,7 +116,8 @@ public class UpdateAllowList extends AbstractServiceDelegate implements Initiali
 	private Function<Reference, Optional<Reference>> addAllowListEntryReturnReference(Bundle transaction,
 			String organizationId, Bundle searchSet)
 	{
-		return endpointRef -> getEndpoint(endpointRef, searchSet).map(endpoint -> {
+		return endpointRef -> getEndpoint(endpointRef, searchSet).map(endpoint ->
+		{
 			Identifier identifier = getDefaultIdentifier(endpoint).get();
 
 			BundleEntryComponent endpointEntry = transaction.addEntry();
@@ -148,7 +150,8 @@ public class UpdateAllowList extends AbstractServiceDelegate implements Initiali
 	private Optional<Endpoint> getEndpoint(Reference endpoint, Bundle searchSet)
 	{
 		return searchSet.getEntry().stream()
-				.filter(e -> e.hasResource() && e.getResource() instanceof Endpoint && e.getFullUrl()
-						.endsWith(endpoint.getReference())).map(e -> (Endpoint) e.getResource()).findFirst();
+				.filter(e -> e.hasResource() && e.getResource() instanceof Endpoint
+						&& e.getFullUrl().endsWith(endpoint.getReference()))
+				.map(e -> (Endpoint) e.getResource()).findFirst();
 	}
 }

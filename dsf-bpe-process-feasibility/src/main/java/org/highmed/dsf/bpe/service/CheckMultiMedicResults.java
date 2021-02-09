@@ -51,21 +51,22 @@ public class CheckMultiMedicResults extends AbstractServiceDelegate
 
 	private void addFinalFeasibilityQueryErrorsToLeadingTask(Task toRead, Task toWrite)
 	{
-		toRead.getInput().stream().filter(in -> in.hasType() && in.getType().hasCoding() && CODESYSTEM_HIGHMED_BPMN
-				.equals(in.getType().getCodingFirstRep().getSystem()) && CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR
-				.equals(in.getType().getCodingFirstRep().getCode())).forEach(in -> toWrite.getOutput()
-				.add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
-						in.getValue().primitiveValue())));
+		toRead.getInput().stream()
+				.filter(in -> in.hasType() && in.getType().hasCoding()
+						&& CODESYSTEM_HIGHMED_BPMN.equals(in.getType().getCodingFirstRep().getSystem())
+						&& CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR.equals(in.getType().getCodingFirstRep().getCode()))
+				.forEach(in -> toWrite.getOutput().add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN,
+						CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, in.getValue().primitiveValue())));
 	}
 
 	private FinalFeasibilityQueryResults readFinalFeasibilityQueryResultsFromCurrentTask(Task task)
 	{
 		List<FinalFeasibilityQueryResult> results = task.getInput().stream()
-				.filter(in -> in.hasType() && in.getType().hasCoding() && CODESYSTEM_HIGHMED_FEASIBILITY
-						.equals(in.getType().getCodingFirstRep().getSystem())
+				.filter(in -> in.hasType() && in.getType().hasCoding()
+						&& CODESYSTEM_HIGHMED_FEASIBILITY.equals(in.getType().getCodingFirstRep().getSystem())
 						&& CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_MULTI_MEDIC_RESULT
-						.equals(in.getType().getCodingFirstRep().getCode())).map(in -> toResult(task, in))
-				.collect(Collectors.toList());
+								.equals(in.getType().getCodingFirstRep().getCode()))
+				.map(in -> toResult(task, in)).collect(Collectors.toList());
 		return new FinalFeasibilityQueryResults(results);
 	}
 
@@ -79,14 +80,13 @@ public class CheckMultiMedicResults extends AbstractServiceDelegate
 
 	private int getParticipatingMedicsCountByCohortId(Task task, String cohortId)
 	{
-		return task.getInput().stream()
-				.filter(in -> in.hasType() && in.getType().hasCoding() && CODESYSTEM_HIGHMED_FEASIBILITY
-						.equals(in.getType().getCodingFirstRep().getSystem())
-						&& CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDICS_COUNT
-						.equals(in.getType().getCodingFirstRep().getCode()) && cohortId
-						.equals(((Reference) in.getExtensionByUrl(EXTENSION_HIGHMED_GROUP_ID).getValue())
-								.getReference())).mapToInt(in -> ((UnsignedIntType) in.getValue()).getValue())
-				.findFirst().getAsInt();
+		return task.getInput().stream().filter(in -> in.hasType() && in.getType().hasCoding()
+				&& CODESYSTEM_HIGHMED_FEASIBILITY.equals(in.getType().getCodingFirstRep().getSystem())
+				&& CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDICS_COUNT
+						.equals(in.getType().getCodingFirstRep().getCode())
+				&& cohortId.equals(
+						((Reference) in.getExtensionByUrl(EXTENSION_HIGHMED_GROUP_ID).getValue()).getReference()))
+				.mapToInt(in -> ((UnsignedIntType) in.getValue()).getValue()).findFirst().getAsInt();
 	}
 
 	protected FinalFeasibilityQueryResults checkResults(FinalFeasibilityQueryResults results)

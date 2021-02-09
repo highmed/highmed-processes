@@ -41,9 +41,10 @@ public class CalculateMultiMedicResults extends AbstractServiceDelegate
 		Map<String, List<FeasibilityQueryResult>> byCohortId = results.stream()
 				.collect(Collectors.groupingBy(FeasibilityQueryResult::getCohortId));
 
-		return byCohortId.entrySet().stream().map(e -> new FinalFeasibilityQueryResult(e.getKey(),
-				toInt(e.getValue().stream().filter(r -> r.getCohortSize() > 0).count()),
-				toInt(e.getValue().stream().mapToLong(FeasibilityQueryResult::getCohortSize).sum())))
+		return byCohortId.entrySet().stream()
+				.map(e -> new FinalFeasibilityQueryResult(e.getKey(),
+						toInt(e.getValue().stream().filter(r -> r.getCohortSize() > 0).count()),
+						toInt(e.getValue().stream().mapToLong(FeasibilityQueryResult::getCohortSize).sum())))
 				.collect(Collectors.toList());
 	}
 

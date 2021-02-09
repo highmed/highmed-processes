@@ -64,7 +64,8 @@ public class ExtractInputValues extends AbstractServiceDelegate implements Initi
 
 	private List<Group> getCohortDefinitions(Stream<String> queries)
 	{
-		return queries.map(q -> {
+		return queries.map(q ->
+		{
 			Group group = new Group();
 			group.setIdElement(new IdType(UUID.randomUUID().toString()));
 			group.addExtension().setUrl(EXTENSION_HIGHMED_QUERY)
@@ -77,29 +78,27 @@ public class ExtractInputValues extends AbstractServiceDelegate implements Initi
 	{
 		return getTaskHelper()
 				.getFirstInputParameterBooleanValue(task, ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK).orElseThrow(
-						() -> new IllegalArgumentException(
-								"NeedsConsentCheck boolean is not set in task with id='" + task.getId()
-										+ "', this error should " + "have been caught by resource validation"));
+						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK)
+				.orElseThrow(() -> new IllegalArgumentException("NeedsConsentCheck boolean is not set in task with id='"
+						+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
 		return getTaskHelper()
 				.getFirstInputParameterBooleanValue(task, ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
-						() -> new IllegalArgumentException(
-								"NeedsRecordLinkage boolean is not set in task with id='" + task.getId()
-										+ "', this error should " + "have been caught by resource validation"));
+						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE)
+				.orElseThrow(
+						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
+								+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 
 	private BloomFilterConfig getBloomFilterConfig(Task task)
 	{
 		return BloomFilterConfig.fromBytes(getTaskHelper()
 				.getFirstInputParameterByteValue(task, ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG).orElseThrow(
-						() -> new IllegalArgumentException(
-								"BloomFilterConfig byte[] is not set in task with id='" + task.getId()
-										+ "', this error should " + "have been caught by resource validation")));
+						ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG)
+				.orElseThrow(() -> new IllegalArgumentException("BloomFilterConfig byte[] is not set in task with id='"
+						+ task.getId() + "', this error should " + "have been caught by resource validation")));
 	}
 }
