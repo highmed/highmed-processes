@@ -30,8 +30,9 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 	{
 		Task task = getCurrentTaskFromExecutionVariables();
 
-		List<Target> targets = getTaskHelper().getInputParameterStringValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,
-				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY)
+		List<Target> targets = getTaskHelper()
+				.getInputParameterStringValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY)
 				.map(correlationKey -> Target.createBiDirectionalTarget("", correlationKey))
 				.collect(Collectors.toList());
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(new Targets(targets)));
@@ -42,10 +43,11 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
-		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
-				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
-				() -> new IllegalArgumentException(
-						"NeedsRecordLinkage boolean is not set in task with id='" + task.getId()
-								+ "', this error should " + "have been caught by resource validation"));
+		return getTaskHelper()
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE)
+				.orElseThrow(
+						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
+								+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 }

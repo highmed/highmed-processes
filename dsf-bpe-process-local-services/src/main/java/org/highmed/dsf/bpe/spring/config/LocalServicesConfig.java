@@ -40,13 +40,13 @@ public class LocalServicesConfig
 
 	@Autowired
 	private OrganizationProvider organizationProvider;
-	
+
 	@Autowired
 	private TaskHelper taskHelper;
 
 	@Autowired
 	private GroupHelper groupHelper;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -104,25 +104,25 @@ public class LocalServicesConfig
 	{
 		return new BouncyCastleProvider();
 	}
-	
+
 	@Bean
 	public GenerateCountFromIds generateCountFromIds()
 	{
 		return new GenerateCountFromIds(fhirClientProvider, taskHelper);
 	}
-	
+
 	@Bean
 	public ExecuteQueries executeQueries()
 	{
 		return new ExecuteQueries(fhirClientProvider, openEhrClient(), taskHelper, organizationProvider);
 	}
-	
+
 	@Bean
 	public OpenEhrClient openEhrClient()
 	{
 		return openEhrClientFactory.createClient(environment::getProperty);
 	}
-	
+
 	@Bean
 	public CheckQueries checkQueries()
 	{

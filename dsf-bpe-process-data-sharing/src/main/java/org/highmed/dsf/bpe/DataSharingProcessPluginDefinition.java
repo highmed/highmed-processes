@@ -66,13 +66,12 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 
 		var vDS = ValueSetResource.file("fhir/ValueSet/highmed-data-sharing.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"computeDataSharing/" + VERSION, Arrays.asList(aCom, cDS, sTCom, sTResS, vDS),
-				"executeDataSharing/" + VERSION, Arrays.asList(aExe, cDS, sTExe, vDS),
-				"requestDataSharing/" + VERSION, Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("computeDataSharing/" + VERSION,
+				Arrays.asList(aCom, cDS, sTCom, sTResS, vDS), "executeDataSharing/" + VERSION,
+				Arrays.asList(aExe, cDS, sTExe, vDS), "requestDataSharing/" + VERSION,
+				Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
 
-		return ResourceProvider
-				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,
-						resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
+				classLoader, resourcesByProcessKeyAndVersion);
 	}
 }

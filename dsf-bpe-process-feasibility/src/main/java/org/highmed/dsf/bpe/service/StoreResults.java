@@ -48,8 +48,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResults results = (QueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		boolean needsRecordLinkage = Boolean.TRUE
 				.equals((Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE));
@@ -73,23 +72,26 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		{
 			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE, EXTENSION_HIGHMED_GROUP_ID)
-					.map(input -> {
+					.map(input ->
+					{
 						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 						String resultSetUrl = ((Reference) input.getValue()).getReference();
 
-						return QueryResult
-								.resultSet(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
+						return QueryResult.resultSet(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
 					}).collect(Collectors.toList());
 		}
 		else
 		{
-			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
-					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT, EXTENSION_HIGHMED_GROUP_ID).map(input -> {
-				String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
-				int cohortSize = ((UnsignedIntType) input.getValue()).getValue();
+			return taskHelper
+					.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+							CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT, EXTENSION_HIGHMED_GROUP_ID)
+					.map(input ->
+					{
+						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
+						int cohortSize = ((UnsignedIntType) input.getValue()).getValue();
 
-				return QueryResult.count(requester.getIdentifier().getValue(), cohortId, cohortSize);
-			}).collect(Collectors.toList());
+						return QueryResult.count(requester.getIdentifier().getValue(), cohortId, cohortSize);
+					}).collect(Collectors.toList());
 		}
 	}
 

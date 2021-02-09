@@ -3,17 +3,17 @@ package org.highmed.dsf.bpe.start;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsBase.CODE_TYPE_AQL_QUERY;
+import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
+import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_QUERY;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
+import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER;
+import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHEMD_RESEARCH_STUDY;
+import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHMED_GROUP;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
-import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
-import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP;
-import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHEMD_RESEARCH_STUDY;
-import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHMED_GROUP;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_PROCESS_URI_AND_LATEST_VERSION;
@@ -48,9 +48,9 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 public class RequestFeasibilityFromMedicsViaMedic1ExampleStarter
 {
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
-	//    highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
+	// highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PASSWORD" or args[1]: the password of the client-certificate
-	//    password
+	// password
 	public static void main(String[] args) throws Exception
 	{
 		Bundle bundle = createStartResource();
@@ -108,21 +108,21 @@ public class RequestFeasibilityFromMedicsViaMedic1ExampleStarter
 		researchStudy.addEnrollment().setReference(group1.getIdElement().getIdPart());
 		researchStudy.addEnrollment().setReference(group2.getIdElement().getIdPart());
 
-		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
-				new Reference().setType(ResourceType.Organization.name()).setIdentifier(
-						new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
+		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
+				.setValue(new Reference().setType(ResourceType.Organization.name())
+						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
 								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1)));
-		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
-				new Reference().setType(ResourceType.Organization.name()).setIdentifier(
-						new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
+		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
+				.setValue(new Reference().setType(ResourceType.Organization.name())
+						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
 								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_2)));
-		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
-				new Reference().setType(ResourceType.Organization.name()).setIdentifier(
-						new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
+		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
+				.setValue(new Reference().setType(ResourceType.Organization.name())
+						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
 								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_3)));
-		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_TTP).setValue(
-				new Reference().setType(ResourceType.Organization.name()).setIdentifier(
-						new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
+		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_TTP)
+				.setValue(new Reference().setType(ResourceType.Organization.name())
+						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
 								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_TTP)));
 
 		return researchStudy;
@@ -147,9 +147,11 @@ public class RequestFeasibilityFromMedicsViaMedic1ExampleStarter
 
 		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_MESSAGE_NAME)).getType()
 				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
-		task.addInput().setValue(new Reference().setReference(researchStudy.getIdElement().getIdPart())
-				.setType(ResourceType.ResearchStudy.name())).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+
+		task.addInput()
+				.setValue(new Reference().setReference(researchStudy.getIdElement().getIdPart())
+						.setType(ResourceType.ResearchStudy.name()))
+				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE);
 		task.addInput().setValue(new BooleanType(true)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE);

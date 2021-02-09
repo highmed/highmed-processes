@@ -50,13 +50,16 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 	{
 		Map<String, String> modifiedQueries = new HashMap<>();
 
-		for (Map.Entry<String, String> entry : queries.entrySet()) {
+		for (Map.Entry<String, String> entry : queries.entrySet())
+		{
 			String query = entry.getValue();
 
 			// TODO Implement correct check for default id query
-			if (!query.startsWith("SELECT e" + ehrIdColumnPath + " as EHRID")) {
+			if (!query.startsWith("SELECT e" + ehrIdColumnPath + " as EHRID"))
+			{
 				query = query.replace("SELECT", "SELECT e" + ehrIdColumnPath + " as EHRID,");
-				logger.warn("Query does not start with '{}', adapting SELECT statement", "SELECT e" + ehrIdColumnPath + " as EHRID");
+				logger.warn("Query does not start with '{}', adapting SELECT statement",
+						"SELECT e" + ehrIdColumnPath + " as EHRID");
 			}
 
 			modifiedQueries.put(entry.getKey(), query);

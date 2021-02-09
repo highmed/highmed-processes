@@ -51,8 +51,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResults results = (QueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		Map<String, List<QueryResult>> byCohortId = results.getResults().stream()
 				.collect(Collectors.groupingBy(QueryResult::getCohortId));

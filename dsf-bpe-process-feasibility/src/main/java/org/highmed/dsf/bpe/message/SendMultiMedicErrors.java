@@ -30,13 +30,13 @@ public class SendMultiMedicErrors extends AbstractTaskMessageSend
 	{
 		Task task = getLeadingTaskFromExecutionVariables();
 
-		String taskUrl = new Reference(new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl() + "/Task" ,  task.getIdElement().getIdPart()))
-				.getReference();
+		String taskUrl = new Reference(new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl() + "/Task",
+				task.getIdElement().getIdPart())).getReference();
 
-		Task.ParameterComponent input = getTaskHelper()
-				.createInput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
-						"An error occurred while calculating the multi medic feasibility result for "
-								+ "all defined cohorts, see task with url='" + taskUrl + "'");
+		Task.ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_BPMN,
+				CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
+				"An error occurred while calculating the multi medic feasibility result for "
+						+ "all defined cohorts, see task with url='" + taskUrl + "'");
 		return Stream.of(input);
 	}
 }

@@ -48,9 +48,10 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate implements 
 	{
 		Task task = getCurrentTaskFromExecutionVariables();
 
-		return getTaskHelper().getFirstInputParameterStringValue(task, ConstantsBase.CODESYSTEM_HIGHMED_BPMN,
-				ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY).orElseThrow(
-				() -> new IllegalStateException(
+		return getTaskHelper()
+				.getFirstInputParameterStringValue(task, ConstantsBase.CODESYSTEM_HIGHMED_BPMN,
+						ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY)
+				.orElseThrow(() -> new IllegalStateException(
 						"No correlation key found, this error should have been caught by resource validation"));
 	}
 }

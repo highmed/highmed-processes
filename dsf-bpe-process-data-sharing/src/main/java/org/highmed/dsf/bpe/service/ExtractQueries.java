@@ -43,7 +43,8 @@ public class ExtractQueries extends AbstractServiceDelegate implements Initializ
 		// <groupId, query>
 		Map<String, String> queries = new HashMap<>();
 
-		cohorts.forEach(group -> {
+		cohorts.forEach(group ->
+		{
 			String aqlQuery = groupHelper.extractAqlQuery(group);
 			String groupId = group.getId();
 

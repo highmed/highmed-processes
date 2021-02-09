@@ -48,8 +48,8 @@ public class CheckFeasibilityResources extends AbstractServiceDelegate
 
 		if (medics < MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY)
 		{
-			throw new RuntimeException(
-					"Number of distinct participanting MeDICs is < " + MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY + ", got " + medics);
+			throw new RuntimeException("Number of distinct participanting MeDICs is < "
+					+ MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY + ", got " + medics);
 		}
 	}
 
@@ -66,8 +66,8 @@ public class CheckFeasibilityResources extends AbstractServiceDelegate
 		int size = cohorts.size();
 		if (size < MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY)
 		{
-			throw new RuntimeException(
-					"Number of defined cohorts is < " + MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY + ", got " + cohorts.size());
+			throw new RuntimeException("Number of defined cohorts is < " + MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY
+					+ ", got " + cohorts.size());
 		}
 	}
 }

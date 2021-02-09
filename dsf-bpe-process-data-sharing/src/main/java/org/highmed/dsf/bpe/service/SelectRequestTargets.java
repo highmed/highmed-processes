@@ -2,8 +2,8 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_TTP;
@@ -99,10 +99,10 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 	{
 		return researchStudy.getExtensionsByUrl(EXTENSION_HIGHMED_PARTICIPATING_TTP).stream()
 				.filter(e -> e.getValue() instanceof Reference).map(e -> (Reference) e.getValue())
-				.map(r -> Target.createUniDirectionalTarget(r.getIdentifier().getValue())).findFirst().orElseThrow(
-						() -> new IllegalArgumentException(
-								"Participating TTP is not set in ResearchStudy with id='" + researchStudy.getId()
-										+ "', this error should " + "have been caught by resource validation"));
+				.map(r -> Target.createUniDirectionalTarget(r.getIdentifier().getValue())).findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(
+						"Participating TTP is not set in ResearchStudy with id='" + researchStudy.getId()
+								+ "', this error should " + "have been caught by resource validation"));
 	}
 
 	private BloomFilterConfig createBloomFilterConfig()

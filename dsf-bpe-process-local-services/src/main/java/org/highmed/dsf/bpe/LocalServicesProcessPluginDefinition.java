@@ -46,7 +46,8 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 	@Override
 	public Stream<Class<?>> getSpringConfigClasses()
 	{
-		return Stream.of(LocalServicesConfig.class, FeasibilitySerializerConfig.class, DataSharingSerializerConfig.class);
+		return Stream.of(LocalServicesConfig.class, FeasibilitySerializerConfig.class,
+				DataSharingSerializerConfig.class);
 	}
 
 	@Override
@@ -62,18 +63,15 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 		var sTL = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-local-services-integration.xml");
 
-		var vF = ValueSetResource
-				.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION, "http://highmed.org/fhir/ValueSet/data-sharing",
-						DEPENDENCY_DATA_SHARING_VERSION);
-		var cF = CodeSystemResource
-				.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION, "http://highmed.org/fhir/CodeSystem/data-sharing",
-						DEPENDENCY_DATA_SHARING_VERSION);
+		var vF = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
+		var cF = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
 				.of("localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, vF, cF));
 
-		return ResourceProvider
-				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,
-						resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
+				classLoader, resourcesByProcessKeyAndVersion);
 	}
 }

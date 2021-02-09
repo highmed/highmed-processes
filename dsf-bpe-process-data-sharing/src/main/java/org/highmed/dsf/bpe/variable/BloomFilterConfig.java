@@ -52,13 +52,8 @@ public class BloomFilterConfig
 	}
 
 	@JsonCreator
-	public BloomFilterConfig(
-			@JsonProperty("permutationSeed")
-					long permutationSeed,
-			@JsonProperty("hmacSha2Key")
-					Key hmacSha2Key,
-			@JsonProperty("hmacSha3Key")
-					Key hmacSha3Key)
+	public BloomFilterConfig(@JsonProperty("permutationSeed") long permutationSeed,
+			@JsonProperty("hmacSha2Key") Key hmacSha2Key, @JsonProperty("hmacSha3Key") Key hmacSha3Key)
 	{
 		this.permutationSeed = permutationSeed;
 		this.hmacSha2Key = hmacSha2Key;
@@ -104,8 +99,8 @@ public class BloomFilterConfig
 
 	private static long bigEndianToLong(byte[] b)
 	{
-		return (((long) b[0] << 56) + ((long) (b[1] & 255) << 48) + ((long) (b[2] & 255) << 40) + ((long) (b[3] & 255)
-				<< 32) + ((long) (b[4] & 255) << 24) + ((b[5] & 255) << 16) + ((b[6] & 255) << 8) + ((b[7] & 255)
-				<< 0));
+		return (((long) b[0] << 56) + ((long) (b[1] & 255) << 48) + ((long) (b[2] & 255) << 40)
+				+ ((long) (b[3] & 255) << 32) + ((long) (b[4] & 255) << 24) + ((b[5] & 255) << 16) + ((b[6] & 255) << 8)
+				+ ((b[7] & 255) << 0));
 	}
 }

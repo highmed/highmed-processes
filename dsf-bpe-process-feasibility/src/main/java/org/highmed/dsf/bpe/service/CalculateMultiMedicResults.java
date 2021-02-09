@@ -27,8 +27,8 @@ public class CalculateMultiMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		List<QueryResult> results = ((QueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS)).getResults();
+		List<QueryResult> results = ((QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS))
+				.getResults();
 
 		List<FinalFeasibilityQueryResult> finalResults = calculateResults(results);
 
@@ -41,9 +41,10 @@ public class CalculateMultiMedicResults extends AbstractServiceDelegate
 		Map<String, List<QueryResult>> byCohortId = results.stream()
 				.collect(Collectors.groupingBy(QueryResult::getCohortId));
 
-		return byCohortId.entrySet().stream().map(e -> new FinalFeasibilityQueryResult(e.getKey(),
-				toInt(e.getValue().stream().filter(r -> r.getCount() > 0).count()),
-				toInt(e.getValue().stream().mapToLong(QueryResult::getCount).sum())))
+		return byCohortId.entrySet().stream()
+				.map(e -> new FinalFeasibilityQueryResult(e.getKey(),
+						toInt(e.getValue().stream().filter(r -> r.getCount() > 0).count()),
+						toInt(e.getValue().stream().mapToLong(QueryResult::getCount).sum())))
 				.collect(Collectors.toList());
 	}
 

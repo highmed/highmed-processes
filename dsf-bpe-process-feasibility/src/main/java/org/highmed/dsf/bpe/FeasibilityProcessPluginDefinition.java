@@ -61,9 +61,8 @@ public class FeasibilityProcessPluginDefinition implements ProcessPluginDefiniti
 		var aExe = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeFeasibility.xml");
 		var aReq = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-requestFeasibility.xml");
 
-		var cDS = CodeSystemResource
-				.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION, "http://highmed.org/fhir/CodeSystem/data-sharing",
-						DEPENDENCY_DATA_SHARING_VERSION);
+		var cDS = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
 		var sTCom = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-compute-feasibility.xml");
 		var sTErr = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-error-feasibility.xml");
@@ -74,17 +73,15 @@ public class FeasibilityProcessPluginDefinition implements ProcessPluginDefiniti
 		var sTResS = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-single-medic-result-feasibility.xml");
 
-		var vDS = ValueSetResource
-				.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION, "http://highmed.org/fhir/ValueSet/data-sharing",
-						DEPENDENCY_DATA_SHARING_VERSION);
+		var vDS = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
-				.of("computeFeasibility/" + VERSION, Arrays.asList(aCom, cDS, sTCom, sTResS, vDS),
-						"executeFeasibility/" + VERSION, Arrays.asList(aExe, cDS, sTExe, vDS),
-						"requestFeasibility/" + VERSION, Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("computeFeasibility/" + VERSION,
+				Arrays.asList(aCom, cDS, sTCom, sTResS, vDS), "executeFeasibility/" + VERSION,
+				Arrays.asList(aExe, cDS, sTExe, vDS), "requestFeasibility/" + VERSION,
+				Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
 
-		return ResourceProvider
-				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,
-						resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
+				classLoader, resourcesByProcessKeyAndVersion);
 	}
 }

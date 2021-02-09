@@ -51,11 +51,14 @@ public class CheckRequest extends AbstractServiceDelegate implements Initializin
 
 	private boolean requesterIsNotOfTypeTtp(Identifier requester)
 	{
-		Optional<Organization> organization = organizationProvider
-				.getOrganization(requester.getSystem(), requester.getValue());
+		Optional<Organization> organization = organizationProvider.getOrganization(requester.getSystem(),
+				requester.getValue());
 
-		return !organization.map(value -> value.getType().stream().anyMatch(type -> type.getCoding().stream().anyMatch(
-				coding -> coding.getSystem().equals(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE) && coding.getCode()
-						.equals(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_TTP)))).orElse(false);
+		return !organization
+				.map(value -> value.getType().stream()
+						.anyMatch(type -> type.getCoding().stream()
+								.anyMatch(coding -> coding.getSystem().equals(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE)
+										&& coding.getCode().equals(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_TTP))))
+				.orElse(false);
 	}
 }

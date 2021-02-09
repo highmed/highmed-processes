@@ -58,9 +58,8 @@ public class BloomFilterConfigSerializer extends PrimitiveValueSerializer<BloomF
 
 		try
 		{
-			BloomFilterConfig target = (bytes == null || bytes.length <= 0) ?
-					null :
-					objectMapper.readValue(bytes, BloomFilterConfig.class);
+			BloomFilterConfig target = (bytes == null || bytes.length <= 0) ? null
+					: objectMapper.readValue(bytes, BloomFilterConfig.class);
 			return BloomFilterConfigValues.create(target);
 		}
 		catch (IOException e)

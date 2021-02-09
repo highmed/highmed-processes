@@ -37,8 +37,7 @@ public class SendSingleMedicResults extends AbstractTaskMessageSend
 	@Override
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
-		QueryResults results = (QueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		return results.getResults().stream().map(result -> toInput(result));
 	}
@@ -62,11 +61,11 @@ public class SendSingleMedicResults extends AbstractTaskMessageSend
 		}
 		else
 		{
-			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-					.getCohortId());
+			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+					+ result.getCohortId());
 			throw new RuntimeException(
-					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-							.getCohortId());
+					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+							+ result.getCohortId());
 		}
 	}
 

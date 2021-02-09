@@ -45,14 +45,12 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 				new Reference().setReference(researchStudyId.toVersionless().getValueAsString()));
 
 		boolean needsConsentCheck = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK);
-		ParameterComponent inputNeedsConsentCheck = getTaskHelper()
-				.createInput(CODESYSTEM_HIGHMED_DATA_SHARING, CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK,
-						needsConsentCheck);
+		ParameterComponent inputNeedsConsentCheck = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK, needsConsentCheck);
 
 		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
-		ParameterComponent inputNeedsRecordLinkage = getTaskHelper()
-				.createInput(CODESYSTEM_HIGHMED_DATA_SHARING, CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE,
-						needsRecordLinkage);
+		ParameterComponent inputNeedsRecordLinkage = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 
 		if (needsRecordLinkage)
 		{

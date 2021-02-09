@@ -32,8 +32,7 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		Task task = getCurrentTaskFromExecutionVariables();
-		QueryResults results = (QueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		addOutputs(task, results);
 	}
@@ -47,29 +46,28 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 	{
 		if (result.isCohortSizeResult())
 		{
-			Task.TaskOutputComponent output = getTaskHelper()
-					.createOutputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
-							CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT,
-							result.getCount());
+			Task.TaskOutputComponent output = getTaskHelper().createOutputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
+					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT, result.getCount());
+
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
 		}
 		else if (result.isIdResultSetUrlResult())
 		{
-			Task.TaskOutputComponent output = getTaskHelper()
-					.createOutput(CODESYSTEM_HIGHMED_DATA_SHARING,
-							CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE,
-							new Reference(result.getResultSetUrl()));
+			Task.TaskOutputComponent output = getTaskHelper().createOutput(CODESYSTEM_HIGHMED_DATA_SHARING,
+					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE,
+					new Reference(result.getResultSetUrl()));
+
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
 		}
 		else
 		{
-			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-					.getCohortId());
+			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+					+ result.getCohortId());
 			throw new RuntimeException(
-					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-							.getCohortId());
+					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+							+ result.getCohortId());
 		}
 	}
 

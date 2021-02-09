@@ -39,8 +39,9 @@ public class SendRequest extends AbstractTaskMessageSend
 		if (bundleId == null || bundleId.isEmpty())
 			throw new IllegalArgumentException("bundleId null or empty");
 
-		return new ParameterComponent(new CodeableConcept(new Coding(CODESYSTEM_HIGHMED_UPDATE_RESOURCE,
-				CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE, null)),
+		return new ParameterComponent(
+				new CodeableConcept(new Coding(CODESYSTEM_HIGHMED_UPDATE_RESOURCE,
+						CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE, null)),
 				new Reference().setReference(localBaseUrl + (localBaseUrl.endsWith("/") ? "" : "/") + bundleId));
 	}
 }

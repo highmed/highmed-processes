@@ -64,9 +64,8 @@ public class DownloadAllowList extends AbstractServiceDelegate
 		{
 			logger.error("Error while reading Bundle with id {} from organization {}: {}", bundleId.getValue(),
 					task.getRequester().getReference(), e.getMessage());
-			throw new RuntimeException(
-					"Error while reading Bundle with id " + bundleId.getValue() + " from organization " + task
-							.getRequester().getReference() + ", " + e.getMessage(), e);
+			throw new RuntimeException("Error while reading Bundle with id " + bundleId.getValue()
+					+ " from organization " + task.getRequester().getReference() + ", " + e.getMessage(), e);
 		}
 
 		if (!EnumSet.of(BundleType.TRANSACTION, BundleType.BATCH).contains(bundle.getType()))
@@ -84,17 +83,16 @@ public class DownloadAllowList extends AbstractServiceDelegate
 		{
 			logger.error("Error while executing Bundle with id {} from organization {} locally: {}",
 					bundleId.getValue(), task.getRequester().getReference(), e.getMessage());
-			throw new RuntimeException(
-					"Error while executing Bundle with id " + bundleId.getValue() + " from organization " + task
-							.getRequester().getReference() + " locally, " + e.getMessage(), e);
+			throw new RuntimeException("Error while executing Bundle with id " + bundleId.getValue()
+					+ " from organization " + task.getRequester().getReference() + " locally, " + e.getMessage(), e);
 		}
 	}
 
 	private IdType getBundleId(Task task)
 	{
-		List<Reference> bundleReferences = getTaskHelper()
-				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST,
-						CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST).collect(Collectors.toList());
+		List<Reference> bundleReferences = getTaskHelper().getInputParameterReferenceValues(task,
+				CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST, CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST)
+				.collect(Collectors.toList());
 
 		if (bundleReferences.size() != 1)
 		{
@@ -103,8 +101,8 @@ public class DownloadAllowList extends AbstractServiceDelegate
 			throw new RuntimeException("Task input parameter " + CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST
 					+ " contains unexpected number of Bundle IDs, expected 1, got " + bundleReferences.size());
 		}
-		else if (!bundleReferences.get(0).hasReference() || !bundleReferences.get(0).getReference()
-				.contains("/Bundle/"))
+		else if (!bundleReferences.get(0).hasReference()
+				|| !bundleReferences.get(0).getReference().contains("/Bundle/"))
 		{
 			logger.error("Task input parameter {} has no Bundle reference",
 					CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST);

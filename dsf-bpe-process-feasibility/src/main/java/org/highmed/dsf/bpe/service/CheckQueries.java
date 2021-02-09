@@ -51,20 +51,20 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 		Map<String, String> queries = new HashMap<>();
 
 		Task leadingTask = getLeadingTaskFromExecutionVariables();
-		cohorts.forEach(group -> {
+		cohorts.forEach(group ->
+		{
 			String aqlQuery = groupHelper.extractAqlQuery(group).toLowerCase();
 
 			String groupId = group.getId();
 			if (!aqlQuery.startsWith(FEASIBILITY_QUERY_PREFIX))
 			{
-				String errorMessage =
-						"Single medic feasibility query check failed, wrong format for query of group with id '"
-								+ groupId + "', expected query to start with '" + FEASIBILITY_QUERY_PREFIX
-								+ "' but got '" + aqlQuery + "'";
+				String errorMessage = "Single medic feasibility query check failed, wrong format for query of group with id '"
+						+ groupId + "', expected query to start with '" + FEASIBILITY_QUERY_PREFIX + "' but got '"
+						+ aqlQuery + "'";
 
 				logger.info(errorMessage);
-				leadingTask.getOutput().add(getTaskHelper()
-						.createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, errorMessage));
+				leadingTask.getOutput().add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN,
+						CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, errorMessage));
 			}
 			else
 			{

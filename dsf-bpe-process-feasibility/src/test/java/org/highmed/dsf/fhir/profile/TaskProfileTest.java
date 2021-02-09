@@ -108,7 +108,8 @@ public class TaskProfileTest
 		outParticipatingMedics1.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId1));
 		TaskOutputComponent outMultiMedicResult1 = task.addOutput();
 		outMultiMedicResult1.setValue(new UnsignedIntType(25)).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING).setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT);
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT);
 		outMultiMedicResult1.addExtension("http://highmed.org/fhir/StructureDefinition/extension-group-id",
 				new Reference(groupId1));
 
@@ -148,9 +149,11 @@ public class TaskProfileTest
 		task.addInput().setValue(new Reference("ResearchStudy/" + UUID.randomUUID().toString())).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE);
-		task.addInput().setValue(new BooleanType(false)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput().setValue(new BooleanType(false)).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE);
-		task.addInput().setValue(new BooleanType(false)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput().setValue(new BooleanType(false)).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK);
 
 		return task;
@@ -206,9 +209,11 @@ public class TaskProfileTest
 		task.addInput().setValue(new Reference("ResearchStudy/" + UUID.randomUUID().toString())).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE);
-		task.addInput().setValue(new BooleanType(false)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput().setValue(new BooleanType(false)).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE);
-		task.addInput().setValue(new BooleanType(false)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput().setValue(new BooleanType(false)).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK);
 
 		return task;
@@ -341,7 +346,8 @@ public class TaskProfileTest
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY);
 
-		task.addInput().setValue(new BooleanType(false)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput().setValue(new BooleanType(false)).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE);
 
 		return task;
