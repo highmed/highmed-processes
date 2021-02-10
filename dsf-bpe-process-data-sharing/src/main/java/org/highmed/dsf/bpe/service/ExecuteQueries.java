@@ -3,12 +3,18 @@ package org.highmed.dsf.bpe.service;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -45,14 +51,19 @@ public class ExecuteQueries extends AbstractServiceDelegate
 		@SuppressWarnings("unchecked")
 		Map<String, String> queries = (Map<String, String>) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERIES);
 
-		queries.forEach(this::executeQuery);
+		List<QueryResult> results = queries.entrySet().stream()
+				.map(entry -> executeQuery(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
+				QueryResultsValues.create(new QueryResults(results)));
 	}
 
-	private void executeQuery(String cohortId, String cohortQuery)
+	private QueryResult executeQuery(String cohortId, String cohortQuery)
 	{
 		// TODO We might want to introduce a more complex result type to represent a count,
 		// errors and possible meta-data.
 
 		ResultSet resultSet = openehrClient.query(cohortQuery, null);
+		return QueryResult.resultSet(organizationProvider.getLocalIdentifierValue(), cohortId, resultSet);
 	}
 }
