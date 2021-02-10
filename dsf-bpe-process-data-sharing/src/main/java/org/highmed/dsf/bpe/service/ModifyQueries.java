@@ -1,5 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
 
 import java.util.HashMap;
@@ -37,13 +39,20 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
-		// <groupId, query>
-		@SuppressWarnings("unchecked")
-		Map<String, String> queries = (Map<String, String>) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERIES);
+		Boolean needsConsentCheck = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK);
+		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
+		boolean idQuery = Boolean.TRUE.equals(needsConsentCheck) || Boolean.TRUE.equals(needsRecordLinkage);
 
-		Map<String, String> modifiedQueries = modifyQueries(queries);
+		if (idQuery)
+		{
+			// <groupId, query>
+			@SuppressWarnings("unchecked")
+			Map<String, String> queries = (Map<String, String>) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERIES);
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERIES, modifiedQueries);
+			Map<String, String> modifiedQueries = modifyQueries(queries);
+
+			execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERIES, modifiedQueries);
+		}
 	}
 
 	private Map<String, String> modifyQueries(Map<String, String> queries)
