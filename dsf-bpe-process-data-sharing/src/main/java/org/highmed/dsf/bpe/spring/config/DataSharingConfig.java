@@ -32,6 +32,8 @@ import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
+import org.highmed.mpi.client.MasterPatientIndexClient;
+import org.highmed.mpi.client.MasterPatientIndexClientFactory;
 import org.highmed.openehr.client.OpenEhrClient;
 import org.highmed.openehr.client.OpenEhrClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -48,6 +52,9 @@ public class DataSharingConfig
 
 	@Autowired
 	private FhirWebserviceClientProvider fhirClientProvider;
+
+	@Autowired
+	private MasterPatientIndexClientFactory masterPatientIndexClientFactory;
 
 	@Autowired
 	private OpenEhrClientFactory openEhrClientFactory;
@@ -66,6 +73,9 @@ public class DataSharingConfig
 
 	@Value("${org.highmed.dsf.bpe.openehr.subject_external_id.path:/ehr_status/subject/external_ref/id/value}")
 	private String ehrIdColumnPath;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Autowired
 	private Environment environment;
@@ -193,21 +203,21 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public OpenEhrClient openEhrClient()
-	{
-		return openEhrClientFactory.createClient(environment::getProperty);
-	}
-
-	@Bean
 	public ExecuteQueries executeQueries()
 	{
 		return new ExecuteQueries(fhirClientProvider, openEhrClient(), taskHelper, organizationProvider);
 	}
 
 	@Bean
+	public OpenEhrClient openEhrClient()
+	{
+		return openEhrClientFactory.createClient(environment::getProperty);
+	}
+
+	@Bean
 	public ProvideLocalPseudonyms provideLocalPseudonyms()
 	{
-		return new ProvideLocalPseudonyms(fhirClientProvider, taskHelper);
+		return new ProvideLocalPseudonyms(fhirClientProvider, taskHelper, ehrIdColumnPath);
 	}
 
 	@Bean
@@ -225,7 +235,14 @@ public class DataSharingConfig
 	@Bean
 	public GenerateBloomFilters generateBloomFilters()
 	{
-		return new GenerateBloomFilters(fhirClientProvider, taskHelper);
+		return new GenerateBloomFilters(fhirClientProvider, taskHelper, ehrIdColumnPath, masterPatientIndexClient(),
+				objectMapper, bouncyCastleProvider());
+	}
+
+	@Bean
+	public MasterPatientIndexClient masterPatientIndexClient()
+	{
+		return masterPatientIndexClientFactory.createClient(environment::getProperty);
 	}
 
 	@Bean

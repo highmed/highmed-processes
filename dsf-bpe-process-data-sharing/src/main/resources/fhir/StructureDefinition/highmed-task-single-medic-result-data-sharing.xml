@@ -29,7 +29,7 @@
         <valueString value="Parameter" />
       </extension>
       <path value="Task.input" />
-      <min value="3" />
+      <min value="4" />
     </element>
     <element id="Task.input:message-name">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -57,6 +57,74 @@
       <path value="Task.input" />
       <sliceName value="correlation-key" />
       <min value="1" />
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
+      <path value="Task.input" />
+      <sliceName value="single-medic-result-set-rbf-reference" />
+      <min value="0" />
+      <max value="*" />
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.extension">
+      <path value="Task.input.extension" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="url" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.extension:group-id">
+      <path value="Task.input.extension" />
+      <sliceName value="group-id" />
+      <min value="1" />
+      <type>
+        <code value="Extension" />
+        <profile value="http://highmed.org/fhir/StructureDefinition/extension-group-id" />
+      </type>
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.type">
+      <path value="Task.input.type" />
+      <binding>
+        <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+          <valueString value="TaskInputParameterType" />
+        </extension>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+      </binding>
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.type.coding">
+      <path value="Task.input.type.coding" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.type.coding.system">
+      <path value="Task.input.type.coding.system" />
+      <min value="1" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.type.coding.code">
+      <path value="Task.input.type.coding.code" />
+      <min value="1" />
+      <fixedCode value="single-medic-result-set-rbf-reference" />
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.value[x]">
+      <path value="Task.input.value[x]" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Binary" />
+      </type>
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.value[x].reference">
+      <path value="Task.input.value[x].reference" />
+      <min value="1" />
+    </element>
+    <element id="Task.input:single-medic-result-set-rbf-reference.value[x].identifier">
+      <path value="Task.input.value[x].identifier" />
+      <max value="0" />
     </element>
   </differential>
 </StructureDefinition>

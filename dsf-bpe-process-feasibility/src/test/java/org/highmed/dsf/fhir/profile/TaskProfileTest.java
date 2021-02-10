@@ -15,8 +15,8 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDICS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_COMPUTE_FEASIBILITY;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_COMPUTE_FEASIBILITY_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_COMPUTE_FEASIBILITY_PROCESS_URI_AND_LATEST_VERSION;
@@ -277,12 +277,12 @@ public class TaskProfileTest
 		ParameterComponent inSingleMedicResult1 = task.addInput();
 		inSingleMedicResult1.setValue(new UnsignedIntType(5)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
-				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT);
+				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT);
 		inSingleMedicResult1.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId1));
 		ParameterComponent inSingleMedicResult2 = task.addInput();
 		inSingleMedicResult2.setValue(new UnsignedIntType(10)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
-				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT);
+				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT);
 		inSingleMedicResult2.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId2));
 
 		return task;
@@ -298,12 +298,12 @@ public class TaskProfileTest
 		ParameterComponent inSingleMedicResult1 = task.addInput();
 		inSingleMedicResult1.setValue(new Reference("Binary/" + UUID.randomUUID().toString())).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
-				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE);
+				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE);
 		inSingleMedicResult1.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId1));
 		ParameterComponent inSingleMedicResult2 = task.addInput();
 		inSingleMedicResult2.setValue(new Reference("Binary/" + UUID.randomUUID().toString())).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
-				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_REFERENCE);
+				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE);
 		inSingleMedicResult2.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId2));
 
 		return task;

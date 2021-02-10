@@ -5,6 +5,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATIO
 import static org.highmed.dsf.bpe.ConstantsBase.OPENEHR_MIMETYPE_JSON;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RBF_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI;
 
 import java.security.Key;
@@ -96,7 +97,7 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 				.map(result -> translateAndCreateBinary(resultSetTranslator, result, securityIdentifier))
 				.collect(Collectors.toList());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_RBF_RESULTS,
 				QueryResultsValues.create(new QueryResults(translatedResults)));
 	}
 

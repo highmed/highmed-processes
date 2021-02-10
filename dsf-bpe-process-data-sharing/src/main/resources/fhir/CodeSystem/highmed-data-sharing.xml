@@ -3,7 +3,7 @@
 		<tag>
 			<system value="http://highmed.org/fhir/CodeSystem/authorization-role"/>
 			<code value="REMOTE"/>
-		</tag>		
+		</tag>
 	</meta>
 	<url value="http://highmed.org/fhir/CodeSystem/data-sharing"/>
 	<!-- version managed by bpe -->
@@ -20,7 +20,7 @@
 	<hierarchyMeaning value="grouped-by"/>
 	<versionNeeded value="false"/>
 	<content value="complete"/>
-	<concept>	
+	<concept>
 		<code value="research-study-reference"/>
 		<display value="Research Study Reference"/>
 		<definition value="HiGHmed Research Study Reference to define what data is requested from which MeDICs and for what purpose"/>
@@ -46,14 +46,19 @@
 		<definition value="MeDIC Correlation Key transferred to TTP for correlating incoming medic results"/>
 	</concept>
 	<concept>
-		<code value="single-medic-result"/>
-		<display value="Single MeDIC Result"/>
-		<definition value="Result of a single query execution"/>
+		<code value="single-medic-count-result"/>
+		<display value="Single MeDIC Count Result"/>
+		<definition value="Result of a single count query execution"/>
 	</concept>
 	<concept>
-		<code value="single-medic-result-reference"/>
-		<display value="Single MeDIC Result Reference"/>
-		<definition value="Reference to an openEHR ResultSet as a result of a single query execution"/>
+		<code value="single-medic-result-set-rbf-reference"/>
+		<display value="Single MeDIC Result Set Record-Bloom-Filter Reference"/>
+		<definition value="Reference to an openEHR ResultSet containing the record-bloom-filters as a result of a single id query execution"/>
+	</concept>
+	<concept>
+		<code value="single-medic-result-set-result-reference"/>
+		<display value="Single MeDIC Result Set Data Reference"/>
+		<definition value="Reference to an openEHR ResultSet containing the actual result of a single query execution"/>
 	</concept>
 	<concept>
 		<code value="multi-medic-result"/>

@@ -70,7 +70,7 @@ public class QueryResult
 	}
 
 	@JsonIgnore
-	public boolean isCohortSizeResult()
+	public boolean isCountResult()
 	{
 		return resultSet == null && resultSetUrl == null;
 	}
