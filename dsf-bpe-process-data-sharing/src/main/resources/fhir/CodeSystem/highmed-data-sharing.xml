@@ -56,7 +56,7 @@
 		<definition value="Reference to an openEHR ResultSet containing the record-bloom-filters as a result of a single id query execution"/>
 	</concept>
 	<concept>
-		<code value="single-medic-result-set-result-reference"/>
+		<code value="single-medic-result-set-data-reference"/>
 		<display value="Single MeDIC Result Set Data Reference"/>
 		<definition value="Reference to an openEHR ResultSet containing the actual result of a single query execution"/>
 	</concept>

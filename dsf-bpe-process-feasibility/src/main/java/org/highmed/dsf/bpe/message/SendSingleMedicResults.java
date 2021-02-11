@@ -1,8 +1,7 @@
 package org.highmed.dsf.bpe.message;
 
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RBF_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RBF_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE;
@@ -38,7 +37,7 @@ public class SendSingleMedicResults extends AbstractTaskMessageSend
 	@Override
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_RBF_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RBF_RESULTS);
 
 		return results.getResults().stream().map(result -> toInput(result));
 	}
@@ -52,7 +51,7 @@ public class SendSingleMedicResults extends AbstractTaskMessageSend
 			input.addExtension(createCohortIdExtension(result.getCohortId()));
 			return input;
 		}
-		else if (result.isIdResultSetUrlResult())
+		else if (result.isRbfResultSetUrlResult())
 		{
 			ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE,

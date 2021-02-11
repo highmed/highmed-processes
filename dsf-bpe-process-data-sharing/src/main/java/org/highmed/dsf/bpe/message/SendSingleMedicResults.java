@@ -1,8 +1,10 @@
 package org.highmed.dsf.bpe.message;
 
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RBF_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RBF_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_DATA_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE;
 
 import java.util.stream.Stream;
@@ -36,17 +38,30 @@ public class SendSingleMedicResults extends AbstractTaskMessageSend
 	@Override
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_RBF_RESULTS);
+		QueryResults rbfResults = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RBF_RESULTS);
+		Stream<ParameterComponent> inputRbfReferences = rbfResults.getResults().stream().map(result -> toInput(result));
 
-		return results.getResults().stream().map(result -> toInput(result));
+		QueryResults dataResults = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS);
+		Stream<ParameterComponent> inputDataReferences = dataResults.getResults().stream()
+				.map(result -> toInput(result));
+
+		return Stream.concat(inputRbfReferences, inputDataReferences);
 	}
 
 	private Task.ParameterComponent toInput(QueryResult result)
 	{
-		if (result.isIdResultSetUrlResult())
+		if (result.isRbfResultSetUrlResult())
 		{
 			ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE,
+					new Reference(result.getResultSetUrl()));
+			input.addExtension(createCohortIdExtension(result.getCohortId()));
+			return input;
+		}
+		else if (result.isDataResultSetUrlResult())
+		{
+			ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
+					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_DATA_REFERENCE,
 					new Reference(result.getResultSetUrl()));
 			input.addExtension(createCohortIdExtension(result.getCohortId()));
 			return input;

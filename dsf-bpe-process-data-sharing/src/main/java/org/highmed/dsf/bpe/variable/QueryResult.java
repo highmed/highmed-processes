@@ -13,35 +13,48 @@ public class QueryResult
 	private final int count;
 	private final ResultSet resultSet;
 	private final String resultSetUrl;
+	private boolean isRbfResultSet;
 
 	public static QueryResult count(String organizationIdentifier, String cohortId, int count)
 	{
 		if (count < 0)
 			throw new IllegalArgumentException("count >= 0 expected");
 
-		return new QueryResult(organizationIdentifier, cohortId, count, null, null);
+		return new QueryResult(organizationIdentifier, cohortId, count, null, null, false);
 	}
 
-	public static QueryResult resultSet(String organizationIdentifier, String cohortId, ResultSet resultSet)
+	public static QueryResult rbfResultSet(String organizationIdentifier, String cohortId, ResultSet resultSet)
 	{
-		return new QueryResult(organizationIdentifier, cohortId, -1, resultSet, null);
+		return new QueryResult(organizationIdentifier, cohortId, -1, resultSet, null, true);
 	}
 
-	public static QueryResult resultSet(String organizationIdentifier, String cohortId, String resultSetUrl)
+	public static QueryResult rbfResultSet(String organizationIdentifier, String cohortId, String resultSetUrl)
 	{
-		return new QueryResult(organizationIdentifier, cohortId, -1, null, resultSetUrl);
+		return new QueryResult(organizationIdentifier, cohortId, -1, null, resultSetUrl, true);
+	}
+
+	public static QueryResult dataResultSet(String organizationIdentifier, String cohortId, ResultSet resultSet)
+	{
+		return new QueryResult(organizationIdentifier, cohortId, -1, resultSet, null, false);
+	}
+
+	public static QueryResult dataResultSet(String organizationIdentifier, String cohortId, String resultSetUrl)
+	{
+		return new QueryResult(organizationIdentifier, cohortId, -1, null, resultSetUrl, false);
 	}
 
 	@JsonCreator
 	public QueryResult(@JsonProperty("organizationIdentifier") String organizationIdentifier,
 			@JsonProperty("cohortId") String cohortId, @JsonProperty("count") int count,
-			@JsonProperty("resultSet") ResultSet resultSet, @JsonProperty("resultSetUrl") String resultSetUrl)
+			@JsonProperty("resultSet") ResultSet resultSet, @JsonProperty("resultSetUrl") String resultSetUrl,
+			@JsonProperty("isRbfResultSet") boolean isRbfResultSet)
 	{
 		this.organizationIdentifier = organizationIdentifier;
 		this.cohortId = cohortId;
 		this.count = count;
 		this.resultSet = resultSet;
 		this.resultSetUrl = resultSetUrl;
+		this.isRbfResultSet = isRbfResultSet;
 	}
 
 	public String getOrganizationIdentifier()
@@ -76,14 +89,38 @@ public class QueryResult
 	}
 
 	@JsonIgnore
-	public boolean isIdResultSetResult()
+	public boolean isRbfResultSetResult()
 	{
-		return resultSet != null && resultSetUrl == null;
+		return isRbfResultSet && isResultSetResult();
 	}
 
 	@JsonIgnore
-	public boolean isIdResultSetUrlResult()
+	public boolean isRbfResultSetUrlResult()
 	{
-		return resultSet == null && resultSetUrl != null;
+		return isRbfResultSet && isResultSetUrlResult();
+	}
+
+	@JsonIgnore
+	public boolean isDataResultSetResult()
+	{
+		return !isRbfResultSet && isResultSetResult();
+	}
+
+	@JsonIgnore
+	public boolean isDataResultSetUrlResult()
+	{
+		return !isRbfResultSet && isResultSetUrlResult();
+	}
+
+	@JsonIgnore
+	private boolean isResultSetResult()
+	{
+		return resultSet != null;
+	}
+
+	@JsonIgnore
+	private boolean isResultSetUrlResult()
+	{
+		return resultSetUrl != null;
 	}
 }

@@ -1,8 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RBF_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RBF_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE;
@@ -33,7 +32,7 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		Task task = getCurrentTaskFromExecutionVariables();
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_RBF_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RBF_RESULTS);
 
 		addOutputs(task, results);
 	}
@@ -53,7 +52,7 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
 		}
-		else if (result.isIdResultSetUrlResult())
+		else if (result.isRbfResultSetUrlResult())
 		{
 			Task.TaskOutputComponent output = getTaskHelper().createOutput(CODESYSTEM_HIGHMED_DATA_SHARING,
 					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE,

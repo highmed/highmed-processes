@@ -217,7 +217,7 @@ public class DataSharingConfig
 	@Bean
 	public ProvideLocalPseudonyms provideLocalPseudonyms()
 	{
-		return new ProvideLocalPseudonyms(fhirClientProvider, taskHelper, ehrIdColumnPath);
+		return new ProvideLocalPseudonyms(fhirClientProvider, taskHelper, ehrIdColumnPath, objectMapper);
 	}
 
 	@Bean

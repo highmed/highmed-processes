@@ -1,6 +1,6 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class CheckSingleMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS);
 
 		Task currentTask = getCurrentTaskFromExecutionVariables();
 		List<QueryResult> filteredResults = filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(results,
@@ -38,7 +38,7 @@ public class CheckSingleMedicResults extends AbstractServiceDelegate
 
 		// TODO: add percentage filter over results
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS,
 				QueryResultsValues.create(new QueryResults(filteredResults)));
 	}
 

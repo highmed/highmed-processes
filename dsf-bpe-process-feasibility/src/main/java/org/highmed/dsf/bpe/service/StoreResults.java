@@ -2,7 +2,7 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_RBF_REFERENCE;
@@ -48,7 +48,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS);
 
 		boolean needsRecordLinkage = Boolean.TRUE
 				.equals((Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE));
@@ -59,7 +59,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		extendedResults.addAll(results.getResults());
 		extendedResults.addAll(getResults(task, needsRecordLinkage));
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS,
 				QueryResultsValues.create(new QueryResults(extendedResults)));
 	}
 
@@ -77,7 +77,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 						String resultSetUrl = ((Reference) input.getValue()).getReference();
 
-						return QueryResult.resultSet(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
+						return QueryResult.rbfResultSet(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
 					}).collect(Collectors.toList());
 		}
 		else
