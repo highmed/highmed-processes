@@ -318,7 +318,7 @@
     <element id="Task.output:single-medic-result-set-rbf-reference.type.coding.code">
       <path value="Task.output.type.coding.code" />
       <min value="0" />
-      <fixedCode value="single-medic-result-reference" />
+      <fixedCode value="single-medic-result-set-rbf-reference" />
     </element>
     <element id="Task.output:single-medic-result-set-rbf-reference.value[x]">
       <path value="Task.output.value[x]" />
