@@ -30,8 +30,10 @@ import org.hl7.fhir.r4.model.Task;
 
 public class LocalServicesMedic1ExampleStarter
 {
-	private static boolean NEEDS_CONSENT_CHECK = true;
+	private static boolean NEEDS_CONSENT_CHECK = false;
 	private static boolean NEEDS_RECORD_LINKAGE = true;
+
+	private static final String QUERY = "SELECT COUNT(e) FROM EHR e;";
 
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
 	// highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
@@ -63,8 +65,8 @@ public class LocalServicesMedic1ExampleStarter
 		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_LOCAL_SERVICES_MESSAGE_NAME)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
 
-		task.addInput().setValue(new StringType("SELECT COUNT(e) FROM EHR e;")).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_QUERY_TYPE).setCode(CODESYSTEM_HIGMED_QUERY_TYPE_VALUE_AQL);
+		task.addInput().setValue(new StringType(QUERY)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_QUERY_TYPE)
+				.setCode(CODESYSTEM_HIGMED_QUERY_TYPE_VALUE_AQL);
 		task.addInput().setValue(new BooleanType(NEEDS_CONSENT_CHECK)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK);

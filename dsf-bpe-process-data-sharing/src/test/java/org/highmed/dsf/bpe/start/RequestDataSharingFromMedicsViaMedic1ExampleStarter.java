@@ -43,11 +43,14 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 
 public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 {
-	private static final String QUERY = "SELECT " + "e/ehr_status/subject/external_ref/id/value as EHRID, "
-			+ "v/items[at0024,'Bezeichnung']/value, " + "v/items [at0001,'Messwert'], "
-			+ "v/items[at0006,'Dokumentationsdatum Untersuchung']/value " + "FROM EHR e " + "CONTAINS COMPOSITION c "
+	private static boolean NEEDS_CONSENT_CHECK = true;
+	private static boolean NEEDS_RECORD_LINKAGE = true;
+
+	private static final String QUERY = "SELECT e/ehr_status/subject/external_ref/id/value as EHRID, "
+			+ "v/items[at0024,'Bezeichnung']/value, v/items [at0001,'Messwert'], "
+			+ "v/items[at0006,'Dokumentationsdatum Untersuchung']/value FROM EHR e CONTAINS COMPOSITION c "
 			+ "CONTAINS CLUSTER v[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1] "
-			+ "WHERE v/items[at0024,'Bezeichnung']/value/value = 'Natrium' " + "OFFSET 0 LIMIT 15";
+			+ "WHERE v/items[at0024,'Bezeichnung']/value/value = 'Natrium' OFFSET 0 LIMIT 15;";
 
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
 	// highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
@@ -156,9 +159,11 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 						.setType(ResourceType.ResearchStudy.name()))
 				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE);
-		task.addInput().setValue(new BooleanType(true)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput().setValue(new BooleanType(NEEDS_RECORD_LINKAGE)).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE);
-		task.addInput().setValue(new BooleanType(true)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput().setValue(new BooleanType(NEEDS_CONSENT_CHECK)).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK);
 
 		return task;

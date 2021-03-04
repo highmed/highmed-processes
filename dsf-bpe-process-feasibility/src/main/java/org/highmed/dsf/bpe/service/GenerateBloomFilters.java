@@ -4,8 +4,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TTP_IDEN
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.OPENEHR_MIMETYPE_JSON;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RBF_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI;
 
 import java.security.Key;
@@ -46,7 +45,7 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class GenerateBloomFilters extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(GenerateBloomFilters.class);
+	private static final Logger logger = LoggerFactory.getLogger(ModifyResultSet.class);
 
 	private static final int RBF_LENGTH = 3000;
 	private static final FieldWeights FBF_WEIGHTS = new FieldWeights(0.1, 0.1, 0.1, 0.2, 0.05, 0.1, 0.05, 0.2, 0.1);
@@ -84,7 +83,7 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		String securityIdentifier = getSecurityIdentifier(execution);
 
@@ -97,7 +96,7 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 				.map(result -> translateAndCreateBinary(resultSetTranslator, result, securityIdentifier))
 				.collect(Collectors.toList());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RBF_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(translatedResults)));
 	}
 
@@ -133,7 +132,7 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 		ResultSet translatedResultSet = translate(resultSetTranslator, result.getResultSet());
 		String resultSetUrl = saveResultSetAsBinaryForTtp(translatedResultSet, ttpIdentifier);
 
-		return QueryResult.rbfResultSet(result.getOrganizationIdentifier(), result.getCohortId(), resultSetUrl);
+		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSetUrl);
 	}
 
 	private ResultSet translate(ResultSetTranslatorToTtpRbfOnly resultSetTranslator, ResultSet resultSet)

@@ -123,6 +123,10 @@
   <bpmn:message id="Message_1dr71re" name="resultSingleMedicFeasibilityMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="localServicesIntegration">
+      <bpmndi:BPMNEdge id="SequenceFlow_07wtgee_di" bpmnElement="SequenceFlow_07wtgee">
+        <di:waypoint x="599" y="272" />
+        <di:waypoint x="667" y="272" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_125i149_di" bpmnElement="Flow_125i149">
         <di:waypoint x="400" y="272" />
         <di:waypoint x="499" y="272" />
@@ -216,10 +220,6 @@
           <dc:Bounds x="722" y="254" width="21" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_07wtgee_di" bpmnElement="SequenceFlow_07wtgee">
-        <di:waypoint x="599" y="272" />
-        <di:waypoint x="667" y="272" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_04ouilq_di" bpmnElement="SequenceFlow_04ouilq">
         <di:waypoint x="1760" y="272" />
         <di:waypoint x="1860" y="272" />
@@ -236,9 +236,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="180" y="297" width="22" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_1pt9xhp_di" bpmnElement="checkQueries">
-        <dc:Bounds x="499" y="232" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_1dln3in_di" bpmnElement="ExclusiveGateway_1dln3in" isMarkerVisible="true">
         <dc:Bounds x="667" y="247" width="50" height="50" />
@@ -281,6 +278,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1y9z4ut_di" bpmnElement="storeResult">
         <dc:Bounds x="1860" y="232" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1pt9xhp_di" bpmnElement="checkQueries">
+        <dc:Bounds x="499" y="232" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

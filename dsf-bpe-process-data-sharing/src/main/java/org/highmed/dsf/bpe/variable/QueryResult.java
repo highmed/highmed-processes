@@ -10,51 +10,38 @@ public class QueryResult
 {
 	private final String organizationIdentifier;
 	private final String cohortId;
-	private final int count;
+	private final int cohortSize;
 	private final ResultSet resultSet;
 	private final String resultSetUrl;
-	private boolean isRbfResultSet;
 
-	public static QueryResult count(String organizationIdentifier, String cohortId, int count)
+	public static QueryResult countResult(String organizationIdentifier, String cohortId, int cohortSize)
 	{
-		if (count < 0)
-			throw new IllegalArgumentException("count >= 0 expected");
+		if (cohortSize < 0)
+			throw new IllegalArgumentException("cohortSize >= 0 expected");
 
-		return new QueryResult(organizationIdentifier, cohortId, count, null, null, false);
+		return new QueryResult(organizationIdentifier, cohortId, cohortSize, null, null);
 	}
 
-	public static QueryResult rbfResultSet(String organizationIdentifier, String cohortId, ResultSet resultSet)
+	public static QueryResult idResult(String organizationIdentifier, String cohortId, ResultSet resultSet)
 	{
-		return new QueryResult(organizationIdentifier, cohortId, -1, resultSet, null, true);
+		return new QueryResult(organizationIdentifier, cohortId, -1, resultSet, null);
 	}
 
-	public static QueryResult rbfResultSet(String organizationIdentifier, String cohortId, String resultSetUrl)
+	public static QueryResult idResult(String organizationIdentifier, String cohortId, String resultSetUrl)
 	{
-		return new QueryResult(organizationIdentifier, cohortId, -1, null, resultSetUrl, true);
-	}
-
-	public static QueryResult dataResultSet(String organizationIdentifier, String cohortId, ResultSet resultSet)
-	{
-		return new QueryResult(organizationIdentifier, cohortId, -1, resultSet, null, false);
-	}
-
-	public static QueryResult dataResultSet(String organizationIdentifier, String cohortId, String resultSetUrl)
-	{
-		return new QueryResult(organizationIdentifier, cohortId, -1, null, resultSetUrl, false);
+		return new QueryResult(organizationIdentifier, cohortId, -1, null, resultSetUrl);
 	}
 
 	@JsonCreator
 	public QueryResult(@JsonProperty("organizationIdentifier") String organizationIdentifier,
-			@JsonProperty("cohortId") String cohortId, @JsonProperty("count") int count,
-			@JsonProperty("resultSet") ResultSet resultSet, @JsonProperty("resultSetUrl") String resultSetUrl,
-			@JsonProperty("isRbfResultSet") boolean isRbfResultSet)
+			@JsonProperty("cohortId") String cohortId, @JsonProperty("cohortSize") int cohortSize,
+			@JsonProperty("resultSet") ResultSet resultSet, @JsonProperty("resultSetUrl") String resultSetUrl)
 	{
 		this.organizationIdentifier = organizationIdentifier;
 		this.cohortId = cohortId;
-		this.count = count;
+		this.cohortSize = cohortSize;
 		this.resultSet = resultSet;
 		this.resultSetUrl = resultSetUrl;
-		this.isRbfResultSet = isRbfResultSet;
 	}
 
 	public String getOrganizationIdentifier()
@@ -67,9 +54,9 @@ public class QueryResult
 		return cohortId;
 	}
 
-	public int getCount()
+	public int getCohortSize()
 	{
-		return count;
+		return cohortSize;
 	}
 
 	public ResultSet getResultSet()
@@ -83,44 +70,20 @@ public class QueryResult
 	}
 
 	@JsonIgnore
-	public boolean isCountResult()
+	public boolean isCohortSizeResult()
 	{
 		return resultSet == null && resultSetUrl == null;
 	}
 
 	@JsonIgnore
-	public boolean isRbfResultSetResult()
+	public boolean isIdResultSetResult()
 	{
-		return isRbfResultSet && isResultSetResult();
+		return resultSet != null && resultSetUrl == null;
 	}
 
 	@JsonIgnore
-	public boolean isRbfResultSetUrlResult()
+	public boolean isIdResultSetUrlResult()
 	{
-		return isRbfResultSet && isResultSetUrlResult();
-	}
-
-	@JsonIgnore
-	public boolean isDataResultSetResult()
-	{
-		return !isRbfResultSet && isResultSetResult();
-	}
-
-	@JsonIgnore
-	public boolean isDataResultSetUrlResult()
-	{
-		return !isRbfResultSet && isResultSetUrlResult();
-	}
-
-	@JsonIgnore
-	private boolean isResultSetResult()
-	{
-		return resultSet != null;
-	}
-
-	@JsonIgnore
-	private boolean isResultSetUrlResult()
-	{
-		return resultSetUrl != null;
+		return resultSet == null && resultSetUrl != null;
 	}
 }

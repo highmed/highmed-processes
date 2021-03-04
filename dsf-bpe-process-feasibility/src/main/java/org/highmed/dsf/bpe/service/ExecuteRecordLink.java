@@ -1,7 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_DATA_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +51,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		Map<String, List<QueryResult>> byCohortId = results.getResults().stream()
 				.collect(Collectors.groupingBy(QueryResult::getCohortId));
@@ -61,7 +61,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 		List<FinalFeasibilityQueryResult> matchedResults = byCohortId.entrySet().stream()
 				.map(e -> match(matcher, e.getKey(), e.getValue())).collect(Collectors.toList());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_DATA_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS,
 				FinalFeasibilityQueryResultsValues.create(new FinalFeasibilityQueryResults(matchedResults)));
 	}
 

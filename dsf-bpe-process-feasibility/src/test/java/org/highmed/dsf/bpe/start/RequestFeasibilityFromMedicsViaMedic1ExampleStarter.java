@@ -50,6 +50,8 @@ public class RequestFeasibilityFromMedicsViaMedic1ExampleStarter
 	private static boolean NEEDS_CONSENT_CHECK = true;
 	private static boolean NEEDS_RECORD_LINKAGE = true;
 
+	private static final String QUERY = "SELECT COUNT(e) FROM EHR e;";
+
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
 	// highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PASSWORD" or args[1]: the password of the client-certificate
@@ -92,8 +94,8 @@ public class RequestFeasibilityFromMedicsViaMedic1ExampleStarter
 		group.setType(GroupType.PERSON);
 		group.setActual(false);
 		group.setActive(true);
-		group.addExtension().setUrl(EXTENSION_HIGHMED_QUERY).setValue(
-				new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression("SELECT COUNT(e) FROM EHR e"));
+		group.addExtension().setUrl(EXTENSION_HIGHMED_QUERY)
+				.setValue(new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression(QUERY));
 		group.setName(name);
 
 		return group;

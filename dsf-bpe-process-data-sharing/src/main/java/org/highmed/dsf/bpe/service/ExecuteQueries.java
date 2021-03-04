@@ -1,7 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +52,7 @@ public class ExecuteQueries extends AbstractServiceDelegate
 		List<QueryResult> results = queries.entrySet().stream()
 				.map(entry -> executeQuery(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(results)));
 	}
 
@@ -62,6 +62,6 @@ public class ExecuteQueries extends AbstractServiceDelegate
 		// errors and possible meta-data.
 
 		ResultSet resultSet = openehrClient.query(cohortQuery, null);
-		return QueryResult.rbfResultSet(organizationProvider.getLocalIdentifierValue(), cohortId, resultSet);
+		return QueryResult.idResult(organizationProvider.getLocalIdentifierValue(), cohortId, resultSet);
 	}
 }

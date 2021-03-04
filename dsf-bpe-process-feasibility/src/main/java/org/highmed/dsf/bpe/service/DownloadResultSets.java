@@ -1,7 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.OPENEHR_MIMETYPE_JSON;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,11 +51,11 @@ public class DownloadResultSets extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		List<QueryResult> resultsWithResultSets = download(results);
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(resultsWithResultSets)));
 	}
 
@@ -72,7 +72,7 @@ public class DownloadResultSets extends AbstractServiceDelegate
 		InputStream binary = readBinaryResource(client, id.getIdPart());
 		ResultSet resultSet = deserializeResultSet(binary);
 
-		return QueryResult.rbfResultSet(result.getOrganizationIdentifier(), result.getCohortId(), resultSet);
+		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSet);
 	}
 
 	private InputStream readBinaryResource(FhirWebserviceClient client, String id)

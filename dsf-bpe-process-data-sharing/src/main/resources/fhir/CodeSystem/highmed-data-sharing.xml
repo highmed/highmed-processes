@@ -7,11 +7,11 @@
 	</meta>
 	<url value="http://highmed.org/fhir/CodeSystem/data-sharing"/>
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="${version}"/>
 	<name value="HiGHmed_Data_Sharing"/>
 	<title value="HiGHmed Data Sharing"/>
 	<!-- status managed by bpe -->
-	<status value="unknown" />
+	<status value="unknown"/>
 	<experimental value="false"/>
 	<date value="2020-11-23"/>
 	<publisher value="HiGHmed"/>
@@ -23,7 +23,8 @@
 	<concept>
 		<code value="research-study-reference"/>
 		<display value="Research Study Reference"/>
-		<definition value="HiGHmed Research Study Reference to define what data is requested from which MeDICs and for what purpose"/>
+		<definition
+				value="HiGHmed Research Study Reference to define what data is requested from which MeDICs and for what purpose"/>
 	</concept>
 	<concept>
 		<code value="needs-record-linkage"/>
@@ -51,14 +52,10 @@
 		<definition value="Result of a single count query execution"/>
 	</concept>
 	<concept>
-		<code value="single-medic-result-set-rbf-reference"/>
-		<display value="Single MeDIC Result Set Record-Bloom-Filter Reference"/>
-		<definition value="Reference to an openEHR ResultSet containing the record-bloom-filters as a result of a single id query execution"/>
-	</concept>
-	<concept>
-		<code value="single-medic-result-set-data-reference"/>
-		<display value="Single MeDIC Result Set Data Reference"/>
-		<definition value="Reference to an openEHR ResultSet containing the actual result of a single query execution"/>
+		<code value="single-medic-result-set-reference"/>
+		<display value="Single MeDIC Result Set Reference"/>
+		<definition value="Reference to an openEHR ResultSet containing the result of a single query
+			execution and/or the record-bloom-filters of a single query execution"/>
 	</concept>
 	<concept>
 		<code value="multi-medic-result"/>

@@ -1,7 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_DATA_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
 import java.util.Map;
@@ -27,12 +27,12 @@ public class CalculateMultiMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		List<QueryResult> results = ((QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS))
+		List<QueryResult> results = ((QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS))
 				.getResults();
 
 		List<FinalFeasibilityQueryResult> finalResults = calculateResults(results);
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_DATA_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS,
 				FinalFeasibilityQueryResultsValues.create(new FinalFeasibilityQueryResults(finalResults)));
 	}
 
@@ -43,8 +43,8 @@ public class CalculateMultiMedicResults extends AbstractServiceDelegate
 
 		return byCohortId.entrySet().stream()
 				.map(e -> new FinalFeasibilityQueryResult(e.getKey(),
-						toInt(e.getValue().stream().filter(r -> r.getCount() > 0).count()),
-						toInt(e.getValue().stream().mapToLong(QueryResult::getCount).sum())))
+						toInt(e.getValue().stream().filter(r -> r.getCohortSize() > 0).count()),
+						toInt(e.getValue().stream().mapToLong(QueryResult::getCohortSize).sum())))
 				.collect(Collectors.toList());
 	}
 

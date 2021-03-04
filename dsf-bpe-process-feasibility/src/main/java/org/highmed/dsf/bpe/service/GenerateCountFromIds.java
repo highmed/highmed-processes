@@ -1,6 +1,6 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,11 +23,11 @@ public class GenerateCountFromIds extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		List<QueryResult> filteredResults = count(results.getResults());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(filteredResults)));
 	}
 
@@ -38,7 +38,7 @@ public class GenerateCountFromIds extends AbstractServiceDelegate
 
 	protected QueryResult count(QueryResult result)
 	{
-		return QueryResult.count(result.getOrganizationIdentifier(), result.getCohortId(),
+		return QueryResult.countResult(result.getOrganizationIdentifier(), result.getCohortId(),
 				result.getResultSet().getRows().size());
 	}
 }

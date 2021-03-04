@@ -3,7 +3,7 @@ package org.highmed.dsf.bpe.message;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_DATA_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDICS;
@@ -38,7 +38,7 @@ public class SendMultiMedicResults extends AbstractTaskMessageSend
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
 		FinalFeasibilityQueryResults results = (FinalFeasibilityQueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_DATA_RESULTS);
+				.getVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS);
 
 		Stream<ParameterComponent> resultInputs = results.getResults().stream().flatMap(this::toInputs);
 		Stream<ParameterComponent> errorInput = getErrorInput(execution);

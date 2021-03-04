@@ -14,15 +14,13 @@ import org.highmed.dsf.bpe.service.CreatePseudonym;
 import org.highmed.dsf.bpe.service.DownloadDataSharingResources;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
 import org.highmed.dsf.bpe.service.DownloadResultSets;
-import org.highmed.dsf.bpe.service.EncryptMdat;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
 import org.highmed.dsf.bpe.service.ExecuteRecordLink;
 import org.highmed.dsf.bpe.service.ExtractQueries;
 import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
-import org.highmed.dsf.bpe.service.GenerateBloomFilters;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
 import org.highmed.dsf.bpe.service.ModifyQueries;
-import org.highmed.dsf.bpe.service.ProvideLocalPseudonyms;
+import org.highmed.dsf.bpe.service.ModifyResultSet;
 import org.highmed.dsf.bpe.service.SelectRequestTargets;
 import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
@@ -215,27 +213,15 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public ProvideLocalPseudonyms provideLocalPseudonyms()
-	{
-		return new ProvideLocalPseudonyms(fhirClientProvider, taskHelper, ehrIdColumnPath, objectMapper);
-	}
-
-	@Bean
-	public EncryptMdat encryptMdat()
-	{
-		return new EncryptMdat(fhirClientProvider, taskHelper);
-	}
-
-	@Bean
 	public FilterQueryResultsByConsent filterQueryResultsByConsent()
 	{
 		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper);
 	}
 
 	@Bean
-	public GenerateBloomFilters generateBloomFilters()
+	public ModifyResultSet modifyResultSet()
 	{
-		return new GenerateBloomFilters(fhirClientProvider, taskHelper, ehrIdColumnPath, masterPatientIndexClient(),
+		return new ModifyResultSet(fhirClientProvider, taskHelper, ehrIdColumnPath, masterPatientIndexClient(),
 				objectMapper, bouncyCastleProvider());
 	}
 

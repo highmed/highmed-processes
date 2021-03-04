@@ -3,7 +3,7 @@ package org.highmed.dsf.bpe.service;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
 import java.util.Map;
@@ -59,7 +59,7 @@ public class ExecuteQueries extends AbstractServiceDelegate implements Initializ
 		List<QueryResult> results = queries.entrySet().stream()
 				.map(entry -> executeQuery(entry.getKey(), entry.getValue(), idQuery)).collect(Collectors.toList());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_DATA_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(results)));
 	}
 
@@ -72,12 +72,12 @@ public class ExecuteQueries extends AbstractServiceDelegate implements Initializ
 
 		if (idQuery)
 		{
-			return QueryResult.rbfResultSet(organizationProvider.getLocalIdentifierValue(), cohortId, resultSet);
+			return QueryResult.idResult(organizationProvider.getLocalIdentifierValue(), cohortId, resultSet);
 		}
 		else
 		{
 			int count = Integer.parseInt(resultSet.getRow(0).get(0).getValueAsString());
-			return QueryResult.count(organizationProvider.getLocalIdentifierValue(), cohortId, count);
+			return QueryResult.countResult(organizationProvider.getLocalIdentifierValue(), cohortId, count);
 		}
 	}
 }
