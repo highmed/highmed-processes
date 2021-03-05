@@ -29,8 +29,8 @@
         <valueString value="Parameter" />
       </extension>
       <path value="Task.input" />
-      <min value="6" />
-      <max value="7" />
+      <min value="7" />
+      <max value="8" />
     </element>
     <element id="Task.input:message-name">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -215,6 +215,48 @@
       <fixedCode value="bloom-filter-configuration" />
     </element>
     <element id="Task.input:bloom-filter-configuration.value[x]">
+      <path value="Task.input.value[x]" />
+      <type>
+        <code value="base64Binary" />
+      </type>
+    </element>
+
+
+    <element id="Task.input:mdat-aes-key">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
+      <path value="Task.input" />
+      <sliceName value="mdat-aes-key" />
+      <min value="0" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:mdat-aes-key.type">
+      <path value="Task.input.type" />
+      <binding>
+        <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+          <valueString value="TaskInputParameterType" />
+        </extension>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+      </binding>
+    </element>
+    <element id="Task.input:mdat-aes-key.type.coding">
+      <path value="Task.input.type.coding" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:mdat-aes-key.type.coding.system">
+      <path value="Task.input.type.coding.system" />
+      <min value="1" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
+    </element>
+    <element id="Task.input:mdat-aes-key.type.coding.code">
+      <path value="Task.input.type.coding.code" />
+      <min value="1" />
+      <fixedCode value="mdat-aes-key" />
+    </element>
+    <element id="Task.input:mdat-aes-key.value[x]">
       <path value="Task.input.value[x]" />
       <type>
         <code value="base64Binary" />

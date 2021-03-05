@@ -3,6 +3,7 @@ package org.highmed.dsf.bpe.service;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
@@ -16,12 +17,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
+import org.highmed.dsf.bpe.variable.SecretKeyValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -29,6 +32,7 @@ import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.TargetValues;
 import org.highmed.dsf.fhir.variables.Targets;
 import org.highmed.dsf.fhir.variables.TargetsValues;
+import org.highmed.pseudonymization.crypto.AesGcmUtil;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResearchStudy;
 import org.springframework.beans.factory.InitializingBean;
@@ -69,15 +73,16 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution)
+	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		ResearchStudy researchStudy = (ResearchStudy) execution.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(getMedicTargets(researchStudy)));
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(getTtpTarget(researchStudy)));
 
-		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, SecretKeyValues.create(createMdatKey()));
 
+		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
 		if (Boolean.TRUE.equals(needsRecordLinkage))
 		{
 			execution.setVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG,
@@ -109,5 +114,10 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 	{
 		return new BloomFilterConfig(random.nextLong(), hmacSha2Generator.generateKey(),
 				hmacSha3Generator.generateKey());
+	}
+
+	private SecretKey createMdatKey() throws NoSuchAlgorithmException
+	{
+		return AesGcmUtil.generateAES256Key();
 	}
 }

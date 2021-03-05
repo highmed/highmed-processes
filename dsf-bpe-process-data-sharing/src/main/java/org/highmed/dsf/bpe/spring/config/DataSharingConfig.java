@@ -221,8 +221,8 @@ public class DataSharingConfig
 	@Bean
 	public ModifyResultSet modifyResultSet()
 	{
-		return new ModifyResultSet(fhirClientProvider, taskHelper, ehrIdColumnPath, masterPatientIndexClient(),
-				objectMapper, bouncyCastleProvider());
+		return new ModifyResultSet(fhirClientProvider, taskHelper, organizationProvider, ehrIdColumnPath,
+				masterPatientIndexClient(), objectMapper, bouncyCastleProvider());
 	}
 
 	@Bean

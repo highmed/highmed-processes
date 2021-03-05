@@ -42,6 +42,11 @@
 		<definition value="Base64 binary encoded bloom filter configuration"/>
 	</concept>
 	<concept>
+		<code value="mdat-aes-key"/>
+		<display value="MDAT AES Secret Key"/>
+		<definition value="Base64 binary encoded MDAT AES secret key"/>
+	</concept>
+	<concept>
 		<code value="medic-correlation-key"/>
 		<display value="MeDIC Correlation Key"/>
 		<definition value="MeDIC Correlation Key transferred to TTP for correlating incoming medic results"/>
