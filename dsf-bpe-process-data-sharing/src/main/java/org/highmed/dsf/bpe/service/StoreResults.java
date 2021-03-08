@@ -44,12 +44,6 @@ public class StoreResults extends AbstractServiceDelegate
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(extendedResults)));
-
-		if (Boolean.TRUE.equals(execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE)))
-		{
-			// Process result rbf
-		}
-
 	}
 
 	private List<QueryResult> getResults(Task task, String code)

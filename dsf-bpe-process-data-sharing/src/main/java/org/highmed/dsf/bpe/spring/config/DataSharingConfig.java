@@ -127,7 +127,7 @@ public class DataSharingConfig
 	@Bean
 	public DownloadResultSets downloadResultSets()
 	{
-		return new DownloadResultSets(fhirClientProvider, taskHelper);
+		return new DownloadResultSets(fhirClientProvider, taskHelper, objectMapper);
 	}
 
 	@Bean
