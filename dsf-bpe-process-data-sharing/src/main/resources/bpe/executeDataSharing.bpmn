@@ -85,7 +85,7 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1ncewqu" sourceRef="checkDataSharingRequest" targetRef="TextAnnotation_0euut3n" />
     <bpmn:textAnnotation id="TextAnnotation_179m5lj">
-      <bpmn:text>Should be split in 3 single tasks</bpmn:text>
+      <bpmn:text>Should be split in 3 single tasks, with and without RBF generation</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1yw2wcu" sourceRef="generateBloomFilters" targetRef="TextAnnotation_179m5lj" />
   </bpmn:process>
@@ -93,12 +93,10 @@
   <bpmn:message id="Message_1dr71re" name="resultSingleMedicDataSharingMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="executeDataSharing">
-      <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
-        <dc:Bounds x="330" y="80" width="267" height="56" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_179m5lj_di" bpmnElement="TextAnnotation_179m5lj">
-        <dc:Bounds x="1450" y="88" width="100" height="40" />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1t9f3m5_di" bpmnElement="Flow_1t9f3m5">
+        <di:waypoint x="1242" y="212" />
+        <di:waypoint x="1360" y="212" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ecoehc_di" bpmnElement="Flow_1ecoehc">
         <di:waypoint x="660" y="212" />
         <di:waypoint x="710" y="212" />
@@ -154,10 +152,9 @@
         <di:waypoint x="980" y="212" />
         <di:waypoint x="1032" y="212" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1t9f3m5_di" bpmnElement="Flow_1t9f3m5">
-        <di:waypoint x="1242" y="212" />
-        <di:waypoint x="1360" y="212" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0t2s0v7_di" bpmnElement="checkResults">
+        <dc:Bounds x="1540" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0jna5l2_di" bpmnElement="checkDataSharingRequest">
         <dc:Bounds x="400" y="172" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -170,6 +167,12 @@
       <bpmndi:BPMNShape id="ServiceTask_0b8j3ka_di" bpmnElement="downloadDataSharingResources">
         <dc:Bounds x="240" y="172" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_10xdh63_di" bpmnElement="EndEvent">
+        <dc:Bounds x="1892" y="194" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1866" y="237" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_0bq7zdz_di" bpmnElement="ExclusiveGateway_0bq7zdz" isMarkerVisible="true">
         <dc:Bounds x="1032" y="187" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -178,6 +181,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_0lecmy5_di" bpmnElement="ExclusiveGateway_0lecmy5" isMarkerVisible="true">
         <dc:Bounds x="1192" y="187" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0akkess_di" bpmnElement="generateBloomFilters">
+        <dc:Bounds x="1360" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_15aifhd_di" bpmnElement="selectResponseTargetTtp">
+        <dc:Bounds x="1710" y="172" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0u5pb4i_di" bpmnElement="executeQueries">
         <dc:Bounds x="880" y="172" width="100" height="80" />
@@ -188,20 +197,11 @@
       <bpmndi:BPMNShape id="Activity_1vlv5ud_di" bpmnElement="extractQueries">
         <dc:Bounds x="560" y="172" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0akkess_di" bpmnElement="generateBloomFilters">
-        <dc:Bounds x="1360" y="172" width="100" height="80" />
+      <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
+        <dc:Bounds x="330" y="80" width="267" height="56" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_15aifhd_di" bpmnElement="selectResponseTargetTtp">
-        <dc:Bounds x="1710" y="172" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0t2s0v7_di" bpmnElement="checkResults">
-        <dc:Bounds x="1540" y="172" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_10xdh63_di" bpmnElement="EndEvent">
-        <dc:Bounds x="1892" y="194" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1866" y="237" width="90" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="TextAnnotation_179m5lj_di" bpmnElement="TextAnnotation_179m5lj">
+        <dc:Bounds x="1450" y="88" width="150" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1ncewqu_di" bpmnElement="Association_1ncewqu">
         <di:waypoint x="455" y="172" />
@@ -209,8 +209,8 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_1yw2wcu_di" bpmnElement="Association_1yw2wcu">
         <di:waypoint x="1410" y="172" />
-        <di:waypoint x="1410" y="108" />
-        <di:waypoint x="1450" y="108" />
+        <di:waypoint x="1410" y="112" />
+        <di:waypoint x="1450" y="112" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
