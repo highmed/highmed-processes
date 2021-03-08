@@ -45,7 +45,7 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class GenerateBloomFilters extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(ModifyResultSet.class);
+	private static final Logger logger = LoggerFactory.getLogger(GenerateBloomFilters.class);
 
 	private static final int RBF_LENGTH = 3000;
 	private static final FieldWeights FBF_WEIGHTS = new FieldWeights(0.1, 0.1, 0.1, 0.2, 0.05, 0.1, 0.05, 0.2, 0.1);

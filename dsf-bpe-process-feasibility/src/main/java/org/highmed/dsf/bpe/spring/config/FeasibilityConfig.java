@@ -22,7 +22,6 @@ import org.highmed.dsf.bpe.service.GenerateBloomFilters;
 import org.highmed.dsf.bpe.service.GenerateCountFromIds;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
 import org.highmed.dsf.bpe.service.ModifyQueries;
-import org.highmed.dsf.bpe.service.ModifyResultSet;
 import org.highmed.dsf.bpe.service.SelectRequestTargets;
 import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;

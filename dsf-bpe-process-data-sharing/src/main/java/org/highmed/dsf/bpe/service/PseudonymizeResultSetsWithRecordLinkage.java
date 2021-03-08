@@ -88,7 +88,8 @@ public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDele
 
 		List<QueryResult> finalResults = groupedResults.entrySet().stream().filter(r -> !r.getValue().isEmpty())
 				.map(e -> translateMatchAndPseudonymize(translatorFromMedic, matcher, psnGenerator, translatorToMedic,
-						e.getKey(), e.getValue())).collect(Collectors.toList());
+						e.getKey(), e.getValue()))
+				.collect(Collectors.toList());
 
 		return new QueryResults(finalResults);
 	}
