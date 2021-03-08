@@ -1,6 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_LEADING_MEDIC_IDENTIFIER;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
@@ -25,9 +26,8 @@ public class SelectResponseTargetMedic extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
-		Task task = getLeadingTaskFromExecutionVariables();
-
-		Target medicTarget = Target.createUniDirectionalTarget(task.getRequester().getIdentifier().getValue());
+		String medicIdentifier = (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_LEADING_MEDIC_IDENTIFIER);
+		Target medicTarget = Target.createUniDirectionalTarget(medicIdentifier);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(medicTarget));
 	}
 }

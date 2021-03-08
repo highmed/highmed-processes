@@ -1,9 +1,6 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsBase.OPENEHR_MIMETYPE_JSON;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
@@ -35,19 +32,10 @@ import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGeneratorImpl;
 import org.highmed.pseudonymization.crypto.AesGcmUtil;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtp;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpImpl;
-import org.hl7.fhir.r4.model.Binary;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResearchStudy;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import ca.uhn.fhir.context.FhirContext;
 
 public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements InitializingBean
 {
@@ -62,20 +50,17 @@ public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements 
 	private final OrganizationProvider organizationProvider;
 	private final String ehrIdColumnPath;
 	private final MasterPatientIndexClient masterPatientIndexClient;
-	private final ObjectMapper openEhrObjectMapper;
 	private final BouncyCastleProvider bouncyCastleProvider;
 
 	public ModifyResultSetsWithRbf(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			OrganizationProvider organizationProvider, String ehrIdColumnPath,
-			MasterPatientIndexClient masterPatientIndexClient, ObjectMapper openEhrObjectMapper,
-			BouncyCastleProvider bouncyCastleProvider)
+			MasterPatientIndexClient masterPatientIndexClient, BouncyCastleProvider bouncyCastleProvider)
 	{
 		super(clientProvider, taskHelper);
 
 		this.organizationProvider = organizationProvider;
 		this.ehrIdColumnPath = ehrIdColumnPath;
 		this.masterPatientIndexClient = masterPatientIndexClient;
-		this.openEhrObjectMapper = openEhrObjectMapper;
 		this.bouncyCastleProvider = bouncyCastleProvider;
 	}
 
@@ -87,7 +72,6 @@ public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements 
 		Objects.requireNonNull(organizationProvider, "organizationProvider");
 		Objects.requireNonNull(ehrIdColumnPath, "ehrIdColumnPath");
 		Objects.requireNonNull(masterPatientIndexClient, "masterPatientIndexClient");
-		Objects.requireNonNull(openEhrObjectMapper, "openEhrObjectMapper");
 		Objects.requireNonNull(bouncyCastleProvider, "bouncyCastleProvider");
 	}
 
@@ -95,7 +79,7 @@ public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements 
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		String organizationIdentifier = organizationProvider.getLocalIdentifierValue();
-		String researchStudyIdentifier = getResearchStudyIdentifier(execution);
+			String researchStudyIdentifier = getResearchStudyIdentifier(execution);
 		SecretKey mdatKey = (SecretKey) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
 		BloomFilterConfig bloomFilterConfig = (BloomFilterConfig) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG);
@@ -104,10 +88,8 @@ public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements 
 				researchStudyIdentifier, mdatKey, bloomFilterConfig);
 
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
-		String ttpIdentifier = (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER);
 		List<QueryResult> translatedResults = results.getResults().stream()
-				.map(result -> translateAndCreateBinary(resultSetTranslator, result, ttpIdentifier))
-				.collect(Collectors.toList());
+				.map(result -> translateAndCreateBinary(resultSetTranslator, result)).collect(Collectors.toList());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(translatedResults)));
@@ -146,13 +128,10 @@ public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements 
 						bouncyCastleProvider));
 	}
 
-	private QueryResult translateAndCreateBinary(ResultSetTranslatorToTtp resultSetTranslator, QueryResult result,
-			String ttpIdentifier)
+	private QueryResult translateAndCreateBinary(ResultSetTranslatorToTtp resultSetTranslator, QueryResult result)
 	{
 		ResultSet translatedResultSet = translate(resultSetTranslator, result.getResultSet());
-		String resultSetUrl = saveResultSetAsBinaryForTtp(translatedResultSet, ttpIdentifier);
-
-		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSetUrl);
+		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), translatedResultSet);
 	}
 
 	private ResultSet translate(ResultSetTranslatorToTtp resultSetTranslator, ResultSet resultSet)
@@ -167,46 +146,4 @@ public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements 
 			throw e;
 		}
 	}
-
-	protected String saveResultSetAsBinaryForTtp(ResultSet resultSet, String securityIdentifier)
-	{
-		byte[] content = serializeResultSet(resultSet);
-		Reference securityContext = new Reference();
-		securityContext.setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue(securityIdentifier);
-		Binary binary = new Binary().setContentType(OPENEHR_MIMETYPE_JSON).setSecurityContext(securityContext)
-				.setData(content);
-
-		IdType created = createBinaryResource(binary);
-		return new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl(), ResourceType.Binary.name(),
-				created.getIdPart(), created.getVersionIdPart()).getValue();
-	}
-
-	private byte[] serializeResultSet(ResultSet resultSet)
-	{
-		try
-		{
-			return openEhrObjectMapper.writeValueAsBytes(resultSet);
-		}
-		catch (JsonProcessingException e)
-		{
-			logger.warn("Error while serializing ResultSet: " + e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	private IdType createBinaryResource(Binary binary)
-	{
-		try
-		{
-			return getFhirWebserviceClientProvider().getLocalWebserviceClient().withMinimalReturn().create(binary);
-		}
-		catch (Exception e)
-		{
-			logger.debug("Binary to create {}", FhirContext.forR4().newJsonParser().encodeResourceToString(binary));
-			logger.warn("Error while creating Binary resoruce: " + e.getMessage(), e);
-			throw e;
-		}
-	}
-
 }

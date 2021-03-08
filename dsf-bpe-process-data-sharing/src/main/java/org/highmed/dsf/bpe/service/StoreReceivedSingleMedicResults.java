@@ -1,6 +1,5 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_GROUP_ID;
@@ -22,12 +21,12 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StoreResults extends AbstractServiceDelegate
+public class StoreReceivedSingleMedicResults extends AbstractServiceDelegate
 {
 
-	private static final Logger logger = LoggerFactory.getLogger(StoreResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(StoreReceivedSingleMedicResults.class);
 
-	public StoreResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public StoreReceivedSingleMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
 	{
 		super(clientProvider, taskHelper);
 	}

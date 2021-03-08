@@ -12,7 +12,7 @@ import org.highmed.dsf.bpe.service.CheckSingleMedicResults;
 import org.highmed.dsf.bpe.service.CheckTtpComputedMultiMedicResults;
 import org.highmed.dsf.bpe.service.DownloadDataSharingResources;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
-import org.highmed.dsf.bpe.service.DownloadResultSets;
+import org.highmed.dsf.bpe.service.DownloadSingleMedicResultSets;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
 import org.highmed.dsf.bpe.service.ExtractQueries;
 import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
@@ -24,7 +24,10 @@ import org.highmed.dsf.bpe.service.SelectRequestTargets;
 import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
 import org.highmed.dsf.bpe.service.StoreCorrelationKeys;
-import org.highmed.dsf.bpe.service.StoreResults;
+import org.highmed.dsf.bpe.service.StoreMultiMedicResultSets;
+import org.highmed.dsf.bpe.service.StoreReceivedSingleMedicResults;
+import org.highmed.dsf.bpe.service.StoreResultSets;
+import org.highmed.dsf.bpe.service.StoreSingleMedicResultSets;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -118,15 +121,15 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public StoreResults storeResults()
+	public StoreReceivedSingleMedicResults storeReceivedSingleMedicResults()
 	{
-		return new StoreResults(fhirClientProvider, taskHelper);
+		return new StoreReceivedSingleMedicResults(fhirClientProvider, taskHelper);
 	}
 
 	@Bean
-	public DownloadResultSets downloadResultSets()
+	public DownloadSingleMedicResultSets downloadSingleMedicResultSets()
 	{
-		return new DownloadResultSets(fhirClientProvider, taskHelper, objectMapper);
+		return new DownloadSingleMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
 	}
 
 	@Bean
@@ -215,7 +218,7 @@ public class DataSharingConfig
 	public ModifyResultSetsWithRbf modifyResultSetsWithRbf()
 	{
 		return new ModifyResultSetsWithRbf(fhirClientProvider, taskHelper, organizationProvider, ehrIdColumnPath,
-				masterPatientIndexClient(), objectMapper, bouncyCastleProvider());
+				masterPatientIndexClient(), bouncyCastleProvider());
 	}
 
 	@Bean
@@ -228,6 +231,18 @@ public class DataSharingConfig
 	public BouncyCastleProvider bouncyCastleProvider()
 	{
 		return new BouncyCastleProvider();
+	}
+
+	@Bean
+	public StoreSingleMedicResultSets storeSingleMedicResultSets()
+	{
+		return new StoreSingleMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
+	}
+
+	@Bean
+	public StoreMultiMedicResultSets storeMultiMedicResultSets()
+	{
+		return new StoreMultiMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
 	}
 
 	@Bean
