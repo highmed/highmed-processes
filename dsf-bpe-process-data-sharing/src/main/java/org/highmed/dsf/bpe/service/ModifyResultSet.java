@@ -5,6 +5,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATIO
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.OPENEHR_MIMETYPE_JSON;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 
@@ -34,12 +35,12 @@ import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGeneratorImpl;
 import org.highmed.pseudonymization.crypto.AesGcmUtil;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtp;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpImpl;
-import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnly;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResearchStudy;
 import org.hl7.fhir.r4.model.ResourceType;
+import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -96,13 +97,15 @@ public class ModifyResultSet extends AbstractServiceDelegate implements Initiali
 	{
 		String organizationIdentifier = organizationProvider.getLocalIdentifierValue();
 		String researchStudyIdentifier = getResearchStudyIdentifier(execution);
+		SecretKey mdatKey = (SecretKey) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
 		BloomFilterConfig bloomFilterConfig = (BloomFilterConfig) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG);
+
 		ResultSetTranslatorToTtp resultSetTranslator = createResultSetTranslator(organizationIdentifier,
-				researchStudyIdentifier, bloomFilterConfig);
-		String ttpIdentifier = (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER);
+				researchStudyIdentifier, mdatKey, bloomFilterConfig);
 
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		String ttpIdentifier = (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER);
 		List<QueryResult> translatedResults = results.getResults().stream()
 				.map(result -> translateAndCreateBinary(resultSetTranslator, result, ttpIdentifier))
 				.collect(Collectors.toList());
@@ -122,15 +125,15 @@ public class ModifyResultSet extends AbstractServiceDelegate implements Initiali
 	}
 
 	protected ResultSetTranslatorToTtp createResultSetTranslator(String organizationIdentifier,
-			String researchStudyIdentifier, BloomFilterConfig bloomFilterConfig) throws NoSuchAlgorithmException
+			String researchStudyIdentifier, SecretKey mdatKey, BloomFilterConfig bloomFilterConfig)
+			throws NoSuchAlgorithmException
 	{
 		RecordBloomFilterGenerator recordBloomFilterGenerator = createRecordBloomFilterGenerator(
 				bloomFilterConfig.getPermutationSeed(), bloomFilterConfig.getHmacSha2Key(),
 				bloomFilterConfig.getHmacSha3Key());
 
-		SecretKey idatKey = AesGcmUtil.generateAES256Key(); // should be provided by properties or pseudonym provider
-															// like gPAS
-		SecretKey mdatKey = AesGcmUtil.generateAES256Key(); // should be provided by research study
+		// TODO: should be provided by properties or pseudonym provider
+		SecretKey idatKey = AesGcmUtil.generateAES256Key();
 
 		return new ResultSetTranslatorToTtpImpl(organizationIdentifier, idatKey, researchStudyIdentifier, mdatKey,
 				ehrIdColumnPath, recordBloomFilterGenerator, masterPatientIndexClient);
@@ -206,6 +209,5 @@ public class ModifyResultSet extends AbstractServiceDelegate implements Initiali
 			throw e;
 		}
 	}
-
 
 }
