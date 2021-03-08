@@ -79,7 +79,7 @@ public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements 
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		String organizationIdentifier = organizationProvider.getLocalIdentifierValue();
-			String researchStudyIdentifier = getResearchStudyIdentifier(execution);
+		String researchStudyIdentifier = getResearchStudyIdentifier(execution);
 		SecretKey mdatKey = (SecretKey) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
 		BloomFilterConfig bloomFilterConfig = (BloomFilterConfig) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG);

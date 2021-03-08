@@ -63,7 +63,10 @@ public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDele
 	{
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
-		String researchStudyIdentifier = "";
+		// TODO: load ResearchStudy Id from Task
+		String researchStudyIdentifier = "test-id";
+
+		// TODO: store key with research study id
 		SecretKey researchStudyKey = AesGcmUtil.generateAES256Key();
 
 		Map<String, List<QueryResult>> byCohortId = groupByCohortId(results);
