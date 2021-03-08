@@ -40,7 +40,6 @@ import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResearchStudy;
 import org.hl7.fhir.r4.model.ResourceType;
-import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -50,9 +49,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.uhn.fhir.context.FhirContext;
 
-public class ModifyResultSet extends AbstractServiceDelegate implements InitializingBean
+public class ModifyResultSetsWithRbf extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(ModifyResultSet.class);
+	private static final Logger logger = LoggerFactory.getLogger(ModifyResultSetsWithRbf.class);
 
 	private static final int RBF_LENGTH = 3000;
 	private static final RecordBloomFilterGeneratorImpl.FieldWeights FBF_WEIGHTS = new RecordBloomFilterGeneratorImpl.FieldWeights(
@@ -66,7 +65,7 @@ public class ModifyResultSet extends AbstractServiceDelegate implements Initiali
 	private final ObjectMapper openEhrObjectMapper;
 	private final BouncyCastleProvider bouncyCastleProvider;
 
-	public ModifyResultSet(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public ModifyResultSetsWithRbf(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			OrganizationProvider organizationProvider, String ehrIdColumnPath,
 			MasterPatientIndexClient masterPatientIndexClient, ObjectMapper openEhrObjectMapper,
 			BouncyCastleProvider bouncyCastleProvider)

@@ -10,17 +10,16 @@ import org.highmed.dsf.bpe.service.CheckDataSharingResources;
 import org.highmed.dsf.bpe.service.CheckMultiMedicResults;
 import org.highmed.dsf.bpe.service.CheckSingleMedicResults;
 import org.highmed.dsf.bpe.service.CheckTtpComputedMultiMedicResults;
-import org.highmed.dsf.bpe.service.CreatePseudonym;
 import org.highmed.dsf.bpe.service.DownloadDataSharingResources;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
 import org.highmed.dsf.bpe.service.DownloadResultSets;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
-import org.highmed.dsf.bpe.service.ExecuteRecordLink;
 import org.highmed.dsf.bpe.service.ExtractQueries;
 import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
 import org.highmed.dsf.bpe.service.ModifyQueries;
-import org.highmed.dsf.bpe.service.ModifyResultSet;
+import org.highmed.dsf.bpe.service.ModifyResultSetsWithRbf;
+import org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithRecordLinkage;
 import org.highmed.dsf.bpe.service.SelectRequestTargets;
 import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
@@ -131,15 +130,9 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public ExecuteRecordLink executeRecordLink()
+	public PseudonymizeResultSetsWithRecordLinkage pseudonymizeResultSetsWithRecordLinkage()
 	{
-		return new ExecuteRecordLink(fhirClientProvider, taskHelper);
-	}
-
-	@Bean
-	public CreatePseudonym createPseudonym()
-	{
-		return new CreatePseudonym(fhirClientProvider, taskHelper);
+		return new PseudonymizeResultSetsWithRecordLinkage(fhirClientProvider, taskHelper, objectMapper);
 	}
 
 	@Bean
@@ -219,9 +212,9 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public ModifyResultSet modifyResultSet()
+	public ModifyResultSetsWithRbf modifyResultSetsWithRbf()
 	{
-		return new ModifyResultSet(fhirClientProvider, taskHelper, organizationProvider, ehrIdColumnPath,
+		return new ModifyResultSetsWithRbf(fhirClientProvider, taskHelper, organizationProvider, ehrIdColumnPath,
 				masterPatientIndexClient(), objectMapper, bouncyCastleProvider());
 	}
 
