@@ -1,6 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -62,11 +63,10 @@ public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDele
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		String researchStudyIdentifier = (String) execution
+				.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER);
 
-		// TODO: load ResearchStudy Id from Task
-		String researchStudyIdentifier = "test-id";
-
-		// TODO: store key with research study id
+		// TODO: store key with corresponding research study id
 		SecretKey researchStudyKey = AesGcmUtil.generateAES256Key();
 
 		Map<String, List<QueryResult>> byCohortId = groupByCohortId(results);

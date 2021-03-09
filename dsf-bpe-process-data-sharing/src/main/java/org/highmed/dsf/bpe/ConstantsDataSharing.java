@@ -6,6 +6,7 @@ import static org.highmed.dsf.bpe.DataSharingProcessPluginDefinition.VERSION;
 public interface ConstantsDataSharing
 {
 	String BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY = "researchStudy";
+	String BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER = "researchStudyIdentifier";
 	String BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK = "needsConsentCheck";
 	String BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE = "needsRecordLinkage";
 	String BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG = "bloomFilterConfig";
@@ -26,6 +27,7 @@ public interface ConstantsDataSharing
 
 	String CODESYSTEM_HIGHMED_DATA_SHARING = "http://highmed.org/fhir/CodeSystem/data-sharing";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE = "research-study-reference";
+	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_IDENTIFIER = "research-study-identifier";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE = "needs-record-linkage";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK = "needs-consent-check";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG = "bloom-filter-configuration";

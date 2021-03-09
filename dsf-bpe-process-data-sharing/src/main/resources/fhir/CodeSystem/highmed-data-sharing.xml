@@ -23,8 +23,12 @@
 	<concept>
 		<code value="research-study-reference"/>
 		<display value="Research Study Reference"/>
-		<definition
-				value="HiGHmed Research Study Reference to define what data is requested from which MeDICs and for what purpose"/>
+		<definition value="Research study resource reference"/>
+	</concept>
+	<concept>
+		<code value="research-study-identifier"/>
+		<display value="Research Study Identifier"/>
+		<definition value="Research study resource unique identifier"/>
 	</concept>
 	<concept>
 		<code value="needs-record-linkage"/>
