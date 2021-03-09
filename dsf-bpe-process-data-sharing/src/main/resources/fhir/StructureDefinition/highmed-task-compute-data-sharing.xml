@@ -29,7 +29,7 @@
         <valueString value="Parameter" />
       </extension>
       <path value="Task.input" />
-      <min value="4" />
+      <min value="5" />
     </element>
     <element id="Task.input:message-name">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">

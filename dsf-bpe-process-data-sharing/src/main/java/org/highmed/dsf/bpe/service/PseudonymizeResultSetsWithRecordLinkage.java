@@ -18,6 +18,8 @@ import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
+import org.highmed.openehr.model.structure.Column;
+import org.highmed.openehr.model.structure.Meta;
 import org.highmed.openehr.model.structure.ResultSet;
 import org.highmed.pseudonymization.crypto.AesGcmUtil;
 import org.highmed.pseudonymization.domain.PersonWithMdat;
@@ -128,7 +130,9 @@ public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDele
 	private ResultSet translateToMedicResultSet(ResultSet initialResultSet, ResultSetTranslatorToMedic translator,
 			List<PseudonymizedPersonWithMdat> pseudonymizedPersons)
 	{
-		return translator.translate(initialResultSet.getMeta(), initialResultSet.getColumns(), pseudonymizedPersons);
+		Meta meta = initialResultSet.getMeta() == null ? new Meta("", "", "", "", "", "") : initialResultSet.getMeta();
+		List<Column> columns = initialResultSet.getColumns();
+		return translator.translate(meta, columns, pseudonymizedPersons);
 	}
 
 	private ResultSetTranslatorFromMedic createResultSetTranslatorFromMedic()
