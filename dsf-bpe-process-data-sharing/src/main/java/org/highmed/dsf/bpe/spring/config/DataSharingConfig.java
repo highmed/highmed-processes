@@ -18,7 +18,7 @@ import org.highmed.dsf.bpe.service.ExtractQueries;
 import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
 import org.highmed.dsf.bpe.service.ModifyQueries;
-import org.highmed.dsf.bpe.service.ModifyResultSetsWithRbf;
+import org.highmed.dsf.bpe.service.TranslateResultSetsWithRbf;
 import org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithRecordLinkage;
 import org.highmed.dsf.bpe.service.SelectRequestTargets;
 import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
@@ -26,7 +26,6 @@ import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
 import org.highmed.dsf.bpe.service.StoreCorrelationKeys;
 import org.highmed.dsf.bpe.service.StoreMultiMedicResultSets;
 import org.highmed.dsf.bpe.service.StoreReceivedSingleMedicResults;
-import org.highmed.dsf.bpe.service.StoreResultSets;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSets;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
@@ -215,9 +214,9 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public ModifyResultSetsWithRbf modifyResultSetsWithRbf()
+	public TranslateResultSetsWithRbf translateResultSetsWithRbf()
 	{
-		return new ModifyResultSetsWithRbf(fhirClientProvider, taskHelper, organizationProvider, ehrIdColumnPath,
+		return new TranslateResultSetsWithRbf(fhirClientProvider, taskHelper, organizationProvider, ehrIdColumnPath,
 				masterPatientIndexClient(), bouncyCastleProvider());
 	}
 

@@ -54,7 +54,7 @@
       <bpmn:outgoing>Flow_14nlfvk</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0kzp6tl" sourceRef="filterByConsent" targetRef="ExclusiveGateway_0lecmy5" />
-    <bpmn:serviceTask id="generateBloomFilters" name="translate with RBF calculation" camunda:class="org.highmed.dsf.bpe.service.ModifyResultSetsWithRbf">
+    <bpmn:serviceTask id="generateBloomFilters" name="translate with RBF calculation" camunda:class="org.highmed.dsf.bpe.service.TranslateResultSetsWithRbf">
       <bpmn:incoming>Flow_0xt2bfn</bpmn:incoming>
       <bpmn:outgoing>Flow_09yooed</bpmn:outgoing>
     </bpmn:serviceTask>
