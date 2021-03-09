@@ -62,7 +62,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0t4lx4v" name="else" sourceRef="ExclusiveGateway_07e71aa" targetRef="ExclusiveGateway_1r8ow3i">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="pseudonymizeResultSetWithRecordLinkage" name="pseudonymize result sets with record linkage" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeResultSetWithRecordLinkage">
+    <bpmn:serviceTask id="pseudonymizeResultSetWithRecordLinkage" name="pseudonymize result sets with record linkage" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithRecordLinkage">
       <bpmn:incoming>SequenceFlow_0calilw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_02zmrer</bpmn:outgoing>
     </bpmn:serviceTask>
