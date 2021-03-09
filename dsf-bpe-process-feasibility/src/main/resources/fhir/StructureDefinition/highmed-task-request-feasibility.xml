@@ -242,11 +242,11 @@
         <code value="unsignedInt" />
       </type>
     </element>
-    <element id="Task.output:multi-medic-result">
+    <element id="Task.output:multi-medic-count-result">
       <path value="Task.output" />
-      <sliceName value="multi-medic-result" />
+      <sliceName value="multi-medic-count-result" />
     </element>
-    <element id="Task.output:multi-medic-result.extension">
+    <element id="Task.output:multi-medic-count-result.extension">
       <path value="Task.output.extension" />
       <slicing>
         <discriminator>
@@ -256,7 +256,7 @@
         <rules value="open" />
       </slicing>
     </element>
-    <element id="Task.output:multi-medic-result.extension:group-id">
+    <element id="Task.output:multi-medic-count-result.extension:group-id">
       <path value="Task.output.extension" />
       <sliceName value="group-id" />
       <min value="1" />
@@ -265,7 +265,7 @@
         <profile value="http://highmed.org/fhir/StructureDefinition/extension-group-id" />
       </type>
     </element>
-    <element id="Task.output:multi-medic-result.type">
+    <element id="Task.output:multi-medic-count-result.type">
       <path value="Task.output.type" />
       <binding>
         <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
@@ -275,22 +275,22 @@
         <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
-    <element id="Task.output:multi-medic-result.type.coding">
+    <element id="Task.output:multi-medic-count-result.type.coding">
       <path value="Task.output.type.coding" />
       <min value="1" />
       <max value="1" />
     </element>
-    <element id="Task.output:multi-medic-result.type.coding.system">
+    <element id="Task.output:multi-medic-count-result.type.coding.system">
       <path value="Task.output.type.coding.system" />
       <min value="1" />
       <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
-    <element id="Task.output:multi-medic-result.type.coding.code">
+    <element id="Task.output:multi-medic-count-result.type.coding.code">
       <path value="Task.output.type.coding.code" />
       <min value="1" />
-      <fixedCode value="multi-medic-result" />
+      <fixedCode value="multi-medic-count-result" />
     </element>
-    <element id="Task.output:multi-medic-result.value[x]">
+    <element id="Task.output:multi-medic-count-result.value[x]">
       <path value="Task.output.value[x]" />
       <type>
         <code value="unsignedInt" />

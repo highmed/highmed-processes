@@ -19,6 +19,7 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
+		// TODO: implement checks
 		logger.info(this.getClass().getName() + " doExecute called");
 	}
 }

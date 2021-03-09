@@ -35,7 +35,8 @@ public interface ConstantsDataSharing
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY = "medic-correlation-key";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT = "single-medic-count-result";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE = "single-medic-result-set-reference";
-	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT = "multi-medic-result";
+	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_COUNT_RESULT = "multi-medic-count-result";
+	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SET_REFERENCE = "multi-medic-result-set-reference";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDICS = "participating-medics";
 
 	String NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER = "http://highmed.org/fhir/NamingSystem/research-study-identifier";

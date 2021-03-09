@@ -3,8 +3,6 @@ package org.highmed.dsf.bpe.message;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SET_REFERENCE;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE;
 
 import java.util.stream.Stream;
 
@@ -49,8 +47,7 @@ public abstract class SendMedicResults extends AbstractTaskMessageSend
 		{
 			String resultSetReferenceCodeSystemValue = getResultSetReferenceCodeSystemValue();
 			ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
-					resultSetReferenceCodeSystemValue,
-					new Reference(result.getResultSetUrl()));
+					resultSetReferenceCodeSystemValue, new Reference(result.getResultSetUrl()));
 			input.addExtension(createCohortIdExtension(result.getCohortId()));
 			return input;
 		}

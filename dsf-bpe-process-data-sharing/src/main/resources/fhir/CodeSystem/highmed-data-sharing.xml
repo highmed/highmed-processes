@@ -67,9 +67,15 @@
 			execution and/or the record-bloom-filters of a single query execution"/>
 	</concept>
 	<concept>
-		<code value="multi-medic-result"/>
+		<code value="multi-medic-count-result"/>
 		<display value="Multi MeDIC Result"/>
-		<definition value="Aggregated result of all single medic results"/>
+		<definition value="Aggregated result of all single count query execution results"/>
+	</concept>
+	<concept>
+		<code value="multi-medic-result-set-reference"/>
+		<display value="Multi MeDIC Result Set Reference"/>
+		<definition value="Reference to an openEHR ResultSet containing the aggregated result of a all single query
+			execution ResultSets"/>
 	</concept>
 	<concept>
 		<code value="participating-medics"/>
