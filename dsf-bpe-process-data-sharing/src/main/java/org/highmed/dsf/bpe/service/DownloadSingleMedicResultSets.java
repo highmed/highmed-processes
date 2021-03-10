@@ -26,77 +26,17 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DownloadSingleMedicResultSets extends AbstractServiceDelegate
+public class DownloadSingleMedicResultSets extends DownloadResultSets
 {
-	private static final Logger logger = LoggerFactory.getLogger(DownloadSingleMedicResultSets.class);
-
-	private final ObjectMapper openEhrObjectMapper;
-
 	public DownloadSingleMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ObjectMapper openEhrObjectMapper)
 	{
-		super(clientProvider, taskHelper);
-		this.openEhrObjectMapper = openEhrObjectMapper;
+		super(clientProvider, taskHelper, openEhrObjectMapper);
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
+	protected QueryResults getQueryResults(DelegateExecution execution)
 	{
-		super.afterPropertiesSet();
-		Objects.requireNonNull(openEhrObjectMapper, "openEhrObjectMapper");
-	}
-
-	@Override
-	protected void doExecute(DelegateExecution execution)
-	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
-
-		List<QueryResult> resultsWithResultSets = download(results);
-
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				QueryResultsValues.create(new QueryResults(resultsWithResultSets)));
-	}
-
-	private List<QueryResult> download(QueryResults results)
-	{
-		return results.getResults().stream().map(this::download).collect(Collectors.toList());
-	}
-
-	private QueryResult download(QueryResult result)
-	{
-		IdType id = new IdType(result.getResultSetUrl());
-		FhirWebserviceClient client = getFhirWebserviceClientProvider().getRemoteWebserviceClient(id.getBaseUrl());
-
-		InputStream binary = readBinaryResource(client, id.getIdPart());
-		ResultSet resultSet = deserializeResultSet(binary);
-
-		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSet);
-	}
-
-	private InputStream readBinaryResource(FhirWebserviceClient client, String id)
-	{
-		try
-		{
-			logger.info("Reading binary from {} with id {}", client.getBaseUrl(), id);
-			return client.readBinary(id, MediaType.valueOf(OPENEHR_MIMETYPE_JSON));
-		}
-		catch (Exception e)
-		{
-			logger.warn("Error while reading Binary resource: " + e.getMessage(), e);
-			throw e;
-		}
-	}
-
-	private ResultSet deserializeResultSet(InputStream content)
-	{
-		try (content)
-		{
-			return openEhrObjectMapper.readValue(content, ResultSet.class);
-		}
-		catch (IOException e)
-		{
-			logger.warn("Error while deserializing ResultSet: " + e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
+		return (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 	}
 }

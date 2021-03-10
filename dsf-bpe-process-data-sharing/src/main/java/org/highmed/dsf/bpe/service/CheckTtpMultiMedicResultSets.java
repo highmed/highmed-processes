@@ -7,11 +7,11 @@ import org.highmed.dsf.fhir.task.TaskHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CheckMultiMedicResults extends AbstractServiceDelegate
+public class CheckTtpMultiMedicResultSets extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(CheckMultiMedicResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(CheckTtpMultiMedicResultSets.class);
 
-	public CheckMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CheckTtpMultiMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
 	{
 		super(clientProvider, taskHelper);
 	}
@@ -19,6 +19,7 @@ public class CheckMultiMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
+		// TODO: implement checks
 		logger.info(this.getClass().getName() + " doExecute called");
 	}
 }

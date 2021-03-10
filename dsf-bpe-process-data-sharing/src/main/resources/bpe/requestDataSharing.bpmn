@@ -25,7 +25,7 @@
       <bpmn:outgoing>Flow_1lw96cm</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics camunda:collection="${targets.entries}" camunda:elementVariable="target" />
     </bpmn:sendTask>
-    <bpmn:intermediateCatchEvent id="receiveFinalResultFromTtp" name="receive final result from TTP">
+    <bpmn:intermediateCatchEvent id="receiveFinalResultFromTtp" name="receive multi MeDIC results from TTP">
       <bpmn:incoming>Flow_1q5jnli</bpmn:incoming>
       <bpmn:outgoing>Flow_1gf3n6o</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0ox92uc" messageRef="Message_1a3ewlk" />
@@ -40,8 +40,8 @@
       <bpmn:outgoing>Flow_1q5jnli</bpmn:outgoing>
       <bpmn:outgoing>Flow_1harl90</bpmn:outgoing>
     </bpmn:eventBasedGateway>
-    <bpmn:serviceTask id="checkFinalResult" name="check final result" camunda:class="org.highmed.dsf.bpe.service.CheckMultiMedicResults">
-      <bpmn:incoming>Flow_1gf3n6o</bpmn:incoming>
+    <bpmn:serviceTask id="checkResultSets" name="check result sets" camunda:class="org.highmed.dsf.bpe.service.CheckMedicMultiMedicResultSets">
+      <bpmn:incoming>Flow_025quhl</bpmn:incoming>
       <bpmn:outgoing>Flow_0rwo9pn</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="handleError" name="handle error" camunda:class="org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults">
@@ -49,18 +49,18 @@
       <bpmn:outgoing>Flow_1s74o06</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_0nlbalq">
-      <bpmn:incoming>Flow_0rwo9pn</bpmn:incoming>
       <bpmn:incoming>Flow_1s74o06</bpmn:incoming>
+      <bpmn:incoming>Flow_1rnnd6d</bpmn:incoming>
       <bpmn:outgoing>Flow_0amk6ah</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="EndEvent" name="success">
       <bpmn:incoming>Flow_0amk6ah</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1q5jnli" sourceRef="Gateway_160gkf1" targetRef="receiveFinalResultFromTtp" />
-    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveFinalResultFromTtp" targetRef="checkFinalResult" />
+    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveFinalResultFromTtp" targetRef="temporarilyStoreMultiMeDICresults" />
     <bpmn:sequenceFlow id="Flow_1harl90" sourceRef="Gateway_160gkf1" targetRef="receiveErrorFromTtp" />
     <bpmn:sequenceFlow id="Flow_1id9r0h" sourceRef="receiveErrorFromTtp" targetRef="handleError" />
-    <bpmn:sequenceFlow id="Flow_0rwo9pn" sourceRef="checkFinalResult" targetRef="Gateway_0nlbalq" />
+    <bpmn:sequenceFlow id="Flow_0rwo9pn" sourceRef="checkResultSets" targetRef="storeResultSets" />
     <bpmn:sequenceFlow id="Flow_1s74o06" sourceRef="handleError" targetRef="Gateway_0nlbalq" />
     <bpmn:sequenceFlow id="Flow_0amk6ah" sourceRef="Gateway_0nlbalq" targetRef="EndEvent" />
     <bpmn:sequenceFlow id="Flow_1lw96cm" sourceRef="sendRequestToMedics" targetRef="Gateway_160gkf1" />
@@ -82,6 +82,16 @@
       <bpmn:incoming>Flow_06otxko</bpmn:incoming>
       <bpmn:outgoing>Flow_0cx3xe1</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:serviceTask id="temporarilyStoreMultiMeDICresults" name="download result sets" camunda:class="org.highmed.dsf.bpe.service.DownloadMultiMedicResultSets">
+      <bpmn:incoming>Flow_1gf3n6o</bpmn:incoming>
+      <bpmn:outgoing>Flow_025quhl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="temporarilyStoreMultiMeDICresults" targetRef="checkResultSets" />
+    <bpmn:sequenceFlow id="Flow_1rnnd6d" sourceRef="storeResultSets" targetRef="Gateway_0nlbalq" />
+    <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSets">
+      <bpmn:incoming>Flow_0rwo9pn</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rnnd6d</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_1oeg3sw" name="requestDataSharingMessage" />
   <bpmn:message id="Message_1a3ewlk" name="resultMultiMedicDataSharingMessage" />
@@ -89,6 +99,15 @@
   <bpmn:message id="Message_0a5typw" name="computeDataSharingMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="requestDataSharing">
+      <bpmndi:BPMNEdge id="Flow_1rnnd6d_di" bpmnElement="Flow_1rnnd6d">
+        <di:waypoint x="1540" y="140" />
+        <di:waypoint x="1600" y="140" />
+        <di:waypoint x="1600" y="202" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_025quhl_di" bpmnElement="Flow_025quhl">
+        <di:waypoint x="1220" y="140" />
+        <di:waypoint x="1280" y="140" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18ie7l6_di" bpmnElement="Flow_18ie7l6">
         <di:waypoint x="688" y="227" />
         <di:waypoint x="760" y="227" />
@@ -98,22 +117,21 @@
         <di:waypoint x="915" y="227" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0amk6ah_di" bpmnElement="Flow_0amk6ah">
-        <di:waypoint x="1345" y="220" />
-        <di:waypoint x="1412" y="220" />
+        <di:waypoint x="1625" y="227" />
+        <di:waypoint x="1682" y="227" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1s74o06_di" bpmnElement="Flow_1s74o06">
-        <di:waypoint x="1250" y="300" />
-        <di:waypoint x="1320" y="300" />
-        <di:waypoint x="1320" y="245" />
+        <di:waypoint x="1220" y="300" />
+        <di:waypoint x="1600" y="300" />
+        <di:waypoint x="1600" y="252" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0rwo9pn_di" bpmnElement="Flow_0rwo9pn">
-        <di:waypoint x="1250" y="140" />
-        <di:waypoint x="1320" y="140" />
-        <di:waypoint x="1320" y="195" />
+        <di:waypoint x="1380" y="140" />
+        <di:waypoint x="1440" y="140" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1id9r0h_di" bpmnElement="Flow_1id9r0h">
         <di:waypoint x="1058" y="300" />
-        <di:waypoint x="1150" y="300" />
+        <di:waypoint x="1120" y="300" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1harl90_di" bpmnElement="Flow_1harl90">
         <di:waypoint x="940" y="252" />
@@ -122,7 +140,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1gf3n6o_di" bpmnElement="Flow_1gf3n6o">
         <di:waypoint x="1058" y="140" />
-        <di:waypoint x="1150" y="140" />
+        <di:waypoint x="1120" y="140" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1q5jnli_di" bpmnElement="Flow_1q5jnli">
         <di:waypoint x="940" y="202" />
@@ -156,7 +174,7 @@
       <bpmndi:BPMNShape id="Event_0bxieya_di" bpmnElement="receiveFinalResultFromTtp">
         <dc:Bounds x="1022" y="122" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1002" y="86" width="76" height="27" />
+          <dc:Bounds x="1005" y="80" width="70" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0jt3zpu_di" bpmnElement="receiveErrorFromTtp">
@@ -168,19 +186,13 @@
       <bpmndi:BPMNShape id="Gateway_160gkf1_di" bpmnElement="Gateway_160gkf1">
         <dc:Bounds x="915" y="202" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1sx3j2g_di" bpmnElement="checkFinalResult">
-        <dc:Bounds x="1150" y="100" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0t7mxic_di" bpmnElement="handleError">
-        <dc:Bounds x="1150" y="260" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0nlbalq_di" bpmnElement="Gateway_0nlbalq" isMarkerVisible="true">
-        <dc:Bounds x="1295" y="195" width="50" height="50" />
+        <dc:Bounds x="1575" y="202" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1vgrk6d_di" bpmnElement="EndEvent">
-        <dc:Bounds x="1412" y="202" width="36" height="36" />
+        <dc:Bounds x="1682" y="209" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1410" y="245" width="40" height="14" />
+          <dc:Bounds x="1680" y="252" width="40" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1c9txf8_di" bpmnElement="sendCorreltationKeysToTTP">
@@ -191,6 +203,18 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1wzn9by_di" bpmnElement="selectRequestTargetsAndGenerateKeys">
         <dc:Bounds x="470" y="187" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1sx3j2g_di" bpmnElement="checkResultSets">
+        <dc:Bounds x="1280" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09oplxx_di" bpmnElement="temporarilyStoreMultiMeDICresults">
+        <dc:Bounds x="1120" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1a9tjil_di" bpmnElement="storeResultSets">
+        <dc:Bounds x="1440" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0t7mxic_di" bpmnElement="handleError">
+        <dc:Bounds x="1120" y="260" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

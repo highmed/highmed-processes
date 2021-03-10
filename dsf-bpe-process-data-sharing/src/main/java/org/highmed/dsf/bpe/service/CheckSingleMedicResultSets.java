@@ -18,12 +18,12 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CheckSingleMedicResults extends AbstractServiceDelegate
+public class CheckSingleMedicResultSets extends AbstractServiceDelegate
 {
 
-	private static final Logger logger = LoggerFactory.getLogger(CheckSingleMedicResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(CheckSingleMedicResultSets.class);
 
-	public CheckSingleMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CheckSingleMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
 	{
 		super(clientProvider, taskHelper);
 	}

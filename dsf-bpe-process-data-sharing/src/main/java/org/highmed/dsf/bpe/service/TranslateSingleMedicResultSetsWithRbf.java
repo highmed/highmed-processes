@@ -37,9 +37,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class TranslateResultSetsWithRbf extends AbstractServiceDelegate implements InitializingBean
+public class TranslateSingleMedicResultSetsWithRbf extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(TranslateResultSetsWithRbf.class);
+	private static final Logger logger = LoggerFactory.getLogger(TranslateSingleMedicResultSetsWithRbf.class);
 
 	private static final int RBF_LENGTH = 3000;
 	private static final RecordBloomFilterGeneratorImpl.FieldWeights FBF_WEIGHTS = new RecordBloomFilterGeneratorImpl.FieldWeights(
@@ -52,7 +52,7 @@ public class TranslateResultSetsWithRbf extends AbstractServiceDelegate implemen
 	private final MasterPatientIndexClient masterPatientIndexClient;
 	private final BouncyCastleProvider bouncyCastleProvider;
 
-	public TranslateResultSetsWithRbf(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public TranslateSingleMedicResultSetsWithRbf(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			OrganizationProvider organizationProvider, String ehrIdColumnPath,
 			MasterPatientIndexClient masterPatientIndexClient, BouncyCastleProvider bouncyCastleProvider)
 	{

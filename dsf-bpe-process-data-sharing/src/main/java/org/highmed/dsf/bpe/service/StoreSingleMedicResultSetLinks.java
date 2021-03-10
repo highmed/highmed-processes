@@ -21,12 +21,12 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StoreReceivedSingleMedicResults extends AbstractServiceDelegate
+public class StoreSingleMedicResultSetLinks extends AbstractServiceDelegate
 {
 
-	private static final Logger logger = LoggerFactory.getLogger(StoreReceivedSingleMedicResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(StoreSingleMedicResultSetLinks.class);
 
-	public StoreReceivedSingleMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public StoreSingleMedicResultSetLinks(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
 	{
 		super(clientProvider, taskHelper);
 	}

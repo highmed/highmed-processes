@@ -7,10 +7,11 @@ import org.highmed.dsf.bpe.message.SendMultiMedicResults;
 import org.highmed.dsf.bpe.message.SendSingleMedicResults;
 import org.highmed.dsf.bpe.message.SendTtpRequest;
 import org.highmed.dsf.bpe.service.CheckDataSharingResources;
-import org.highmed.dsf.bpe.service.CheckMultiMedicResults;
-import org.highmed.dsf.bpe.service.CheckSingleMedicResults;
-import org.highmed.dsf.bpe.service.CheckTtpComputedMultiMedicResults;
+import org.highmed.dsf.bpe.service.CheckMedicMultiMedicResultSets;
+import org.highmed.dsf.bpe.service.CheckSingleMedicResultSets;
+import org.highmed.dsf.bpe.service.CheckTtpMultiMedicResultSets;
 import org.highmed.dsf.bpe.service.DownloadDataSharingResources;
+import org.highmed.dsf.bpe.service.DownloadMultiMedicResultSets;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
 import org.highmed.dsf.bpe.service.DownloadSingleMedicResultSets;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
@@ -24,9 +25,9 @@ import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
 import org.highmed.dsf.bpe.service.StoreCorrelationKeys;
 import org.highmed.dsf.bpe.service.StoreMultiMedicResultSets;
-import org.highmed.dsf.bpe.service.StoreReceivedSingleMedicResults;
+import org.highmed.dsf.bpe.service.StoreSingleMedicResultSetLinks;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSets;
-import org.highmed.dsf.bpe.service.TranslateResultSetsWithRbf;
+import org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithRbf;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -104,9 +105,21 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public CheckMultiMedicResults checkMultiMedicResults()
+	public DownloadMultiMedicResultSets downloadMultiMedicResultSets()
 	{
-		return new CheckMultiMedicResults(fhirClientProvider, taskHelper);
+		return new DownloadMultiMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
+	}
+
+	@Bean
+	public CheckMedicMultiMedicResultSets checkMedicMultiMedicResultSets()
+	{
+		return new CheckMedicMultiMedicResultSets(fhirClientProvider, taskHelper);
+	}
+
+	@Bean
+	public StoreMultiMedicResultSets storeMultiMedicResultSets()
+	{
+		return new StoreMultiMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
 	}
 
 	//
@@ -120,9 +133,9 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public StoreReceivedSingleMedicResults storeReceivedSingleMedicResults()
+	public StoreSingleMedicResultSetLinks storeSingleMedicResultSetLinks()
 	{
-		return new StoreReceivedSingleMedicResults(fhirClientProvider, taskHelper);
+		return new StoreSingleMedicResultSetLinks(fhirClientProvider, taskHelper);
 	}
 
 	@Bean
@@ -144,9 +157,9 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public CheckTtpComputedMultiMedicResults checkTtpComputedMultiMedicResults()
+	public CheckTtpMultiMedicResultSets checkTtpMultiMedicResultSets()
 	{
-		return new CheckTtpComputedMultiMedicResults(fhirClientProvider, taskHelper);
+		return new CheckTtpMultiMedicResultSets(fhirClientProvider, taskHelper);
 	}
 
 	@Bean
@@ -214,10 +227,10 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public TranslateResultSetsWithRbf translateResultSetsWithRbf()
+	public TranslateSingleMedicResultSetsWithRbf translateSingleMedicResultSetsWithRbf()
 	{
-		return new TranslateResultSetsWithRbf(fhirClientProvider, taskHelper, organizationProvider, ehrIdColumnPath,
-				masterPatientIndexClient(), bouncyCastleProvider());
+		return new TranslateSingleMedicResultSetsWithRbf(fhirClientProvider, taskHelper, organizationProvider,
+				ehrIdColumnPath, masterPatientIndexClient(), bouncyCastleProvider());
 	}
 
 	@Bean
@@ -239,15 +252,9 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public StoreMultiMedicResultSets storeMultiMedicResultSets()
+	public CheckSingleMedicResultSets checkSingleMedicResultSets()
 	{
-		return new StoreMultiMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
-	}
-
-	@Bean
-	public CheckSingleMedicResults checkSingleMedicResults()
-	{
-		return new CheckSingleMedicResults(fhirClientProvider, taskHelper);
+		return new CheckSingleMedicResultSets(fhirClientProvider, taskHelper);
 	}
 
 	@Bean

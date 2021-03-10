@@ -8,11 +8,11 @@
       <bpmn:endEvent id="SubEndEvent">
         <bpmn:incoming>SequenceFlow_0mj024w</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:serviceTask id="temporarillyStoreQueryResults" name="temporarilly store single MeDIC results" camunda:class="org.highmed.dsf.bpe.service.StoreReceivedSingleMedicResults">
+      <bpmn:serviceTask id="storeResultSetLinks" name="store result set links" camunda:class="org.highmed.dsf.bpe.service.StoreSingleMedicResultSetLinks">
         <bpmn:incoming>SequenceFlow_0by0at7</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0mj024w</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:receiveTask id="receiveQueryResultsFromMeDIC" name="receive query results from MeDIC" messageRef="Message_0a1qxd8">
+      <bpmn:receiveTask id="receiveResults" name="receive results" messageRef="Message_0a1qxd8">
         <bpmn:extensionElements>
           <camunda:inputOutput>
             <camunda:inputParameter name="correlationKey">${target.correlationKey}</camunda:inputParameter>
@@ -24,9 +24,9 @@
       <bpmn:startEvent id="SubStartEvent">
         <bpmn:outgoing>SequenceFlow_0qjt33w</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:sequenceFlow id="SequenceFlow_0qjt33w" sourceRef="SubStartEvent" targetRef="receiveQueryResultsFromMeDIC" />
-      <bpmn:sequenceFlow id="SequenceFlow_0by0at7" sourceRef="receiveQueryResultsFromMeDIC" targetRef="temporarillyStoreQueryResults" />
-      <bpmn:sequenceFlow id="SequenceFlow_0mj024w" sourceRef="temporarillyStoreQueryResults" targetRef="SubEndEvent" />
+      <bpmn:sequenceFlow id="SequenceFlow_0qjt33w" sourceRef="SubStartEvent" targetRef="receiveResults" />
+      <bpmn:sequenceFlow id="SequenceFlow_0by0at7" sourceRef="receiveResults" targetRef="storeResultSetLinks" />
+      <bpmn:sequenceFlow id="SequenceFlow_0mj024w" sourceRef="storeResultSetLinks" targetRef="SubEndEvent" />
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="TimerEnded" attachedToRef="SubProcess_1gopxt4">
       <bpmn:outgoing>SequenceFlow_0h3to47</bpmn:outgoing>
@@ -38,7 +38,7 @@
       <bpmn:outgoing>SequenceFlow_01pjftq</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_08676wn" />
     </bpmn:startEvent>
-    <bpmn:endEvent id="EndEventSuccess" name="send final result to leading MeDIC">
+    <bpmn:endEvent id="EndEventSuccess" name="send results to MeDIC">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="processDefinitionKey">requestDataSharing</camunda:inputParameter>
@@ -47,7 +47,7 @@
           <camunda:inputParameter name="messageName">resultMultiMedicDataSharingMessage</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1r6dq8y</bpmn:incoming>
+      <bpmn:incoming>Flow_0uaqn1r</bpmn:incoming>
       <bpmn:messageEventDefinition messageRef="Message_0ue93sz" camunda:class="org.highmed.dsf.bpe.message.SendMultiMedicResults" />
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_01pjftq" sourceRef="StartEvent" targetRef="storeCorrelationKeys" />
@@ -70,17 +70,17 @@
     <bpmn:exclusiveGateway id="ExclusiveGateway_1r8ow3i">
       <bpmn:incoming>SequenceFlow_02zmrer</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0t4lx4v</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ixeke2</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1qqffoq</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="storeCorrelationKeys" name="store correlation keys" camunda:class="org.highmed.dsf.bpe.service.StoreCorrelationKeys">
       <bpmn:incoming>SequenceFlow_01pjftq</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1lfe4wr</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="selectResponseTargetMedic" name="select response target MeDIC" camunda:class="org.highmed.dsf.bpe.service.SelectResponseTargetMedic">
-      <bpmn:incoming>Flow_1qmx444</bpmn:incoming>
-      <bpmn:outgoing>Flow_1k0sqwo</bpmn:outgoing>
+      <bpmn:incoming>Flow_1qqffoq</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wig1wj</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="EndEventError" name="send error to leading MeDIC">
+    <bpmn:endEvent id="EndEventError" name="send error to MeDIC">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="processDefinitionKey">requestDataSharing</camunda:inputParameter>
@@ -92,12 +92,11 @@
       <bpmn:incoming>Flow_1tmnvhl</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_19y5diw" messageRef="Message_0kix95m" camunda:class="org.highmed.dsf.bpe.message.SendMultiMedicErrors" />
     </bpmn:endEvent>
-    <bpmn:serviceTask id="checkComputedResults" name="check computed result" camunda:class="org.highmed.dsf.bpe.service.CheckTtpComputedMultiMedicResults">
-      <bpmn:incoming>Flow_1k0sqwo</bpmn:incoming>
-      <bpmn:outgoing>Flow_1r6dq8y</bpmn:outgoing>
+    <bpmn:serviceTask id="checkResultSets" name="check result sets" camunda:class="org.highmed.dsf.bpe.service.CheckTtpMultiMedicResultSets">
+      <bpmn:incoming>Flow_1wig1wj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mogdyo</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1ixeke2" sourceRef="ExclusiveGateway_1r8ow3i" targetRef="storeFinalResultSets" />
-    <bpmn:boundaryEvent id="Event_1vp5qzs" attachedToRef="checkComputedResults">
+    <bpmn:boundaryEvent id="Event_1vp5qzs" attachedToRef="checkResultSets">
       <bpmn:outgoing>Flow_1tmnvhl</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_05kx06m" errorRef="Error_0qub4jc" />
     </bpmn:boundaryEvent>
@@ -110,19 +109,20 @@
       <bpmn:incoming>SequenceFlow_0h3to47</bpmn:incoming>
       <bpmn:outgoing>Flow_0b5n9vc</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0b5n9vc" sourceRef="Gateway_0h2eszv" targetRef="downloadSingleMedicResultSets" />
-    <bpmn:sequenceFlow id="Flow_0gx8n5k" sourceRef="downloadSingleMedicResultSets" targetRef="ExclusiveGateway_07e71aa" />
-    <bpmn:serviceTask id="downloadSingleMedicResultSets" name="download single MeDIC result sets" camunda:class="org.highmed.dsf.bpe.service.DownloadSingleMedicResultSets">
+    <bpmn:sequenceFlow id="Flow_0b5n9vc" sourceRef="Gateway_0h2eszv" targetRef="downloadResultSets" />
+    <bpmn:sequenceFlow id="Flow_0gx8n5k" sourceRef="downloadResultSets" targetRef="ExclusiveGateway_07e71aa" />
+    <bpmn:serviceTask id="downloadResultSets" name="download result sets" camunda:class="org.highmed.dsf.bpe.service.DownloadSingleMedicResultSets">
       <bpmn:incoming>Flow_0b5n9vc</bpmn:incoming>
       <bpmn:outgoing>Flow_0gx8n5k</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="storeFinalResultSets" name="store multi MeDIC result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSets">
-      <bpmn:incoming>Flow_1ixeke2</bpmn:incoming>
-      <bpmn:outgoing>Flow_1qmx444</bpmn:outgoing>
+    <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSets">
+      <bpmn:incoming>Flow_0mogdyo</bpmn:incoming>
+      <bpmn:outgoing>Flow_0uaqn1r</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1r6dq8y" sourceRef="checkComputedResults" targetRef="EndEventSuccess" />
-    <bpmn:sequenceFlow id="Flow_1qmx444" sourceRef="storeFinalResultSets" targetRef="selectResponseTargetMedic" />
-    <bpmn:sequenceFlow id="Flow_1k0sqwo" sourceRef="selectResponseTargetMedic" targetRef="checkComputedResults" />
+    <bpmn:sequenceFlow id="Flow_0mogdyo" sourceRef="checkResultSets" targetRef="storeResultSets" />
+    <bpmn:sequenceFlow id="Flow_1qqffoq" sourceRef="ExclusiveGateway_1r8ow3i" targetRef="selectResponseTargetMedic" />
+    <bpmn:sequenceFlow id="Flow_1wig1wj" sourceRef="selectResponseTargetMedic" targetRef="checkResultSets" />
+    <bpmn:sequenceFlow id="Flow_0uaqn1r" sourceRef="storeResultSets" targetRef="EndEventSuccess" />
   </bpmn:process>
   <bpmn:message id="Message_0a1qxd8" name="resultSingleMedicDataSharingMessage" />
   <bpmn:message id="Message_0ue93sz" name="resultMultiMedicDataSharingMessage" />
@@ -146,14 +146,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1347" y="133" width="65" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1k0sqwo_di" bpmnElement="Flow_1k0sqwo">
-        <di:waypoint x="1880" y="242" />
-        <di:waypoint x="1940" y="242" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ixeke2_di" bpmnElement="Flow_1ixeke2">
-        <di:waypoint x="1545" y="242" />
-        <di:waypoint x="1620" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_02zmrer_di" bpmnElement="SequenceFlow_02zmrer">
         <di:waypoint x="1520" y="166" />
@@ -183,39 +175,47 @@
         <di:waypoint x="195" y="242" />
         <di:waypoint x="279" y="242" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1r6dq8y_di" bpmnElement="Flow_1r6dq8y">
-        <di:waypoint x="2040" y="242" />
-        <di:waypoint x="2142" y="242" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tmnvhl_di" bpmnElement="Flow_1tmnvhl">
-        <di:waypoint x="2040" y="300" />
-        <di:waypoint x="2040" y="350" />
+        <di:waypoint x="1880" y="300" />
+        <di:waypoint x="1880" y="350" />
         <di:waypoint x="2142" y="350" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1qmx444_di" bpmnElement="Flow_1qmx444">
-        <di:waypoint x="1720" y="242" />
+      <bpmndi:BPMNEdge id="Flow_0mogdyo_di" bpmnElement="Flow_0mogdyo">
+        <di:waypoint x="1880" y="242" />
+        <di:waypoint x="1950" y="242" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qqffoq_di" bpmnElement="Flow_1qqffoq">
+        <di:waypoint x="1545" y="242" />
+        <di:waypoint x="1610" y="242" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wig1wj_di" bpmnElement="Flow_1wig1wj">
+        <di:waypoint x="1710" y="242" />
         <di:waypoint x="1780" y="242" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0uaqn1r_di" bpmnElement="Flow_0uaqn1r">
+        <di:waypoint x="2050" y="242" />
+        <di:waypoint x="2142" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_0xh5o35_di" bpmnElement="EndEventSuccess">
         <dc:Bounds x="2142" y="224" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2118" y="267" width="85" height="27" />
+          <dc:Bounds x="2125" y="267" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1hmug5i_di" bpmnElement="EndEventError">
         <dc:Bounds x="2142" y="332" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2124" y="375" width="73" height="27" />
+          <dc:Bounds x="2129" y="375" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_13j8ce9_di" bpmnElement="checkComputedResults">
-        <dc:Bounds x="1940" y="202" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0tps18n_di" bpmnElement="storeResultSets">
+        <dc:Bounds x="1950" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0uk3eyz_di" bpmnElement="selectResponseTargetMedic">
+      <bpmndi:BPMNShape id="Activity_13j8ce9_di" bpmnElement="checkResultSets">
         <dc:Bounds x="1780" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0tps18n_di" bpmnElement="storeFinalResultSets">
-        <dc:Bounds x="1620" y="202" width="100" height="80" />
+      <bpmndi:BPMNShape id="ServiceTask_0uk3eyz_di" bpmnElement="selectResponseTargetMedic">
+        <dc:Bounds x="1610" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SubProcess_1gopxt4_di" bpmnElement="SubProcess_1gopxt4" isExpanded="true">
         <dc:Bounds x="469" y="175" width="498" height="134" />
@@ -235,10 +235,10 @@
       <bpmndi:BPMNShape id="EndEvent_01cb50v_di" bpmnElement="SubEndEvent">
         <dc:Bounds x="894" y="226" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0yjis46_di" bpmnElement="temporarillyStoreQueryResults">
+      <bpmndi:BPMNShape id="ServiceTask_0yjis46_di" bpmnElement="storeResultSetLinks">
         <dc:Bounds x="746" y="204" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ReceiveTask_0533fm9_di" bpmnElement="receiveQueryResultsFromMeDIC">
+      <bpmndi:BPMNShape id="ReceiveTask_0533fm9_di" bpmnElement="receiveResults">
         <dc:Bounds x="583" y="204" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_17r90ez_di" bpmnElement="SubStartEvent">
@@ -268,14 +268,14 @@
       <bpmndi:BPMNShape id="Gateway_0h2eszv_di" bpmnElement="Gateway_0h2eszv" isMarkerVisible="true">
         <dc:Bounds x="1045" y="217" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1rzqqn0_di" bpmnElement="downloadSingleMedicResultSets">
+      <bpmndi:BPMNShape id="Activity_1rzqqn0_di" bpmnElement="downloadResultSets">
         <dc:Bounds x="1160" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BoundaryEvent_1g0rcyp_di" bpmnElement="TimerEnded">
         <dc:Bounds x="949" y="291" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_155cxa9_di" bpmnElement="Event_1vp5qzs">
-        <dc:Bounds x="2022" y="264" width="36" height="36" />
+        <dc:Bounds x="1862" y="264" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
