@@ -15,6 +15,7 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 import java.util.stream.Stream;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
@@ -56,9 +57,9 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 		ParameterComponent inputNeedsRecordLinkage = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 
-		SecretKey mdatKey = (SecretKey) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
+		byte[] mdatKey = (byte[]) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
 		ParameterComponent inputMdatKey = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
-				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MDAT_AES_KEY, mdatKey.getEncoded());
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MDAT_AES_KEY, mdatKey);
 
 		if (needsRecordLinkage)
 		{

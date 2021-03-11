@@ -53,7 +53,7 @@
       <bpmn:outgoing>Flow_14nlfvk</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0kzp6tl" sourceRef="filterByConsent" targetRef="ExclusiveGateway_0lecmy5" />
-    <bpmn:serviceTask id="translateWithRbfGeneration" name="translate with RBF generation" camunda:class="org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithRbf">
+    <bpmn:serviceTask id="translateWithRbfGeneration" name="translate with RBF generation and encryption" camunda:class="org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithRbf">
       <bpmn:incoming>Flow_0xt2bfn</bpmn:incoming>
       <bpmn:outgoing>Flow_09yooed</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -67,7 +67,7 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1kp6eaq" sourceRef="checkDataSharingRequest" targetRef="extractQueries" />
     <bpmn:sequenceFlow id="Flow_0qsitvp" sourceRef="addIdSelectionIfMissing" targetRef="executeQueries" />
-    <bpmn:serviceTask id="addIdSelectionIfMissing" name="Add id selection if missing" camunda:class="org.highmed.dsf.bpe.service.ModifyQueries">
+    <bpmn:serviceTask id="addIdSelectionIfMissing" name="add id selection if missing" camunda:class="org.highmed.dsf.bpe.service.ModifyQueries">
       <bpmn:incoming>Flow_1ecoehc</bpmn:incoming>
       <bpmn:outgoing>Flow_0qsitvp</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -111,6 +111,22 @@
   <bpmn:message id="Message_1dr71re" name="resultSingleMedicDataSharingMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="executeDataSharing">
+      <bpmndi:BPMNEdge id="Flow_1611vr6_di" bpmnElement="Flow_1611vr6">
+        <di:waypoint x="2040" y="212" />
+        <di:waypoint x="2122" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pzik8k_di" bpmnElement="Flow_1pzik8k">
+        <di:waypoint x="1700" y="212" />
+        <di:waypoint x="1770" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pgebfo_di" bpmnElement="Flow_1pgebfo">
+        <di:waypoint x="1515" y="212" />
+        <di:waypoint x="1600" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08925ay_di" bpmnElement="Flow_08925ay">
+        <di:waypoint x="1870" y="212" />
+        <di:waypoint x="1940" y="212" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09yooed_di" bpmnElement="Flow_09yooed">
         <di:waypoint x="1490" y="130" />
         <di:waypoint x="1490" y="187" />
@@ -174,22 +190,9 @@
         <di:waypoint x="980" y="212" />
         <di:waypoint x="1032" y="212" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08925ay_di" bpmnElement="Flow_08925ay">
-        <di:waypoint x="1870" y="212" />
-        <di:waypoint x="1940" y="212" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1pgebfo_di" bpmnElement="Flow_1pgebfo">
-        <di:waypoint x="1515" y="212" />
-        <di:waypoint x="1600" y="212" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1pzik8k_di" bpmnElement="Flow_1pzik8k">
-        <di:waypoint x="1700" y="212" />
-        <di:waypoint x="1770" y="212" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1611vr6_di" bpmnElement="Flow_1611vr6">
-        <di:waypoint x="2040" y="212" />
-        <di:waypoint x="2122" y="212" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0t2s0v7_di" bpmnElement="checkResultSets">
+        <dc:Bounds x="1770" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0jna5l2_di" bpmnElement="checkDataSharingRequest">
         <dc:Bounds x="400" y="172" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -220,8 +223,14 @@
       <bpmndi:BPMNShape id="ServiceTask_0akkess_di" bpmnElement="translateWithRbfGeneration">
         <dc:Bounds x="1440" y="50" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_15aifhd_di" bpmnElement="selectResponseTargetTtp">
+        <dc:Bounds x="1600" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0u5pb4i_di" bpmnElement="executeQueries">
         <dc:Bounds x="880" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ok9q8j_di" bpmnElement="addIdSelectionIfMissing">
+        <dc:Bounds x="720" y="172" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1vlv5ud_di" bpmnElement="extractQueries">
         <dc:Bounds x="560" y="172" width="100" height="80" />
@@ -235,20 +244,11 @@
       <bpmndi:BPMNShape id="Gateway_13kxug8_di" bpmnElement="Gateway_13kxug8" isMarkerVisible="true">
         <dc:Bounds x="1465" y="187" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
-        <dc:Bounds x="330" y="80" width="267" height="56" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ok9q8j_di" bpmnElement="addIdSelectionIfMissing">
-        <dc:Bounds x="720" y="172" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_15aifhd_di" bpmnElement="selectResponseTargetTtp">
-        <dc:Bounds x="1600" y="172" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0t2s0v7_di" bpmnElement="checkResultSets">
-        <dc:Bounds x="1770" y="172" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1mdgvqk_di" bpmnElement="storeResultSets">
         <dc:Bounds x="1940" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
+        <dc:Bounds x="330" y="80" width="267" height="56" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1ncewqu_di" bpmnElement="Association_1ncewqu">
         <di:waypoint x="455" y="172" />

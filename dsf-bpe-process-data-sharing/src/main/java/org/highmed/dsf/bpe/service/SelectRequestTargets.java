@@ -24,7 +24,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
-import org.highmed.dsf.bpe.variable.SecretKeyValues;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -79,8 +78,7 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(getMedicTargets(researchStudy)));
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(getTtpTarget(researchStudy)));
-
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, SecretKeyValues.create(createMdatKey()));
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, AesGcmUtil.generateAES256Key().getEncoded());
 
 		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
 		if (Boolean.TRUE.equals(needsRecordLinkage))
@@ -114,10 +112,5 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 	{
 		return new BloomFilterConfig(random.nextLong(), hmacSha2Generator.generateKey(),
 				hmacSha3Generator.generateKey());
-	}
-
-	private SecretKey createMdatKey() throws NoSuchAlgorithmException
-	{
-		return AesGcmUtil.generateAES256Key();
 	}
 }

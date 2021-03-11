@@ -27,6 +27,7 @@ import org.highmed.dsf.bpe.service.StoreCorrelationKeys;
 import org.highmed.dsf.bpe.service.StoreMultiMedicResultSets;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSetLinks;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSets;
+import org.highmed.dsf.bpe.service.TranslateMultiMedicResultSets;
 import org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithRbf;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
@@ -49,7 +50,6 @@ import ca.uhn.fhir.context.FhirContext;
 @Configuration
 public class DataSharingConfig
 {
-
 	@Autowired
 	private FhirWebserviceClientProvider fhirClientProvider;
 
@@ -108,6 +108,12 @@ public class DataSharingConfig
 	public DownloadMultiMedicResultSets downloadMultiMedicResultSets()
 	{
 		return new DownloadMultiMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
+	}
+
+	@Bean
+	public TranslateMultiMedicResultSets translateMultiMedicResultSets()
+	{
+		return new TranslateMultiMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
 	}
 
 	@Bean

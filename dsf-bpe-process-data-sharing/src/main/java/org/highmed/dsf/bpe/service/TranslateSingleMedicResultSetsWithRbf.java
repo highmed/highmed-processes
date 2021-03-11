@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -80,7 +81,7 @@ public class TranslateSingleMedicResultSetsWithRbf extends AbstractServiceDelega
 	{
 		String organizationIdentifier = organizationProvider.getLocalIdentifierValue();
 		String researchStudyIdentifier = getResearchStudyIdentifier(execution);
-		SecretKey mdatKey = (SecretKey) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
+		SecretKey mdatKey = getMdatKey(execution);
 		BloomFilterConfig bloomFilterConfig = (BloomFilterConfig) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG);
 
@@ -103,6 +104,12 @@ public class TranslateSingleMedicResultSetsWithRbf extends AbstractServiceDelega
 				.orElseThrow(() -> new IllegalArgumentException("Identifier is not set in research study with id='"
 						+ researchStudy.getId() + "', this error should have been caught by resource validation"))
 				.getValue();
+	}
+
+	protected SecretKey getMdatKey(DelegateExecution execution)
+	{
+		byte[] encodedKey = (byte[]) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
+		return new SecretKeySpec(encodedKey, "AES");
 	}
 
 	protected ResultSetTranslatorToTtp createResultSetTranslator(String organizationIdentifier,
@@ -146,4 +153,6 @@ public class TranslateSingleMedicResultSetsWithRbf extends AbstractServiceDelega
 			throw e;
 		}
 	}
+
+
 }

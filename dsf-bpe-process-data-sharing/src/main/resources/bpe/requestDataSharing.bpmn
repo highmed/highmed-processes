@@ -41,7 +41,7 @@
       <bpmn:outgoing>Flow_1harl90</bpmn:outgoing>
     </bpmn:eventBasedGateway>
     <bpmn:serviceTask id="checkResultSets" name="check result sets" camunda:class="org.highmed.dsf.bpe.service.CheckMedicMultiMedicResultSets">
-      <bpmn:incoming>Flow_025quhl</bpmn:incoming>
+      <bpmn:incoming>Flow_1m59ov0</bpmn:incoming>
       <bpmn:outgoing>Flow_0rwo9pn</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="handleError" name="handle error" camunda:class="org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults">
@@ -86,11 +86,16 @@
       <bpmn:incoming>Flow_1gf3n6o</bpmn:incoming>
       <bpmn:outgoing>Flow_025quhl</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="temporarilyStoreMultiMeDICresults" targetRef="checkResultSets" />
+    <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="temporarilyStoreMultiMeDICresults" targetRef="translateWithDecryption" />
     <bpmn:sequenceFlow id="Flow_1rnnd6d" sourceRef="storeResultSets" targetRef="Gateway_0nlbalq" />
     <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSets">
       <bpmn:incoming>Flow_0rwo9pn</bpmn:incoming>
       <bpmn:outgoing>Flow_1rnnd6d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1m59ov0" sourceRef="translateWithDecryption" targetRef="checkResultSets" />
+    <bpmn:serviceTask id="translateWithDecryption" name="translate with decryption" camunda:class="org.highmed.dsf.bpe.service.TranslateMultiMedicResultSets">
+      <bpmn:incoming>Flow_025quhl</bpmn:incoming>
+      <bpmn:outgoing>Flow_1m59ov0</bpmn:outgoing>
     </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_1oeg3sw" name="requestDataSharingMessage" />
@@ -99,10 +104,14 @@
   <bpmn:message id="Message_0a5typw" name="computeDataSharingMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="requestDataSharing">
+      <bpmndi:BPMNEdge id="Flow_1m59ov0_di" bpmnElement="Flow_1m59ov0">
+        <di:waypoint x="1380" y="140" />
+        <di:waypoint x="1440" y="140" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rnnd6d_di" bpmnElement="Flow_1rnnd6d">
-        <di:waypoint x="1540" y="140" />
-        <di:waypoint x="1600" y="140" />
-        <di:waypoint x="1600" y="202" />
+        <di:waypoint x="1690" y="140" />
+        <di:waypoint x="1730" y="140" />
+        <di:waypoint x="1730" y="202" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_025quhl_di" bpmnElement="Flow_025quhl">
         <di:waypoint x="1220" y="140" />
@@ -117,17 +126,17 @@
         <di:waypoint x="915" y="227" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0amk6ah_di" bpmnElement="Flow_0amk6ah">
-        <di:waypoint x="1625" y="227" />
-        <di:waypoint x="1682" y="227" />
+        <di:waypoint x="1755" y="227" />
+        <di:waypoint x="1822" y="227" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1s74o06_di" bpmnElement="Flow_1s74o06">
         <di:waypoint x="1220" y="300" />
-        <di:waypoint x="1600" y="300" />
-        <di:waypoint x="1600" y="252" />
+        <di:waypoint x="1730" y="300" />
+        <di:waypoint x="1730" y="252" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0rwo9pn_di" bpmnElement="Flow_0rwo9pn">
-        <di:waypoint x="1380" y="140" />
-        <di:waypoint x="1440" y="140" />
+        <di:waypoint x="1540" y="140" />
+        <di:waypoint x="1590" y="140" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1id9r0h_di" bpmnElement="Flow_1id9r0h">
         <di:waypoint x="1058" y="300" />
@@ -186,13 +195,19 @@
       <bpmndi:BPMNShape id="Gateway_160gkf1_di" bpmnElement="Gateway_160gkf1">
         <dc:Bounds x="915" y="202" width="50" height="50" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1sx3j2g_di" bpmnElement="checkResultSets">
+        <dc:Bounds x="1440" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0t7mxic_di" bpmnElement="handleError">
+        <dc:Bounds x="1120" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0nlbalq_di" bpmnElement="Gateway_0nlbalq" isMarkerVisible="true">
-        <dc:Bounds x="1575" y="202" width="50" height="50" />
+        <dc:Bounds x="1705" y="202" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1vgrk6d_di" bpmnElement="EndEvent">
-        <dc:Bounds x="1682" y="209" width="36" height="36" />
+        <dc:Bounds x="1822" y="209" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1680" y="252" width="40" height="14" />
+          <dc:Bounds x="1820" y="252" width="40" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1c9txf8_di" bpmnElement="sendCorreltationKeysToTTP">
@@ -204,17 +219,14 @@
       <bpmndi:BPMNShape id="Activity_1wzn9by_di" bpmnElement="selectRequestTargetsAndGenerateKeys">
         <dc:Bounds x="470" y="187" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1sx3j2g_di" bpmnElement="checkResultSets">
-        <dc:Bounds x="1280" y="100" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_09oplxx_di" bpmnElement="temporarilyStoreMultiMeDICresults">
         <dc:Bounds x="1120" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1a9tjil_di" bpmnElement="storeResultSets">
-        <dc:Bounds x="1440" y="100" width="100" height="80" />
+        <dc:Bounds x="1590" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0t7mxic_di" bpmnElement="handleError">
-        <dc:Bounds x="1120" y="260" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0lqm4kz_di" bpmnElement="translateWithDecryption">
+        <dc:Bounds x="1280" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

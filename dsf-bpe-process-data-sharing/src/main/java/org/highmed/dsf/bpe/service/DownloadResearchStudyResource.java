@@ -5,10 +5,12 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_N
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER;
 
 import java.util.Objects;
 
@@ -21,6 +23,7 @@ import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.fhir.client.FhirWebserviceClient;
 import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResearchStudy;
 import org.hl7.fhir.r4.model.Task;
@@ -56,12 +59,14 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 
 		IdType researchStudyId = getResearchStudyId(task);
 		ResearchStudy researchStudy = getResearchStudy(researchStudyId, client);
+		String researchStudyIdentifier = getResearchStudyIdentifier(researchStudy);
 		boolean needsConsentCheck = getNeedsConsentCheck(task);
 		boolean needsRecordLinkage = getNeedsRecordLinkageCheck(task);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY, researchStudy);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK, needsConsentCheck);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER, researchStudyIdentifier);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_LEADING_MEDIC_IDENTIFIER,
 				organizationProvider.getLocalIdentifierValue());
@@ -110,5 +115,15 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 				.orElseThrow(
 						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
 								+ task.getId() + "', this error should " + "have been caught by resource validation"));
+	}
+
+	private String getResearchStudyIdentifier(ResearchStudy researchStudy)
+	{
+		Identifier identifier = researchStudy.getIdentifier().stream()
+				.filter(i -> i.getSystem().equals(NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER)).findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("Identifier is not set in research study with id='"
+						+ researchStudy.getId() + "', this error should have been caught by resource validation"));
+
+		return identifier.getValue();
 	}
 }

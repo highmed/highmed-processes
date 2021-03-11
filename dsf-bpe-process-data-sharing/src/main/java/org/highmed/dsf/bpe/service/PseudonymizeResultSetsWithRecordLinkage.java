@@ -6,6 +6,7 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_R
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,10 +39,11 @@ import org.highmed.pseudonymization.translation.ResultSetTranslatorToMedic;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToMedicImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDelegate
+public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDelegate implements InitializingBean
 {
 
 	private static final Logger logger = LoggerFactory.getLogger(PseudonymizeResultSetsWithRecordLinkage.class);
@@ -59,6 +61,7 @@ public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDele
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+		Objects.requireNonNull(psnObjectMapper, "psnObjectMapper");
 	}
 
 	@Override
@@ -119,20 +122,37 @@ public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDele
 	private List<List<PersonWithMdat>> translateFromMedicResultSets(ResultSetTranslatorFromMedic translator,
 			List<QueryResult> results)
 	{
-		return results.stream().map(r -> translateFromMedic(translator, r)).collect(Collectors.toList());
+		return results.stream().map(r -> translateFromMedicResultSet(translator, r)).collect(Collectors.toList());
 	}
 
-	private List<PersonWithMdat> translateFromMedic(ResultSetTranslatorFromMedic translator, QueryResult result)
+	private List<PersonWithMdat> translateFromMedicResultSet(ResultSetTranslatorFromMedic translator,
+			QueryResult toTranslate)
 	{
-		return translator.translate(result.getOrganizationIdentifier(), result.getResultSet());
+		try
+		{
+			return translator.translate(toTranslate.getOrganizationIdentifier(), toTranslate.getResultSet());
+		}
+		catch (Exception e)
+		{
+			logger.warn("Error while translating ResultSet: " + e.getMessage(), e);
+			throw e;
+		}
 	}
 
-	private ResultSet translateToMedicResultSet(ResultSet initialResultSet, ResultSetTranslatorToMedic translator,
+	private ResultSet translateToMedicResultSet(ResultSet toTranslate, ResultSetTranslatorToMedic translator,
 			List<PseudonymizedPersonWithMdat> pseudonymizedPersons)
 	{
-		Meta meta = initialResultSet.getMeta() == null ? new Meta("", "", "", "", "", "") : initialResultSet.getMeta();
-		List<Column> columns = initialResultSet.getColumns();
-		return translator.translate(meta, columns, pseudonymizedPersons);
+		try
+		{
+			Meta meta = toTranslate.getMeta() == null ? new Meta("", "", "", "", "", "") : toTranslate.getMeta();
+			List<Column> columns = toTranslate.getColumns();
+			return translator.translate(meta, columns, pseudonymizedPersons);
+		}
+		catch (Exception e)
+		{
+			logger.warn("Error while translating ResultSet: " + e.getMessage(), e);
+			throw e;
+		}
 	}
 
 	private ResultSetTranslatorFromMedic createResultSetTranslatorFromMedic()
