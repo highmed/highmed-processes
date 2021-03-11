@@ -49,19 +49,23 @@ public abstract class DownloadResultSets extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
-		QueryResults results = getQueryResults(execution);
-
+		List<QueryResult> results = getQueryResults(execution);
 		List<QueryResult> resultsWithResultSets = download(results);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(resultsWithResultSets)));
 	}
 
-	protected abstract QueryResults getQueryResults(DelegateExecution execution);
+	/**
+	 * @param execution
+	 *            The process execution environment
+	 * @return The QueryResult objects containing the corresponding Binary result set url.
+	 */
+	protected abstract List<QueryResult> getQueryResults(DelegateExecution execution);
 
-	private List<QueryResult> download(QueryResults results)
+	private List<QueryResult> download(List<QueryResult> results)
 	{
-		return results.getResults().stream().map(this::download).collect(Collectors.toList());
+		return results.stream().map(this::download).collect(Collectors.toList());
 	}
 
 	private QueryResult download(QueryResult result)

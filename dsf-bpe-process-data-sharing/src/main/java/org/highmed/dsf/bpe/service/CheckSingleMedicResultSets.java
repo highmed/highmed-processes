@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 public class CheckSingleMedicResultSets extends AbstractServiceDelegate
 {
-
 	private static final Logger logger = LoggerFactory.getLogger(CheckSingleMedicResultSets.class);
 
 	public CheckSingleMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
@@ -56,7 +55,7 @@ public class CheckSingleMedicResultSets extends AbstractServiceDelegate
 		return filteredResults;
 	}
 
-	protected Optional<String> testResultAndReturnErrorReason(QueryResult result)
+	private Optional<String> testResultAndReturnErrorReason(QueryResult result)
 	{
 		// TODO: implement check
 		// result size > 0

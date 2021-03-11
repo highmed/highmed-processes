@@ -139,7 +139,6 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 		task.setIdElement(new IdType("urn:uuid:" + UUID.randomUUID().toString()));
 
 		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING);
-		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING);
 		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI_AND_LATEST_VERSION);
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);

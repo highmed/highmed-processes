@@ -45,7 +45,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PseudonymizeResultSetsWithRecordLinkage extends AbstractServiceDelegate implements InitializingBean
 {
-
 	private static final Logger logger = LoggerFactory.getLogger(PseudonymizeResultSetsWithRecordLinkage.class);
 
 	private final ObjectMapper psnObjectMapper;

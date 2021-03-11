@@ -58,19 +58,38 @@ public abstract class StoreResultSets extends AbstractServiceDelegate implements
 		List<QueryResult> storedResults = results.getResults().stream()
 				.map(result -> saveResultSetAsBinary(result, securityIdentifier)).collect(Collectors.toList());
 
+		List<QueryResult> postProcessedResults = postProcessStoredResults(storedResults, execution);
+
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				QueryResultsValues.create(new QueryResults(storedResults)));
+				QueryResultsValues.create(new QueryResults(postProcessedResults)));
 	}
 
+	/**
+	 * @param execution
+	 *            The process execution environment
+	 * @return Identifier of the organization that can read the stored binary resource from the local FHIR server
+	 */
 	protected abstract String getSecurityIdentifier(DelegateExecution execution);
 
-	protected QueryResult saveResultSetAsBinary(QueryResult result, String securityIdentifier)
+	/**
+	 * @param storedResults
+	 *            The QueryResult objects after storing them to the local FHIR server
+	 * @param execution
+	 *            The process execution environment
+	 * @return The QueryResult objects after post processing
+	 */
+	protected List<QueryResult> postProcessStoredResults(List<QueryResult> storedResults, DelegateExecution execution)
+	{
+		return storedResults;
+	}
+
+	private QueryResult saveResultSetAsBinary(QueryResult result, String securityIdentifier)
 	{
 		String binaryId = save(result.getResultSet(), securityIdentifier);
 		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), binaryId);
 	}
 
-	protected String save(ResultSet resultSet, String securityIdentifier)
+	private String save(ResultSet resultSet, String securityIdentifier)
 	{
 		byte[] content = serializeResultSet(resultSet);
 		Reference securityContext = new Reference();

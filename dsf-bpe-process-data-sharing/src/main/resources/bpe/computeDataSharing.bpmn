@@ -115,7 +115,7 @@
       <bpmn:incoming>Flow_0b5n9vc</bpmn:incoming>
       <bpmn:outgoing>Flow_0gx8n5k</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSets">
+    <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSetsForLeadingMedic">
       <bpmn:incoming>Flow_0mogdyo</bpmn:incoming>
       <bpmn:outgoing>Flow_0uaqn1r</bpmn:outgoing>
     </bpmn:serviceTask>

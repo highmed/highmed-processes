@@ -88,7 +88,7 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="temporarilyStoreMultiMeDICresults" targetRef="translateWithDecryption" />
     <bpmn:sequenceFlow id="Flow_1rnnd6d" sourceRef="storeResultSets" targetRef="Gateway_0nlbalq" />
-    <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSets">
+    <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSetsForResearcher">
       <bpmn:incoming>Flow_0rwo9pn</bpmn:incoming>
       <bpmn:outgoing>Flow_1rnnd6d</bpmn:outgoing>
     </bpmn:serviceTask>

@@ -39,6 +39,9 @@ public abstract class SendMedicResults extends AbstractTaskMessageSend
 		return results.getResults().stream().map(this::toInput);
 	}
 
+	/**
+	 * @return the code system value that classifies the result set reference Task input
+	 */
 	protected abstract String getResultSetReferenceCodeSystemValue();
 
 	private Task.ParameterComponent toInput(QueryResult result)

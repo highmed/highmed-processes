@@ -96,7 +96,7 @@ public class TranslateSingleMedicResultSetsWithRbf extends AbstractServiceDelega
 				QueryResultsValues.create(new QueryResults(translatedResults)));
 	}
 
-	protected String getResearchStudyIdentifier(DelegateExecution execution)
+	private String getResearchStudyIdentifier(DelegateExecution execution)
 	{
 		ResearchStudy researchStudy = (ResearchStudy) execution.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY);
 		return researchStudy.getIdentifier().stream()
@@ -106,13 +106,13 @@ public class TranslateSingleMedicResultSetsWithRbf extends AbstractServiceDelega
 				.getValue();
 	}
 
-	protected SecretKey getMdatKey(DelegateExecution execution)
+	private SecretKey getMdatKey(DelegateExecution execution)
 	{
 		byte[] encodedKey = (byte[]) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
 		return new SecretKeySpec(encodedKey, "AES");
 	}
 
-	protected ResultSetTranslatorToTtp createResultSetTranslator(String organizationIdentifier,
+	private ResultSetTranslatorToTtp createResultSetTranslator(String organizationIdentifier,
 			String researchStudyIdentifier, SecretKey mdatKey, BloomFilterConfig bloomFilterConfig)
 			throws NoSuchAlgorithmException
 	{
@@ -127,7 +127,7 @@ public class TranslateSingleMedicResultSetsWithRbf extends AbstractServiceDelega
 				ehrIdColumnPath, recordBloomFilterGenerator, masterPatientIndexClient);
 	}
 
-	protected RecordBloomFilterGenerator createRecordBloomFilterGenerator(long permutationSeed, Key hmacSha2Key,
+	private RecordBloomFilterGenerator createRecordBloomFilterGenerator(long permutationSeed, Key hmacSha2Key,
 			Key hmacSha3Key)
 	{
 		return new RecordBloomFilterGeneratorImpl(RBF_LENGTH, permutationSeed, FBF_WEIGHTS, FBF_LENGTHS,
@@ -153,6 +153,5 @@ public class TranslateSingleMedicResultSetsWithRbf extends AbstractServiceDelega
 			throw e;
 		}
 	}
-
 
 }

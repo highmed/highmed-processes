@@ -18,14 +18,9 @@ import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StoreSingleMedicResultSetLinks extends AbstractServiceDelegate
 {
-
-	private static final Logger logger = LoggerFactory.getLogger(StoreSingleMedicResultSetLinks.class);
-
 	public StoreSingleMedicResultSetLinks(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
 	{
 		super(clientProvider, taskHelper);

@@ -60,13 +60,13 @@ public class TranslateMultiMedicResultSets extends AbstractServiceDelegate imple
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS, QueryResultsValues.create(decryptedResults));
 	}
 
-	protected SecretKey getMdatKey(DelegateExecution execution)
+	private SecretKey getMdatKey(DelegateExecution execution)
 	{
 		byte[] encodedKey = (byte[]) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
 		return new SecretKeySpec(encodedKey, "AES");
 	}
 
-	protected ResultSetTranslatorFromTtp createResultSetTranslator(String researchStudyIdentifier,
+	private ResultSetTranslatorFromTtp createResultSetTranslator(String researchStudyIdentifier,
 			SecretKey researchStudyKey)
 	{
 		return new ResultSetTranslatorFromTtpImpl(researchStudyIdentifier, researchStudyKey, openEhrObjectMapper);

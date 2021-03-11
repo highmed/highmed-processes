@@ -24,7 +24,8 @@ import org.highmed.dsf.bpe.service.SelectRequestTargets;
 import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
 import org.highmed.dsf.bpe.service.StoreCorrelationKeys;
-import org.highmed.dsf.bpe.service.StoreMultiMedicResultSets;
+import org.highmed.dsf.bpe.service.StoreMultiMedicResultSetsForLeadingMedic;
+import org.highmed.dsf.bpe.service.StoreMultiMedicResultSetsForResearcher;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSetLinks;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSets;
 import org.highmed.dsf.bpe.service.TranslateMultiMedicResultSets;
@@ -123,9 +124,15 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public StoreMultiMedicResultSets storeMultiMedicResultSets()
+	public StoreMultiMedicResultSetsForLeadingMedic storeMultiMedicResultSetsForLeadingMedic()
 	{
-		return new StoreMultiMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
+		return new StoreMultiMedicResultSetsForLeadingMedic(fhirClientProvider, taskHelper, objectMapper);
+	}
+
+	@Bean
+	public StoreMultiMedicResultSetsForResearcher storeMultiMedicResultSetsForResearcher()
+	{
+		return new StoreMultiMedicResultSetsForResearcher(fhirClientProvider, taskHelper, objectMapper);
 	}
 
 	//

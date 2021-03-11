@@ -18,7 +18,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 public class ModifyQueries extends AbstractServiceDelegate implements InitializingBean
 {
-
 	private static final Logger logger = LoggerFactory.getLogger(ModifyQueries.class);
 
 	private final String ehrIdColumnPath;

@@ -14,9 +14,6 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 
 import java.util.stream.Stream;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
