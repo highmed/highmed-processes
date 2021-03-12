@@ -20,6 +20,7 @@ import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
 import org.highmed.dsf.bpe.service.ModifyQueries;
 import org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithRecordLinkage;
+import org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithoutRecordLinkage;
 import org.highmed.dsf.bpe.service.SelectRequestTargets;
 import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
@@ -30,6 +31,7 @@ import org.highmed.dsf.bpe.service.StoreSingleMedicResultSetLinks;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSets;
 import org.highmed.dsf.bpe.service.TranslateMultiMedicResultSets;
 import org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithRbf;
+import org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithoutRbf;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -164,6 +166,12 @@ public class DataSharingConfig
 	}
 
 	@Bean
+	public PseudonymizeResultSetsWithoutRecordLinkage pseudonymizeResultSetsWithoutRecordLinkage()
+	{
+		return new PseudonymizeResultSetsWithoutRecordLinkage(fhirClientProvider, taskHelper, objectMapper);
+	}
+
+	@Bean
 	public SelectResponseTargetMedic selectResponseTargetMedic()
 	{
 		return new SelectResponseTargetMedic(fhirClientProvider, taskHelper);
@@ -244,6 +252,13 @@ public class DataSharingConfig
 	{
 		return new TranslateSingleMedicResultSetsWithRbf(fhirClientProvider, taskHelper, organizationProvider,
 				ehrIdColumnPath, masterPatientIndexClient(), bouncyCastleProvider());
+	}
+
+	@Bean
+	public TranslateSingleMedicResultSetsWithoutRbf translateSingleMedicResultSetsWithoutRbf()
+	{
+		return new TranslateSingleMedicResultSetsWithoutRbf(fhirClientProvider, taskHelper, organizationProvider,
+				ehrIdColumnPath);
 	}
 
 	@Bean

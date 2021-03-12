@@ -53,7 +53,7 @@
       <bpmn:outgoing>Flow_14nlfvk</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0kzp6tl" sourceRef="filterByConsent" targetRef="ExclusiveGateway_0lecmy5" />
-    <bpmn:serviceTask id="translateWithRbfGeneration" name="translate with RBF generation and encryption" camunda:class="org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithRbf">
+    <bpmn:serviceTask id="translateWithEncryptionAndRbfGeneration" name="translate with encryption and RBF generation " camunda:class="org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithRbf">
       <bpmn:incoming>Flow_0xt2bfn</bpmn:incoming>
       <bpmn:outgoing>Flow_09yooed</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -83,17 +83,17 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_14nlfvk" sourceRef="ExclusiveGateway_0lecmy5" targetRef="Gateway_118ojzy" />
     <bpmn:exclusiveGateway id="Gateway_13kxug8">
-      <bpmn:incoming>Flow_09dzkmp</bpmn:incoming>
       <bpmn:incoming>Flow_09yooed</bpmn:incoming>
+      <bpmn:incoming>Flow_13fof22</bpmn:incoming>
       <bpmn:outgoing>Flow_1pgebfo</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_09dzkmp" name="else" sourceRef="Gateway_118ojzy" targetRef="Gateway_13kxug8">
+    <bpmn:sequenceFlow id="Flow_09dzkmp" name="else" sourceRef="Gateway_118ojzy" targetRef="translateWithEncryptionAndWithoutRbfGeneration">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0xt2bfn" sourceRef="Gateway_118ojzy" targetRef="translateWithRbfGeneration">
+    <bpmn:sequenceFlow id="Flow_0xt2bfn" sourceRef="Gateway_118ojzy" targetRef="translateWithEncryptionAndRbfGeneration">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_09yooed" sourceRef="translateWithRbfGeneration" targetRef="Gateway_13kxug8" />
+    <bpmn:sequenceFlow id="Flow_09yooed" sourceRef="translateWithEncryptionAndRbfGeneration" targetRef="Gateway_13kxug8" />
     <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreSingleMedicResultSets">
       <bpmn:incoming>Flow_08925ay</bpmn:incoming>
       <bpmn:outgoing>Flow_1611vr6</bpmn:outgoing>
@@ -102,6 +102,11 @@
     <bpmn:sequenceFlow id="Flow_1pgebfo" sourceRef="Gateway_13kxug8" targetRef="selectResponseTargetTtp" />
     <bpmn:sequenceFlow id="Flow_1pzik8k" sourceRef="selectResponseTargetTtp" targetRef="checkResultSets" />
     <bpmn:sequenceFlow id="Flow_1611vr6" sourceRef="storeResultSets" targetRef="EndEvent" />
+    <bpmn:sequenceFlow id="Flow_13fof22" sourceRef="translateWithEncryptionAndWithoutRbfGeneration" targetRef="Gateway_13kxug8" />
+    <bpmn:serviceTask id="translateWithEncryptionAndWithoutRbfGeneration" name="translate with encryption" camunda:class="org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithoutRbf">
+      <bpmn:incoming>Flow_09dzkmp</bpmn:incoming>
+      <bpmn:outgoing>Flow_13fof22</bpmn:outgoing>
+    </bpmn:serviceTask>
     <bpmn:textAnnotation id="TextAnnotation_0euut3n">
       <bpmn:text>uac check, study definiton validity, type of cohort, ethics commitee vote, included medics, user authentication, rate limit, etc.</bpmn:text>
     </bpmn:textAnnotation>
@@ -111,6 +116,10 @@
   <bpmn:message id="Message_1dr71re" name="resultSingleMedicDataSharingMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="executeDataSharing">
+      <bpmndi:BPMNEdge id="Flow_13fof22_di" bpmnElement="Flow_13fof22">
+        <di:waypoint x="1490" y="315" />
+        <di:waypoint x="1490" y="237" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1611vr6_di" bpmnElement="Flow_1611vr6">
         <di:waypoint x="2040" y="212" />
         <di:waypoint x="2122" y="212" />
@@ -137,10 +146,11 @@
         <di:waypoint x="1440" y="90" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09dzkmp_di" bpmnElement="Flow_09dzkmp">
-        <di:waypoint x="1355" y="212" />
-        <di:waypoint x="1465" y="212" />
+        <di:waypoint x="1330" y="237" />
+        <di:waypoint x="1330" y="355" />
+        <di:waypoint x="1440" y="355" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1361" y="195" width="21" height="14" />
+          <dc:Bounds x="1337" y="335" width="21" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_14nlfvk_di" bpmnElement="Flow_14nlfvk">
@@ -220,7 +230,7 @@
       <bpmndi:BPMNShape id="ExclusiveGateway_0lecmy5_di" bpmnElement="ExclusiveGateway_0lecmy5" isMarkerVisible="true">
         <dc:Bounds x="1192" y="187" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0akkess_di" bpmnElement="translateWithRbfGeneration">
+      <bpmndi:BPMNShape id="ServiceTask_0akkess_di" bpmnElement="translateWithEncryptionAndRbfGeneration">
         <dc:Bounds x="1440" y="50" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_15aifhd_di" bpmnElement="selectResponseTargetTtp">
@@ -246,6 +256,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1mdgvqk_di" bpmnElement="storeResultSets">
         <dc:Bounds x="1940" y="172" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0cu49cc_di" bpmnElement="translateWithEncryptionAndWithoutRbfGeneration">
+        <dc:Bounds x="1440" y="315" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
         <dc:Bounds x="330" y="80" width="267" height="56" />

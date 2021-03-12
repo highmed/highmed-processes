@@ -44,7 +44,7 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 {
 	private static boolean NEEDS_CONSENT_CHECK = true;
-	private static boolean NEEDS_RECORD_LINKAGE = true;
+	private static boolean NEEDS_RECORD_LINKAGE = false;
 
 	private static final String QUERY = "SELECT e/ehr_status/subject/external_ref/id/value as EHRID, "
 			+ "v/items[at0024,'Bezeichnung']/value, v/items [at0001,'Messwert'], "

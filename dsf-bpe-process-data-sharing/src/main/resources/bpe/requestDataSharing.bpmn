@@ -57,7 +57,7 @@
       <bpmn:incoming>Flow_0amk6ah</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1q5jnli" sourceRef="Gateway_160gkf1" targetRef="receiveFinalResultFromTtp" />
-    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveFinalResultFromTtp" targetRef="temporarilyStoreMultiMeDICresults" />
+    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveFinalResultFromTtp" targetRef="downloadResultSets" />
     <bpmn:sequenceFlow id="Flow_1harl90" sourceRef="Gateway_160gkf1" targetRef="receiveErrorFromTtp" />
     <bpmn:sequenceFlow id="Flow_1id9r0h" sourceRef="receiveErrorFromTtp" targetRef="handleError" />
     <bpmn:sequenceFlow id="Flow_0rwo9pn" sourceRef="checkResultSets" targetRef="storeResultSets" />
@@ -82,11 +82,11 @@
       <bpmn:incoming>Flow_06otxko</bpmn:incoming>
       <bpmn:outgoing>Flow_0cx3xe1</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="temporarilyStoreMultiMeDICresults" name="download result sets" camunda:class="org.highmed.dsf.bpe.service.DownloadMultiMedicResultSets">
+    <bpmn:serviceTask id="downloadResultSets" name="download result sets" camunda:class="org.highmed.dsf.bpe.service.DownloadMultiMedicResultSets">
       <bpmn:incoming>Flow_1gf3n6o</bpmn:incoming>
       <bpmn:outgoing>Flow_025quhl</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="temporarilyStoreMultiMeDICresults" targetRef="translateWithDecryption" />
+    <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="downloadResultSets" targetRef="translateWithDecryption" />
     <bpmn:sequenceFlow id="Flow_1rnnd6d" sourceRef="storeResultSets" targetRef="Gateway_0nlbalq" />
     <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSetsForResearcher">
       <bpmn:incoming>Flow_0rwo9pn</bpmn:incoming>
@@ -219,7 +219,7 @@
       <bpmndi:BPMNShape id="Activity_1wzn9by_di" bpmnElement="selectRequestTargetsAndGenerateKeys">
         <dc:Bounds x="470" y="187" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_09oplxx_di" bpmnElement="temporarilyStoreMultiMeDICresults">
+      <bpmndi:BPMNShape id="Activity_09oplxx_di" bpmnElement="downloadResultSets">
         <dc:Bounds x="1120" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1a9tjil_di" bpmnElement="storeResultSets">

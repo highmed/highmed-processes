@@ -4,7 +4,6 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.SecretKey;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -12,17 +11,15 @@ import org.highmed.mpi.client.MasterPatientIndexClient;
 import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGenerator;
 import org.highmed.pseudonymization.crypto.AesGcmUtil;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtp;
-import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpWithRbfImpl;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpNoRbfImpl;
 import org.springframework.beans.factory.InitializingBean;
 
-public class TranslateSingleMedicResultSetsWithRbf extends TranslateSingleMedicResultSets implements InitializingBean
+public class TranslateSingleMedicResultSetsWithoutRbf extends TranslateSingleMedicResultSets implements InitializingBean
 {
-	public TranslateSingleMedicResultSetsWithRbf(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, String ehrIdColumnPath,
-			MasterPatientIndexClient masterPatientIndexClient, BouncyCastleProvider bouncyCastleProvider)
+	public TranslateSingleMedicResultSetsWithoutRbf(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			OrganizationProvider organizationProvider, String ehrIdColumnPath)
 	{
-		super(clientProvider, taskHelper, organizationProvider, ehrIdColumnPath, masterPatientIndexClient,
-				bouncyCastleProvider);
+		super(clientProvider, taskHelper, organizationProvider, ehrIdColumnPath, null, null);
 	}
 
 	@Override
@@ -34,7 +31,7 @@ public class TranslateSingleMedicResultSetsWithRbf extends TranslateSingleMedicR
 		// TODO: should be provided by properties or pseudonym provider
 		SecretKey idatKey = AesGcmUtil.generateAES256Key();
 
-		return new ResultSetTranslatorToTtpWithRbfImpl(organizationIdentifier, idatKey, researchStudyIdentifier,
-				mdatKey, ehrIdColumnPath, recordBloomFilterGenerator, masterPatientIndexClient);
+		return new ResultSetTranslatorToTtpNoRbfImpl(organizationIdentifier, idatKey, researchStudyIdentifier, mdatKey,
+				ehrIdColumnPath);
 	}
 }
