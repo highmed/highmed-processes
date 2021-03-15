@@ -75,15 +75,21 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 	{
 		ResearchStudy researchStudy = (ResearchStudy) execution.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY);
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(getMedicTargets(researchStudy)));
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(getTtpTarget(researchStudy)));
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, AesGcmUtil.generateAES256Key().getEncoded());
+		Targets medicTargets = getMedicTargets(researchStudy);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(medicTargets));
+
+		Target ttpTarget = getTtpTarget(researchStudy);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(ttpTarget));
+
+		byte[] mdatKey = AesGcmUtil.generateAES256Key().getEncoded();
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, mdatKey);
 
 		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
 		if (Boolean.TRUE.equals(needsRecordLinkage))
 		{
+			BloomFilterConfig bloomFilterConfig = createBloomFilterConfig();
 			execution.setVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG,
-					BloomFilterConfigValues.create(createBloomFilterConfig()));
+					BloomFilterConfigValues.create(bloomFilterConfig));
 		}
 	}
 
@@ -93,6 +99,10 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 				.filter(e -> e.getValue() instanceof Reference).map(e -> (Reference) e.getValue())
 				.map(r -> Target.createBiDirectionalTarget(r.getIdentifier().getValue(), UUID.randomUUID().toString()))
 				.collect(Collectors.toList());
+
+		if (targets.size() < 1)
+			throw new IllegalArgumentException("No participating MeDICs are set in ResearchStudy with id='"
+					+ researchStudy.getId() + "', this error should have been caught by resource validation");
 
 		return new Targets(targets);
 	}
@@ -104,7 +114,7 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 				.map(r -> Target.createUniDirectionalTarget(r.getIdentifier().getValue())).findFirst()
 				.orElseThrow(() -> new IllegalArgumentException(
 						"Participating TTP is not set in ResearchStudy with id='" + researchStudy.getId()
-								+ "', this error should " + "have been caught by resource validation"));
+								+ "', this error should have been caught by resource validation"));
 	}
 
 	private BloomFilterConfig createBloomFilterConfig()

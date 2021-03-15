@@ -8,7 +8,6 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_Q
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 import static org.highmed.pseudonymization.crypto.AesGcmUtil.AES;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -85,17 +84,16 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 		String organizationIdentifier = organizationProvider.getLocalIdentifierValue();
 		String researchStudyIdentifier = getResearchStudyIdentifier(execution);
 		SecretKey mdatKey = getMdatKey(execution);
-
 		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
-		RecordBloomFilterGenerator bloomFilterGenerator = createRecordBloomFilterGenerator(execution,
-				needsRecordLinkage);
+		RecordBloomFilterGenerator bloomFilterGenerator = needsRecordLinkage
+				? createRecordBloomFilterGenerator(execution)
+				: null;
 
-		ResultSetTranslatorToTtp resultSetTranslator = createResultSetTranslator(organizationIdentifier,
-				researchStudyIdentifier, mdatKey, ehrIdColumnPath, masterPatientIndexClient, bloomFilterGenerator);
+		ResultSetTranslatorToTtp translator = createResultSetTranslator(organizationIdentifier, researchStudyIdentifier,
+				mdatKey, ehrIdColumnPath, masterPatientIndexClient, bloomFilterGenerator);
 
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
-		List<QueryResult> translatedResults = results.getResults().stream()
-				.map(result -> translateAndCreateBinary(resultSetTranslator, result)).collect(Collectors.toList());
+		List<QueryResult> translatedResults = translateResults(translator, results);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(translatedResults)));
@@ -117,42 +115,45 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 		return new SecretKeySpec(encodedKey, AES);
 	}
 
-	private RecordBloomFilterGenerator createRecordBloomFilterGenerator(DelegateExecution execution,
-			boolean needsRecordLinkage)
+	private RecordBloomFilterGenerator createRecordBloomFilterGenerator(DelegateExecution execution)
 	{
-		if (needsRecordLinkage)
-		{
-			BloomFilterConfig bloomFilterConfig = (BloomFilterConfig) execution
-					.getVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG);
-			return new RecordBloomFilterGeneratorImpl(RBF_LENGTH, bloomFilterConfig.getPermutationSeed(), FBF_WEIGHTS,
-					FBF_LENGTHS,
-					() -> new BloomFilterGenerator.HmacSha2HmacSha3BiGramHasher(bloomFilterConfig.getHmacSha2Key(),
-							bloomFilterConfig.getHmacSha2Key(), bouncyCastleProvider));
-		}
-		else
-		{
-			return null;
-		}
+		BloomFilterConfig bloomFilterConfig = (BloomFilterConfig) execution
+				.getVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG);
+		return new RecordBloomFilterGeneratorImpl(RBF_LENGTH, bloomFilterConfig.getPermutationSeed(), FBF_WEIGHTS,
+				FBF_LENGTHS,
+				() -> new BloomFilterGenerator.HmacSha2HmacSha3BiGramHasher(bloomFilterConfig.getHmacSha2Key(),
+						bloomFilterConfig.getHmacSha2Key(), bouncyCastleProvider));
 	}
 
 	/**
 	 * @param organizationIdentifier
+	 *            the FHIR identifier of the current organization
 	 * @param researchStudyIdentifier
+	 *            the FHIR identifier of the ResearchStudy defining the data sharing request
 	 * @param mdatKey
+	 *            the key provided by the leading MeDIC to encrypt the MDAT
 	 * @param ehrIdColumnPath
+	 *            the path to the external subject id column
 	 * @param masterPatientIndexClient
+	 *            the client to retrieve the {@link org.highmed.mpi.client.Idat} from the MPI, may be null
 	 * @param recordBloomFilterGenerator
-	 * @return
-	 * @throws NoSuchAlgorithmException
+	 *            the generator to create RBFs based on the {@link org.highmed.mpi.client.Idat} provided by the
+	 *            masterPatientIndexClient, may be null
+	 * @return {@link ResultSetTranslatorToTtp}
 	 */
 	abstract protected ResultSetTranslatorToTtp createResultSetTranslator(String organizationIdentifier,
 			String researchStudyIdentifier, SecretKey mdatKey, String ehrIdColumnPath,
-			MasterPatientIndexClient masterPatientIndexClient, RecordBloomFilterGenerator recordBloomFilterGenerator)
-			throws NoSuchAlgorithmException;
+			MasterPatientIndexClient masterPatientIndexClient, RecordBloomFilterGenerator recordBloomFilterGenerator);
 
-	private QueryResult translateAndCreateBinary(ResultSetTranslatorToTtp resultSetTranslator, QueryResult result)
+	private List<QueryResult> translateResults(ResultSetTranslatorToTtp translator, QueryResults results)
 	{
-		ResultSet translatedResultSet = translate(resultSetTranslator, result.getResultSet());
+		return results.getResults().stream().map(result -> translateAndCreateBinary(translator, result))
+				.collect(Collectors.toList());
+	}
+
+	private QueryResult translateAndCreateBinary(ResultSetTranslatorToTtp translator, QueryResult result)
+	{
+		ResultSet translatedResultSet = translate(translator, result.getResultSet());
 		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), translatedResultSet);
 	}
 

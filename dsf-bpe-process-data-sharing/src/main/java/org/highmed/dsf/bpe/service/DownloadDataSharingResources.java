@@ -37,6 +37,7 @@ import org.hl7.fhir.r4.model.Group;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResearchStudy;
+import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 		FhirWebserviceClient client = getWebserviceClient(researchStudyId);
 		Bundle bundle = getResearchStudyAndCohortDefinitions(researchStudyId, client);
 
-		ResearchStudy researchStudy = (ResearchStudy) bundle.getEntryFirstRep().getResource();
+		ResearchStudy researchStudy = getResearchStudy(bundle);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY, FhirResourceValues.create(researchStudy));
 
 		List<Group> cohortDefinitions = getCohortDefinitions(bundle, client.getBaseUrl());
@@ -98,9 +99,12 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 
 	private IdType getResearchStudyId(Task task)
 	{
-		Reference researchStudyReference = getTaskHelper().getInputParameterReferenceValues(task,
-				CODESYSTEM_HIGHMED_DATA_SHARING, CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE)
-				.findFirst().get();
+		Reference researchStudyReference = getTaskHelper()
+				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE)
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("ResearchStudy reference is not set in task with id='"
+						+ task.getId() + "', this error should " + "have been caught by resource validation"));
 
 		return new IdType(researchStudyReference.getReference());
 	}
@@ -136,7 +140,7 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 				throw new RuntimeException("Returned search-set did not contain ResearchStudy at index == 0");
 			}
 			else if (bundle.getEntry().stream().skip(1).map(c -> c.hasResource() && c.getResource() instanceof Group)
-					.filter(b -> !b).findAny().isPresent())
+					.anyMatch(b -> !b))
 			{
 				throw new RuntimeException("Returned search-set contained unexpected resource at index >= 1");
 			}
@@ -149,6 +153,16 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 					researchStudyId.getIdPart(), client.getBaseUrl(), e.getMessage());
 			throw e;
 		}
+	}
+
+	private ResearchStudy getResearchStudy(Bundle bundle)
+	{
+		Resource resource = bundle.getEntryFirstRep().getResource();
+		if (resource instanceof ResearchStudy)
+			return (ResearchStudy) resource;
+		else
+			throw new RuntimeException("Expected first bundle entry to be of type research study");
+
 	}
 
 	private List<Group> getCohortDefinitions(Bundle bundle, String baseUrl)

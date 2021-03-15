@@ -3,10 +3,10 @@ package org.highmed.dsf.bpe.service;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_COHORTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
@@ -41,16 +41,8 @@ public class ExtractQueries extends AbstractServiceDelegate implements Initializ
 				.getResourcesAndCast();
 
 		// <groupId, query>
-		Map<String, String> queries = new HashMap<>();
-
-		cohorts.forEach(group ->
-		{
-			String aqlQuery = groupHelper.extractAqlQuery(group);
-			String groupId = group.getId();
-
-			queries.put(groupId, aqlQuery);
-		});
-
+		Map<String, String> queries = cohorts.stream()
+				.collect(Collectors.toMap(Group::getId, groupHelper::extractAqlQuery));
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERIES, queries);
 	}
 }

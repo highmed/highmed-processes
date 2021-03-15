@@ -5,7 +5,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_BU
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_RESULT;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_FEASIBILITY_RESULT;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 				resultsWithEnoughParticipatingMedics);
 
 		if (!existsAtLeastOneResult)
-			throw new BpmnError(BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_RESULT);
+			throw new BpmnError(BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_FEASIBILITY_RESULT);
 	}
 
 	private List<FinalFeasibilityQueryResult> filterResultsByParticipatingMedics(Task leadingTask,

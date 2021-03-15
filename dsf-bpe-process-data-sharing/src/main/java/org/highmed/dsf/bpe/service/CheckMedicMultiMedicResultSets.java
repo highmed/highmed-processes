@@ -1,13 +1,18 @@
 package org.highmed.dsf.bpe.service;
 
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
+
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
+import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
+import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CheckMedicMultiMedicResultSets extends AbstractServiceDelegate
+public class CheckMedicMultiMedicResultSets extends CheckResultSets
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckMedicMultiMedicResultSets.class);
 
@@ -17,8 +22,9 @@ public class CheckMedicMultiMedicResultSets extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution)
+	protected Stream<BiFunction<QueryResult, Task, Boolean>> getChecks(QueryResult result, Task task)
 	{
-		logger.info(this.getClass().getName() + " doExecute called");
+		// TODO: define and implement further result set checks
+		return Stream.of(this::checkColumns, this::checkRows);
 	}
 }

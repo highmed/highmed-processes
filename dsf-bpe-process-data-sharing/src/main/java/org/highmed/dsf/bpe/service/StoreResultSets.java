@@ -55,10 +55,8 @@ public abstract class StoreResultSets extends AbstractServiceDelegate implements
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 		String securityIdentifier = getSecurityIdentifier(execution);
 
-		List<QueryResult> storedResults = results.getResults().stream()
-				.map(result -> saveResultSetAsBinary(result, securityIdentifier)).collect(Collectors.toList());
-
-		List<QueryResult> postProcessedResults = postProcessStoredResults(storedResults, execution);
+		List<QueryResult> savedResults = saveQueryResults(results, securityIdentifier);
+		List<QueryResult> postProcessedResults = postProcessStoredResults(savedResults, execution);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(postProcessedResults)));
@@ -66,21 +64,28 @@ public abstract class StoreResultSets extends AbstractServiceDelegate implements
 
 	/**
 	 * @param execution
-	 *            The process execution environment
-	 * @return Identifier of the organization that can read the stored binary resource from the local FHIR server
+	 *            the bpmn process execution environment
+	 * @return the identifier of the organization that should have read access to the stored Binary resource from the
+	 *         local FHIR server
 	 */
 	protected abstract String getSecurityIdentifier(DelegateExecution execution);
 
 	/**
 	 * @param storedResults
-	 *            The QueryResult objects after storing them to the local FHIR server
+	 *            the {@link QueryResult} objects after storing them to the local FHIR server
 	 * @param execution
-	 *            The process execution environment
-	 * @return The QueryResult objects after post processing
+	 *            the bpmn process execution environment
+	 * @return the {@link QueryResult} objects after post processing
 	 */
 	protected List<QueryResult> postProcessStoredResults(List<QueryResult> storedResults, DelegateExecution execution)
 	{
 		return storedResults;
+	}
+
+	private List<QueryResult> saveQueryResults(QueryResults results, String securityIdentifier)
+	{
+		return results.getResults().stream().map(result -> saveResultSetAsBinary(result, securityIdentifier))
+				.collect(Collectors.toList());
 	}
 
 	private QueryResult saveResultSetAsBinary(QueryResult result, String securityIdentifier)

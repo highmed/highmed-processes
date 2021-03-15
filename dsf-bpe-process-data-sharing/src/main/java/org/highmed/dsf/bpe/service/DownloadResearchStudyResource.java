@@ -56,14 +56,16 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 
 		IdType researchStudyId = getResearchStudyId(task);
 		ResearchStudy researchStudy = getResearchStudy(researchStudyId, client);
-		String researchStudyIdentifier = getResearchStudyIdentifier(researchStudy);
-		boolean needsConsentCheck = getNeedsConsentCheck(task);
-		boolean needsRecordLinkage = getNeedsRecordLinkageCheck(task);
-
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY, researchStudy);
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK, needsConsentCheck);
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
+
+		String researchStudyIdentifier = getResearchStudyIdentifier(researchStudy);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER, researchStudyIdentifier);
+
+		boolean needsConsentCheck = getNeedsConsentCheck(task);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK, needsConsentCheck);
+
+		boolean needsRecordLinkage = getNeedsRecordLinkageCheck(task);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_LEADING_MEDIC_IDENTIFIER,
 				organizationProvider.getLocalIdentifierValue());

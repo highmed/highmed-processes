@@ -58,8 +58,8 @@ public abstract class DownloadResultSets extends AbstractServiceDelegate
 
 	/**
 	 * @param execution
-	 *            The process execution environment
-	 * @return The QueryResult objects containing the corresponding Binary result set url.
+	 *            the process execution environment
+	 * @return the {@link QueryResult} objects containing the corresponding Binary result set url.
 	 */
 	protected abstract List<QueryResult> getQueryResults(DelegateExecution execution);
 

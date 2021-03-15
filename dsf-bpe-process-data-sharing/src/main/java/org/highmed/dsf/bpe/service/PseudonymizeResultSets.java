@@ -71,7 +71,7 @@ public abstract class PseudonymizeResultSets extends AbstractServiceDelegate imp
 		String researchStudyIdentifier = (String) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER);
 
-		// TODO: store key with corresponding research study id
+		// TODO: store pseudonym key with corresponding research study id
 		SecretKey researchStudyKey = AesGcmUtil.generateAES256Key();
 
 		Map<String, List<QueryResult>> byCohortId = groupByCohortId(results);
@@ -86,7 +86,7 @@ public abstract class PseudonymizeResultSets extends AbstractServiceDelegate imp
 	}
 
 	private QueryResults createFinalResults(String researchStudyIdentifier, SecretKey reserchStudyKey,
-			Map<String, List<QueryResult>> groupedResults) throws NoSuchAlgorithmException
+			Map<String, List<QueryResult>> groupedResults)
 	{
 		ResultSetTranslatorFromMedic translatorFromMedic = createResultSetTranslatorFromMedic();
 		ResultSetTranslatorToMedic translatorToMedic = createResultSetTranslatorToMedic();
@@ -165,7 +165,7 @@ public abstract class PseudonymizeResultSets extends AbstractServiceDelegate imp
 	}
 
 	/**
-	 * @return
+	 * @return the {@link ResultSetTranslatorFromMedic} that should be used to translate the result sets
 	 */
 	protected abstract ResultSetTranslatorFromMedic createResultSetTranslatorFromMedic();
 

@@ -19,6 +19,7 @@ public class FilterQueryResultsByConsent extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		logger.info(this.getClass().getName() + " doExecute called");
+		// TODO: implement doExecute
+		logger.debug(this.getClass().getName() + " doExecute called");
 	}
 }

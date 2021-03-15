@@ -45,8 +45,8 @@ public class ExecuteQueries extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		// <groupId, query>
 		@SuppressWarnings("unchecked")
+		// <groupId, query>
 		Map<String, String> queries = (Map<String, String>) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERIES);
 
 		List<QueryResult> results = queries.entrySet().stream()
@@ -58,9 +58,7 @@ public class ExecuteQueries extends AbstractServiceDelegate
 
 	private QueryResult executeQuery(String cohortId, String cohortQuery)
 	{
-		// TODO We might want to introduce a more complex result type to represent a count,
-		// errors and possible meta-data.
-
+		// TODO: introduce a more complex result type to represent a count, errors and possible meta-data
 		ResultSet resultSet = openehrClient.query(cohortQuery, null);
 		return QueryResult.idResult(organizationProvider.getLocalIdentifierValue(), cohortId, resultSet);
 	}

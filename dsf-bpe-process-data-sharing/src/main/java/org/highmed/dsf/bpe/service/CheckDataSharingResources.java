@@ -31,7 +31,7 @@ public class CheckDataSharingResources extends AbstractServiceDelegate
 		checkConsentCheck(execution);
 		checkFullyQualifiedCohortIds(execution);
 
-		// TODO: Define further checks
+		// TODO: define and implement further checks
 	}
 
 	private void checkConsentCheck(DelegateExecution execution)

@@ -158,7 +158,7 @@
         <di:waypoint x="1305" y="212" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ecoehc_di" bpmnElement="Flow_1ecoehc">
-        <di:waypoint x="660" y="212" />
+        <di:waypoint x="650" y="212" />
         <di:waypoint x="720" y="212" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0qsitvp_di" bpmnElement="Flow_0qsitvp">
@@ -167,7 +167,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1kp6eaq_di" bpmnElement="Flow_1kp6eaq">
         <di:waypoint x="500" y="212" />
-        <di:waypoint x="560" y="212" />
+        <di:waypoint x="550" y="212" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0kzp6tl_di" bpmnElement="SequenceFlow_0kzp6tl">
         <di:waypoint x="1217" y="315" />
@@ -242,9 +242,6 @@
       <bpmndi:BPMNShape id="Activity_1ok9q8j_di" bpmnElement="addIdSelectionIfMissing">
         <dc:Bounds x="720" y="172" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1vlv5ud_di" bpmnElement="extractQueries">
-        <dc:Bounds x="560" y="172" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_118ojzy_di" bpmnElement="Gateway_118ojzy" isMarkerVisible="true">
         <dc:Bounds x="1305" y="187" width="50" height="50" />
         <bpmndi:BPMNLabel>
@@ -262,6 +259,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
         <dc:Bounds x="330" y="80" width="267" height="56" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1vlv5ud_di" bpmnElement="extractQueries">
+        <dc:Bounds x="550" y="172" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1ncewqu_di" bpmnElement="Association_1ncewqu">
         <di:waypoint x="455" y="172" />

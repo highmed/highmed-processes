@@ -5,7 +5,7 @@ import static org.highmed.dsf.bpe.FeasibilityProcessPluginDefinition.VERSION;
 
 public interface ConstantsFeasibility
 {
-	String BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_RESULT = "errorMultiMedicFeasibilityResult";
+	String BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_FEASIBILITY_RESULT = "errorMultiMedicFeasibilityResult";
 
 	// Must be 3 or larger, as otherwise it is possible to draw conclusions about the individual MeDICs
 	// (if I already know the cohort size in my MeDIC)

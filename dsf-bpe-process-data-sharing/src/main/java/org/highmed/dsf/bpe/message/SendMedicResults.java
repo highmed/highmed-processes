@@ -40,7 +40,7 @@ public abstract class SendMedicResults extends AbstractTaskMessageSend
 	}
 
 	/**
-	 * @return the code system value that classifies the result set reference Task input
+	 * @return the code system value that classifies the result set reference in the Task input that will be generated
 	 */
 	protected abstract String getResultSetReferenceCodeSystemValue();
 
@@ -48,9 +48,8 @@ public abstract class SendMedicResults extends AbstractTaskMessageSend
 	{
 		if (result.isIdResultSetUrlResult())
 		{
-			String resultSetReferenceCodeSystemValue = getResultSetReferenceCodeSystemValue();
 			ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
-					resultSetReferenceCodeSystemValue, new Reference(result.getResultSetUrl()));
+					getResultSetReferenceCodeSystemValue(), new Reference(result.getResultSetUrl()));
 			input.addExtension(createCohortIdExtension(result.getCohortId()));
 			return input;
 		}

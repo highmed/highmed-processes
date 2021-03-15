@@ -2,14 +2,15 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_GROUP_ID;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsDataSharing;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
@@ -29,30 +30,30 @@ public class StoreSingleMedicResultSetLinks extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
-		List<QueryResult> extendedResults = new ArrayList<>(results.getResults());
+		QueryResults currentResults = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		List<QueryResult> newResults = getNewResults();
 
-		Task task = getCurrentTaskFromExecutionVariables();
-		extendedResults.addAll(getResults(task,
-				ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE));
+		List<QueryResult> extendedResults = Stream.of(currentResults.getResults(), newResults)
+				.flatMap(Collection::stream).collect(Collectors.toList());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(extendedResults)));
 	}
 
-	private List<QueryResult> getResults(Task task, String code)
+	private List<QueryResult> getNewResults()
 	{
-		TaskHelper taskHelper = getTaskHelper();
+		Task task = getCurrentTaskFromExecutionVariables();
 		Reference requester = task.getRequester();
 
-		return taskHelper
-				.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING, code, EXTENSION_HIGHMED_GROUP_ID)
-				.map(input ->
-				{
-					String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
-					String resultSetUrl = ((Reference) input.getValue()).getReference();
+		return getTaskHelper().getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE, EXTENSION_HIGHMED_GROUP_ID)
+				.map(input -> getQueryResult(input, requester)).collect(Collectors.toList());
+	}
 
-					return QueryResult.idResult(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
-				}).collect(Collectors.toList());
+	private QueryResult getQueryResult(Task.ParameterComponent input, Reference requester)
+	{
+		String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
+		String resultSetUrl = ((Reference) input.getValue()).getReference();
+		return QueryResult.idResult(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
 	}
 }

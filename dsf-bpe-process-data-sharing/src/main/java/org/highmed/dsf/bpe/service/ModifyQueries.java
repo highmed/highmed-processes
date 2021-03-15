@@ -4,9 +4,9 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_N
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
@@ -40,39 +40,33 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 	{
 		Boolean needsConsentCheck = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK);
 		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
-		boolean idQuery = Boolean.TRUE.equals(needsConsentCheck) || Boolean.TRUE.equals(needsRecordLinkage);
 
-		if (idQuery)
+		if (Boolean.TRUE.equals(needsConsentCheck) || Boolean.TRUE.equals(needsRecordLinkage))
 		{
-			// <groupId, query>
 			@SuppressWarnings("unchecked")
+			// <groupId, query>
 			Map<String, String> queries = (Map<String, String>) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERIES);
-
 			Map<String, String> modifiedQueries = modifyQueries(queries);
-
 			execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERIES, modifiedQueries);
 		}
 	}
 
 	private Map<String, String> modifyQueries(Map<String, String> queries)
 	{
-		Map<String, String> modifiedQueries = new HashMap<>();
+		return queries.entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, entry -> modify(entry.getValue())));
+	}
 
-		for (Map.Entry<String, String> entry : queries.entrySet())
+	private String modify(String query)
+	{
+		// TODO: implement correct check for id query
+		if (!query.startsWith("SELECT e" + ehrIdColumnPath + " as EHRID"))
 		{
-			String query = entry.getValue();
-
-			// TODO Implement correct check for default id query
-			if (!query.startsWith("SELECT e" + ehrIdColumnPath + " as EHRID"))
-			{
-				query = query.replace("SELECT", "SELECT e" + ehrIdColumnPath + " as EHRID,");
-				logger.warn("Query does not start with '{}', adapting SELECT statement",
-						"SELECT e" + ehrIdColumnPath + " as EHRID");
-			}
-
-			modifiedQueries.put(entry.getKey(), query);
+			query = query.replace("SELECT", "SELECT e" + ehrIdColumnPath + " as EHRID,");
+			logger.warn("Query does not start with '{}', adapting SELECT statement",
+					"SELECT e" + ehrIdColumnPath + " as EHRID");
 		}
 
-		return modifiedQueries;
+		return query;
 	}
 }

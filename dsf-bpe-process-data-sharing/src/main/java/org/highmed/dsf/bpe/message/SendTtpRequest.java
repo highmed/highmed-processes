@@ -34,17 +34,18 @@ public class SendTtpRequest extends AbstractTaskMessageSend
 	@Override
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
-		Targets multiInstanceTargets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);
-		Stream<Task.ParameterComponent> inputTargets = getTargetComponents(multiInstanceTargets);
+		Targets medicTargets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);
+		Stream<Task.ParameterComponent> inputMedicTargets = getTargetComponents(medicTargets);
 
 		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
 		Task.ParameterComponent inputNeedsRecordLinkage = getRecordLinkageComponent(needsRecordLinkage);
 
 		String researchStudyIdentifier = (String) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER);
-		Task.ParameterComponent inputResearchStudy = getInputResearchStudyIdentifierComponent(researchStudyIdentifier);
+		Task.ParameterComponent inputResearchStudyIdentifier = getInputResearchStudyIdentifierComponent(
+				researchStudyIdentifier);
 
-		return Stream.concat(inputTargets, Stream.of(inputNeedsRecordLinkage, inputResearchStudy));
+		return Stream.concat(inputMedicTargets, Stream.of(inputNeedsRecordLinkage, inputResearchStudyIdentifier));
 	}
 
 	private Stream<Task.ParameterComponent> getTargetComponents(Targets targets)

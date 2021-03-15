@@ -39,7 +39,6 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate
 	{
 		String ttpIdentifier = (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER);
 		String correlationKey = getCorrelationKey();
-
 		Target ttpTarget = Target.createBiDirectionalTarget(ttpIdentifier, correlationKey);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(ttpTarget));
 	}

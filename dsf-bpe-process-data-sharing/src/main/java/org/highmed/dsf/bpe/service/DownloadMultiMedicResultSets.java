@@ -32,12 +32,14 @@ public class DownloadMultiMedicResultSets extends DownloadResultSets
 
 		return getTaskHelper().getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SET_REFERENCE, EXTENSION_HIGHMED_GROUP_ID)
-				.map(input ->
-				{
-					String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
-					String resultSetUrl = ((Reference) input.getValue()).getReference();
+				.map(input -> toQueryResult(input, requester)).collect(Collectors.toList());
+	}
 
-					return QueryResult.idResult(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
-				}).collect(Collectors.toList());
+	private QueryResult toQueryResult(Task.ParameterComponent input, Reference requester)
+	{
+		String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
+		String resultSetUrl = ((Reference) input.getValue()).getReference();
+
+		return QueryResult.idResult(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
 	}
 }
