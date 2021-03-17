@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.highmed.dsf.bpe.crypto.KeyConsumer;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
@@ -47,12 +48,14 @@ public abstract class PseudonymizeResultSets extends AbstractServiceDelegate imp
 {
 	private static final Logger logger = LoggerFactory.getLogger(PseudonymizeResultSets.class);
 
+	private final KeyConsumer keyConsumer;
 	private final ObjectMapper psnObjectMapper;
 
 	public PseudonymizeResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ObjectMapper psnObjectMapper)
+			KeyConsumer keyConsumer, ObjectMapper psnObjectMapper)
 	{
 		super(clientProvider, taskHelper);
+		this.keyConsumer = keyConsumer;
 		this.psnObjectMapper = psnObjectMapper;
 	}
 
@@ -60,6 +63,7 @@ public abstract class PseudonymizeResultSets extends AbstractServiceDelegate imp
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+		Objects.requireNonNull(keyConsumer, "keyConsumer");
 		Objects.requireNonNull(psnObjectMapper, "psnObjectMapper");
 	}
 
@@ -70,13 +74,19 @@ public abstract class PseudonymizeResultSets extends AbstractServiceDelegate imp
 		String researchStudyIdentifier = (String) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER);
 
-		// TODO: store pseudonym key with corresponding research study id
-		SecretKey researchStudyKey = AesGcmUtil.generateAES256Key();
+		SecretKey researchStudyKey = createAndStoreResearchStudyKey(researchStudyIdentifier);
 
 		Map<String, List<QueryResult>> byCohortId = groupByCohortId(results);
 		QueryResults finalResults = createFinalResults(researchStudyIdentifier, researchStudyKey, byCohortId);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS, QueryResultsValues.create(finalResults));
+	}
+
+	private SecretKey createAndStoreResearchStudyKey(String researchStudyIdentifier) throws Exception
+	{
+		SecretKey key = AesGcmUtil.generateAES256Key();
+		keyConsumer.store(researchStudyIdentifier, key);
+		return key;
 	}
 
 	private Map<String, List<QueryResult>> groupByCohortId(QueryResults results)

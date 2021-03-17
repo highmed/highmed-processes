@@ -8,6 +8,7 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_Q
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 import static org.highmed.pseudonymization.crypto.AesGcmUtil.AES;
 
+import java.security.Key;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.highmed.dsf.bpe.crypto.KeyProvider;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.QueryResult;
@@ -47,17 +49,19 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 			500, 500, 250, 50, 500, 250, 500, 500, 500);
 
 	private final OrganizationProvider organizationProvider;
+	private final KeyProvider keyProvider;
 	private final String ehrIdColumnPath;
 	private final MasterPatientIndexClient masterPatientIndexClient;
 	private final BouncyCastleProvider bouncyCastleProvider;
 
 	public TranslateSingleMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, String ehrIdColumnPath,
+			OrganizationProvider organizationProvider, KeyProvider keyProvider, String ehrIdColumnPath,
 			MasterPatientIndexClient masterPatientIndexClient, BouncyCastleProvider bouncyCastleProvider)
 	{
 		super(clientProvider, taskHelper);
 
 		this.organizationProvider = organizationProvider;
+		this.keyProvider = keyProvider;
 		this.ehrIdColumnPath = ehrIdColumnPath;
 		this.masterPatientIndexClient = masterPatientIndexClient;
 		this.bouncyCastleProvider = bouncyCastleProvider;
@@ -82,6 +86,7 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		String organizationIdentifier = organizationProvider.getLocalIdentifierValue();
+		SecretKey idatKey = getIdatKey(organizationIdentifier);
 		String researchStudyIdentifier = getResearchStudyIdentifier(execution);
 		SecretKey mdatKey = getMdatKey(execution);
 		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
@@ -89,14 +94,19 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 				? createRecordBloomFilterGenerator(execution)
 				: null;
 
-		ResultSetTranslatorToTtp translator = createResultSetTranslator(organizationIdentifier, researchStudyIdentifier,
-				mdatKey, ehrIdColumnPath, masterPatientIndexClient, bloomFilterGenerator);
+		ResultSetTranslatorToTtp translator = createResultSetTranslator(organizationIdentifier, idatKey,
+				researchStudyIdentifier, mdatKey, ehrIdColumnPath, masterPatientIndexClient, bloomFilterGenerator);
 
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 		List<QueryResult> translatedResults = translateResults(translator, results);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(translatedResults)));
+	}
+
+	private SecretKey getIdatKey(String organizationIdentifier)
+	{
+		return (SecretKey) keyProvider.get(organizationIdentifier);
 	}
 
 	private String getResearchStudyIdentifier(DelegateExecution execution)
@@ -128,6 +138,8 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 	/**
 	 * @param organizationIdentifier
 	 *            the FHIR identifier of the current organization
+	 * @param idatKey
+	 *            the key to encrypt the IDAT
 	 * @param researchStudyIdentifier
 	 *            the FHIR identifier of the ResearchStudy defining the data sharing request
 	 * @param mdatKey
@@ -142,7 +154,7 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 	 * @return {@link ResultSetTranslatorToTtp}
 	 */
 	abstract protected ResultSetTranslatorToTtp createResultSetTranslator(String organizationIdentifier,
-			String researchStudyIdentifier, SecretKey mdatKey, String ehrIdColumnPath,
+			SecretKey idatKey, String researchStudyIdentifier, SecretKey mdatKey, String ehrIdColumnPath,
 			MasterPatientIndexClient masterPatientIndexClient, RecordBloomFilterGenerator recordBloomFilterGenerator);
 
 	private List<QueryResult> translateResults(ResultSetTranslatorToTtp translator, QueryResults results)

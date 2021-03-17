@@ -1,6 +1,12 @@
 package org.highmed.dsf.bpe.spring.config;
 
+import java.nio.file.Paths;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.highmed.dsf.bpe.crypto.KeyConsumer;
+import org.highmed.dsf.bpe.crypto.KeyProvider;
+import org.highmed.dsf.bpe.crypto.SecretKeyConsumerImpl;
+import org.highmed.dsf.bpe.crypto.SecretKeyProviderImpl;
 import org.highmed.dsf.bpe.message.SendMedicRequest;
 import org.highmed.dsf.bpe.message.SendMultiMedicErrors;
 import org.highmed.dsf.bpe.message.SendMultiMedicResults;
@@ -73,6 +79,18 @@ public class DataSharingConfig
 
 	@Autowired
 	private FhirContext fhirContext;
+
+	@Value("${org.highmed.dsf.bpe.psn.organizationKey.keystore.file:conf/organization-key.jceks}")
+	private String organizationKeystoreFile;
+
+	@Value("${org.highmed.dsf.bpe.psn.organizationKey.keystore.password:password}")
+	private String organizationKeystorePassword;
+
+	@Value("${org.highmed.dsf.bpe.psn.researchStudyKeys.keystore.file:conf/research-study-keystore.jceks}")
+	private String researchStudyKeystoreFile;
+
+	@Value("${org.highmed.dsf.bpe.psn.researchStudyKeys.keystore.password:password}")
+	private String getResearchStudyKeystorePassword;
 
 	@Value("${org.highmed.dsf.bpe.openehr.subject_external_id.path:/ehr_status/subject/external_ref/id/value}")
 	private String ehrIdColumnPath;
@@ -160,15 +178,23 @@ public class DataSharingConfig
 	}
 
 	@Bean
+	public KeyConsumer keyConsumer()
+	{
+		return new SecretKeyConsumerImpl(Paths.get(researchStudyKeystoreFile),
+				getResearchStudyKeystorePassword.toCharArray());
+	}
+
+	@Bean
 	public PseudonymizeResultSetsWithRecordLinkage pseudonymizeResultSetsWithRecordLinkage()
 	{
-		return new PseudonymizeResultSetsWithRecordLinkage(fhirClientProvider, taskHelper, objectMapper);
+		return new PseudonymizeResultSetsWithRecordLinkage(fhirClientProvider, taskHelper, keyConsumer(), objectMapper);
 	}
 
 	@Bean
 	public PseudonymizeResultSetsWithoutRecordLinkage pseudonymizeResultSetsWithoutRecordLinkage()
 	{
-		return new PseudonymizeResultSetsWithoutRecordLinkage(fhirClientProvider, taskHelper, objectMapper);
+		return new PseudonymizeResultSetsWithoutRecordLinkage(fhirClientProvider, taskHelper, keyConsumer(),
+				objectMapper);
 	}
 
 	@Bean
@@ -248,17 +274,24 @@ public class DataSharingConfig
 	}
 
 	@Bean
+	public KeyProvider keyProvider()
+	{
+		return new SecretKeyProviderImpl(organizationProvider, Paths.get(organizationKeystoreFile),
+				organizationKeystorePassword.toCharArray());
+	}
+
+	@Bean
 	public TranslateSingleMedicResultSetsWithRbf translateSingleMedicResultSetsWithRbf()
 	{
 		return new TranslateSingleMedicResultSetsWithRbf(fhirClientProvider, taskHelper, organizationProvider,
-				ehrIdColumnPath, masterPatientIndexClient(), bouncyCastleProvider());
+				keyProvider(), ehrIdColumnPath, masterPatientIndexClient(), bouncyCastleProvider());
 	}
 
 	@Bean
 	public TranslateSingleMedicResultSetsWithoutRbf translateSingleMedicResultSetsWithoutRbf()
 	{
 		return new TranslateSingleMedicResultSetsWithoutRbf(fhirClientProvider, taskHelper, organizationProvider,
-				ehrIdColumnPath);
+				keyProvider(), ehrIdColumnPath);
 	}
 
 	@Bean
