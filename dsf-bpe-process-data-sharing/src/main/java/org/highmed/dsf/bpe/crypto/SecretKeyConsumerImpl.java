@@ -1,6 +1,9 @@
 package org.highmed.dsf.bpe.crypto;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.security.Key;
 import java.security.KeyStore;
@@ -35,13 +38,16 @@ public class SecretKeyConsumerImpl implements KeyConsumer, InitializingBean
 		{
 			keystore = KeyStoreIo.readJceks(keystoreFile, keystorePassword);
 		}
-		catch (FileNotFoundException e)
+		catch (FileNotFoundException | NoSuchFileException e)
 		{
 			logger.warn("Could not find keystore at {}, creating an empty keystore", keystoreFile);
 
-			keystore = KeyStoreHelper.createPkcs12(keystorePassword);
+			keystore = KeyStoreHelper.createJceks(keystorePassword);
 			KeyStoreIo.write(keystore, keystoreFile, keystorePassword);
 		}
+
+		if (!Files.isWritable(keystoreFile))
+			throw new IOException("ResearchStudy keystore at " + keystoreFile.toString() + " not writable");
 	}
 
 	@Override

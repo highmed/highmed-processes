@@ -80,13 +80,13 @@ public class DataSharingConfig
 	@Autowired
 	private FhirContext fhirContext;
 
-	@Value("${org.highmed.dsf.bpe.psn.organizationKey.keystore.file:conf/organization-key.jceks}")
+	@Value("${org.highmed.dsf.bpe.psn.organizationKey.keystore.file:psn/organization-keystore.jceks}")
 	private String organizationKeystoreFile;
 
 	@Value("${org.highmed.dsf.bpe.psn.organizationKey.keystore.password:password}")
 	private String organizationKeystorePassword;
 
-	@Value("${org.highmed.dsf.bpe.psn.researchStudyKeys.keystore.file:conf/research-study-keystore.jceks}")
+	@Value("${org.highmed.dsf.bpe.psn.researchStudyKeys.keystore.file:psn/research-study-keystore.jceks}")
 	private String researchStudyKeystoreFile;
 
 	@Value("${org.highmed.dsf.bpe.psn.researchStudyKeys.keystore.password:password}")

@@ -1,6 +1,9 @@
 package org.highmed.dsf.bpe.crypto;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.security.Key;
 import java.security.KeyStore;
@@ -43,7 +46,7 @@ public class SecretKeyProviderImpl implements KeyProvider, InitializingBean
 		{
 			keystore = KeyStoreIo.readJceks(keystoreFile, keystorePassword);
 		}
-		catch (FileNotFoundException e)
+		catch (FileNotFoundException | NoSuchFileException e)
 		{
 			logger.warn("Could not find keystore at {}, creating a new keystore containing a new organization key",
 					keystoreFile);
@@ -53,6 +56,9 @@ public class SecretKeyProviderImpl implements KeyProvider, InitializingBean
 					keystorePassword, null);
 			KeyStoreIo.write(keystore, keystoreFile, keystorePassword);
 		}
+
+		if (!Files.isReadable(keystoreFile))
+			throw new IOException("Organization keystore at " + keystoreFile.toString() + " not writable");
 	}
 
 	@Override
