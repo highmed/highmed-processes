@@ -65,7 +65,6 @@
       <path value="Task.input" />
       <sliceName value="single-medic-result-set-reference" />
       <min value="1" />
-      <max value="*" />
     </element>
     <element id="Task.input:single-medic-result-set-reference.extension">
       <path value="Task.input.extension" />

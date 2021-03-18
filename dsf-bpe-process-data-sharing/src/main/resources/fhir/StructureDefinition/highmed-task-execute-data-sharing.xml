@@ -220,8 +220,6 @@
         <code value="base64Binary" />
       </type>
     </element>
-
-
     <element id="Task.input:mdat-aes-key">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
         <valueString value="Parameter" />

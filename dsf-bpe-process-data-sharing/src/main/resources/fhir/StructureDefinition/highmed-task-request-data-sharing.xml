@@ -195,7 +195,6 @@
       <path value="Task.output" />
       <sliceName value="multi-medic-result-set-reference" />
       <min value="0" />
-      <max value="*" />
     </element>
     <element id="Task.output:multi-medic-result-set-reference.extension">
       <path value="Task.output.extension" />
