@@ -14,8 +14,9 @@ import org.highmed.dsf.bpe.message.SendSingleMedicResults;
 import org.highmed.dsf.bpe.message.SendTtpRequest;
 import org.highmed.dsf.bpe.service.CheckDataSharingResources;
 import org.highmed.dsf.bpe.service.CheckMedicMultiMedicResultSets;
-import org.highmed.dsf.bpe.service.CheckSingleMedicResultSets;
+import org.highmed.dsf.bpe.service.CheckMedicSingleMedicResultSets;
 import org.highmed.dsf.bpe.service.CheckTtpMultiMedicResultSets;
+import org.highmed.dsf.bpe.service.CheckTtpSingleMedicResultSets;
 import org.highmed.dsf.bpe.service.DownloadDataSharingResources;
 import org.highmed.dsf.bpe.service.DownloadMultiMedicResultSets;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
@@ -101,6 +102,10 @@ public class DataSharingConfig
 	@Autowired
 	private Environment environment;
 
+	//
+	// process requestDataSharing implementations
+	//
+
 	@Bean
 	public DownloadResearchStudyResource downloadResearchStudyResourceDS()
 	{
@@ -155,6 +160,12 @@ public class DataSharingConfig
 		return new StoreMultiMedicResultSetsForResearcher(fhirClientProvider, taskHelper, objectMapper);
 	}
 
+	@Bean
+	public HandleErrorMultiMedicResults handleErrorMultiMedicResults()
+	{
+		return new HandleErrorMultiMedicResults(fhirClientProvider, taskHelper);
+	}
+
 	//
 	// process computeDataSharing implementations
 	//
@@ -175,6 +186,12 @@ public class DataSharingConfig
 	public DownloadSingleMedicResultSets downloadSingleMedicResultSets()
 	{
 		return new DownloadSingleMedicResultSets(fhirClientProvider, taskHelper, objectMapper);
+	}
+
+	@Bean
+	public CheckTtpSingleMedicResultSets checkTtpSingleMedicResultSets()
+	{
+		return new CheckTtpSingleMedicResultSets(fhirClientProvider, taskHelper);
 	}
 
 	@Bean
@@ -219,12 +236,6 @@ public class DataSharingConfig
 	public SendMultiMedicErrors sendMultiMedicErrors()
 	{
 		return new SendMultiMedicErrors(fhirClientProvider, taskHelper, organizationProvider, fhirContext);
-	}
-
-	@Bean
-	public HandleErrorMultiMedicResults handleErrorMultiMedicResults()
-	{
-		return new HandleErrorMultiMedicResults(fhirClientProvider, taskHelper);
 	}
 
 	//
@@ -313,9 +324,9 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public CheckSingleMedicResultSets checkSingleMedicResultSets()
+	public CheckMedicSingleMedicResultSets checkMedicSingleMedicResultSets()
 	{
-		return new CheckSingleMedicResultSets(fhirClientProvider, taskHelper);
+		return new CheckMedicSingleMedicResultSets(fhirClientProvider, taskHelper);
 	}
 
 	@Bean

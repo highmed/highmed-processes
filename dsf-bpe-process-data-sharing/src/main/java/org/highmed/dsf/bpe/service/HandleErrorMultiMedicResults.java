@@ -43,7 +43,7 @@ public class HandleErrorMultiMedicResults extends AbstractServiceDelegate
 	private void transformToOutput(String taskId, Task.ParameterComponent input, Task leadingTask)
 	{
 		String errorMessage = input.getValue().primitiveValue();
-		logger.warn("Received data sharing error in task with id='{}', reason: {}", taskId, errorMessage);
+		logger.warn("Received multi medic data sharing error in task with id='{}', reason: {}", taskId, errorMessage);
 		leadingTask.getOutput().add(getTaskHelper().createOutput(ConstantsBase.CODESYSTEM_HIGHMED_BPMN,
 				ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, errorMessage));
 	}

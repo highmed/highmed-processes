@@ -53,7 +53,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_01pjftq" sourceRef="StartEvent" targetRef="storeCorrelationKeys" />
     <bpmn:sequenceFlow id="SequenceFlow_1lfe4wr" sourceRef="storeCorrelationKeys" targetRef="SubProcess_1gopxt4" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_07e71aa">
-      <bpmn:incoming>Flow_0gx8n5k</bpmn:incoming>
+      <bpmn:incoming>Flow_0g86uan</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0t4lx4v</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0calilw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -90,17 +90,18 @@
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1tmnvhl</bpmn:incoming>
+      <bpmn:incoming>Flow_0rwc0yo</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_19y5diw" messageRef="Message_0kix95m" camunda:class="org.highmed.dsf.bpe.message.SendMultiMedicErrors" />
     </bpmn:endEvent>
-    <bpmn:serviceTask id="checkResultSets" name="check result sets" camunda:class="org.highmed.dsf.bpe.service.CheckTtpMultiMedicResultSets">
+    <bpmn:serviceTask id="checkPseudonymizedResultSets" name="check pseudonymized result sets" camunda:class="org.highmed.dsf.bpe.service.CheckTtpMultiMedicResultSets">
       <bpmn:incoming>Flow_1wig1wj</bpmn:incoming>
       <bpmn:outgoing>Flow_0mogdyo</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="Event_1vp5qzs" attachedToRef="checkResultSets">
+    <bpmn:boundaryEvent id="errorPseudonymization" attachedToRef="checkPseudonymizedResultSets">
       <bpmn:outgoing>Flow_1tmnvhl</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_05kx06m" errorRef="Error_0qub4jc" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1tmnvhl" sourceRef="Event_1vp5qzs" targetRef="EndEventError" />
+    <bpmn:sequenceFlow id="Flow_1tmnvhl" sourceRef="errorPseudonymization" targetRef="EndEventError" />
     <bpmn:sequenceFlow id="SequenceFlow_0calilw" name="needs record linkage" sourceRef="ExclusiveGateway_07e71aa" targetRef="pseudonymizeResultSetWithRecordLinkage">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -110,7 +111,7 @@
       <bpmn:outgoing>Flow_0b5n9vc</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0b5n9vc" sourceRef="Gateway_0h2eszv" targetRef="downloadResultSets" />
-    <bpmn:sequenceFlow id="Flow_0gx8n5k" sourceRef="downloadResultSets" targetRef="ExclusiveGateway_07e71aa" />
+    <bpmn:sequenceFlow id="Flow_0gx8n5k" sourceRef="downloadResultSets" targetRef="checkReceivedResultSets" />
     <bpmn:serviceTask id="downloadResultSets" name="download result sets" camunda:class="org.highmed.dsf.bpe.service.DownloadSingleMedicResultSets">
       <bpmn:incoming>Flow_0b5n9vc</bpmn:incoming>
       <bpmn:outgoing>Flow_0gx8n5k</bpmn:outgoing>
@@ -119,74 +120,89 @@
       <bpmn:incoming>Flow_0mogdyo</bpmn:incoming>
       <bpmn:outgoing>Flow_0uaqn1r</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0mogdyo" sourceRef="checkResultSets" targetRef="storeResultSets" />
+    <bpmn:sequenceFlow id="Flow_0mogdyo" sourceRef="checkPseudonymizedResultSets" targetRef="storeResultSets" />
     <bpmn:sequenceFlow id="Flow_1qqffoq" sourceRef="ExclusiveGateway_1r8ow3i" targetRef="selectResponseTargetMedic" />
-    <bpmn:sequenceFlow id="Flow_1wig1wj" sourceRef="selectResponseTargetMedic" targetRef="checkResultSets" />
+    <bpmn:sequenceFlow id="Flow_1wig1wj" sourceRef="selectResponseTargetMedic" targetRef="checkPseudonymizedResultSets" />
     <bpmn:sequenceFlow id="Flow_0uaqn1r" sourceRef="storeResultSets" targetRef="EndEventSuccess" />
     <bpmn:sequenceFlow id="Flow_115yfgb" sourceRef="pseudonymizeResultSetWithoutRecordLinkage" targetRef="ExclusiveGateway_1r8ow3i" />
     <bpmn:serviceTask id="pseudonymizeResultSetWithoutRecordLinkage" name="pseudonymize result sets" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithoutRecordLinkage">
       <bpmn:incoming>SequenceFlow_0t4lx4v</bpmn:incoming>
       <bpmn:outgoing>Flow_115yfgb</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0g86uan" sourceRef="checkReceivedResultSets" targetRef="ExclusiveGateway_07e71aa" />
+    <bpmn:serviceTask id="checkReceivedResultSets" name="check received result sets" camunda:class="org.highmed.dsf.bpe.service.CheckTtpSingleMedicResultSets">
+      <bpmn:incoming>Flow_0gx8n5k</bpmn:incoming>
+      <bpmn:outgoing>Flow_0g86uan</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="errorReceived" attachedToRef="checkReceivedResultSets">
+      <bpmn:outgoing>Flow_0rwc0yo</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1co4qxl" errorRef="Error_1r03ghq" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_0rwc0yo" sourceRef="errorReceived" targetRef="EndEventError" />
   </bpmn:process>
   <bpmn:message id="Message_0a1qxd8" name="resultSingleMedicDataSharingMessage" />
   <bpmn:message id="Message_0ue93sz" name="resultMultiMedicDataSharingMessage" />
   <bpmn:message id="Message_08676wn" name="computeDataSharingMessage" />
   <bpmn:message id="Message_0kix95m" name="errorMultiMedicDataSharingMessage" />
-  <bpmn:error id="Error_0qub4jc" name="errorMultiMedicDataSharingResult" errorCode="errorMultiMedicDataSharingResult" camunda:errorMessage="errorMultiMedicDataSharingResult" />
+  <bpmn:error id="Error_0qub4jc" name="errorMultiMedicPseudonymizedDataSharingResult" errorCode="errorMultiMedicPseudonymizedDataSharingResult" camunda:errorMessage="errorMultiMedicPseudonymizedDataSharingResult" />
+  <bpmn:error id="Error_1r03ghq" name="errorMultiMedicReceivedDataSharingResult" errorCode="errorMultiMedicReceivedDataSharingResult" camunda:errorMessage="errorMultiMedicReceivedDataSharingResult" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="computeDataSharing">
+      <bpmndi:BPMNEdge id="Flow_0g86uan_di" bpmnElement="Flow_0g86uan">
+        <di:waypoint x="1430" y="242" />
+        <di:waypoint x="1485" y="242" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_115yfgb_di" bpmnElement="Flow_115yfgb">
-        <di:waypoint x="1520" y="320" />
-        <di:waypoint x="1520" y="267" />
+        <di:waypoint x="1690" y="320" />
+        <di:waypoint x="1690" y="267" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0uaqn1r_di" bpmnElement="Flow_0uaqn1r">
-        <di:waypoint x="2050" y="242" />
-        <di:waypoint x="2142" y="242" />
+        <di:waypoint x="2220" y="242" />
+        <di:waypoint x="2312" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1wig1wj_di" bpmnElement="Flow_1wig1wj">
-        <di:waypoint x="1710" y="242" />
-        <di:waypoint x="1780" y="242" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1qqffoq_di" bpmnElement="Flow_1qqffoq">
-        <di:waypoint x="1545" y="242" />
-        <di:waypoint x="1610" y="242" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0mogdyo_di" bpmnElement="Flow_0mogdyo">
         <di:waypoint x="1880" y="242" />
         <di:waypoint x="1950" y="242" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qqffoq_di" bpmnElement="Flow_1qqffoq">
+        <di:waypoint x="1715" y="242" />
+        <di:waypoint x="1780" y="242" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mogdyo_di" bpmnElement="Flow_0mogdyo">
+        <di:waypoint x="2050" y="242" />
+        <di:waypoint x="2120" y="242" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0gx8n5k_di" bpmnElement="Flow_0gx8n5k">
         <di:waypoint x="1260" y="242" />
-        <di:waypoint x="1315" y="242" />
+        <di:waypoint x="1330" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0b5n9vc_di" bpmnElement="Flow_0b5n9vc">
         <di:waypoint x="1095" y="242" />
         <di:waypoint x="1160" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0calilw_di" bpmnElement="SequenceFlow_0calilw">
-        <di:waypoint x="1340" y="217" />
-        <di:waypoint x="1340" y="126" />
-        <di:waypoint x="1470" y="126" />
+        <di:waypoint x="1510" y="217" />
+        <di:waypoint x="1510" y="126" />
+        <di:waypoint x="1640" y="126" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1347" y="133" width="65" height="27" />
+          <dc:Bounds x="1517" y="133" width="65" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tmnvhl_di" bpmnElement="Flow_1tmnvhl">
-        <di:waypoint x="1880" y="300" />
-        <di:waypoint x="1880" y="350" />
-        <di:waypoint x="2142" y="350" />
+        <di:waypoint x="2050" y="300" />
+        <di:waypoint x="2050" y="420" />
+        <di:waypoint x="2312" y="420" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_02zmrer_di" bpmnElement="SequenceFlow_02zmrer">
-        <di:waypoint x="1520" y="166" />
-        <di:waypoint x="1520" y="217" />
+        <di:waypoint x="1690" y="166" />
+        <di:waypoint x="1690" y="217" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0t4lx4v_di" bpmnElement="SequenceFlow_0t4lx4v">
-        <di:waypoint x="1340" y="267" />
-        <di:waypoint x="1340" y="360" />
-        <di:waypoint x="1470" y="360" />
+        <di:waypoint x="1510" y="267" />
+        <di:waypoint x="1510" y="360" />
+        <di:waypoint x="1640" y="360" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1344" y="342" width="21" height="14" />
+          <dc:Bounds x="1514" y="342" width="21" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0h3to47_di" bpmnElement="SequenceFlow_0h3to47">
@@ -206,6 +222,17 @@
         <di:waypoint x="195" y="242" />
         <di:waypoint x="279" y="242" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rwc0yo_di" bpmnElement="Flow_0rwc0yo">
+        <di:waypoint x="1430" y="300" />
+        <di:waypoint x="1430" y="420" />
+        <di:waypoint x="2312" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1hmug5i_di" bpmnElement="EndEventError">
+        <dc:Bounds x="2312" y="402" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2299" y="445" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SubProcess_1gopxt4_di" bpmnElement="SubProcess_1gopxt4" isExpanded="true">
         <dc:Bounds x="469" y="175" width="498" height="134" />
       </bpmndi:BPMNShape>
@@ -239,38 +266,32 @@
       <bpmndi:BPMNShape id="StartEvent_1skbvzb_di" bpmnElement="StartEvent">
         <dc:Bounds x="159" y="224" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="166" y="267" width="23" height="14" />
+          <dc:Bounds x="167" y="267" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_0xh5o35_di" bpmnElement="EndEventSuccess">
-        <dc:Bounds x="2142" y="224" width="36" height="36" />
+        <dc:Bounds x="2312" y="224" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2125" y="267" width="72" height="27" />
+          <dc:Bounds x="2295" y="267" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_07e71aa_di" bpmnElement="ExclusiveGateway_07e71aa" isMarkerVisible="true">
-        <dc:Bounds x="1315" y="217" width="50" height="50" />
+        <dc:Bounds x="1485" y="217" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_093hq2s_di" bpmnElement="pseudonymizeResultSetWithRecordLinkage">
-        <dc:Bounds x="1470" y="86" width="100" height="80" />
+        <dc:Bounds x="1640" y="86" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_1r8ow3i_di" bpmnElement="ExclusiveGateway_1r8ow3i" isMarkerVisible="true">
-        <dc:Bounds x="1495" y="217" width="50" height="50" />
+        <dc:Bounds x="1665" y="217" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0bw310g_di" bpmnElement="storeCorrelationKeys">
         <dc:Bounds x="279" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0uk3eyz_di" bpmnElement="selectResponseTargetMedic">
-        <dc:Bounds x="1610" y="202" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1hmug5i_di" bpmnElement="EndEventError">
-        <dc:Bounds x="2142" y="332" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2129" y="375" width="63" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_13j8ce9_di" bpmnElement="checkResultSets">
         <dc:Bounds x="1780" y="202" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13j8ce9_di" bpmnElement="checkPseudonymizedResultSets">
+        <dc:Bounds x="1950" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0h2eszv_di" bpmnElement="Gateway_0h2eszv" isMarkerVisible="true">
         <dc:Bounds x="1045" y="217" width="50" height="50" />
@@ -279,16 +300,22 @@
         <dc:Bounds x="1160" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0tps18n_di" bpmnElement="storeResultSets">
-        <dc:Bounds x="1950" y="202" width="100" height="80" />
+        <dc:Bounds x="2120" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0y1tjhz_di" bpmnElement="pseudonymizeResultSetWithoutRecordLinkage">
-        <dc:Bounds x="1470" y="320" width="100" height="80" />
+        <dc:Bounds x="1640" y="320" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_155cxa9_di" bpmnElement="Event_1vp5qzs">
-        <dc:Bounds x="1862" y="264" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_0798gut_di" bpmnElement="checkReceivedResultSets">
+        <dc:Bounds x="1330" y="202" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_155cxa9_di" bpmnElement="errorPseudonymization">
+        <dc:Bounds x="2032" y="264" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BoundaryEvent_1g0rcyp_di" bpmnElement="TimerEnded">
         <dc:Bounds x="949" y="291" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1c7452s_di" bpmnElement="errorReceived">
+        <dc:Bounds x="1412" y="264" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

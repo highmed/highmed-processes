@@ -55,7 +55,7 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 
 		var sTCom = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-compute-data-sharing.xml");
 		var sTExe = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-execute-data-sharing.xml");
-		var sTErr = StructureDefinitionResource
+		var sTErrM = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-multi-medic-error-data-sharing.xml");
 		var sTResM = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-multi-medic-result-data-sharing.xml");
@@ -68,7 +68,7 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("computeDataSharing/" + VERSION,
 				Arrays.asList(aCom, cDS, sTCom, sTResS, vDS), "executeDataSharing/" + VERSION,
 				Arrays.asList(aExe, cDS, sTExe, vDS), "requestDataSharing/" + VERSION,
-				Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
+				Arrays.asList(aReq, cDS, sTReq, sTResM, sTErrM, vDS));
 
 		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
 				classLoader, resourcesByProcessKeyAndVersion);

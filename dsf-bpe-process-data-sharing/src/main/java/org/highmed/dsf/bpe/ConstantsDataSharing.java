@@ -5,7 +5,9 @@ import static org.highmed.dsf.bpe.DataSharingProcessPluginDefinition.VERSION;
 
 public interface ConstantsDataSharing
 {
-	String BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_DATA_SHARING_RESULT = "errorMultiMedicDataSharingResult";
+	String BPMN_EXECUTION_ERROR_CODE_SINGLE_MEDIC_DATA_SHARING_RESULT = "errorSingleMedicDataSharingResult";
+	String BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_RECEIVED_DATA_SHARING_RESULT = "errorMultiMedicReceivedDataSharingResult";
+	String BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_PSEUDONYMIZED_DATA_SHARING_RESULT = "errorMultiMedicPseudonymizedDataSharingResult";
 
 	String BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY = "researchStudy";
 	String BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER = "researchStudyIdentifier";

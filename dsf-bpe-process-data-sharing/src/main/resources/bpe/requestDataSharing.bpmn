@@ -25,7 +25,7 @@
       <bpmn:outgoing>Flow_1lw96cm</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics camunda:collection="${targets.entries}" camunda:elementVariable="target" />
     </bpmn:sendTask>
-    <bpmn:intermediateCatchEvent id="receiveFinalResultFromTtp" name="receive multi MeDIC results from TTP">
+    <bpmn:intermediateCatchEvent id="receiveMultiMediclResultFromTtp" name="receive multi MeDIC results from TTP">
       <bpmn:incoming>Flow_1q5jnli</bpmn:incoming>
       <bpmn:outgoing>Flow_1gf3n6o</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0ox92uc" messageRef="Message_1a3ewlk" />
@@ -56,8 +56,8 @@
     <bpmn:endEvent id="EndEvent" name="success">
       <bpmn:incoming>Flow_0amk6ah</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1q5jnli" sourceRef="Gateway_160gkf1" targetRef="receiveFinalResultFromTtp" />
-    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveFinalResultFromTtp" targetRef="downloadResultSets" />
+    <bpmn:sequenceFlow id="Flow_1q5jnli" sourceRef="Gateway_160gkf1" targetRef="receiveMultiMediclResultFromTtp" />
+    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveMultiMediclResultFromTtp" targetRef="downloadResultSets" />
     <bpmn:sequenceFlow id="Flow_1harl90" sourceRef="Gateway_160gkf1" targetRef="receiveErrorFromTtp" />
     <bpmn:sequenceFlow id="Flow_1id9r0h" sourceRef="receiveErrorFromTtp" targetRef="handleError" />
     <bpmn:sequenceFlow id="Flow_0rwo9pn" sourceRef="checkResultSets" targetRef="storeResultSets" />
@@ -180,7 +180,7 @@
       <bpmndi:BPMNShape id="Activity_1bpkypl_di" bpmnElement="sendRequestToMedics">
         <dc:Bounds x="760" y="187" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0bxieya_di" bpmnElement="receiveFinalResultFromTtp">
+      <bpmndi:BPMNShape id="Event_0bxieya_di" bpmnElement="receiveMultiMediclResultFromTtp">
         <dc:Bounds x="1022" y="122" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1005" y="80" width="70" height="40" />

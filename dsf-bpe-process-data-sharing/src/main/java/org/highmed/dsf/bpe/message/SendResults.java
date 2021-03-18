@@ -22,11 +22,11 @@ import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.context.FhirContext;
 
-public abstract class SendMedicResults extends AbstractTaskMessageSend
+public abstract class SendResults extends AbstractTaskMessageSend
 {
-	private static final Logger logger = LoggerFactory.getLogger(SendMedicResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(SendResults.class);
 
-	public SendMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public SendResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			OrganizationProvider organizationProvider, FhirContext fhirContext)
 	{
 		super(clientProvider, taskHelper, organizationProvider, fhirContext);
