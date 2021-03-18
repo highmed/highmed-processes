@@ -56,12 +56,12 @@ public class CheckTtpMultiMedicResultSets extends CheckResultSets
 		{
 			logger.warn(
 					"Could not calculate result for any cohort definition in the data sharing request with "
-							+ "task-id='{}', business-key='{}' and correlation-key='{}', are there results present?",
+							+ "task-id='{}', business-key='{}' and correlation-key='{}'",
 					taskId, businessKey, correlationKey);
 
 			leadingTask.getOutput()
 					.add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
-							"Could not calculate result for any cohort definition, are there results present?"));
+							"Could not calculate result for any cohort definition"));
 
 			return false;
 		}
