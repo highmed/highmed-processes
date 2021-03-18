@@ -132,7 +132,7 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 		return new RecordBloomFilterGeneratorImpl(RBF_LENGTH, bloomFilterConfig.getPermutationSeed(), FBF_WEIGHTS,
 				FBF_LENGTHS,
 				() -> new BloomFilterGenerator.HmacSha2HmacSha3BiGramHasher(bloomFilterConfig.getHmacSha2Key(),
-						bloomFilterConfig.getHmacSha2Key(), bouncyCastleProvider));
+						bloomFilterConfig.getHmacSha3Key(), bouncyCastleProvider));
 	}
 
 	/**
@@ -181,5 +181,4 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 			throw e;
 		}
 	}
-
 }
