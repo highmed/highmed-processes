@@ -1,5 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
@@ -41,7 +43,7 @@ public abstract class CheckResultSets extends AbstractServiceDelegate
 
 	private List<QueryResult> filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(QueryResults results)
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getLeadingTaskFromExecutionVariables();
 		return results.getResults().stream().filter(r -> testResultAndAddPossibleError(r, task))
 				.collect(Collectors.toList());
 	}
@@ -50,7 +52,7 @@ public abstract class CheckResultSets extends AbstractServiceDelegate
 	{
 		boolean hasFailingCheck = getChecks(result, task).map(check -> check.apply(result, task))
 				.anyMatch(Boolean.FALSE::equals);
-		
+
 		return !hasFailingCheck;
 	}
 
@@ -82,8 +84,8 @@ public abstract class CheckResultSets extends AbstractServiceDelegate
 				+ error;
 		logger.warn(errorMessage);
 
-		task.getOutput().add(getTaskHelper().createOutput(ConstantsBase.CODESYSTEM_HIGHMED_BPMN,
-				ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, errorMessage));
+		task.getOutput().add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
+				errorMessage));
 	}
 
 	protected boolean checkColumns(QueryResult result, Task task)

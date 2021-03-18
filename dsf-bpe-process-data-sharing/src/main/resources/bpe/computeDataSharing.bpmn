@@ -84,7 +84,7 @@
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="processDefinitionKey">requestDataSharing</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-error-data-sharing</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-data-sharing</camunda:inputParameter>
           <camunda:inputParameter name="versionTag">0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">errorMultiMedicDataSharingMessage</camunda:inputParameter>
         </camunda:inputOutput>
@@ -136,6 +136,10 @@
   <bpmn:error id="Error_0qub4jc" name="errorMultiMedicDataSharingResult" errorCode="errorMultiMedicDataSharingResult" camunda:errorMessage="errorMultiMedicDataSharingResult" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="computeDataSharing">
+      <bpmndi:BPMNEdge id="Flow_115yfgb_di" bpmnElement="Flow_115yfgb">
+        <di:waypoint x="1520" y="320" />
+        <di:waypoint x="1520" y="267" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0uaqn1r_di" bpmnElement="Flow_0uaqn1r">
         <di:waypoint x="2050" y="242" />
         <di:waypoint x="2142" y="242" />
@@ -202,13 +206,6 @@
         <di:waypoint x="195" y="242" />
         <di:waypoint x="279" y="242" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_115yfgb_di" bpmnElement="Flow_115yfgb">
-        <di:waypoint x="1520" y="320" />
-        <di:waypoint x="1520" y="267" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_0y1tjhz_di" bpmnElement="pseudonymizeResultSetWithoutRecordLinkage">
-        <dc:Bounds x="1470" y="320" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SubProcess_1gopxt4_di" bpmnElement="SubProcess_1gopxt4" isExpanded="true">
         <dc:Bounds x="469" y="175" width="498" height="134" />
       </bpmndi:BPMNShape>
@@ -283,6 +280,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0tps18n_di" bpmnElement="storeResultSets">
         <dc:Bounds x="1950" y="202" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0y1tjhz_di" bpmnElement="pseudonymizeResultSetWithoutRecordLinkage">
+        <dc:Bounds x="1470" y="320" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_155cxa9_di" bpmnElement="Event_1vp5qzs">
         <dc:Bounds x="1862" y="264" width="36" height="36" />
