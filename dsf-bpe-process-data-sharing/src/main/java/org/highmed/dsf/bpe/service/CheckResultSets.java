@@ -50,6 +50,7 @@ public abstract class CheckResultSets extends AbstractServiceDelegate
 	{
 		boolean hasFailingCheck = getChecks(result, task).map(check -> check.apply(result, task))
 				.anyMatch(Boolean.FALSE::equals);
+		
 		return !hasFailingCheck;
 	}
 
@@ -87,21 +88,21 @@ public abstract class CheckResultSets extends AbstractServiceDelegate
 
 	protected boolean checkColumns(QueryResult result, Task task)
 	{
-		boolean hasError = result.getResultSet().getColumns().size() < 1;
+		boolean passed = result.getResultSet().getColumns().size() > 0;
 
-		if (hasError)
+		if (!passed)
 			addError(task, result.getCohortId(), "no columns present");
 
-		return hasError;
+		return passed;
 	}
 
 	protected boolean checkRows(QueryResult result, Task task)
 	{
-		boolean hasError = result.getResultSet().getRows().size() < 1;
+		boolean passed = result.getResultSet().getRows().size() > 0;
 
-		if (hasError)
+		if (!passed)
 			addError(task, result.getCohortId(), "no rows present");
 
-		return hasError;
+		return passed;
 	}
 }
