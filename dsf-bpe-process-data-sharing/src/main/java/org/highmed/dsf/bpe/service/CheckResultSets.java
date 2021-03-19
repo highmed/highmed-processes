@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
@@ -78,10 +77,10 @@ public abstract class CheckResultSets extends AbstractServiceDelegate
 		return passedResults;
 	}
 
-	protected void addError(Task task, String cohortId, String error)
+	protected void addError(Task task, String organizationIdentifier, String cohortId, String error)
 	{
-		String errorMessage = "Data sharing query result check failed for group with id='" + cohortId + "', reason: "
-				+ error;
+		String errorMessage = "QueryResult check failed for group with id='" + cohortId
+				+ "' supplied from organization " + organizationIdentifier + ", reason: " + error;
 		logger.warn(errorMessage);
 
 		task.getOutput().add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
@@ -93,7 +92,7 @@ public abstract class CheckResultSets extends AbstractServiceDelegate
 		boolean passed = result.getResultSet().getColumns().size() > 0;
 
 		if (!passed)
-			addError(task, result.getCohortId(), "no columns present");
+			addError(task, result.getOrganizationIdentifier(), result.getCohortId(), "no columns present");
 
 		return passed;
 	}
@@ -103,7 +102,7 @@ public abstract class CheckResultSets extends AbstractServiceDelegate
 		boolean passed = result.getResultSet().getRows().size() > 0;
 
 		if (!passed)
-			addError(task, result.getCohortId(), "no rows present");
+			addError(task, result.getOrganizationIdentifier(), result.getCohortId(), "no rows present");
 
 		return passed;
 	}

@@ -59,9 +59,8 @@ public class CheckTtpMultiMedicResultSets extends CheckResultSets
 							+ "task-id='{}', business-key='{}' and correlation-key='{}'",
 					taskId, businessKey, correlationKey);
 
-			leadingTask.getOutput()
-					.add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
-							"Could not calculate result for any cohort definition"));
+			leadingTask.getOutput().add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN,
+					CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, "Could not calculate result for any cohort definition"));
 
 			return false;
 		}
