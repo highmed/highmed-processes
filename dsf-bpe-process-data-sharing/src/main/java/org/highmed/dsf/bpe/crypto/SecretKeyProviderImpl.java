@@ -58,7 +58,7 @@ public class SecretKeyProviderImpl implements KeyProvider, InitializingBean
 		}
 
 		if (!Files.isReadable(keystoreFile))
-			throw new IOException("Organization keystore at " + keystoreFile.toString() + " not writable");
+			throw new IOException("Organization keystore at " + keystoreFile.toString() + " not readable");
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public class KeyStoreIo
 	public static void write(KeyStore keystore, Path file, char[] password)
 			throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException
 	{
-		try (OutputStream stream = Files.newOutputStream(file, CREATE, APPEND))
+		try (OutputStream stream = Files.newOutputStream(file))
 		{
 			keystore.store(stream, password);
 		}
