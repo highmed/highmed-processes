@@ -33,6 +33,9 @@ public interface ConstantsDataSharing
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_COUNT_RESULT = "multi-medic-count-result";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SET_REFERENCE = "multi-medic-result-set-reference";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDICS = "participating-medics";
+	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_REQUEST_FORM_REFERENCE = "request-form-reference";
+	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONTRACT_REFERENCE = "contract-reference";
+	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_FEASIBILITY_QUERY_REFERENCE = "feasibility-query-reference";
 
 	String NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER = "http://highmed.org/fhir/NamingSystem/research-study-identifier";
 

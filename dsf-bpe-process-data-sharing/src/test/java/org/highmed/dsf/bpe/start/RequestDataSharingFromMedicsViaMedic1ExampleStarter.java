@@ -7,8 +7,11 @@ import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATIO
 import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHEMD_RESEARCH_STUDY;
 import static org.highmed.dsf.bpe.ConstantsBase.PROFILE_HIGHMED_GROUP;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONTRACT_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_FEASIBILITY_QUERY_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_REQUEST_FORM_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_TTP;
@@ -23,9 +26,11 @@ import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HI
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_3;
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_TTP;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
 
+import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Expression;
@@ -34,6 +39,7 @@ import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Narrative;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.RelatedArtifact;
 import org.hl7.fhir.r4.model.ResearchStudy;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
@@ -45,6 +51,10 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 {
 	private static boolean NEEDS_CONSENT_CHECK = true;
 	private static boolean NEEDS_RECORD_LINKAGE = true;
+
+	private static String REQUEST_FORM_REFERENCE = "https://medic1/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
+	private static String CONTRACT_REFERENCE = "https://medic1/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
+	private static String FEASIBILITY_REFERENCE = "https://medic1/fhir/Task/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
 
 	private static final String QUERY = "SELECT e/ehr_status/subject/external_ref/id/value as EHRID, "
 			+ "v/items[at0024,'Bezeichnung']/value, v/items [at0001,'Messwert'], "
@@ -58,11 +68,12 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 	// password
 	public static void main(String[] args) throws Exception
 	{
-		Bundle bundle = createStartResource();
-		ExampleStarter.forServer(args, MEDIC_1_FHIR_BASE_URL).startWith(bundle);
+		ExampleStarter starter = ExampleStarter.forServer(args, MEDIC_1_FHIR_BASE_URL);
+		Bundle bundle = createStartResource(starter);
+		starter.startWith(bundle);
 	}
 
-	private static Bundle createStartResource()
+	private static Bundle createStartResource(ExampleStarter starter)
 	{
 		Group group1 = createGroup("Group 1");
 		Group group2 = createGroup("Group 2");
@@ -110,21 +121,30 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 		researchStudy.addIdentifier().setSystem(NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER)
 				.setValue(UUID.randomUUID().toString());
 		researchStudy.setStatus(ResearchStudy.ResearchStudyStatus.ACTIVE);
+
 		researchStudy.addEnrollment().setReference(group1.getIdElement().getIdPart());
 		researchStudy.addEnrollment().setReference(group2.getIdElement().getIdPart());
+
+		researchStudy.addRelatedArtifact().setType(RelatedArtifact.RelatedArtifactType.DOCUMENTATION)
+				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_REQUEST_FORM_REFERENCE).setUrl(REQUEST_FORM_REFERENCE);
+		researchStudy.addRelatedArtifact().setType(RelatedArtifact.RelatedArtifactType.JUSTIFICATION)
+				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONTRACT_REFERENCE).setUrl(CONTRACT_REFERENCE);
+		researchStudy.addRelatedArtifact().setType(RelatedArtifact.RelatedArtifactType.JUSTIFICATION)
+				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_FEASIBILITY_QUERY_REFERENCE)
+				.setUrl(FEASIBILITY_REFERENCE);
 
 		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
 				.setValue(new Reference().setType(ResourceType.Organization.name())
 						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
 								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1)));
-		// researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
-		// new Reference().setType(ResourceType.Organization.name()).setIdentifier(
-		// new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
-		// .setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_2)));
-		// researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
-		// new Reference().setType(ResourceType.Organization.name()).setIdentifier(
-		// new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
-		// .setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_3)));
+		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
+				.setValue(new Reference().setType(ResourceType.Organization.name())
+						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
+								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_2)));
+		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
+				.setValue(new Reference().setType(ResourceType.Organization.name())
+						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
+								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_3)));
 		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_TTP)
 				.setValue(new Reference().setType(ResourceType.Organization.name())
 						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)

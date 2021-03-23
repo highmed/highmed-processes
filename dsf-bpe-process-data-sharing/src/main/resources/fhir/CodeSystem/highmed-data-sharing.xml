@@ -82,4 +82,19 @@
 		<display value="Participating MeDICs"/>
 		<definition value="Count of all MeDICs who participated in a data sharing request"/>
 	</concept>
+	<concept>
+		<code value="request-form-reference"/>
+		<display value="Request Form Reference"/>
+		<definition value="Url to a Binary resource containing the request form"/>
+	</concept>
+	<concept>
+		<code value="contract-reference"/>
+		<display value="Contract Reference"/>
+		<definition value="Url to a Binary resource containing the data usage contract"/>
+	</concept>
+	<concept>
+		<code value="feasibility-query-reference"/>
+		<display value="Feasibility Query Reference"/>
+		<definition value="Url to a completed Task resource containing the feasibility query result"/>
+	</concept>
 </CodeSystem> 

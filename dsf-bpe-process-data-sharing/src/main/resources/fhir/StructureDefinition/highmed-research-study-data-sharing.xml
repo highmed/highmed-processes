@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <tag>
+      <system value="http://highmed.org/fhir/CodeSystem/authorization-role" />
+      <code value="REMOTE" />
+    </tag>
+  </meta>
+  <url value="http://highmed.org/fhir/StructureDefinition/research-study-data-sharing" />
+  <version value="${version}" />
+  <name value="ResearchStudyDataSharing" />
+  <status value="unknown" />
+  <experimental value="false" />
+  <date value="2021-01-26" />
+  <fhirVersion value="4.0.1" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="ResearchStudy" />
+  <baseDefinition value="http://highmed.org/fhir/StructureDefinition/research-study" />
+  <derivation value="constraint" />
+  <differential>
+    <element id="ResearchStudy.relatedArtifact">
+      <path value="ResearchStudy.relatedArtifact" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="label" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+      <min value="3" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:request-form-reference">
+      <path value="ResearchStudy.relatedArtifact" />
+      <sliceName value="request-form-reference" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:request-form-reference.type">
+      <path value="ResearchStudy.relatedArtifact.type" />
+      <fixedCode value="documentation" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:request-form-reference.label">
+      <path value="ResearchStudy.relatedArtifact.label" />
+      <min value="1" />
+      <fixedString value="request-form-reference" />
+      <binding>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+      </binding>
+    </element>
+    <element id="ResearchStudy.relatedArtifact:request-form-reference.url">
+      <path value="ResearchStudy.relatedArtifact.url" />
+      <min value="1" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:contract-reference">
+      <path value="ResearchStudy.relatedArtifact" />
+      <sliceName value="contract-reference" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:contract-reference.type">
+      <path value="ResearchStudy.relatedArtifact.type" />
+      <fixedCode value="justification" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:contract-reference.label">
+      <path value="ResearchStudy.relatedArtifact.label" />
+      <min value="1" />
+      <fixedString value="contract-reference" />
+      <binding>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+      </binding>
+    </element>
+    <element id="ResearchStudy.relatedArtifact:contract-reference.url">
+      <path value="ResearchStudy.relatedArtifact.url" />
+      <min value="1" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:feasibility-query-reference">
+      <path value="ResearchStudy.relatedArtifact" />
+      <sliceName value="feasibility-query-reference" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:feasibility-query-reference.type">
+      <path value="ResearchStudy.relatedArtifact.type" />
+      <fixedCode value="justification" />
+    </element>
+    <element id="ResearchStudy.relatedArtifact:feasibility-query-reference.label">
+      <path value="ResearchStudy.relatedArtifact.label" />
+      <min value="1" />
+      <fixedString value="feasibility-query-reference" />
+      <binding>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+      </binding>
+    </element>
+    <element id="ResearchStudy.relatedArtifact:feasibility-query-reference.url">
+      <path value="ResearchStudy.relatedArtifact.url" />
+      <min value="1" />
+    </element>
+  </differential>
+</StructureDefinition>
