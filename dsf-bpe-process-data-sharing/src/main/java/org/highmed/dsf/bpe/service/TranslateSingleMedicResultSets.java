@@ -6,9 +6,7 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_M
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
-import static org.highmed.pseudonymization.crypto.AesGcmUtil.AES;
 
-import java.security.Key;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -122,7 +120,7 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 	private SecretKey getMdatKey(DelegateExecution execution)
 	{
 		byte[] encodedKey = (byte[]) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
-		return new SecretKeySpec(encodedKey, AES);
+		return new SecretKeySpec(encodedKey, "AES");
 	}
 
 	private RecordBloomFilterGenerator createRecordBloomFilterGenerator(DelegateExecution execution)
