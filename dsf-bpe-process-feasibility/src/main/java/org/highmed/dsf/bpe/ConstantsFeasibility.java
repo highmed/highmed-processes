@@ -20,7 +20,7 @@ public interface ConstantsFeasibility
 	// (if I already know the cohort size in my MeDIC)
 	int MIN_PARTICIPATING_MEDICS = 3;
 	int MIN_COHORT_DEFINITIONS = 1;
-	String FEASIBILITY_QUERY_PREFIX = "select count";
+	String FEASIBILITY_QUERY_PREFIX = "SELECT COUNT";
 
 	String CODESYSTEM_HIGHMED_FEASIBILITY = "http://highmed.org/fhir/CodeSystem/feasibility";
 	String CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY = "medic-correlation-key";

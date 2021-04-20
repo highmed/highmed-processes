@@ -17,7 +17,7 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class UpdateAllowListProcessPluginDefinition implements ProcessPluginDefinition
 {
-	public static final String VERSION = "0.4.0";
+	public static final String VERSION = "0.4.1";
 
 	@Override
 	public String getName()

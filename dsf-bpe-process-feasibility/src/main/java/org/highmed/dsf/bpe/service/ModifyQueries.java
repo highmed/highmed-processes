@@ -64,6 +64,6 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 	protected String replaceSelectCountWithSelectMpiId(String value)
 	{
 		// TODO Implement correct replacement for default id query
-		return value.replace("select count(e)", "select e" + ehrIdColumnPath + " as EHRID");
+		return value.replace("SELECT COUNT(e)", "SELECT e" + ehrIdColumnPath + " as EHRID");
 	}
 }
