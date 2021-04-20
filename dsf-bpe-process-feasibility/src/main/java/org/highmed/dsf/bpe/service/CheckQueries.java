@@ -50,7 +50,7 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 		Task leadingTask = getLeadingTaskFromExecutionVariables();
 		cohorts.forEach(group ->
 		{
-			String aqlQuery = groupHelper.extractAqlQuery(group).toLowerCase();
+			String aqlQuery = groupHelper.extractAqlQuery(group);
 
 			String groupId = group.getId();
 			if (!aqlQuery.startsWith(ConstantsFeasibility.FEASIBILITY_QUERY_PREFIX))
