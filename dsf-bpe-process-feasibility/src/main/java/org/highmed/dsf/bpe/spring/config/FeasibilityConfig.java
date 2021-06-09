@@ -27,8 +27,10 @@ import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
 import org.highmed.dsf.bpe.service.StoreCorrelationKeys;
 import org.highmed.dsf.bpe.service.StoreResults;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
+import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.mpi.client.MasterPatientIndexClient;
@@ -63,7 +65,13 @@ public class FeasibilityConfig
 	private OrganizationProvider organizationProvider;
 
 	@Autowired
+	private EndpointProvider endpointProvider;
+
+	@Autowired
 	private TaskHelper taskHelper;
+
+	@Autowired
+	private ReadAccessHelper readAccessHelper;
 
 	@Autowired
 	private GroupHelper groupHelper;
@@ -87,37 +95,40 @@ public class FeasibilityConfig
 	@Bean
 	public DownloadResearchStudyResource downloadResearchStudyResource()
 	{
-		return new DownloadResearchStudyResource(organizationProvider, fhirClientProvider, taskHelper);
+		return new DownloadResearchStudyResource(fhirClientProvider, taskHelper, readAccessHelper,
+				organizationProvider);
 	}
 
 	@Bean
 	public SelectRequestTargets selectRequestTargets()
 	{
-		return new SelectRequestTargets(fhirClientProvider, taskHelper, organizationProvider, bouncyCastleProvider());
+		return new SelectRequestTargets(fhirClientProvider, taskHelper, readAccessHelper, endpointProvider,
+				bouncyCastleProvider());
 	}
 
 	@Bean
 	public SendTtpRequest sendTtpRequest()
 	{
-		return new SendTtpRequest(fhirClientProvider, taskHelper, organizationProvider, fhirContext);
+		return new SendTtpRequest(fhirClientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 	}
 
 	@Bean
 	public SendMedicRequest sendMedicRequest()
 	{
-		return new SendMedicRequest(fhirClientProvider, taskHelper, organizationProvider, fhirContext);
+		return new SendMedicRequest(fhirClientProvider, taskHelper, readAccessHelper, organizationProvider,
+				fhirContext);
 	}
 
 	@Bean
 	public CheckMultiMedicResults checkMultiMedicResults()
 	{
-		return new CheckMultiMedicResults(fhirClientProvider, taskHelper);
+		return new CheckMultiMedicResults(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public HandleErrorMultiMedicResults handleErrorMultiMedicResults()
 	{
-		return new HandleErrorMultiMedicResults(fhirClientProvider, taskHelper);
+		return new HandleErrorMultiMedicResults(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	//
@@ -127,43 +138,44 @@ public class FeasibilityConfig
 	@Bean
 	public DownloadFeasibilityResources downloadFeasibilityResources()
 	{
-		return new DownloadFeasibilityResources(organizationProvider, fhirClientProvider, taskHelper);
+		return new DownloadFeasibilityResources(fhirClientProvider, taskHelper, readAccessHelper, organizationProvider);
 	}
 
 	@Bean
 	public CheckFeasibilityResources checkFeasibilityResources()
 	{
-		return new CheckFeasibilityResources(fhirClientProvider, taskHelper);
+		return new CheckFeasibilityResources(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public CheckQueries checkQueries()
 	{
-		return new CheckQueries(fhirClientProvider, taskHelper, groupHelper);
+		return new CheckQueries(fhirClientProvider, taskHelper, readAccessHelper, groupHelper);
 	}
 
 	@Bean
 	public ModifyQueries modifyQueries()
 	{
-		return new ModifyQueries(fhirClientProvider, taskHelper, ehrIdColumnPath);
+		return new ModifyQueries(fhirClientProvider, taskHelper, readAccessHelper, ehrIdColumnPath);
 	}
 
 	@Bean
 	public ExecuteQueries executeQueries()
 	{
-		return new ExecuteQueries(fhirClientProvider, openEhrClient(), taskHelper, organizationProvider);
+		return new ExecuteQueries(fhirClientProvider, openEhrClient(), taskHelper, readAccessHelper,
+				organizationProvider);
 	}
 
 	@Bean
 	public FilterQueryResultsByConsent filterQueryResultsByConsent()
 	{
-		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper);
+		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public GenerateCountFromIds generateCountFromIds()
 	{
-		return new GenerateCountFromIds(fhirClientProvider, taskHelper);
+		return new GenerateCountFromIds(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
@@ -181,8 +193,8 @@ public class FeasibilityConfig
 	@Bean
 	public GenerateBloomFilters generateBloomFilters()
 	{
-		return new GenerateBloomFilters(fhirClientProvider, taskHelper, ehrIdColumnPath, masterPatientIndexClient(),
-				objectMapper, bouncyCastleProvider());
+		return new GenerateBloomFilters(fhirClientProvider, taskHelper, readAccessHelper, ehrIdColumnPath,
+				masterPatientIndexClient(), objectMapper, bouncyCastleProvider());
 	}
 
 	@Bean
@@ -194,19 +206,20 @@ public class FeasibilityConfig
 	@Bean
 	public CheckSingleMedicResults checkSingleMedicResults()
 	{
-		return new CheckSingleMedicResults(fhirClientProvider, taskHelper);
+		return new CheckSingleMedicResults(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public SelectResponseTargetTtp selectResponseTargetTtp()
 	{
-		return new SelectResponseTargetTtp(fhirClientProvider, taskHelper, organizationProvider);
+		return new SelectResponseTargetTtp(fhirClientProvider, taskHelper, readAccessHelper, endpointProvider);
 	}
 
 	@Bean
 	public SendSingleMedicResults sendSingleMedicResults()
 	{
-		return new SendSingleMedicResults(fhirClientProvider, taskHelper, organizationProvider, fhirContext);
+		return new SendSingleMedicResults(fhirClientProvider, taskHelper, readAccessHelper, organizationProvider,
+				fhirContext);
 	}
 
 	//
@@ -216,19 +229,19 @@ public class FeasibilityConfig
 	@Bean
 	public StoreCorrelationKeys storeCorrelationKeys()
 	{
-		return new StoreCorrelationKeys(fhirClientProvider, taskHelper);
+		return new StoreCorrelationKeys(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public StoreResults storeResults()
 	{
-		return new StoreResults(fhirClientProvider, taskHelper, organizationProvider);
+		return new StoreResults(fhirClientProvider, taskHelper, readAccessHelper, organizationProvider);
 	}
 
 	@Bean
 	public DownloadResultSets downloadResultSets()
 	{
-		return new DownloadResultSets(fhirClientProvider, taskHelper, objectMapper);
+		return new DownloadResultSets(fhirClientProvider, taskHelper, readAccessHelper, objectMapper);
 	}
 
 	@Bean
@@ -240,36 +253,39 @@ public class FeasibilityConfig
 	@Bean
 	public ExecuteRecordLink executeRecordLink()
 	{
-		return new ExecuteRecordLink(fhirClientProvider, taskHelper, resultSetTranslatorFromMedicRbfOnly());
+		return new ExecuteRecordLink(fhirClientProvider, taskHelper, readAccessHelper,
+				resultSetTranslatorFromMedicRbfOnly());
 	}
 
 	@Bean
 	public CalculateMultiMedicResults calculateMultiMedicResults()
 	{
-		return new CalculateMultiMedicResults(fhirClientProvider, taskHelper);
+		return new CalculateMultiMedicResults(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public CheckTtpComputedMultiMedicResults checkTtpComputedMultiMedicResults()
 	{
-		return new CheckTtpComputedMultiMedicResults(fhirClientProvider, taskHelper);
+		return new CheckTtpComputedMultiMedicResults(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public SelectResponseTargetMedic selectResponseTargetMedic()
 	{
-		return new SelectResponseTargetMedic(fhirClientProvider, taskHelper, organizationProvider);
+		return new SelectResponseTargetMedic(fhirClientProvider, taskHelper, readAccessHelper, endpointProvider);
 	}
 
 	@Bean
 	public SendMultiMedicResults sendMultiMedicResults()
 	{
-		return new SendMultiMedicResults(fhirClientProvider, taskHelper, organizationProvider, fhirContext);
+		return new SendMultiMedicResults(fhirClientProvider, taskHelper, readAccessHelper, organizationProvider,
+				fhirContext);
 	}
 
 	@Bean
 	public SendMultiMedicErrors sendMultiMedicErrors()
 	{
-		return new SendMultiMedicErrors(fhirClientProvider, taskHelper, organizationProvider, fhirContext);
+		return new SendMultiMedicErrors(fhirClientProvider, taskHelper, readAccessHelper, organizationProvider,
+				fhirContext);
 	}
 }

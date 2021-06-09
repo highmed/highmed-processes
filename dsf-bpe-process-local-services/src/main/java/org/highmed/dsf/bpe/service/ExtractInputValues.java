@@ -17,6 +17,7 @@ import org.highmed.dsf.bpe.ConstantsFeasibility;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.BloomFilterConfig;
 import org.highmed.dsf.bpe.variables.BloomFilterConfigValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.FhirResourcesListValues;
@@ -28,9 +29,10 @@ import org.springframework.beans.factory.InitializingBean;
 
 public class ExtractInputValues extends AbstractServiceDelegate implements InitializingBean
 {
-	public ExtractInputValues(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public ExtractInputValues(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.BloomFilterConfig;
 import org.highmed.dsf.bpe.variables.BloomFilterConfigValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -46,10 +47,11 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 
 	private final OrganizationProvider organizationProvider;
 
-	public DownloadFeasibilityResources(OrganizationProvider organizationProvider,
-			FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public DownloadFeasibilityResources(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.organizationProvider = organizationProvider;
 	}
 
@@ -57,6 +59,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+
 		Objects.requireNonNull(organizationProvider, "organizationProvider");
 	}
 
@@ -110,7 +113,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 		}
 		else
 		{
-			return getFhirWebserviceClientProvider().getRemoteWebserviceClient(researchStudyId.getBaseUrl());
+			return getFhirWebserviceClientProvider().getWebserviceClient(researchStudyId.getBaseUrl());
 		}
 	}
 

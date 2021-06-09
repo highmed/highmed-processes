@@ -17,6 +17,7 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Task;
@@ -27,9 +28,10 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckTtpComputedMultiMedicResults.class);
 
-	public CheckTtpComputedMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CheckTtpComputedMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override
