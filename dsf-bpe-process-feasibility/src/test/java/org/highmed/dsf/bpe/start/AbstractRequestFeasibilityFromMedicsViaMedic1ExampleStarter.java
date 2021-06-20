@@ -98,7 +98,6 @@ public abstract class AbstractRequestFeasibilityFromMedicsViaMedic1ExampleStarte
 				new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression("SELECT COUNT(e) FROM EHR e"));
 		group.setName(name);
 
-		readAccessHelper.addLocal(group);
 		Arrays.stream(medicIdentifier).forEach(i -> readAccessHelper.addOrganization(group, i));
 		readAccessHelper.addOrganization(group, ttpIdentifier);
 
@@ -126,7 +125,6 @@ public abstract class AbstractRequestFeasibilityFromMedicsViaMedic1ExampleStarte
 				.setValue(new Reference().setType(ResourceType.Organization.name()).setIdentifier(new Identifier()
 						.setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue(ttpIdentifier)));
 
-		readAccessHelper.addLocal(researchStudy);
 		Arrays.stream(medicIdentifier).forEach(i -> readAccessHelper.addOrganization(researchStudy, i));
 		readAccessHelper.addOrganization(researchStudy, ttpIdentifier);
 

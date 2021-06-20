@@ -154,7 +154,6 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 	{
 		byte[] content = serializeResultSet(resultSet);
 		Binary binary = new Binary().setContentType(OPENEHR_MIMETYPE_JSON).setData(content);
-		getReadAccessHelper().addLocal(binary);
 		getReadAccessHelper().addOrganization(binary, ttpIdentifier);
 
 		IdType created = createBinaryResource(binary);
