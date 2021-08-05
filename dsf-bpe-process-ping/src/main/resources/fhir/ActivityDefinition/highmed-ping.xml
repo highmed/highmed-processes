@@ -63,6 +63,6 @@
 			<value value="pmo@highmed.org" />
 		</telecom>
 	</contact>
-	<description value="Process to send PING messages to remote Organizations and to receive corresponding PONG message" />
+	<description value="Process to send PING messages to remote Organizations and to receive corresponding PONG messages" />
 	<kind value="Task" />
 </ActivityDefinition>
