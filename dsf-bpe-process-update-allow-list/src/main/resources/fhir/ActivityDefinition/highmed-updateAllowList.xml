@@ -17,7 +17,7 @@
 				<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization-organization">
 					<valueIdentifier>
 						<system value="http://highmed.org/sid/organization-identifier" />
-						<value value="${org.highmed.dsf.bpe.allowListOrganization:hs-heilbronn.de}" />
+						<value value="${org.highmed.dsf.bpe.allow.list.organization:hs-heilbronn.de}" />
 					</valueIdentifier>
 				</extension>
 				<system value="http://highmed.org/fhir/CodeSystem/process-authorization" />
@@ -29,7 +29,7 @@
 				<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization-organization">
 					<valueIdentifier>
 						<system value="http://highmed.org/sid/organization-identifier" />
-						<value value="${org.highmed.dsf.bpe.allowListOrganization:hs-heilbronn.de}" />
+						<value value="${org.highmed.dsf.bpe.allow.list.organization:hs-heilbronn.de}" />
 					</valueIdentifier>
 				</extension>
 				<system value="http://highmed.org/fhir/CodeSystem/process-authorization" />
