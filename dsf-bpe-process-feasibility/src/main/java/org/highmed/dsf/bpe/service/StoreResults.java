@@ -17,6 +17,7 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -30,9 +31,9 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	private final OrganizationProvider organizationProvider;
 
 	public StoreResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 
 		this.organizationProvider = organizationProvider;
 	}
@@ -97,5 +98,4 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 					}).collect(Collectors.toList());
 		}
 	}
-
 }

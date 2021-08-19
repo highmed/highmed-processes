@@ -13,6 +13,7 @@ import org.highmed.dsf.fhir.resources.CodeSystemResource;
 import org.highmed.dsf.fhir.resources.ResourceProvider;
 import org.highmed.dsf.fhir.resources.StructureDefinitionResource;
 import org.highmed.dsf.fhir.resources.ValueSetResource;
+import org.springframework.core.env.PropertyResolver;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -54,7 +55,8 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 	}
 
 	@Override
-	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader)
+	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
+			PropertyResolver resolver)
 	{
 		var aL = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-localServicesIntegration.xml");
 		var sTL = StructureDefinitionResource
@@ -66,9 +68,9 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 				"http://highmed.org/fhir/CodeSystem/feasibility", DEPENDENCY_FEASIBILITY_VERSION);
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
-				.of("localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, vF, cF));
+				.of("highmedorg_localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, vF, cF));
 
 		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
-				classLoader, resourcesByProcessKeyAndVersion);
+				classLoader, resolver, resourcesByProcessKeyAndVersion);
 	}
 }

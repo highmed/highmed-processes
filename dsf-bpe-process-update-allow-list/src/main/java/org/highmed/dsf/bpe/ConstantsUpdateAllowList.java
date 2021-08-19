@@ -6,7 +6,7 @@ import static org.highmed.dsf.bpe.UpdateAllowListProcessPluginDefinition.VERSION
 public interface ConstantsUpdateAllowList
 {
 	String CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST = "http://highmed.org/fhir/CodeSystem/update-allow-list";
-	String CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST = "highmed_allow_list";
+	String CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST = "allow_list";
 
 	String PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST = "http://highmed.org/fhir/StructureDefinition/task-download-allow-list";
 	String PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST_PROCESS_URI = PROCESS_HIGHMED_URI_BASE + "downloadAllowList/";

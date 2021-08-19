@@ -12,6 +12,7 @@ import javax.ws.rs.WebApplicationException;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.fhir.client.FhirWebserviceClient;
@@ -31,9 +32,11 @@ public class DownloadAllowList extends AbstractServiceDelegate
 
 	private final FhirContext context;
 
-	public DownloadAllowList(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper, FhirContext context)
+	public DownloadAllowList(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper, FhirContext context)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.context = context;
 	}
 
@@ -50,7 +53,7 @@ public class DownloadAllowList extends AbstractServiceDelegate
 		Task task = getCurrentTaskFromExecutionVariables();
 		IdType bundleId = getBundleId(task);
 		FhirWebserviceClient requesterClient = getFhirWebserviceClientProvider()
-				.getRemoteWebserviceClient(bundleId.getBaseUrl());
+				.getWebserviceClient(bundleId.getBaseUrl());
 
 		Bundle bundle;
 		try

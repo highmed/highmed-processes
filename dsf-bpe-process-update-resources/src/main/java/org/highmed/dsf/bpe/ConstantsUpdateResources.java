@@ -5,6 +5,8 @@ import static org.highmed.dsf.bpe.UpdateResourcesProcessPluginDefinition.VERSION
 
 public interface ConstantsUpdateResources
 {
+	String BPMN_EXECUTION_VARIABLE_BUNDLE = "bundle";
+
 	String CODESYSTEM_HIGHMED_UPDATE_RESOURCE = "http://highmed.org/fhir/CodeSystem/update-resources";
 	String CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE = "bundle-reference";
 	String CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_ORGANIZATION_IDENTIFIER_SEARCH_PARAMETER = "organization-identifier-search-parameter";

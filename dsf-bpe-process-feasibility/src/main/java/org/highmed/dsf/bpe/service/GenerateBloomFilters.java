@@ -1,11 +1,11 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.OPENEHR_MIMETYPE_JSON;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI;
+import static org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnlyImpl.FILTER_ON_IDAT_NOT_FOUND_EXCEPTION;
 
 import java.security.Key;
 import java.util.List;
@@ -19,6 +19,7 @@ import org.highmed.dsf.bpe.variables.BloomFilterConfig;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.mpi.client.MasterPatientIndexClient;
@@ -32,7 +33,6 @@ import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnly;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnlyImpl;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
@@ -58,10 +58,11 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 	private final BouncyCastleProvider bouncyCastleProvider;
 
 	public GenerateBloomFilters(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			String ehrIdColumnPath, MasterPatientIndexClient masterPatientIndexClient, ObjectMapper openEhrObjectMapper,
+			ReadAccessHelper readAccessHelper, String ehrIdColumnPath,
+			MasterPatientIndexClient masterPatientIndexClient, ObjectMapper openEhrObjectMapper,
 			BouncyCastleProvider bouncyCastleProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 
 		this.ehrIdColumnPath = ehrIdColumnPath;
 		this.masterPatientIndexClient = masterPatientIndexClient;
@@ -116,7 +117,7 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 		return new ResultSetTranslatorToTtpRbfOnlyImpl(ehrIdColumnPath,
 				createRecordBloomFilterGenerator(bloomFilterConfig.getPermutationSeed(),
 						bloomFilterConfig.getHmacSha2Key(), bloomFilterConfig.getHmacSha3Key()),
-				masterPatientIndexClient, ResultSetTranslatorToTtpRbfOnlyImpl.FILTER_ON_IDAT_NOT_FOUND_EXCEPTION);
+				masterPatientIndexClient, FILTER_ON_IDAT_NOT_FOUND_EXCEPTION);
 	}
 
 	protected RecordBloomFilterGenerator createRecordBloomFilterGenerator(long permutationSeed, Key hmacSha2Key,
@@ -149,14 +150,11 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 		}
 	}
 
-	protected String saveResultSetAsBinaryForTtp(ResultSet resultSet, String securityIdentifier)
+	protected String saveResultSetAsBinaryForTtp(ResultSet resultSet, String ttpIdentifier)
 	{
 		byte[] content = serializeResultSet(resultSet);
-		Reference securityContext = new Reference();
-		securityContext.setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue(securityIdentifier);
-		Binary binary = new Binary().setContentType(OPENEHR_MIMETYPE_JSON).setSecurityContext(securityContext)
-				.setData(content);
+		Binary binary = new Binary().setContentType(OPENEHR_MIMETYPE_JSON).setData(content);
+		getReadAccessHelper().addOrganization(binary, ttpIdentifier);
 
 		IdType created = createBinaryResource(binary);
 		return new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl(), ResourceType.Binary.name(),

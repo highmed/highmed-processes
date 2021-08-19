@@ -16,6 +16,7 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.fhir.client.FhirWebserviceClient;
@@ -33,9 +34,9 @@ public class DownloadResultSets extends AbstractServiceDelegate
 	private final ObjectMapper openEhrObjectMapper;
 
 	public DownloadResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ObjectMapper openEhrObjectMapper)
+			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 
 		this.openEhrObjectMapper = openEhrObjectMapper;
 	}
@@ -68,7 +69,7 @@ public class DownloadResultSets extends AbstractServiceDelegate
 	private FeasibilityQueryResult download(FeasibilityQueryResult result)
 	{
 		IdType id = new IdType(result.getResultSetUrl());
-		FhirWebserviceClient client = getFhirWebserviceClientProvider().getRemoteWebserviceClient(id.getBaseUrl());
+		FhirWebserviceClient client = getFhirWebserviceClientProvider().getWebserviceClient(id.getBaseUrl());
 
 		InputStream binary = readBinaryResource(client, id.getIdPart());
 		ResultSet resultSet = deserializeResultSet(binary);
