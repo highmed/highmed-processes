@@ -10,7 +10,7 @@
 			<valueString value="localServicesIntegrationMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-local-services-integration" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-local-services-integration|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

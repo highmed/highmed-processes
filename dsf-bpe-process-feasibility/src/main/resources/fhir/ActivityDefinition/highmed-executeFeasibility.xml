@@ -10,7 +10,7 @@
 			<valueString value="executeFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-execute-feasibility" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-execute-feasibility|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

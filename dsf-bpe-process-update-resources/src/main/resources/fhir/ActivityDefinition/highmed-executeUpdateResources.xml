@@ -10,7 +10,7 @@
 			<valueString value="executeUpdateResourcesMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-execute-update-resources" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-execute-update-resources|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

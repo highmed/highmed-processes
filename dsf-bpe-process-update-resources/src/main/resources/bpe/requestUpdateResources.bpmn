@@ -12,7 +12,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeUpdateResources/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">executeUpdateResourcesMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-update-resources</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-update-resources|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1u4zxix</bpmn:incoming>

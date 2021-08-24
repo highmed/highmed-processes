@@ -10,7 +10,7 @@
 			<valueString value="updateAllowListMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-update-allow-list" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-update-allow-list|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

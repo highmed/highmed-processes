@@ -10,7 +10,7 @@
 			<valueString value="requestFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-feasibility" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-feasibility|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -58,7 +58,7 @@
 			<valueString value="resultMultiMedicFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -106,7 +106,7 @@
 			<valueString value="errorMultiMedicFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

@@ -10,7 +10,7 @@
 			<valueString value="pingMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-ping" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-ping|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

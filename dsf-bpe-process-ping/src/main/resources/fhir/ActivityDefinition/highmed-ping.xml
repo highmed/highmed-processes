@@ -10,7 +10,7 @@
 			<valueString value="startPingProcessMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping-process" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping-process|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -30,7 +30,7 @@
 			<valueString value="pongMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-pong" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-pong|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
