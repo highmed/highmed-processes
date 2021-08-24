@@ -22,7 +22,7 @@
 	<content value="complete" />
 	<concept>
 		<code value="allow_list" />
-		<display value="HiGHmed Allow List" />
+		<display value="Allow List" />
 		<definition value="Allow list identifying organizations" />
 	</concept>
 </CodeSystem> 
