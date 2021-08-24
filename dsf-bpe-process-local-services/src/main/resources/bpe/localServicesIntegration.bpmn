@@ -92,14 +92,6 @@
       <bpmn:outgoing>SequenceFlow_1rmqv20</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="EndEvent">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="messageName">resultSingleMedicFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="versionTag">0.5.0</camunda:inputParameter>
-          <camunda:inputParameter name="processDefinitionKey">computeFeasibility</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-feasibility|0.5.0</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0m4rhl9</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0m4rhl9" sourceRef="storeResult" targetRef="EndEvent" />
