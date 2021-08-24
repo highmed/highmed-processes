@@ -1,5 +1,8 @@
 package org.highmed.dsf.bpe.service;
 
+import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -7,13 +10,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsFeasibility;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.pseudonymization.domain.PersonWithMdat;
@@ -31,9 +34,9 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 	private final ResultSetTranslatorFromMedicRbfOnly translator;
 
 	public ExecuteRecordLink(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ResultSetTranslatorFromMedicRbfOnly translator)
+			ReadAccessHelper readAccessHelper, ResultSetTranslatorFromMedicRbfOnly translator)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 
 		this.translator = translator;
 	}
@@ -50,7 +53,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
-				.getVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		Map<String, List<FeasibilityQueryResult>> byCohortId = results.getResults().stream()
 				.collect(Collectors.groupingBy(FeasibilityQueryResult::getCohortId));
@@ -60,7 +63,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 		List<FinalFeasibilityQueryResult> matchedResults = byCohortId.entrySet().stream()
 				.map(e -> match(matcher, e.getKey(), e.getValue())).collect(Collectors.toList());
 
-		execution.setVariable(ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS,
 				FinalFeasibilityQueryResultsValues.create(new FinalFeasibilityQueryResults(matchedResults)));
 	}
 

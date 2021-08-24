@@ -42,10 +42,10 @@ public class TaskProfileTest
 
 	@ClassRule
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION,
-			Arrays.asList("highmed-task-base-0.4.0.xml", "highmed-task-start-ping-process.xml", "highmed-task-ping.xml",
+			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-task-start-ping-process.xml", "highmed-task-ping.xml",
 					"highmed-task-pong.xml"),
-			Arrays.asList("highmed-authorization-role-0.4.0.xml", "highmed-bpmn-message-0.4.0.xml"),
-			Arrays.asList("highmed-authorization-role-0.4.0.xml", "highmed-bpmn-message-0.4.0.xml"));
+			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml"),
+			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
 			validationRule.getValidationSupport());

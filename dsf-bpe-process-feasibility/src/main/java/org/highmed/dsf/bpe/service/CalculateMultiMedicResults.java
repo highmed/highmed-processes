@@ -14,14 +14,16 @@ import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 
 public class CalculateMultiMedicResults extends AbstractServiceDelegate
 {
-	public CalculateMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CalculateMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override
@@ -41,9 +43,10 @@ public class CalculateMultiMedicResults extends AbstractServiceDelegate
 		Map<String, List<FeasibilityQueryResult>> byCohortId = results.stream()
 				.collect(Collectors.groupingBy(FeasibilityQueryResult::getCohortId));
 
-		return byCohortId.entrySet().stream().map(e -> new FinalFeasibilityQueryResult(e.getKey(),
-				toInt(e.getValue().stream().filter(r -> r.getCohortSize() > 0).count()),
-				toInt(e.getValue().stream().mapToLong(FeasibilityQueryResult::getCohortSize).sum())))
+		return byCohortId.entrySet().stream()
+				.map(e -> new FinalFeasibilityQueryResult(e.getKey(),
+						toInt(e.getValue().stream().filter(r -> r.getCohortSize() > 0).count()),
+						toInt(e.getValue().stream().mapToLong(FeasibilityQueryResult::getCohortSize).sum())))
 				.collect(Collectors.toList());
 	}
 

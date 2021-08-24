@@ -17,6 +17,7 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Task;
@@ -27,9 +28,10 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckTtpComputedMultiMedicResults.class);
 
-	public CheckTtpComputedMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CheckTtpComputedMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override
@@ -61,15 +63,16 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 		String correlationKey = getTaskHelper().getFirstInputParameterStringValue(leadingTask, CODESYSTEM_HIGHMED_BPMN,
 				CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY).orElse(null);
 
-		return results.getResults().stream().filter(result -> {
+		return results.getResults().stream().filter(result ->
+		{
 			if (result.getParticipatingMedics() < MIN_PARTICIPATING_MEDICS)
 			{
 				logger.warn("Removed result with cohort id='{}' from feasibility request with task-id='{}', "
-								+ "business-key='{}' and correlation-key='{}' because of not enough participating MeDICs",
+						+ "business-key='{}' and correlation-key='{}' because of not enough participating MeDICs",
 						result.getCohortId(), taskId, businessKey, correlationKey);
 
-				leadingTask.getOutput().add(getTaskHelper()
-						.createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
+				leadingTask.getOutput()
+						.add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
 								"Removed result with cohort id='" + result.getCohortId()
 										+ "' from feasibility request because of not enough participating MeDICs"));
 
@@ -90,12 +93,13 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 
 		if (results.size() < 1)
 		{
-			logger.warn("Did not receive enough results from participating MeDICs for any cohort definition in the "
-							+ "feasibility request with task-id='{}', business-key='{}' " + "and correlation-key='{}'", taskId,
-					businessKey, correlationKey);
+			logger.warn(
+					"Did not receive enough results from participating MeDICs for any cohort definition in the "
+							+ "feasibility request with task-id='{}', business-key='{}' " + "and correlation-key='{}'",
+					taskId, businessKey, correlationKey);
 
-			leadingTask.getOutput().add(getTaskHelper()
-					.createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
+			leadingTask.getOutput()
+					.add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
 							"Did not receive enough results from participating MeDICs for any cohort definition"));
 
 			return false;

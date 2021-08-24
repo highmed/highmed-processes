@@ -13,12 +13,15 @@ import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
+import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.Targets;
 import org.highmed.dsf.fhir.variables.TargetsValues;
+import org.hl7.fhir.r4.model.Endpoint;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
@@ -33,13 +36,16 @@ public class SelectResourceAndTargets extends AbstractServiceDelegate implements
 	private static final Pattern BUNDLE_ID_PATTERN = Pattern.compile(BUNDLE_ID_PATTERN_STRING);
 
 	private final OrganizationProvider organizationProvider;
+	private final EndpointProvider endpointProvider;
 
 	public SelectResourceAndTargets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider,
+			EndpointProvider endpointProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 
 		this.organizationProvider = organizationProvider;
+		this.endpointProvider = endpointProvider;
 	}
 
 	@Override
@@ -54,9 +60,9 @@ public class SelectResourceAndTargets extends AbstractServiceDelegate implements
 	public void doExecute(DelegateExecution execution) throws Exception
 	{
 		Task task = getCurrentTaskFromExecutionVariables();
-		List<Reference> references = getTaskHelper()
-				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_UPDATE_RESOURCE,
-						CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE).collect(Collectors.toList());
+		List<Reference> references = getTaskHelper().getInputParameterReferenceValues(task,
+				CODESYSTEM_HIGHMED_UPDATE_RESOURCE, CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE)
+				.collect(Collectors.toList());
 
 		if (references.size() != 1)
 		{
@@ -80,8 +86,10 @@ public class SelectResourceAndTargets extends AbstractServiceDelegate implements
 
 		List<Target> targets = targetIdentifierSearchParameters.stream()
 				.flatMap(organizationProvider::searchRemoteOrganizationsIdentifiers)
-				.map(identifier -> Target.createUniDirectionalTarget(identifier.getValue()))
-				.collect(Collectors.toList());
+				.map(identifier -> Target.createUniDirectionalTarget(identifier.getValue(),
+						endpointProvider.getFirstDefaultEndpoint(identifier.getValue()).filter(Endpoint::hasAddress)
+								.map(Endpoint::getAddress).orElse(null)))
+				.filter(t -> t.getTargetEndpointUrl() != null).collect(Collectors.toList());
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(new Targets(targets)));
 	}
 }

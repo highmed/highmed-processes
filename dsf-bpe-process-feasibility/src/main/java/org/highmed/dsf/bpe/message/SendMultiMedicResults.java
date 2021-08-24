@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResults;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.AbstractTaskMessageSend;
@@ -29,9 +30,9 @@ import ca.uhn.fhir.context.FhirContext;
 public class SendMultiMedicResults extends AbstractTaskMessageSend
 {
 	public SendMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, FhirContext fhirContext)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext)
 	{
-		super(clientProvider, taskHelper, organizationProvider, fhirContext);
+		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 	}
 
 	@Override
@@ -48,16 +49,12 @@ public class SendMultiMedicResults extends AbstractTaskMessageSend
 
 	private Stream<ParameterComponent> toInputs(FinalFeasibilityQueryResult result)
 	{
-		ParameterComponent input1 = getTaskHelper()
-				.createInputUnsignedInt(CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_MULTI_MEDIC_RESULT,
-						result.getCohortSize());
+		ParameterComponent input1 = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_FEASIBILITY,
+				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_MULTI_MEDIC_RESULT, result.getCohortSize());
 		input1.addExtension(createCohortIdExtension(result.getCohortId()));
 
-		ParameterComponent input2 = getTaskHelper()
-				.createInputUnsignedInt(CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDICS_COUNT,
-						result.getParticipatingMedics());
+		ParameterComponent input2 = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_FEASIBILITY,
+				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDICS_COUNT, result.getParticipatingMedics());
 		input2.addExtension(createCohortIdExtension(result.getCohortId()));
 
 		return Stream.of(input1, input2);
@@ -79,10 +76,10 @@ public class SendMultiMedicResults extends AbstractTaskMessageSend
 			String taskUrl = new Reference(new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl() + "/Task",
 					task.getIdElement().getIdPart())).getReference();
 
-			Task.ParameterComponent input = getTaskHelper()
-					.createInput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
-							"Errors occurred for missing cohorts while calculating their multi medic feasibility "
-									+ "result, see task with url='" + taskUrl + "'");
+			Task.ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_BPMN,
+					CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
+					"Errors occurred for missing cohorts while calculating their multi medic feasibility "
+							+ "result, see task with url='" + taskUrl + "'");
 			return Stream.of(input);
 		}
 
@@ -91,8 +88,9 @@ public class SendMultiMedicResults extends AbstractTaskMessageSend
 
 	private boolean hasErrorOutput(List<Task.TaskOutputComponent> outputs)
 	{
-		return outputs.stream().anyMatch(output -> output.getType().getCoding().stream().anyMatch(
-				coding -> coding.getSystem().equals(CODESYSTEM_HIGHMED_BPMN) && coding.getCode()
-						.equals(CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR)));
+		return outputs.stream()
+				.anyMatch(output -> output.getType().getCoding().stream()
+						.anyMatch(coding -> coding.getSystem().equals(CODESYSTEM_HIGHMED_BPMN)
+								&& coding.getCode().equals(CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR)));
 	}
 }

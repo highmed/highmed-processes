@@ -2,8 +2,8 @@ package org.highmed.dsf.bpe.spring.config;
 
 import org.highmed.dsf.bpe.service.DownloadAllowList;
 import org.highmed.dsf.bpe.service.UpdateAllowList;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
-import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +18,10 @@ public class UpdateAllowListConfig
 	private FhirWebserviceClientProvider clientProvider;
 
 	@Autowired
-	private OrganizationProvider organizationProvider;
+	private TaskHelper taskHelper;
 
 	@Autowired
-	private TaskHelper taskHelper;
+	private ReadAccessHelper readAccessHelper;
 
 	@Autowired
 	private FhirContext fhirContext;
@@ -29,12 +29,12 @@ public class UpdateAllowListConfig
 	@Bean
 	public UpdateAllowList updateAllowList()
 	{
-		return new UpdateAllowList(organizationProvider, clientProvider, taskHelper);
+		return new UpdateAllowList(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public DownloadAllowList downloadAllowList()
 	{
-		return new DownloadAllowList(clientProvider, taskHelper, fhirContext);
+		return new DownloadAllowList(clientProvider, taskHelper, readAccessHelper, fhirContext);
 	}
 }

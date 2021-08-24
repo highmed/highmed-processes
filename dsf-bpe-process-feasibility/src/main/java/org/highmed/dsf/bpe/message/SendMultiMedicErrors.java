@@ -6,6 +6,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ER
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.AbstractTaskMessageSend;
@@ -20,9 +21,9 @@ import ca.uhn.fhir.context.FhirContext;
 public class SendMultiMedicErrors extends AbstractTaskMessageSend
 {
 	public SendMultiMedicErrors(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, FhirContext fhirContext)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext)
 	{
-		super(clientProvider, taskHelper, organizationProvider, fhirContext);
+		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 	}
 
 	@Override
@@ -30,13 +31,13 @@ public class SendMultiMedicErrors extends AbstractTaskMessageSend
 	{
 		Task task = getLeadingTaskFromExecutionVariables();
 
-		String taskUrl = new Reference(new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl() + "/Task" ,  task.getIdElement().getIdPart()))
-				.getReference();
+		String taskUrl = new Reference(new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl() + "/Task",
+				task.getIdElement().getIdPart())).getReference();
 
-		Task.ParameterComponent input = getTaskHelper()
-				.createInput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
-						"An error occurred while calculating the multi medic feasibility result for "
-								+ "all defined cohorts, see task with url='" + taskUrl + "'");
+		Task.ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_BPMN,
+				CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
+				"An error occurred while calculating the multi medic feasibility result for "
+						+ "all defined cohorts, see task with url='" + taskUrl + "'");
 		return Stream.of(input);
 	}
 }

@@ -12,12 +12,13 @@ import org.highmed.dsf.fhir.resources.CodeSystemResource;
 import org.highmed.dsf.fhir.resources.ResourceProvider;
 import org.highmed.dsf.fhir.resources.StructureDefinitionResource;
 import org.highmed.dsf.fhir.resources.ValueSetResource;
+import org.springframework.core.env.PropertyResolver;
 
 import ca.uhn.fhir.context.FhirContext;
 
 public class UpdateResourcesProcessPluginDefinition implements ProcessPluginDefinition
 {
-	public static final String VERSION = "0.4.1";
+	public static final String VERSION = "0.5.0";
 
 	@Override
 	public String getName()
@@ -44,7 +45,8 @@ public class UpdateResourcesProcessPluginDefinition implements ProcessPluginDefi
 	}
 
 	@Override
-	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader)
+	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
+			PropertyResolver resolver)
 	{
 		var aExec = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeUpdateResources.xml");
 		var aReq = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-requestUpdateResources.xml");
@@ -55,12 +57,11 @@ public class UpdateResourcesProcessPluginDefinition implements ProcessPluginDefi
 				.file("fhir/StructureDefinition/highmed-task-request-update-resources.xml");
 		var v = ValueSetResource.file("fhir/ValueSet/highmed-update-resources.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
-				.of("executeUpdateResources/" + VERSION, Arrays.asList(aExec, c, sExec, v),
-						"requestUpdateResources/" + VERSION, Arrays.asList(aReq, c, sReq, v));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
+				"highmedorg_executeUpdateResources/" + VERSION, Arrays.asList(aExec, c, sExec, v),
+				"highmedorg_requestUpdateResources/" + VERSION, Arrays.asList(aReq, c, sReq, v));
 
-		return ResourceProvider
-				.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader,
-						resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
+				classLoader, resolver, resourcesByProcessKeyAndVersion);
 	}
 }

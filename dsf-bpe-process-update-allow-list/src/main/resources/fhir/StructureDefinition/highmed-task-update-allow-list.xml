@@ -1,8 +1,8 @@
 <StructureDefinition xmlns="http://hl7.org/fhir">
   <meta>
     <tag>
-      <system value="http://highmed.org/fhir/CodeSystem/authorization-role" />
-      <code value="REMOTE" />
+      <system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+      <code value="ALL" />
     </tag>
   </meta>
   <url value="http://highmed.org/fhir/StructureDefinition/task-update-allow-list" />
@@ -12,7 +12,7 @@
   <!-- status managed by bpe -->
   <status value="unknown" />
   <experimental value="false" />
-  <date value="2021-04-20" />
+  <date value="2021-08-24" />
   <fhirVersion value="4.0.1" />
   <kind value="resource" />
   <abstract value="false" />
@@ -86,7 +86,7 @@
     <element id="Task.output:allowList.type.coding.code">
       <path value="Task.output.type.coding.code" />
       <min value="1" />
-      <fixedCode value="highmed_allow_list" />
+      <fixedCode value="allow_list" />
     </element>
     <element id="Task.output:allowList.value[x]">
       <path value="Task.output.value[x]" />

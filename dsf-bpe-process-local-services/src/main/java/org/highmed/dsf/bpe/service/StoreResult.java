@@ -7,6 +7,7 @@ import org.highmed.dsf.bpe.ConstantsFeasibility;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Extension;
@@ -20,9 +21,10 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 {
 	private static final Logger logger = LoggerFactory.getLogger(StoreResult.class);
 
-	public StoreResult(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public StoreResult(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override
@@ -44,29 +46,29 @@ public class StoreResult extends AbstractServiceDelegate implements Initializing
 	{
 		if (result.isCohortSizeResult())
 		{
-			Task.TaskOutputComponent output = getTaskHelper()
-					.createOutputUnsignedInt(ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-							ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT,
-							result.getCohortSize());
+			Task.TaskOutputComponent output = getTaskHelper().createOutputUnsignedInt(
+					ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
+					ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT,
+					result.getCohortSize());
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
 		}
 		else if (result.isIdResultSetUrlResult())
 		{
-			Task.TaskOutputComponent output = getTaskHelper()
-					.createOutput(ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
-							ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE,
-							new Reference(result.getResultSetUrl()));
+			Task.TaskOutputComponent output = getTaskHelper().createOutput(
+					ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY,
+					ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE,
+					new Reference(result.getResultSetUrl()));
 			output.addExtension(createCohortIdExtension(result.getCohortId()));
 			task.addOutput(output);
 		}
 		else
 		{
-			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-					.getCohortId());
+			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+					+ result.getCohortId());
 			throw new RuntimeException(
-					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-							.getCohortId());
+					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+							+ result.getCohortId());
 		}
 	}
 

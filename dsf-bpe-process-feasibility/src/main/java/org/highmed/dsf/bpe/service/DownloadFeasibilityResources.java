@@ -23,6 +23,7 @@ import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.BloomFilterConfig;
 import org.highmed.dsf.bpe.variables.BloomFilterConfigValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -46,10 +47,11 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 
 	private final OrganizationProvider organizationProvider;
 
-	public DownloadFeasibilityResources(OrganizationProvider organizationProvider,
-			FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public DownloadFeasibilityResources(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.organizationProvider = organizationProvider;
 	}
 
@@ -57,6 +59,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+
 		Objects.requireNonNull(organizationProvider, "organizationProvider");
 	}
 
@@ -94,23 +97,23 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 
 	private IdType getResearchStudyId(Task task)
 	{
-		Reference researchStudyReference = getTaskHelper()
-				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE).findFirst().get();
+		Reference researchStudyReference = getTaskHelper().getInputParameterReferenceValues(task,
+				CODESYSTEM_HIGHMED_FEASIBILITY, CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE)
+				.findFirst().get();
 
 		return new IdType(researchStudyReference.getReference());
 	}
 
 	private FhirWebserviceClient getWebserviceClient(IdType researchStudyId)
 	{
-		if (researchStudyId.getBaseUrl() == null || researchStudyId.getBaseUrl()
-				.equals(getFhirWebserviceClientProvider().getLocalBaseUrl()))
+		if (researchStudyId.getBaseUrl() == null
+				|| researchStudyId.getBaseUrl().equals(getFhirWebserviceClientProvider().getLocalBaseUrl()))
 		{
 			return getFhirWebserviceClientProvider().getLocalWebserviceClient();
 		}
 		else
 		{
-			return getFhirWebserviceClientProvider().getRemoteWebserviceClient(researchStudyId.getBaseUrl());
+			return getFhirWebserviceClientProvider().getWebserviceClient(researchStudyId.getBaseUrl());
 		}
 	}
 
@@ -126,8 +129,8 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 			{
 				throw new RuntimeException("Returned search-set contained less then two entries");
 			}
-			else if (!bundle.getEntryFirstRep().hasResource() || !(bundle.getEntryFirstRep()
-					.getResource() instanceof ResearchStudy))
+			else if (!bundle.getEntryFirstRep().hasResource()
+					|| !(bundle.getEntryFirstRep().getResource() instanceof ResearchStudy))
 			{
 				throw new RuntimeException("Returned search-set did not contain ResearchStudy at index == 0");
 			}
@@ -149,7 +152,8 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 
 	private List<Group> getCohortDefinitions(Bundle bundle, String baseUrl)
 	{
-		return bundle.getEntry().stream().skip(1).map(e -> {
+		return bundle.getEntry().stream().skip(1).map(e ->
+		{
 			Group group = (Group) e.getResource();
 			IdType oldId = group.getIdElement();
 			group.setIdElement(
@@ -167,29 +171,29 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 
 	private boolean getNeedsConsentCheck(Task task)
 	{
-		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK).orElseThrow(
-				() -> new IllegalArgumentException(
-						"NeedsConsentCheck boolean is not set in task with id='" + task.getId()
-								+ "', this error should " + "have been caught by resource validation"));
+		return getTaskHelper()
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
+						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK)
+				.orElseThrow(() -> new IllegalArgumentException("NeedsConsentCheck boolean is not set in task with id='"
+						+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
-		return getTaskHelper().getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE).orElseThrow(
-				() -> new IllegalArgumentException(
-						"NeedsRecordLinkage boolean is not set in task with id='" + task.getId()
-								+ "', this error should " + "have been caught by resource validation"));
+		return getTaskHelper()
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
+						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE)
+				.orElseThrow(
+						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
+								+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 
 	private BloomFilterConfig getBloomFilterConfig(Task task)
 	{
 		return BloomFilterConfig.fromBytes(getTaskHelper()
 				.getFirstInputParameterByteValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG).orElseThrow(
-						() -> new IllegalArgumentException(
-								"BloomFilterConfig byte[] is not set in task with id='" + task.getId()
-										+ "', this error should " + "have been caught by resource validation")));
+						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG)
+				.orElseThrow(() -> new IllegalArgumentException("BloomFilterConfig byte[] is not set in task with id='"
+						+ task.getId() + "', this error should " + "have been caught by resource validation")));
 	}
 }

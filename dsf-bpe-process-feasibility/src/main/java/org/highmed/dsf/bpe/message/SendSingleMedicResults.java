@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.AbstractTaskMessageSend;
@@ -29,9 +30,9 @@ public class SendSingleMedicResults extends AbstractTaskMessageSend
 	private static final Logger logger = LoggerFactory.getLogger(SendSingleMedicResults.class);
 
 	public SendSingleMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, FhirContext fhirContext)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext)
 	{
-		super(clientProvider, taskHelper, organizationProvider, fhirContext);
+		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 	}
 
 	@Override
@@ -62,11 +63,11 @@ public class SendSingleMedicResults extends AbstractTaskMessageSend
 		}
 		else
 		{
-			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-					.getCohortId());
+			logger.warn("Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+					+ result.getCohortId());
 			throw new RuntimeException(
-					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID " + result
-							.getCohortId());
+					"Unexpected result (not a cohort-size or ResultSet URL result) for cohort with ID "
+							+ result.getCohortId());
 		}
 	}
 

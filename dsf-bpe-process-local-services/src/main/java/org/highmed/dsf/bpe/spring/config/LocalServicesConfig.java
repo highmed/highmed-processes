@@ -10,6 +10,7 @@ import org.highmed.dsf.bpe.service.GenerateBloomFilters;
 import org.highmed.dsf.bpe.service.GenerateCountFromIds;
 import org.highmed.dsf.bpe.service.ModifyQueries;
 import org.highmed.dsf.bpe.service.StoreResult;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -40,13 +41,16 @@ public class LocalServicesConfig
 
 	@Autowired
 	private OrganizationProvider organizationProvider;
-	
+
 	@Autowired
 	private TaskHelper taskHelper;
 
 	@Autowired
+	private ReadAccessHelper readAccessHelper;
+
+	@Autowired
 	private GroupHelper groupHelper;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -59,38 +63,38 @@ public class LocalServicesConfig
 	@Bean
 	public ExtractInputValues extractInputValues()
 	{
-		return new ExtractInputValues(fhirClientProvider, taskHelper);
+		return new ExtractInputValues(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public StoreResult storeResult()
 	{
-		return new StoreResult(fhirClientProvider, taskHelper);
+		return new StoreResult(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public CheckSingleMedicResults checkSingleMedicResults()
 	{
-		return new CheckSingleMedicResults(fhirClientProvider, taskHelper);
+		return new CheckSingleMedicResults(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public ModifyQueries modifyQueries()
 	{
-		return new ModifyQueries(fhirClientProvider, taskHelper, ehrIdColumnPath);
+		return new ModifyQueries(fhirClientProvider, taskHelper, readAccessHelper, ehrIdColumnPath);
 	}
 
 	@Bean
 	public FilterQueryResultsByConsent filterQueryResultsByConsent()
 	{
-		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper);
+		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public GenerateBloomFilters generateBloomFilters()
 	{
-		return new GenerateBloomFilters(fhirClientProvider, taskHelper, ehrIdColumnPath, masterPatientIndexClient(),
-				objectMapper, bouncyCastleProvider());
+		return new GenerateBloomFilters(fhirClientProvider, taskHelper, readAccessHelper, ehrIdColumnPath,
+				masterPatientIndexClient(), objectMapper, bouncyCastleProvider());
 	}
 
 	@Bean
@@ -104,28 +108,29 @@ public class LocalServicesConfig
 	{
 		return new BouncyCastleProvider();
 	}
-	
+
 	@Bean
 	public GenerateCountFromIds generateCountFromIds()
 	{
-		return new GenerateCountFromIds(fhirClientProvider, taskHelper);
+		return new GenerateCountFromIds(fhirClientProvider, taskHelper, readAccessHelper);
 	}
-	
+
 	@Bean
 	public ExecuteQueries executeQueries()
 	{
-		return new ExecuteQueries(fhirClientProvider, openEhrClient(), taskHelper, organizationProvider);
+		return new ExecuteQueries(fhirClientProvider, openEhrClient(), taskHelper, readAccessHelper,
+				organizationProvider);
 	}
-	
+
 	@Bean
 	public OpenEhrClient openEhrClient()
 	{
 		return openEhrClientFactory.createClient(environment::getProperty);
 	}
-	
+
 	@Bean
 	public CheckQueries checkQueries()
 	{
-		return new CheckQueries(fhirClientProvider, taskHelper, groupHelper);
+		return new CheckQueries(fhirClientProvider, taskHelper, readAccessHelper, groupHelper);
 	}
 }
