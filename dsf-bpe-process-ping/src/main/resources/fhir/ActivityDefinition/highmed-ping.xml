@@ -10,7 +10,7 @@
 			<valueString value="startPingProcessMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping-process" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping-process|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -30,7 +30,7 @@
 			<valueString value="pongMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-pong" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-pong|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -54,7 +54,7 @@
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-06-08" />
+	<date value="2021-08-24" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

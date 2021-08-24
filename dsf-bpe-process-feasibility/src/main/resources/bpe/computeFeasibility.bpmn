@@ -47,7 +47,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibility/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultMultiMedicFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1r6dq8y</bpmn:incoming>
@@ -98,7 +98,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibility/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">errorMultiMedicFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1tmnvhl</bpmn:incoming>

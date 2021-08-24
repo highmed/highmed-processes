@@ -14,7 +14,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibility/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">executeFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-feasibility</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-feasibility|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_035oihl</bpmn:incoming>
@@ -34,7 +34,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeFeasibility/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">computeFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-compute-feasibility</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-compute-feasibility|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0b5s4ef</bpmn:incoming>

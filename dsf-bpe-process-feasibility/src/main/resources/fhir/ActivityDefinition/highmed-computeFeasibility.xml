@@ -10,7 +10,7 @@
 			<valueString value="computeFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-compute-feasibility" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-compute-feasibility|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -58,7 +58,7 @@
 			<valueString value="resultSingleMedicFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-single-medic-result-feasibility" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-single-medic-result-feasibility|${version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -110,7 +110,7 @@
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-06-09" />
+	<date value="2021-08-24" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />
