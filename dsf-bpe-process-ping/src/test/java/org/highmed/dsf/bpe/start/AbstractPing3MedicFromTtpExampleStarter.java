@@ -4,7 +4,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_PING_PROCESS_URI_AND_LATEST_VERSION;
-import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_PING;
+import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_PING_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_PING_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_TTP;
 
@@ -27,7 +27,7 @@ public abstract class AbstractPing3MedicFromTtpExampleStarter
 	private Task createStartResource()
 	{
 		Task task = new Task();
-		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_START_PING);
+		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_START_PING_AND_LATEST_VERSION);
 		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_PING_PROCESS_URI_AND_LATEST_VERSION);
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);

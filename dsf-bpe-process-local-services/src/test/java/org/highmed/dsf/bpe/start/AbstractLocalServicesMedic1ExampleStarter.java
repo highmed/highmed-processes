@@ -9,7 +9,7 @@ import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIB
 import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES;
+import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1;
@@ -42,7 +42,7 @@ public abstract class AbstractLocalServicesMedic1ExampleStarter
 	{
 		Task task = new Task();
 
-		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_LOCAL_SERVICES);
+		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_LOCAL_SERVICES_AND_LATEST_VERSION);
 		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI_AND_LATEST_VERSION);
 		task.setStatus(Task.TaskStatus.REQUESTED);
 		task.setIntent(Task.TaskIntent.ORDER);

@@ -14,7 +14,7 @@ import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIB
 import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1;
@@ -136,7 +136,7 @@ public abstract class AbstractRequestFeasibilityFromMedicsViaMedic1ExampleStarte
 		Task task = new Task();
 		task.setIdElement(new IdType("urn:uuid:" + UUID.randomUUID().toString()));
 
-		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY);
+		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_AND_LATEST_VERSION);
 		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_PROCESS_URI_AND_LATEST_VERSION);
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
