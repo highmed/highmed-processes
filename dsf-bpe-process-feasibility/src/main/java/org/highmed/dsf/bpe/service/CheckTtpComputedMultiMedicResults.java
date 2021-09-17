@@ -6,7 +6,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_CO
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_ERROR_CODE_MULTI_MEDIC_FEASIBILITY_RESULT;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +17,7 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Task;
@@ -27,9 +28,10 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckTtpComputedMultiMedicResults.class);
 
-	public CheckTtpComputedMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CheckTtpComputedMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class CheckTtpComputedMultiMedicResults extends AbstractServiceDelegate
 
 		return results.getResults().stream().filter(result ->
 		{
-			if (result.getParticipatingMedics() < MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY)
+			if (result.getParticipatingMedics() < MIN_PARTICIPATING_MEDICS)
 			{
 				logger.warn("Removed result with cohort id='{}' from feasibility request with task-id='{}', "
 						+ "business-key='{}' and correlation-key='{}' because of not enough participating MeDICs",

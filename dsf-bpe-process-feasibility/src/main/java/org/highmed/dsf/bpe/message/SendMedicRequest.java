@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.AbstractTaskMessageSend;
@@ -28,9 +29,9 @@ import ca.uhn.fhir.context.FhirContext;
 public class SendMedicRequest extends AbstractTaskMessageSend
 {
 	public SendMedicRequest(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, FhirContext fhirContext)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext)
 	{
-		super(clientProvider, taskHelper, organizationProvider, fhirContext);
+		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 	}
 
 	@Override
@@ -45,6 +46,7 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 				new Reference().setReference(researchStudyId.toVersionless().getValueAsString()));
 
 		boolean needsConsentCheck = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK);
+
 		ParameterComponent inputNeedsConsentCheck = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK, needsConsentCheck);
 

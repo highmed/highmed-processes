@@ -14,7 +14,6 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,20 +21,22 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.FhirResourcesListValues;
 import org.hl7.fhir.r4.model.Expression;
 import org.hl7.fhir.r4.model.Group;
-import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Group.GroupType;
 import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
 public class ExtractInputValues extends AbstractServiceDelegate implements InitializingBean
 {
-	public ExtractInputValues(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public ExtractInputValues(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override
@@ -72,10 +73,13 @@ public class ExtractInputValues extends AbstractServiceDelegate implements Initi
 		return queries.map(q ->
 		{
 			Group group = new Group();
-			group.setIdElement(new IdType(UUID.randomUUID().toString()));
+			group.setType(GroupType.PERSON);
+			group.setActual(false);
 			group.addExtension().setUrl(EXTENSION_HIGHMED_QUERY)
 					.setValue(new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression(q));
-			return group;
+			getReadAccessHelper().addLocal(group);
+
+			return getFhirWebserviceClientProvider().getLocalWebserviceClient().create(group);
 		}).collect(Collectors.toList());
 	}
 

@@ -2,9 +2,12 @@ package org.highmed.dsf.bpe.spring.config;
 
 import org.highmed.dsf.bpe.message.SendRequest;
 import org.highmed.dsf.bpe.service.CheckRequest;
+import org.highmed.dsf.bpe.service.DownloadBundle;
 import org.highmed.dsf.bpe.service.SelectResourceAndTargets;
 import org.highmed.dsf.bpe.service.UpdateResources;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
+import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,16 @@ public class UpdateResourcesConfig
 	private FhirWebserviceClientProvider clientProvider;
 
 	@Autowired
+	private TaskHelper taskHelper;
+
+	@Autowired
+	private ReadAccessHelper readAccessHelper;
+
+	@Autowired
 	private OrganizationProvider organizationProvider;
 
 	@Autowired
-	private TaskHelper taskHelper;
+	private EndpointProvider endpointProvider;
 
 	@Autowired
 	private FhirContext fhirContext;
@@ -31,24 +40,31 @@ public class UpdateResourcesConfig
 	@Bean
 	public SendRequest sendRequest()
 	{
-		return new SendRequest(clientProvider, taskHelper, organizationProvider, fhirContext);
+		return new SendRequest(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 	}
 
 	@Bean
 	public SelectResourceAndTargets selectUpdateResourcesTargets()
 	{
-		return new SelectResourceAndTargets(clientProvider, taskHelper, organizationProvider);
+		return new SelectResourceAndTargets(clientProvider, taskHelper, readAccessHelper, organizationProvider,
+				endpointProvider);
 	}
 
 	@Bean
-	public UpdateResources updateResources()
+	public DownloadBundle downloadBundle()
 	{
-		return new UpdateResources(clientProvider, taskHelper, fhirContext);
+		return new DownloadBundle(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
 	public CheckRequest checkRequest()
 	{
-		return new CheckRequest(clientProvider, taskHelper, organizationProvider);
+		return new CheckRequest(clientProvider, taskHelper, readAccessHelper);
+	}
+
+	@Bean
+	public UpdateResources updateResources()
+	{
+		return new UpdateResources(clientProvider, taskHelper, readAccessHelper, fhirContext);
 	}
 }

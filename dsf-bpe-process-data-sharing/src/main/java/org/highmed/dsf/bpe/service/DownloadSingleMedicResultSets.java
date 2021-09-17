@@ -7,6 +7,7 @@ import java.util.List;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 
@@ -15,9 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DownloadSingleMedicResultSets extends DownloadResultSets
 {
 	public DownloadSingleMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ObjectMapper openEhrObjectMapper)
+			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
-		super(clientProvider, taskHelper, openEhrObjectMapper);
+		super(clientProvider, taskHelper, readAccessHelper, openEhrObjectMapper);
 	}
 
 	@Override

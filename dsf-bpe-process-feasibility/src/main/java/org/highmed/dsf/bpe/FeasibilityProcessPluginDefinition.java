@@ -14,6 +14,7 @@ import org.highmed.dsf.fhir.resources.CodeSystemResource;
 import org.highmed.dsf.fhir.resources.ResourceProvider;
 import org.highmed.dsf.fhir.resources.StructureDefinitionResource;
 import org.highmed.dsf.fhir.resources.ValueSetResource;
+import org.springframework.core.env.PropertyResolver;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -55,7 +56,8 @@ public class FeasibilityProcessPluginDefinition implements ProcessPluginDefiniti
 	}
 
 	@Override
-	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader)
+	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
+			PropertyResolver resolver)
 	{
 		var aCom = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-computeFeasibility.xml");
 		var aExe = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeFeasibility.xml");
@@ -76,12 +78,12 @@ public class FeasibilityProcessPluginDefinition implements ProcessPluginDefiniti
 		var vDS = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
 				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("computeFeasibility/" + VERSION,
-				Arrays.asList(aCom, cDS, sTCom, sTResS, vDS), "executeFeasibility/" + VERSION,
-				Arrays.asList(aExe, cDS, sTExe, vDS), "requestFeasibility/" + VERSION,
-				Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
+				"highmedorg_computeFeasibility/" + VERSION, Arrays.asList(aCom, cDS, sTCom, sTResS, vDS),
+				"highmedorg_executeFeasibility/" + VERSION, Arrays.asList(aExe, cDS, sTExe, vDS),
+				"highmedorg_requestFeasibility/" + VERSION, Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
 
 		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
-				classLoader, resourcesByProcessKeyAndVersion);
+				classLoader, resolver, resourcesByProcessKeyAndVersion);
 	}
 }

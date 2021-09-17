@@ -4,15 +4,17 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Task;
 
 public class CheckMedicMultiMedicResultSets extends CheckResultSets
 {
-	public CheckMedicMultiMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CheckMedicMultiMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override

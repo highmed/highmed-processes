@@ -23,6 +23,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -46,10 +47,11 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 
 	private final OrganizationProvider organizationProvider;
 
-	public DownloadFeasibilityResources(OrganizationProvider organizationProvider,
-			FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public DownloadFeasibilityResources(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.organizationProvider = organizationProvider;
 	}
 
@@ -57,6 +59,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+
 		Objects.requireNonNull(organizationProvider, "organizationProvider");
 	}
 
@@ -97,6 +100,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 		Reference researchStudyReference = getTaskHelper().getInputParameterReferenceValues(task,
 				CODESYSTEM_HIGHMED_DATA_SHARING, CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE)
 				.findFirst().get();
+
 		return new IdType(researchStudyReference.getReference());
 	}
 
@@ -109,7 +113,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 		}
 		else
 		{
-			return getFhirWebserviceClientProvider().getRemoteWebserviceClient(researchStudyId.getBaseUrl());
+			return getFhirWebserviceClientProvider().getWebserviceClient(researchStudyId.getBaseUrl());
 		}
 	}
 
@@ -171,7 +175,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK)
 				.orElseThrow(() -> new IllegalArgumentException("NeedsConsentCheck boolean is not set in task with id='"
-						+ task.getId() + "', this error should have been caught by resource validation"));
+						+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
@@ -181,7 +185,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE)
 				.orElseThrow(
 						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
-								+ task.getId() + "', this error should have been caught by resource validation"));
+								+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 
 	private BloomFilterConfig getBloomFilterConfig(Task task)
@@ -190,6 +194,6 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 				.getFirstInputParameterByteValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG)
 				.orElseThrow(() -> new IllegalArgumentException("BloomFilterConfig byte[] is not set in task with id='"
-						+ task.getId() + "', this error should have been caught by resource validation")));
+						+ task.getId() + "', this error should " + "have been caught by resource validation")));
 	}
 }

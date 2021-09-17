@@ -9,11 +9,12 @@
 	<parent>
 		<artifactId>dsf-bpe-highmed-processes-pom</artifactId>
 		<groupId>org.highmed.dsf</groupId>
-		<version>0.5.0-SNAPSHOT</version>
+		<version>0.6.0-SNAPSHOT</version>
 	</parent>
 
 	<properties>
 		<main.basedir>${project.basedir}/..</main.basedir>
+		<dsf.location>../../highmed-dsf</dsf.location>
 	</properties>
 
 	<dependencies>
@@ -24,18 +25,19 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.highmed.dsf</groupId>
-			<artifactId>dsf-fhir-validation</artifactId>
-			<scope>test</scope>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>de.hs-heilbronn.mi</groupId>
 			<artifactId>log4j2-utils</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.highmed.dsf</groupId>
+			<artifactId>dsf-fhir-validation</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -69,7 +71,7 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup/bpe/app/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
@@ -86,7 +88,7 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic1/bpe/app/process
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic1/bpe/process
 									</outputDirectory>
 								</configuration>
 							</execution>
@@ -104,7 +106,7 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic2/bpe/app/process
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic2/bpe/process
 									</outputDirectory>
 								</configuration>
 							</execution>
@@ -122,7 +124,7 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic3/bpe/app/process
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic3/bpe/process
 									</outputDirectory>
 								</configuration>
 							</execution>
@@ -140,7 +142,79 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/ttp/bpe/app/process
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/ttp/bpe/process
+									</outputDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-process-to-docker-test-setup-3medic-ttp-docker/medic1</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>${project.groupId}</groupId>
+											<artifactId>${project.artifactId}</artifactId>
+											<version>${project.version}</version>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp-docker/medic1/bpe/process
+									</outputDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-process-to-docker-test-setup-3medic-ttp-docker/medic2</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>${project.groupId}</groupId>
+											<artifactId>${project.artifactId}</artifactId>
+											<version>${project.version}</version>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp-docker/medic2/bpe/process
+									</outputDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-process-to-docker-test-setup-3medic-ttp-docker/medic3</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>${project.groupId}</groupId>
+											<artifactId>${project.artifactId}</artifactId>
+											<version>${project.version}</version>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp-docker/medic3/bpe/process
+									</outputDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-process-to-docker-test-setup-3medic-ttp-docker/ttp</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>${project.groupId}</groupId>
+											<artifactId>${project.artifactId}</artifactId>
+											<version>${project.version}</version>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp-docker/ttp/bpe/process
 									</outputDirectory>
 								</configuration>
 							</execution>
@@ -152,35 +226,63 @@
 						<configuration>
 							<filesets>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup/bpe/app/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic1/bpe/app/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic1/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic2/bpe/app/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic2/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/medic3/bpe/app/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic3/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>../../highmed-dsf/dsf-docker-test-setup-3medic-ttp/ttp/bpe/app/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/ttp/bpe/process</directory>
+									<includes>
+										<include>${project.artifactId}-${project.version}.jar</include>
+									</includes>
+									<followSymlinks>false</followSymlinks>
+								</fileset>
+								<fileset>
+									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp-docker/medic1/bpe/process</directory>
+									<includes>
+										<include>${project.artifactId}-${project.version}.jar</include>
+									</includes>
+									<followSymlinks>false</followSymlinks>
+								</fileset>
+								<fileset>
+									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp-docker/medic2/bpe/process</directory>
+									<includes>
+										<include>${project.artifactId}-${project.version}.jar</include>
+									</includes>
+									<followSymlinks>false</followSymlinks>
+								</fileset>
+								<fileset>
+									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp-docker/medic3/bpe/process</directory>
+									<includes>
+										<include>${project.artifactId}-${project.version}.jar</include>
+									</includes>
+									<followSymlinks>false</followSymlinks>
+								</fileset>
+								<fileset>
+									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp-docker/ttp/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>

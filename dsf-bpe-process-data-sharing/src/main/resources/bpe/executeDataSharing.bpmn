@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.1">
-  <bpmn:process id="executeDataSharing" isExecutable="true" camunda:versionTag="0.5.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
+  <bpmn:process id="highmedorg_executeDataSharing" isExecutable="true" camunda:versionTag="0.5.0">
     <bpmn:serviceTask id="checkResultSets" name="check results sets" camunda:class="org.highmed.dsf.bpe.service.CheckMedicSingleMedicResultSets">
       <bpmn:incoming>Flow_1pzik8k</bpmn:incoming>
       <bpmn:outgoing>Flow_08925ay</bpmn:outgoing>
@@ -23,10 +23,9 @@
     <bpmn:endEvent id="EndEventSuccess" name="send results to TTP">
       <bpmn:extensionElements>
         <camunda:inputOutput>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeDataSharing/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultSingleMedicDataSharingMessage</camunda:inputParameter>
-          <camunda:inputParameter name="versionTag">0.5.0</camunda:inputParameter>
-          <camunda:inputParameter name="processDefinitionKey">computeDataSharing</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-data-sharing</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-data-sharing|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1611vr6</bpmn:incoming>
@@ -125,7 +124,7 @@
   <bpmn:message id="Message_1ppodb0" name="errorSingleMedicDataSharingMessage" />
   <bpmn:error id="Error_0c5gjso" name="errorSingleMedicDataSharingResult" errorCode="errorSingleMedicDataSharingResult" camunda:errorMessage="errorSingleMedicDataSharingResult" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="executeDataSharing">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_executeDataSharing">
       <bpmndi:BPMNEdge id="Flow_1o1ugb3_di" bpmnElement="Flow_1o1ugb3">
         <di:waypoint x="1880" y="270" />
         <di:waypoint x="1880" y="340" />

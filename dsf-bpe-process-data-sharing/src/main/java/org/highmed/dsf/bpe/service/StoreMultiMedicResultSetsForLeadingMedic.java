@@ -3,6 +3,7 @@ package org.highmed.dsf.bpe.service;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_LEADING_MEDIC_IDENTIFIER;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 
@@ -11,9 +12,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class StoreMultiMedicResultSetsForLeadingMedic extends StoreResultSets
 {
 	public StoreMultiMedicResultSetsForLeadingMedic(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ObjectMapper openEhrObjectMapper)
+			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
-		super(clientProvider, taskHelper, openEhrObjectMapper);
+		super(clientProvider, taskHelper, readAccessHelper, openEhrObjectMapper);
 	}
 
 	@Override

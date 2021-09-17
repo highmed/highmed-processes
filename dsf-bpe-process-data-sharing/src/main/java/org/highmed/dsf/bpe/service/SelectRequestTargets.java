@@ -2,12 +2,14 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_TYPE;
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_MEDIC;
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_TTP;
+import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_TTP;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -20,17 +22,21 @@ import javax.crypto.KeyGenerator;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
-import org.highmed.dsf.fhir.organization.OrganizationProvider;
+import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.TargetValues;
 import org.highmed.dsf.fhir.variables.Targets;
 import org.highmed.dsf.fhir.variables.TargetsValues;
 import org.highmed.pseudonymization.crypto.AesGcmUtil;
+import org.hl7.fhir.r4.model.Extension;
+import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResearchStudy;
 import org.springframework.beans.factory.InitializingBean;
@@ -39,16 +45,17 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 {
 	private final Random random = new Random();
 
-	private final OrganizationProvider organizationProvider;
+	private final EndpointProvider endpointProvider;
 	private final KeyGenerator hmacSha2Generator;
 	private final KeyGenerator hmacSha3Generator;
 
 	public SelectRequestTargets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, BouncyCastleProvider bouncyCastleProvider)
+			ReadAccessHelper readAccessHelper, EndpointProvider endpointProvider,
+			BouncyCastleProvider bouncyCastleProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 
-		this.organizationProvider = organizationProvider;
+		this.endpointProvider = endpointProvider;
 
 		try
 		{
@@ -67,7 +74,7 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
-		Objects.requireNonNull(organizationProvider, "organizationProvider");
+		Objects.requireNonNull(endpointProvider, "endpointProvider");
 	}
 
 	@Override
@@ -95,26 +102,35 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 
 	private Targets getMedicTargets(ResearchStudy researchStudy)
 	{
-		List<Target> targets = researchStudy.getExtensionsByUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).stream()
-				.filter(e -> e.getValue() instanceof Reference).map(e -> (Reference) e.getValue())
-				.map(r -> Target.createBiDirectionalTarget(r.getIdentifier().getValue(), UUID.randomUUID().toString()))
+		List<Target> targets = researchStudy.getExtensionsByUrl(ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
+				.stream().filter(Extension::hasValue).map(Extension::getValue).filter(v -> v instanceof Reference)
+				.map(v -> (Reference) v).filter(Reference::hasIdentifier).map(Reference::getIdentifier)
+				.filter(Identifier::hasValue).map(Identifier::getValue)
+				.map(medicIdentifier -> Target.createBiDirectionalTarget(medicIdentifier,
+						getAddress(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_MEDIC, medicIdentifier),
+						UUID.randomUUID().toString()))
 				.collect(Collectors.toList());
-
-		if (targets.size() < 1)
-			throw new IllegalArgumentException("No participating MeDICs are set in ResearchStudy with id='"
-					+ researchStudy.getId() + "', this error should have been caught by resource validation");
 
 		return new Targets(targets);
 	}
 
 	private Target getTtpTarget(ResearchStudy researchStudy)
 	{
-		return researchStudy.getExtensionsByUrl(EXTENSION_HIGHMED_PARTICIPATING_TTP).stream()
-				.filter(e -> e.getValue() instanceof Reference).map(e -> (Reference) e.getValue())
-				.map(r -> Target.createUniDirectionalTarget(r.getIdentifier().getValue())).findFirst()
-				.orElseThrow(() -> new IllegalArgumentException(
-						"Participating TTP is not set in ResearchStudy with id='" + researchStudy.getId()
-								+ "', this error should have been caught by resource validation"));
+		return researchStudy.getExtensionsByUrl(ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP).stream()
+				.filter(Extension::hasValue).map(Extension::getValue).filter(v -> v instanceof Reference)
+				.map(v -> (Reference) v).filter(Reference::hasIdentifier).map(Reference::getIdentifier)
+				.filter(Identifier::hasValue).map(Identifier::getValue)
+				.map(ttpIdentifier -> Target.createUniDirectionalTarget(ttpIdentifier,
+						getAddress(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_TTP, ttpIdentifier)))
+				.findFirst().get();
+	}
+
+	private String getAddress(String role, String identifier)
+	{
+		return endpointProvider
+				.getFirstConsortiumEndpointAdress(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM,
+						CODESYSTEM_HIGHMED_ORGANIZATION_TYPE, role, identifier)
+				.get();
 	}
 
 	private BloomFilterConfig createBloomFilterConfig()

@@ -25,6 +25,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -49,9 +50,9 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 	private final OrganizationProvider organizationProvider;
 
 	public DownloadDataSharingResources(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 		this.organizationProvider = organizationProvider;
 	}
 
@@ -118,7 +119,7 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 		}
 		else
 		{
-			return getFhirWebserviceClientProvider().getRemoteWebserviceClient(researchStudyId.getBaseUrl());
+			return getFhirWebserviceClientProvider().getWebserviceClient(researchStudyId.getBaseUrl());
 		}
 	}
 

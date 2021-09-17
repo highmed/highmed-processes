@@ -11,6 +11,7 @@ import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.springframework.beans.factory.InitializingBean;
@@ -19,9 +20,11 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 {
 	private final String ehrIdColumnPath;
 
-	public ModifyQueries(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper, String ehrIdColumnPath)
+	public ModifyQueries(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper, String ehrIdColumnPath)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.ehrIdColumnPath = ehrIdColumnPath;
 	}
 
@@ -29,6 +32,7 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+
 		Objects.requireNonNull(ehrIdColumnPath, "ehrIdColumnPath");
 	}
 
@@ -64,6 +68,6 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 	protected String replaceSelectCountWithSelectMpiId(String value)
 	{
 		// TODO Implement correct replacement for default id query
-		return value.replace("select count(e)", "select e" + ehrIdColumnPath + " as EHRID");
+		return value.replace("SELECT COUNT(e)", "SELECT e" + ehrIdColumnPath + " as EHRID");
 	}
 }

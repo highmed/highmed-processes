@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Task;
@@ -22,9 +23,10 @@ public class CheckTtpMultiMedicResultSets extends CheckResultSets
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckTtpMultiMedicResultSets.class);
 
-	public CheckTtpMultiMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CheckTtpMultiMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override

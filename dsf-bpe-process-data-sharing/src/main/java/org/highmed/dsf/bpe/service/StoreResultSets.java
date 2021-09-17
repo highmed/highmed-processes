@@ -13,6 +13,7 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variable.QueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.openehr.model.structure.ResultSet;
@@ -36,9 +37,9 @@ public abstract class StoreResultSets extends AbstractServiceDelegate implements
 	private final ObjectMapper openEhrObjectMapper;
 
 	public StoreResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ObjectMapper openEhrObjectMapper)
+			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 		this.openEhrObjectMapper = openEhrObjectMapper;
 	}
 

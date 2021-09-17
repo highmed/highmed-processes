@@ -12,7 +12,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -29,9 +31,11 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 
 	private final GroupHelper groupHelper;
 
-	public CheckQueries(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper, GroupHelper groupHelper)
+	public CheckQueries(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper, GroupHelper groupHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.groupHelper = groupHelper;
 	}
 
@@ -39,6 +43,7 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+
 		Objects.requireNonNull(groupHelper, "groupHelper");
 	}
 
@@ -53,12 +58,12 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 		Task leadingTask = getLeadingTaskFromExecutionVariables();
 		cohorts.forEach(group ->
 		{
-			String aqlQuery = groupHelper.extractAqlQuery(group).toLowerCase();
+			String aqlQuery = groupHelper.extractAqlQuery(group);
 
 			String groupId = group.getId();
 			if (!aqlQuery.startsWith(FEASIBILITY_QUERY_PREFIX))
 			{
-				String errorMessage = "Single medic feasibility query check failed, wrong format for query of group with id '"
+				String errorMessage = "Initial single medic feasibility query check failed, wrong format for query of group with id '"
 						+ groupId + "', expected query to start with '" + FEASIBILITY_QUERY_PREFIX + "' but got '"
 						+ aqlQuery + "'";
 

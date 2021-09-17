@@ -17,6 +17,7 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variable.QueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.openehr.model.structure.Column;
@@ -52,9 +53,9 @@ public abstract class PseudonymizeResultSets extends AbstractServiceDelegate imp
 	private final ObjectMapper psnObjectMapper;
 
 	public PseudonymizeResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			KeyConsumer keyConsumer, ObjectMapper psnObjectMapper)
+			ReadAccessHelper readAccessHelper, KeyConsumer keyConsumer, ObjectMapper psnObjectMapper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 		this.keyConsumer = keyConsumer;
 		this.psnObjectMapper = psnObjectMapper;
 	}

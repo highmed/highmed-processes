@@ -73,9 +73,9 @@ public class TaskProfileTest
 					"highmed-task-request-feasibility.xml", "highmed-task-execute-feasibility.xml",
 					"highmed-task-single-medic-result-feasibility.xml", "highmed-task-compute-feasibility.xml",
 					"highmed-task-multi-medic-result-feasibility.xml", "highmed-task-error-feasibility.xml"),
-			Arrays.asList("highmed-authorization-role-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml",
+			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml",
 					"highmed-data-sharing.xml"),
-			Arrays.asList("highmed-authorization-role-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml",
+			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml",
 					"highmed-data-sharing.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),

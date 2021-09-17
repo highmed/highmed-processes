@@ -22,6 +22,7 @@ import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variable.QueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -53,10 +54,11 @@ public abstract class TranslateSingleMedicResultSets extends AbstractServiceDele
 	private final BouncyCastleProvider bouncyCastleProvider;
 
 	public TranslateSingleMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, KeyProvider keyProvider, String ehrIdColumnPath,
-			MasterPatientIndexClient masterPatientIndexClient, BouncyCastleProvider bouncyCastleProvider)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, KeyProvider keyProvider,
+			String ehrIdColumnPath, MasterPatientIndexClient masterPatientIndexClient,
+			BouncyCastleProvider bouncyCastleProvider)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 
 		this.organizationProvider = organizationProvider;
 		this.keyProvider = keyProvider;

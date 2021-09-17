@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1yff9tp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.1">
-  <bpmn:process id="computeDataSharing" isExecutable="true" camunda:versionTag="0.5.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1yff9tp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
+  <bpmn:process id="highmedorg_computeDataSharing" isExecutable="true" camunda:versionTag="0.5.0">
     <bpmn:subProcess id="SubProcess_1gopxt4">
       <bpmn:incoming>SequenceFlow_1lfe4wr</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0xxpamp</bpmn:outgoing>
@@ -41,10 +41,9 @@
     <bpmn:endEvent id="EndEventSuccess" name="send results to MeDIC">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="processDefinitionKey">requestDataSharing</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-data-sharing</camunda:inputParameter>
-          <camunda:inputParameter name="versionTag">0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestDataSharing/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultMultiMedicDataSharingMessage</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-data-sharing|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0uaqn1r</bpmn:incoming>
@@ -83,10 +82,9 @@
     <bpmn:endEvent id="EndEventError" name="send error to MeDIC">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="processDefinitionKey">requestDataSharing</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-data-sharing</camunda:inputParameter>
-          <camunda:inputParameter name="versionTag">0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestDataSharing/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">errorMultiMedicDataSharingMessage</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-data-sharing|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1tmnvhl</bpmn:incoming>
@@ -147,7 +145,12 @@
   <bpmn:error id="Error_0qub4jc" name="errorMultiMedicPseudonymizedDataSharingResult" errorCode="errorMultiMedicPseudonymizedDataSharingResult" camunda:errorMessage="errorMultiMedicPseudonymizedDataSharingResult" />
   <bpmn:error id="Error_1r03ghq" name="errorMultiMedicReceivedDataSharingResult" errorCode="errorMultiMedicReceivedDataSharingResult" camunda:errorMessage="errorMultiMedicReceivedDataSharingResult" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="computeDataSharing">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_computeDataSharing">
+      <bpmndi:BPMNEdge id="Flow_0rwc0yo_di" bpmnElement="Flow_0rwc0yo">
+        <di:waypoint x="1430" y="300" />
+        <di:waypoint x="1430" y="420" />
+        <di:waypoint x="2312" y="420" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0g86uan_di" bpmnElement="Flow_0g86uan">
         <di:waypoint x="1430" y="242" />
         <di:waypoint x="1485" y="242" />
@@ -222,17 +225,6 @@
         <di:waypoint x="195" y="242" />
         <di:waypoint x="279" y="242" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0rwc0yo_di" bpmnElement="Flow_0rwc0yo">
-        <di:waypoint x="1430" y="300" />
-        <di:waypoint x="1430" y="420" />
-        <di:waypoint x="2312" y="420" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_1hmug5i_di" bpmnElement="EndEventError">
-        <dc:Bounds x="2312" y="402" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2299" y="445" width="63" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SubProcess_1gopxt4_di" bpmnElement="SubProcess_1gopxt4" isExpanded="true">
         <dc:Bounds x="469" y="175" width="498" height="134" />
       </bpmndi:BPMNShape>
@@ -290,6 +282,12 @@
       <bpmndi:BPMNShape id="ServiceTask_0uk3eyz_di" bpmnElement="selectResponseTargetMedic">
         <dc:Bounds x="1780" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1hmug5i_di" bpmnElement="EndEventError">
+        <dc:Bounds x="2312" y="402" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2299" y="445" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_13j8ce9_di" bpmnElement="checkPseudonymizedResultSets">
         <dc:Bounds x="1950" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -308,14 +306,14 @@
       <bpmndi:BPMNShape id="Activity_0798gut_di" bpmnElement="checkReceivedResultSets">
         <dc:Bounds x="1330" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1c7452s_di" bpmnElement="errorReceived">
+        <dc:Bounds x="1412" y="264" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_155cxa9_di" bpmnElement="errorPseudonymization">
         <dc:Bounds x="2032" y="264" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BoundaryEvent_1g0rcyp_di" bpmnElement="TimerEnded">
         <dc:Bounds x="949" y="291" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1c7452s_di" bpmnElement="errorReceived">
-        <dc:Bounds x="1412" y="264" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

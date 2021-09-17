@@ -12,6 +12,7 @@ import org.highmed.dsf.fhir.resources.CodeSystemResource;
 import org.highmed.dsf.fhir.resources.ResourceProvider;
 import org.highmed.dsf.fhir.resources.StructureDefinitionResource;
 import org.highmed.dsf.fhir.resources.ValueSetResource;
+import org.springframework.core.env.PropertyResolver;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -44,7 +45,8 @@ public class UpdateAllowListProcessPluginDefinition implements ProcessPluginDefi
 	}
 
 	@Override
-	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader)
+	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
+			PropertyResolver resolver)
 	{
 		var aDown = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-downloadAllowList.xml");
 		var aUp = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-updateAllowList.xml");
@@ -53,10 +55,11 @@ public class UpdateAllowListProcessPluginDefinition implements ProcessPluginDefi
 		var sUp = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-update-allow-list.xml");
 		var v = ValueSetResource.file("fhir/ValueSet/highmed-update-allow-list.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("downloadAllowList/" + VERSION,
-				Arrays.asList(aDown, c, sDown, v), "updateAllowList/" + VERSION, Arrays.asList(aUp, c, sUp, v));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
+				"highmedorg_downloadAllowList/" + VERSION, Arrays.asList(aDown, c, sDown, v),
+				"highmedorg_updateAllowList/" + VERSION, Arrays.asList(aUp, c, sUp, v));
 
 		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
-				classLoader, resourcesByProcessKeyAndVersion);
+				classLoader, resolver, resourcesByProcessKeyAndVersion);
 	}
 }

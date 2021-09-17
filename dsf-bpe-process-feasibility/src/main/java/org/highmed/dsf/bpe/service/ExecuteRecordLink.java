@@ -16,6 +16,7 @@ import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.pseudonymization.domain.PersonWithMdat;
@@ -33,9 +34,9 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 	private final ResultSetTranslatorFromMedicRbfOnly translator;
 
 	public ExecuteRecordLink(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ResultSetTranslatorFromMedicRbfOnly translator)
+			ReadAccessHelper readAccessHelper, ResultSetTranslatorFromMedicRbfOnly translator)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 
 		this.translator = translator;
 	}

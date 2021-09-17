@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1flneil" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.1">
-  <bpmn:process id="requestDataSharing" isExecutable="true" camunda:versionTag="0.5.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1flneil" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
+  <bpmn:process id="highmedorg_requestDataSharing" isExecutable="true" camunda:versionTag="0.5.0">
     <bpmn:sequenceFlow id="Flow_0dd6nmz" sourceRef="StartEvent" targetRef="downloadResearchStudyResource" />
     <bpmn:sequenceFlow id="Flow_06otxko" sourceRef="downloadResearchStudyResource" targetRef="selectRequestTargetsAndGenerateKeys" />
     <bpmn:startEvent id="StartEvent" name="start">
@@ -15,10 +15,9 @@
     <bpmn:sendTask id="sendRequestToMedics" name="send request to medics" camunda:class="org.highmed.dsf.bpe.message.SendMedicRequest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="processDefinitionKey">executeDataSharing</camunda:inputParameter>
-          <camunda:inputParameter name="versionTag">0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeDataSharing/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">executeDataSharingMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-data-sharing</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-data-sharing|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_18ie7l6</bpmn:incoming>
@@ -67,10 +66,9 @@
     <bpmn:intermediateThrowEvent id="sendCorreltationKeysToTTP" name="send correlation keys to TTP">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="processDefinitionKey">computeDataSharing</camunda:inputParameter>
-          <camunda:inputParameter name="versionTag">0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeDataSharing/0.5.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">computeDataSharingMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-compute-data-sharing</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-compute-data-sharing|0.5.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0cx3xe1</bpmn:incoming>
@@ -103,7 +101,7 @@
   <bpmn:message id="Message_0j6r7o2" name="errorMultiMedicDataSharingMessage" />
   <bpmn:message id="Message_0a5typw" name="computeDataSharingMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="requestDataSharing">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_requestDataSharing">
       <bpmndi:BPMNEdge id="Flow_1m59ov0_di" bpmnElement="Flow_1m59ov0">
         <di:waypoint x="1380" y="140" />
         <di:waypoint x="1440" y="140" />

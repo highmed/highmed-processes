@@ -13,6 +13,7 @@ import org.highmed.dsf.fhir.resources.CodeSystemResource;
 import org.highmed.dsf.fhir.resources.ResourceProvider;
 import org.highmed.dsf.fhir.resources.StructureDefinitionResource;
 import org.highmed.dsf.fhir.resources.ValueSetResource;
+import org.springframework.core.env.PropertyResolver;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -45,7 +46,8 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 	}
 
 	@Override
-	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader)
+	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
+			PropertyResolver resolver)
 	{
 		var aCom = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-computeDataSharing.xml");
 		var aExe = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeDataSharing.xml");
@@ -67,12 +69,13 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 
 		var vDS = ValueSetResource.file("fhir/ValueSet/highmed-data-sharing.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("computeDataSharing/" + VERSION,
-				Arrays.asList(aCom, cDS, sTCom, sTResS, vDS), "executeDataSharing/" + VERSION,
-				Arrays.asList(aExe, cDS, sTExe, sRSDS, vDS), "requestDataSharing/" + VERSION,
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
+				"highmedorg_computeDataSharing/" + VERSION, Arrays.asList(aCom, cDS, sTCom, sTResS, vDS),
+				"highmedorg_executeDataSharing/" + VERSION, Arrays.asList(aExe, cDS, sTExe, sRSDS, vDS),
+				"highmedorg_requestDataSharing/" + VERSION,
 				Arrays.asList(aReq, cDS, sTReq, sRSDS, sTResM, sTErrM, vDS));
 
 		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
-				classLoader, resourcesByProcessKeyAndVersion);
+				classLoader, resolver, resourcesByProcessKeyAndVersion);
 	}
 }

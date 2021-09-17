@@ -4,6 +4,7 @@ import javax.crypto.SecretKey;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.highmed.dsf.bpe.crypto.KeyProvider;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -16,11 +17,12 @@ import org.springframework.beans.factory.InitializingBean;
 public class TranslateSingleMedicResultSetsWithRbf extends TranslateSingleMedicResultSets implements InitializingBean
 {
 	public TranslateSingleMedicResultSetsWithRbf(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, KeyProvider keyProvider, String ehrIdColumnPath,
-			MasterPatientIndexClient masterPatientIndexClient, BouncyCastleProvider bouncyCastleProvider)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, KeyProvider keyProvider,
+			String ehrIdColumnPath, MasterPatientIndexClient masterPatientIndexClient,
+			BouncyCastleProvider bouncyCastleProvider)
 	{
-		super(clientProvider, taskHelper, organizationProvider, keyProvider, ehrIdColumnPath, masterPatientIndexClient,
-				bouncyCastleProvider);
+		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, keyProvider, ehrIdColumnPath,
+				masterPatientIndexClient, bouncyCastleProvider);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import org.highmed.dsf.fhir.resources.CodeSystemResource;
 import org.highmed.dsf.fhir.resources.ResourceProvider;
 import org.highmed.dsf.fhir.resources.StructureDefinitionResource;
 import org.highmed.dsf.fhir.resources.ValueSetResource;
+import org.springframework.core.env.PropertyResolver;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -57,21 +58,22 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 	}
 
 	@Override
-	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader)
+	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
+			PropertyResolver resolver)
 	{
 		var aL = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-localServicesIntegration.xml");
 		var sTL = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-local-services-integration.xml");
 
-		var vF = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
-				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
-		var cF = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+		var cDS = CodeSystemResource.dependency(DEPENDENCY_FEASIBILITY_NAME_AND_VERSION,
 				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
+		var vDS = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
-				.of("localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, vF, cF));
+				.of("highmedorg_localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, cDS, vDS));
 
 		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
-				classLoader, resourcesByProcessKeyAndVersion);
+				classLoader, resolver, resourcesByProcessKeyAndVersion);
 	}
 }

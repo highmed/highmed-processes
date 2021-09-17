@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Extension;
@@ -20,9 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class StoreMultiMedicResultSetsForResearcher extends StoreResultSets
 {
 	public StoreMultiMedicResultSetsForResearcher(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ObjectMapper openEhrObjectMapper)
+			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
-		super(clientProvider, taskHelper, openEhrObjectMapper);
+		super(clientProvider, taskHelper, readAccessHelper, openEhrObjectMapper);
 	}
 
 	@Override

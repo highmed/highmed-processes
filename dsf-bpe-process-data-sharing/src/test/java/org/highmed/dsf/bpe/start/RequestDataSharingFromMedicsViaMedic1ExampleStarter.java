@@ -30,6 +30,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
 
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelperImpl;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.Bundle;
@@ -52,15 +54,17 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 	private static boolean NEEDS_CONSENT_CHECK = true;
 	private static boolean NEEDS_RECORD_LINKAGE = true;
 
-	private static String REQUEST_FORM_REFERENCE = "https://medic1/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
-	private static String CONTRACT_REFERENCE = "https://medic1/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
-	private static String FEASIBILITY_REFERENCE = "https://medic1/fhir/Task/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
+	private static String REQUEST_FORM_REFERENCE = "https://foo/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
+	private static String CONTRACT_REFERENCE = "https://foo/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
+	private static String FEASIBILITY_REFERENCE = "https://foo/fhir/Task/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
 
 	private static final String QUERY = "SELECT e/ehr_status/subject/external_ref/id/value as EHRID, "
 			+ "v/items[at0024,'Bezeichnung']/value, v/items [at0001,'Messwert'], "
 			+ "v/items[at0006,'Dokumentationsdatum Untersuchung']/value FROM EHR e CONTAINS COMPOSITION c "
 			+ "CONTAINS CLUSTER v[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1] "
 			+ "WHERE v/items[at0024,'Bezeichnung']/value/value = 'Natrium' OFFSET 0 LIMIT 15;";
+
+	private static final ReadAccessHelper readAccessHelper = new ReadAccessHelperImpl();
 
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
 	// highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
@@ -109,6 +113,8 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 				.setValue(new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression(QUERY));
 		group.setName(name);
 
+		readAccessHelper.addAll(group);
+
 		return group;
 	}
 
@@ -149,6 +155,8 @@ public class RequestDataSharingFromMedicsViaMedic1ExampleStarter
 				.setValue(new Reference().setType(ResourceType.Organization.name())
 						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
 								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_TTP)));
+
+		readAccessHelper.addAll(researchStudy);
 
 		return researchStudy;
 	}

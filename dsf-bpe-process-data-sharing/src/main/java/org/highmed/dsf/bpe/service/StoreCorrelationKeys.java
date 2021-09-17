@@ -17,6 +17,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variable.QueryResultsValues;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
@@ -26,9 +27,10 @@ import org.hl7.fhir.r4.model.Task;
 
 public class StoreCorrelationKeys extends AbstractServiceDelegate
 {
-	public StoreCorrelationKeys(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public StoreCorrelationKeys(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 		List<Target> targets = getTaskHelper()
 				.getInputParameterStringValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY)
-				.map(correlationKey -> Target.createBiDirectionalTarget("", correlationKey))
+				.map(correlationKey -> Target.createBiDirectionalTarget("", "", correlationKey))
 				.collect(Collectors.toList());
 
 		return new Targets(targets);

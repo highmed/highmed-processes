@@ -3,6 +3,7 @@ package org.highmed.dsf.bpe.service;
 import javax.crypto.SecretKey;
 
 import org.highmed.dsf.bpe.crypto.KeyProvider;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -15,9 +16,11 @@ import org.springframework.beans.factory.InitializingBean;
 public class TranslateSingleMedicResultSetsWithoutRbf extends TranslateSingleMedicResultSets implements InitializingBean
 {
 	public TranslateSingleMedicResultSetsWithoutRbf(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			OrganizationProvider organizationProvider, KeyProvider keyProvider, String ehrIdColumnPath)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, KeyProvider keyProvider,
+			String ehrIdColumnPath)
 	{
-		super(clientProvider, taskHelper, organizationProvider, keyProvider, ehrIdColumnPath, null, null);
+		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, keyProvider, ehrIdColumnPath, null,
+				null);
 	}
 
 	@Override

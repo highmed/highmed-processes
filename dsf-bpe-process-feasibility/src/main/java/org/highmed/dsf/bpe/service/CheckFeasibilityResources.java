@@ -4,13 +4,14 @@ import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_COHORTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_COHORT_DEFINITIONS;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.MIN_PARTICIPATING_MEDICS;
 
 import java.util.List;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
+import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.FhirResourcesList;
@@ -20,9 +21,10 @@ import org.hl7.fhir.r4.model.ResearchStudy;
 
 public class CheckFeasibilityResources extends AbstractServiceDelegate
 {
-	public CheckFeasibilityResources(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper)
+	public CheckFeasibilityResources(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper)
 	{
-		super(clientProvider, taskHelper);
+		super(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Override
@@ -46,10 +48,10 @@ public class CheckFeasibilityResources extends AbstractServiceDelegate
 				.filter(i -> NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER.equals(i.getSystem())).map(i -> i.getValue())
 				.distinct().count();
 
-		if (medics < MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY)
+		if (medics < MIN_PARTICIPATING_MEDICS)
 		{
-			throw new RuntimeException("Number of distinct participanting MeDICs is < "
-					+ MIN_PARTICIPATING_MEDICS_FOR_FEASIBILITY + ", got " + medics);
+			throw new RuntimeException(
+					"Number of distinct participanting MeDICs is < " + MIN_PARTICIPATING_MEDICS + ", got " + medics);
 		}
 	}
 
@@ -64,10 +66,10 @@ public class CheckFeasibilityResources extends AbstractServiceDelegate
 	private void checkNumberOfCohortDefinitions(List<Group> cohorts)
 	{
 		int size = cohorts.size();
-		if (size < MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY)
+		if (size < MIN_COHORT_DEFINITIONS)
 		{
-			throw new RuntimeException("Number of defined cohorts is < " + MIN_COHORT_DEFINITIONS_FOR_FEASIBILITY
-					+ ", got " + cohorts.size());
+			throw new RuntimeException(
+					"Number of defined cohorts is < " + MIN_COHORT_DEFINITIONS + ", got " + cohorts.size());
 		}
 	}
 }
