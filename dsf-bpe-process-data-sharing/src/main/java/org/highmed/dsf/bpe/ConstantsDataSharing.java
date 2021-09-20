@@ -45,29 +45,41 @@ public interface ConstantsDataSharing
 	String EXTENSION_HIGHMED_QUERY = "http://highmed.org/fhir/StructureDefinition/extension-query";
 
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/task-request-data-sharing";
+	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_AND_VERSION = "http://highmed.org/fhir/StructureDefinition/task-request-data-sharing"
+			+ "|" + VERSION;
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI = PROCESS_HIGHMED_URI_BASE + "requestDataSharing/";
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI_AND_LATEST_VERSION = PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI
 			+ VERSION;
 	String PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_MESSAGE_NAME = "requestDataSharingMessage";
 
 	String PROFILE_HIGHMED_TASK_EXECUTE_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/task-execute-data-sharing";
+	String PROFILE_HIGHMED_TASK_EXECUTE_DATA_SHARING_AND_VERSION = "http://highmed.org/fhir/StructureDefinition/task-execute-data-sharing"
+			+ "|" + VERSION;
 	String PROFILE_HIGHMED_TASK_EXECUTE_DATA_SHARING_PROCESS_URI = PROCESS_HIGHMED_URI_BASE + "executeDataSharing/";
 	String PROFILE_HIGHMED_TASK_EXECUTE_DATA_SHARING_PROCESS_URI_AND_LATEST_VERSION = PROFILE_HIGHMED_TASK_EXECUTE_DATA_SHARING_PROCESS_URI
 			+ VERSION;
 	String PROFILE_HIGHMED_TASK_EXECUTE_DATA_SHARING_MESSAGE_NAME = "executeDataSharingMessage";
 
 	String PROFILE_HIGHMED_TASK_COMPUTE_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/task-compute-data-sharing";
+	String PROFILE_HIGHMED_TASK_COMPUTE_DATA_SHARING_AND_VERSION = "http://highmed.org/fhir/StructureDefinition/task-compute-data-sharing"
+			+ "|" + VERSION;
 	String PROFILE_HIGHMED_TASK_COMPUTE_DATA_SHARING_PROCESS_URI = PROCESS_HIGHMED_URI_BASE + "computeDataSharing/";
 	String PROFILE_HIGHMED_TASK_COMPUTE_DATA_SHARING_PROCESS_URI_AND_LATEST_VERSION = PROFILE_HIGHMED_TASK_COMPUTE_DATA_SHARING_PROCESS_URI
 			+ VERSION;
 	String PROFILE_HIGHMED_TASK_COMPUTE_DATA_SHARING_MESSAGE_NAME = "computeDataSharingMessage";
 
 	String PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/task-single-medic-result-data-sharing";
+	String PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_DATA_SHARING_AND_VERSION = "http://highmed.org/fhir/StructureDefinition/task-single-medic-result-data-sharing"
+			+ "|" + VERSION;
 	String PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_DATA_SHARING_MESSAGE_NAME = "resultSingleMedicDataSharingMessage";
 
 	String PROFILE_HIGHMED_TASK_MULTI_MEDIC_RESULT_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-data-sharing";
+	String PROFILE_HIGHMED_TASK_MULTI_MEDIC_RESULT_DATA_SHARING_AND_VERSION = "http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-data-sharing"
+			+ "|" + VERSION;
 	String PROFILE_HIGHMED_TASK_MULTI_MEDIC_RESULT_DATA_SHARING_MESSAGE_NAME = "resultMultiMedicDataSharingMessage";
 
 	String PROFILE_HIGHMED_TASK_ERROR_DATA_SHARING = "http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-data-sharing";
+	String PROFILE_HIGHMED_TASK_ERROR_DATA_SHARING_VERSION = "http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-data-sharing"
+			+ "|" + VERSION;
 	String PROFILE_HIGHMED_TASK_ERROR_DATA_SHARING_MESSAGE_NAME = "errorMultiMedicDataSharingMessage";
 }
