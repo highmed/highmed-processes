@@ -1,9 +1,9 @@
 package org.highmed.dsf.bpe.start;
 
-import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.MEDIC_1_FHIR_BASE_URL;
+import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.MEDIC_1_DOCKER_FHIR_BASE_URL;
 
-public class RequestFeasibilityFromMedicsViaMedic1ExampleStarter
-		extends AbstractRequestFeasibilityFromMedicsViaMedic1ExampleStarter
+public class RequestDataSharingFromMedicsViaMedic1DockerExampleStarter
+		extends AbstractRequestDataSharingFromMedicsViaMedic1ExampleStarter
 {
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
 	// highmed-dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
@@ -11,6 +11,6 @@ public class RequestFeasibilityFromMedicsViaMedic1ExampleStarter
 	// password
 	public static void main(String[] args) throws Exception
 	{
-		new RequestFeasibilityFromMedicsViaMedic1ExampleStarter().main(args, MEDIC_1_FHIR_BASE_URL);
+		new RequestDataSharingFromMedicsViaMedic1DockerExampleStarter().main(args, MEDIC_1_DOCKER_FHIR_BASE_URL);
 	}
 }

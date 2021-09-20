@@ -20,6 +20,7 @@ import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Targets;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Task;
 
 import ca.uhn.fhir.context.FhirContext;
@@ -63,8 +64,8 @@ public class SendTtpRequest extends AbstractTaskMessageSend
 
 	private Task.ParameterComponent getInputResearchStudyIdentifierComponent(String researchStudyIdentifierValue)
 	{
-		Reference reference = new Reference().setIdentifier(new Identifier().setValue(researchStudyIdentifierValue)
-				.setSystem(NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER));
+		Reference reference = new Reference().setType(ResourceType.ResearchStudy.name()).setIdentifier(new Identifier()
+				.setValue(researchStudyIdentifierValue).setSystem(NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER));
 
 		return getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_IDENTIFIER, reference);

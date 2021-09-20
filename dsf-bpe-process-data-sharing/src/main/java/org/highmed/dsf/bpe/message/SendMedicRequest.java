@@ -47,7 +47,7 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 		ParameterComponent inputNeedsConsentCheck = getNeedsConsentCheckComponent(needsConsentCheck);
 
 		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
-		ParameterComponent inputNeedsRecordLinkage = getNeedsRecordLinakgeComponent(needsRecordLinkage);
+		ParameterComponent inputNeedsRecordLinkage = getNeedsRecordLinkageComponent(needsRecordLinkage);
 
 		byte[] mdatKey = (byte[]) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
 		ParameterComponent inputMdatKey = getMdatKeyComponent(mdatKey);
@@ -83,7 +83,7 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK, needsConsentCheck);
 	}
 
-	private Task.ParameterComponent getNeedsRecordLinakgeComponent(boolean needsRecordLinkage)
+	private Task.ParameterComponent getNeedsRecordLinkageComponent(boolean needsRecordLinkage)
 	{
 		return getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);

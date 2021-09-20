@@ -185,11 +185,6 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 		return ref.getIdentifier().getValue();
 	}
 
-	private String getLeadingMedicIdentifier(Task task)
-	{
-		return task.getRequester().getIdentifier().getValue();
-	}
-
 	private boolean getNeedsConsentCheck(Task task)
 	{
 		return getTaskHelper()
