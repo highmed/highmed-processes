@@ -39,7 +39,7 @@
       <bpmn:outgoing>Flow_1q5jnli</bpmn:outgoing>
       <bpmn:outgoing>Flow_1harl90</bpmn:outgoing>
     </bpmn:eventBasedGateway>
-    <bpmn:serviceTask id="checkResultSets" name="check result sets" camunda:class="org.highmed.dsf.bpe.service.CheckMedicMultiMedicResultSets">
+    <bpmn:serviceTask id="checkResults" name="check results" camunda:class="org.highmed.dsf.bpe.service.CheckMedicMultiMedicResults">
       <bpmn:incoming>Flow_1m59ov0</bpmn:incoming>
       <bpmn:outgoing>Flow_0rwo9pn</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -56,10 +56,10 @@
       <bpmn:incoming>Flow_0amk6ah</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1q5jnli" sourceRef="Gateway_160gkf1" targetRef="receiveMultiMediclResultFromTtp" />
-    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveMultiMediclResultFromTtp" targetRef="downloadResultSets" />
+    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveMultiMediclResultFromTtp" targetRef="downloadResults" />
     <bpmn:sequenceFlow id="Flow_1harl90" sourceRef="Gateway_160gkf1" targetRef="receiveErrorFromTtp" />
     <bpmn:sequenceFlow id="Flow_1id9r0h" sourceRef="receiveErrorFromTtp" targetRef="handleError" />
-    <bpmn:sequenceFlow id="Flow_0rwo9pn" sourceRef="checkResultSets" targetRef="storeResultSets" />
+    <bpmn:sequenceFlow id="Flow_0rwo9pn" sourceRef="checkResults" targetRef="storeResults" />
     <bpmn:sequenceFlow id="Flow_1s74o06" sourceRef="handleError" targetRef="Gateway_0nlbalq" />
     <bpmn:sequenceFlow id="Flow_0amk6ah" sourceRef="Gateway_0nlbalq" targetRef="EndEvent" />
     <bpmn:sequenceFlow id="Flow_1lw96cm" sourceRef="sendRequestToMedics" targetRef="Gateway_160gkf1" />
@@ -80,18 +80,18 @@
       <bpmn:incoming>Flow_06otxko</bpmn:incoming>
       <bpmn:outgoing>Flow_0cx3xe1</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="downloadResultSets" name="download result sets" camunda:class="org.highmed.dsf.bpe.service.DownloadMultiMedicResultSets">
+    <bpmn:serviceTask id="downloadResults" name="download results" camunda:class="org.highmed.dsf.bpe.service.DownloadMultiMedicResults">
       <bpmn:incoming>Flow_1gf3n6o</bpmn:incoming>
       <bpmn:outgoing>Flow_025quhl</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="downloadResultSets" targetRef="translateWithDecryption" />
-    <bpmn:sequenceFlow id="Flow_1rnnd6d" sourceRef="storeResultSets" targetRef="Gateway_0nlbalq" />
-    <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSetsForResearcher">
+    <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="downloadResults" targetRef="decryptResults" />
+    <bpmn:sequenceFlow id="Flow_1rnnd6d" sourceRef="storeResults" targetRef="Gateway_0nlbalq" />
+    <bpmn:serviceTask id="storeResults" name="store results" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultsForResearcher">
       <bpmn:incoming>Flow_0rwo9pn</bpmn:incoming>
       <bpmn:outgoing>Flow_1rnnd6d</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1m59ov0" sourceRef="translateWithDecryption" targetRef="checkResultSets" />
-    <bpmn:serviceTask id="translateWithDecryption" name="translate with decryption" camunda:class="org.highmed.dsf.bpe.service.TranslateMultiMedicResultSets">
+    <bpmn:sequenceFlow id="Flow_1m59ov0" sourceRef="decryptResults" targetRef="checkResults" />
+    <bpmn:serviceTask id="decryptResults" name="decrypt results" camunda:class="org.highmed.dsf.bpe.service.DecryptMultiMedicResults">
       <bpmn:incoming>Flow_025quhl</bpmn:incoming>
       <bpmn:outgoing>Flow_1m59ov0</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -193,7 +193,7 @@
       <bpmndi:BPMNShape id="Gateway_160gkf1_di" bpmnElement="Gateway_160gkf1">
         <dc:Bounds x="915" y="202" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1sx3j2g_di" bpmnElement="checkResultSets">
+      <bpmndi:BPMNShape id="Activity_1sx3j2g_di" bpmnElement="checkResults">
         <dc:Bounds x="1440" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0t7mxic_di" bpmnElement="handleError">
@@ -217,13 +217,13 @@
       <bpmndi:BPMNShape id="Activity_1wzn9by_di" bpmnElement="selectRequestTargetsAndGenerateKeys">
         <dc:Bounds x="470" y="187" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_09oplxx_di" bpmnElement="downloadResultSets">
+      <bpmndi:BPMNShape id="Activity_09oplxx_di" bpmnElement="downloadResults">
         <dc:Bounds x="1120" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1a9tjil_di" bpmnElement="storeResultSets">
+      <bpmndi:BPMNShape id="Activity_1a9tjil_di" bpmnElement="storeResults">
         <dc:Bounds x="1590" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0lqm4kz_di" bpmnElement="translateWithDecryption">
+      <bpmndi:BPMNShape id="Activity_0lqm4kz_di" bpmnElement="decryptResults">
         <dc:Bounds x="1280" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>

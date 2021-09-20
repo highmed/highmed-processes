@@ -21,11 +21,11 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class CheckResultSets extends AbstractServiceDelegate
+public abstract class CheckResults extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(CheckResultSets.class);
+	private static final Logger logger = LoggerFactory.getLogger(CheckResults.class);
 
-	public CheckResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public CheckResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

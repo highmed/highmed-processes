@@ -9,9 +9,9 @@ import org.highmed.dsf.fhir.task.TaskHelper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class StoreMultiMedicResultSetsForLeadingMedic extends StoreResultSets
+public class StoreMultiMedicResultsForLeadingMedic extends StoreResults
 {
-	public StoreMultiMedicResultSetsForLeadingMedic(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public StoreMultiMedicResultsForLeadingMedic(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper, openEhrObjectMapper);

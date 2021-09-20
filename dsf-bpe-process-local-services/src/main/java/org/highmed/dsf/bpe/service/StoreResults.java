@@ -20,11 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class StoreResult extends AbstractServiceDelegate implements InitializingBean
+public class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(StoreResult.class);
+	private static final Logger logger = LoggerFactory.getLogger(StoreResults.class);
 
-	public StoreResult(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public StoreResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

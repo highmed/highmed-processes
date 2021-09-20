@@ -16,10 +16,10 @@ import org.highmed.dsf.bpe.service.CheckSingleMedicResults;
 import org.highmed.dsf.bpe.service.CheckTtpComputedMultiMedicResults;
 import org.highmed.dsf.bpe.service.DownloadFeasibilityResources;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
-import org.highmed.dsf.bpe.service.DownloadResultSets;
+import org.highmed.dsf.bpe.service.DownloadResults;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
 import org.highmed.dsf.bpe.service.ExecuteRecordLink;
-import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
+import org.highmed.dsf.bpe.service.FilterResultsByConsent;
 import org.highmed.dsf.bpe.service.GenerateBloomFilters;
 import org.highmed.dsf.bpe.service.GenerateCountFromIds;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
@@ -178,9 +178,9 @@ public class FeasibilityConfig
 	}
 
 	@Bean
-	public FilterQueryResultsByConsent filterQueryResultsByConsent()
+	public FilterResultsByConsent filterResultsByConsent()
 	{
-		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper, consentClient());
+		return new FilterResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper, consentClient());
 	}
 
 	@Bean
@@ -250,9 +250,9 @@ public class FeasibilityConfig
 	}
 
 	@Bean
-	public DownloadResultSets downloadResultSets()
+	public DownloadResults downloadResults()
 	{
-		return new DownloadResultSets(fhirClientProvider, taskHelper, readAccessHelper, objectMapper);
+		return new DownloadResults(fhirClientProvider, taskHelper, readAccessHelper, objectMapper);
 	}
 
 	@Bean

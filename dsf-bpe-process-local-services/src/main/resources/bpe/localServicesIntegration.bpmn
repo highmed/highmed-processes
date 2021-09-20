@@ -44,7 +44,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0isxkuy" name="needs consent check" sourceRef="ExclusiveGateway_0bq7zdz" targetRef="filterByConsent">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsConsentCheck == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="filterByConsent" name="filter by consent" camunda:class="org.highmed.dsf.bpe.service.FilterQueryResultsByConsent">
+    <bpmn:serviceTask id="filterByConsent" name="filter by consent" camunda:class="org.highmed.dsf.bpe.service.FilterResultsByConsent">
       <bpmn:incoming>SequenceFlow_0isxkuy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0kzp6tl</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -101,7 +101,7 @@
       <bpmn:incoming>Flow_1yjkp7k</bpmn:incoming>
       <bpmn:outgoing>Flow_125i149</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="storeResult" name="store result" camunda:class="org.highmed.dsf.bpe.service.StoreResult">
+    <bpmn:serviceTask id="storeResult" name="store results" camunda:class="org.highmed.dsf.bpe.service.StoreResults">
       <bpmn:incoming>SequenceFlow_04ouilq</bpmn:incoming>
       <bpmn:outgoing>Flow_0m4rhl9</bpmn:outgoing>
     </bpmn:serviceTask>

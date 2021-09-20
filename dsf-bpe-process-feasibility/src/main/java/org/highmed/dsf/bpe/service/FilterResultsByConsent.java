@@ -20,13 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class FilterQueryResultsByConsent extends AbstractServiceDelegate implements InitializingBean
+public class FilterResultsByConsent extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(FilterQueryResultsByConsent.class);
+	private static final Logger logger = LoggerFactory.getLogger(FilterResultsByConsent.class);
 
 	private final ConsentClient consentClient;
 
-	public FilterQueryResultsByConsent(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public FilterResultsByConsent(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, ConsentClient consentClient)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

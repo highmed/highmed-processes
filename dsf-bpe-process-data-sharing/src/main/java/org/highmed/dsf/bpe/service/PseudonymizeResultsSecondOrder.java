@@ -45,14 +45,14 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class PseudonymizeQueryResultsSecondOrder extends AbstractServiceDelegate implements InitializingBean
+public abstract class PseudonymizeResultsSecondOrder extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(PseudonymizeQueryResultsSecondOrder.class);
+	private static final Logger logger = LoggerFactory.getLogger(PseudonymizeResultsSecondOrder.class);
 
 	private final KeyConsumer keyConsumer;
 	private final ObjectMapper psnObjectMapper;
 
-	public PseudonymizeQueryResultsSecondOrder(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public PseudonymizeResultsSecondOrder(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, KeyConsumer keyConsumer, ObjectMapper psnObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

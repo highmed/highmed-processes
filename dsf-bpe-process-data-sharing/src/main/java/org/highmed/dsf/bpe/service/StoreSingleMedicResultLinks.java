@@ -21,9 +21,9 @@ import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
-public class StoreSingleMedicResultSetLinks extends AbstractServiceDelegate
+public class StoreSingleMedicResultLinks extends AbstractServiceDelegate
 {
-	public StoreSingleMedicResultSetLinks(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public StoreSingleMedicResultLinks(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

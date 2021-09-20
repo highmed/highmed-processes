@@ -27,13 +27,13 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DownloadResultSets extends AbstractServiceDelegate
+public class DownloadResults extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(DownloadResultSets.class);
+	private static final Logger logger = LoggerFactory.getLogger(DownloadResults.class);
 
 	private final ObjectMapper openEhrObjectMapper;
 
-	public DownloadResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public DownloadResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

@@ -7,11 +7,11 @@ import org.highmed.dsf.bpe.service.CheckQueries;
 import org.highmed.dsf.bpe.service.CheckSingleMedicResults;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
 import org.highmed.dsf.bpe.service.ExtractInputValues;
-import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
+import org.highmed.dsf.bpe.service.FilterResultsByConsent;
 import org.highmed.dsf.bpe.service.GenerateBloomFilters;
 import org.highmed.dsf.bpe.service.GenerateCountFromIds;
 import org.highmed.dsf.bpe.service.ModifyQueries;
-import org.highmed.dsf.bpe.service.StoreResult;
+import org.highmed.dsf.bpe.service.StoreResults;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
@@ -72,9 +72,9 @@ public class LocalServicesConfig
 	}
 
 	@Bean
-	public StoreResult storeResult()
+	public StoreResults storeResults()
 	{
-		return new StoreResult(fhirClientProvider, taskHelper, readAccessHelper);
+		return new StoreResults(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
@@ -96,9 +96,9 @@ public class LocalServicesConfig
 	}
 
 	@Bean
-	public FilterQueryResultsByConsent filterQueryResultsByConsent()
+	public FilterResultsByConsent filterResultsByConsent()
 	{
-		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper, consentClient());
+		return new FilterResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper, consentClient());
 	}
 
 	@Bean

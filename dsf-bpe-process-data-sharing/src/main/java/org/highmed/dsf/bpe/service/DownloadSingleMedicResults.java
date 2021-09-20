@@ -13,9 +13,9 @@ import org.highmed.dsf.fhir.task.TaskHelper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DownloadSingleMedicResultSets extends DownloadResultSets
+public class DownloadSingleMedicResults extends DownloadResults
 {
-	public DownloadSingleMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public DownloadSingleMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper, openEhrObjectMapper);

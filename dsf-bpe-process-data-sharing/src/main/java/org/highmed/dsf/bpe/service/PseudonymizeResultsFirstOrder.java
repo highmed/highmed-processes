@@ -20,13 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class PseudonymizeQueryResultsFirstOrder extends AbstractServiceDelegate implements InitializingBean
+public class PseudonymizeResultsFirstOrder extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(PseudonymizeQueryResultsFirstOrder.class);
+	private static final Logger logger = LoggerFactory.getLogger(PseudonymizeResultsFirstOrder.class);
 
 	private final PseudonymizationClient pseudonymizationClient;
 
-	public PseudonymizeQueryResultsFirstOrder(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public PseudonymizeResultsFirstOrder(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, PseudonymizationClient pseudonymizationClient)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

@@ -9,9 +9,9 @@ import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.hl7.fhir.r4.model.Task;
 
-public class CheckMedicMultiMedicResultSets extends CheckResultSets
+public class CheckMedicMultiMedicResults extends CheckResults
 {
-	public CheckMedicMultiMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public CheckMedicMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

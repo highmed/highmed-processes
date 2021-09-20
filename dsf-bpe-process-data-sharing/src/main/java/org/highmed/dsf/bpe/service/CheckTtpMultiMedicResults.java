@@ -19,11 +19,11 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CheckTtpSingleMedicResultSets extends CheckResultSets
+public class CheckTtpMultiMedicResults extends CheckResults
 {
-	private static final Logger logger = LoggerFactory.getLogger(CheckTtpSingleMedicResultSets.class);
+	private static final Logger logger = LoggerFactory.getLogger(CheckTtpMultiMedicResults.class);
 
-	public CheckTtpSingleMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public CheckTtpMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
@@ -57,13 +57,12 @@ public class CheckTtpSingleMedicResultSets extends CheckResultSets
 		if (results.size() < 1)
 		{
 			logger.warn(
-					"Did not receive any valid results from any MeDIC for any cohort definition in the data sharing request with "
-							+ "task-id='{}', business-key='{}' and correlation-key='{}', are there results present?",
+					"Could not calculate result for any cohort definition in the data sharing request with "
+							+ "task-id='{}', business-key='{}' and correlation-key='{}'",
 					taskId, businessKey, correlationKey);
 
-			leadingTask.getOutput()
-					.add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR,
-							"Did not receive any valid results from any MeDIC for any cohort definition"));
+			leadingTask.getOutput().add(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN,
+					CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, "Could not calculate result for any cohort definition"));
 
 			return false;
 		}

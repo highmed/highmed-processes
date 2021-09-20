@@ -30,13 +30,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.uhn.fhir.context.FhirContext;
 
-public abstract class StoreResultSets extends AbstractServiceDelegate implements InitializingBean
+public abstract class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(StoreResultSets.class);
+	private static final Logger logger = LoggerFactory.getLogger(StoreResults.class);
 
 	private final ObjectMapper openEhrObjectMapper;
 
-	public StoreResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public StoreResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

@@ -5,15 +5,15 @@ import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedic;
-import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedicNoRbfImpl;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedicWithRbfImpl;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage extends PseudonymizeQueryResultsSecondOrder
+public class PseudonymizeResultsSecondOrderWithRecordLinkage extends PseudonymizeResultsSecondOrder
 		implements InitializingBean
 {
-	public PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage(FhirWebserviceClientProvider clientProvider,
+	public PseudonymizeResultsSecondOrderWithRecordLinkage(FhirWebserviceClientProvider clientProvider,
 			TaskHelper taskHelper, ReadAccessHelper readAccessHelper, KeyConsumer keyConsumer,
 			ObjectMapper psnObjectMapper)
 	{
@@ -23,6 +23,6 @@ public class PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage extends Pse
 	@Override
 	protected ResultSetTranslatorFromMedic createResultSetTranslatorFromMedic()
 	{
-		return new ResultSetTranslatorFromMedicNoRbfImpl();
+		return new ResultSetTranslatorFromMedicWithRbfImpl();
 	}
 }

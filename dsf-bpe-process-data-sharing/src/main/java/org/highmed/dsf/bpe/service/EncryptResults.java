@@ -31,15 +31,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class EncryptQueryResults extends AbstractServiceDelegate implements InitializingBean
+public class EncryptResults extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(EncryptQueryResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(EncryptResults.class);
 
 	private final OrganizationProvider organizationProvider;
 	private final KeyProvider keyProvider;
 	private final String ehrIdColumnPath;
 
-	public EncryptQueryResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public EncryptResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, KeyProvider keyProvider,
 			String ehrIdColumnPath)
 	{

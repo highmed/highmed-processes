@@ -28,13 +28,13 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class TranslateMultiMedicResultSets extends AbstractServiceDelegate implements InitializingBean
+public class DecryptMultiMedicResults extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(TranslateMultiMedicResultSets.class);
+	private static final Logger logger = LoggerFactory.getLogger(DecryptMultiMedicResults.class);
 
 	private final ObjectMapper openEhrObjectMapper;
 
-	public TranslateMultiMedicResultSets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public DecryptMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

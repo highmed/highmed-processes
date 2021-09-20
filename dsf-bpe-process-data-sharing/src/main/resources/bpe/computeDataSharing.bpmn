@@ -8,7 +8,7 @@
       <bpmn:endEvent id="SubEndEvent">
         <bpmn:incoming>SequenceFlow_0mj024w</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:serviceTask id="storeResultSetLinks" name="store result set links" camunda:class="org.highmed.dsf.bpe.service.StoreSingleMedicResultSetLinks">
+      <bpmn:serviceTask id="storeResultLinks" name="store result links" camunda:class="org.highmed.dsf.bpe.service.StoreSingleMedicResultLinks">
         <bpmn:incoming>SequenceFlow_0by0at7</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0mj024w</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -25,8 +25,8 @@
         <bpmn:outgoing>SequenceFlow_0qjt33w</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="SequenceFlow_0qjt33w" sourceRef="SubStartEvent" targetRef="receiveResults" />
-      <bpmn:sequenceFlow id="SequenceFlow_0by0at7" sourceRef="receiveResults" targetRef="storeResultSetLinks" />
-      <bpmn:sequenceFlow id="SequenceFlow_0mj024w" sourceRef="storeResultSetLinks" targetRef="SubEndEvent" />
+      <bpmn:sequenceFlow id="SequenceFlow_0by0at7" sourceRef="receiveResults" targetRef="storeResultLinks" />
+      <bpmn:sequenceFlow id="SequenceFlow_0mj024w" sourceRef="storeResultLinks" targetRef="SubEndEvent" />
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="TimerEnded" attachedToRef="SubProcess_1gopxt4">
       <bpmn:outgoing>SequenceFlow_0h3to47</bpmn:outgoing>
@@ -61,11 +61,11 @@
     <bpmn:sequenceFlow id="SequenceFlow_0t4lx4v" name="else" sourceRef="ExclusiveGateway_07e71aa" targetRef="pseudonymizeResultSetWithoutRecordLinkage">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="pseudonymizeResultSetWithRecordLinkage" name="pseudonymize result sets with record linkage" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeQueryResultsSecondOrderWithRecordLinkage">
+    <bpmn:serviceTask id="pseudonymizeResultsWithRecordLinkage" name="pseudonymize results with record linkage" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeResultsSecondOrderWithRecordLinkage">
       <bpmn:incoming>SequenceFlow_0calilw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_02zmrer</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_02zmrer" sourceRef="pseudonymizeResultSetWithRecordLinkage" targetRef="ExclusiveGateway_1r8ow3i" />
+    <bpmn:sequenceFlow id="SequenceFlow_02zmrer" sourceRef="pseudonymizeResultsWithRecordLinkage" targetRef="ExclusiveGateway_1r8ow3i" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_1r8ow3i">
       <bpmn:incoming>SequenceFlow_02zmrer</bpmn:incoming>
       <bpmn:incoming>Flow_115yfgb</bpmn:incoming>
@@ -91,16 +91,16 @@
       <bpmn:incoming>Flow_0rwc0yo</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_19y5diw" messageRef="Message_0kix95m" camunda:class="org.highmed.dsf.bpe.message.SendMultiMedicErrors" />
     </bpmn:endEvent>
-    <bpmn:serviceTask id="checkPseudonymizedResultSets" name="check pseudonymized result sets" camunda:class="org.highmed.dsf.bpe.service.CheckTtpMultiMedicResultSets">
+    <bpmn:serviceTask id="checkPseudonymizedResults" name="check pseudonymized results" camunda:class="org.highmed.dsf.bpe.service.CheckTtpMultiMedicResults">
       <bpmn:incoming>Flow_1wig1wj</bpmn:incoming>
       <bpmn:outgoing>Flow_0mogdyo</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="errorPseudonymization" attachedToRef="checkPseudonymizedResultSets">
+    <bpmn:boundaryEvent id="errorPseudonymization" attachedToRef="checkPseudonymizedResults">
       <bpmn:outgoing>Flow_1tmnvhl</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_05kx06m" errorRef="Error_0qub4jc" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1tmnvhl" sourceRef="errorPseudonymization" targetRef="EndEventError" />
-    <bpmn:sequenceFlow id="SequenceFlow_0calilw" name="needs record linkage" sourceRef="ExclusiveGateway_07e71aa" targetRef="pseudonymizeResultSetWithRecordLinkage">
+    <bpmn:sequenceFlow id="SequenceFlow_0calilw" name="needs record linkage" sourceRef="ExclusiveGateway_07e71aa" targetRef="pseudonymizeResultsWithRecordLinkage">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="Gateway_0h2eszv">
@@ -108,31 +108,31 @@
       <bpmn:incoming>SequenceFlow_0h3to47</bpmn:incoming>
       <bpmn:outgoing>Flow_0b5n9vc</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0b5n9vc" sourceRef="Gateway_0h2eszv" targetRef="downloadResultSets" />
-    <bpmn:sequenceFlow id="Flow_0gx8n5k" sourceRef="downloadResultSets" targetRef="checkReceivedResultSets" />
-    <bpmn:serviceTask id="downloadResultSets" name="download result sets" camunda:class="org.highmed.dsf.bpe.service.DownloadSingleMedicResultSets">
+    <bpmn:sequenceFlow id="Flow_0b5n9vc" sourceRef="Gateway_0h2eszv" targetRef="downloadResults" />
+    <bpmn:sequenceFlow id="Flow_0gx8n5k" sourceRef="downloadResults" targetRef="checkReceivedResults" />
+    <bpmn:serviceTask id="downloadResults" name="download results" camunda:class="org.highmed.dsf.bpe.service.DownloadSingleMedicResults">
       <bpmn:incoming>Flow_0b5n9vc</bpmn:incoming>
       <bpmn:outgoing>Flow_0gx8n5k</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="storeResultSets" name="store result sets" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultSetsForLeadingMedic">
+    <bpmn:serviceTask id="storeResults" name="store results" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultsForLeadingMedic">
       <bpmn:incoming>Flow_0mogdyo</bpmn:incoming>
       <bpmn:outgoing>Flow_0uaqn1r</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0mogdyo" sourceRef="checkPseudonymizedResultSets" targetRef="storeResultSets" />
+    <bpmn:sequenceFlow id="Flow_0mogdyo" sourceRef="checkPseudonymizedResults" targetRef="storeResults" />
     <bpmn:sequenceFlow id="Flow_1qqffoq" sourceRef="ExclusiveGateway_1r8ow3i" targetRef="selectResponseTargetMedic" />
-    <bpmn:sequenceFlow id="Flow_1wig1wj" sourceRef="selectResponseTargetMedic" targetRef="checkPseudonymizedResultSets" />
-    <bpmn:sequenceFlow id="Flow_0uaqn1r" sourceRef="storeResultSets" targetRef="EndEventSuccess" />
+    <bpmn:sequenceFlow id="Flow_1wig1wj" sourceRef="selectResponseTargetMedic" targetRef="checkPseudonymizedResults" />
+    <bpmn:sequenceFlow id="Flow_0uaqn1r" sourceRef="storeResults" targetRef="EndEventSuccess" />
     <bpmn:sequenceFlow id="Flow_115yfgb" sourceRef="pseudonymizeResultSetWithoutRecordLinkage" targetRef="ExclusiveGateway_1r8ow3i" />
-    <bpmn:serviceTask id="pseudonymizeResultSetWithoutRecordLinkage" name="pseudonymize result sets" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage">
+    <bpmn:serviceTask id="pseudonymizeResultSetWithoutRecordLinkage" name="pseudonymize results without record linkage" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeResultsSecondOrderWithoutRecordLinkage">
       <bpmn:incoming>SequenceFlow_0t4lx4v</bpmn:incoming>
       <bpmn:outgoing>Flow_115yfgb</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0g86uan" sourceRef="checkReceivedResultSets" targetRef="ExclusiveGateway_07e71aa" />
-    <bpmn:serviceTask id="checkReceivedResultSets" name="check received result sets" camunda:class="org.highmed.dsf.bpe.service.CheckTtpSingleMedicResultSets">
+    <bpmn:sequenceFlow id="Flow_0g86uan" sourceRef="checkReceivedResults" targetRef="ExclusiveGateway_07e71aa" />
+    <bpmn:serviceTask id="checkReceivedResults" name="check received results" camunda:class="org.highmed.dsf.bpe.service.CheckTtpSingleMedicResults">
       <bpmn:incoming>Flow_0gx8n5k</bpmn:incoming>
       <bpmn:outgoing>Flow_0g86uan</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="errorReceived" attachedToRef="checkReceivedResultSets">
+    <bpmn:boundaryEvent id="errorReceived" attachedToRef="checkReceivedResults">
       <bpmn:outgoing>Flow_0rwc0yo</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1co4qxl" errorRef="Error_1r03ghq" />
     </bpmn:boundaryEvent>
@@ -243,7 +243,7 @@
       <bpmndi:BPMNShape id="EndEvent_01cb50v_di" bpmnElement="SubEndEvent">
         <dc:Bounds x="894" y="226" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0yjis46_di" bpmnElement="storeResultSetLinks">
+      <bpmndi:BPMNShape id="ServiceTask_0yjis46_di" bpmnElement="storeResultLinks">
         <dc:Bounds x="746" y="204" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ReceiveTask_0533fm9_di" bpmnElement="receiveResults">
@@ -270,7 +270,7 @@
       <bpmndi:BPMNShape id="ExclusiveGateway_07e71aa_di" bpmnElement="ExclusiveGateway_07e71aa" isMarkerVisible="true">
         <dc:Bounds x="1485" y="217" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_093hq2s_di" bpmnElement="pseudonymizeResultSetWithRecordLinkage">
+      <bpmndi:BPMNShape id="ServiceTask_093hq2s_di" bpmnElement="pseudonymizeResultsWithRecordLinkage">
         <dc:Bounds x="1640" y="86" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_1r8ow3i_di" bpmnElement="ExclusiveGateway_1r8ow3i" isMarkerVisible="true">
@@ -288,22 +288,22 @@
           <dc:Bounds x="2299" y="445" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_13j8ce9_di" bpmnElement="checkPseudonymizedResultSets">
+      <bpmndi:BPMNShape id="Activity_13j8ce9_di" bpmnElement="checkPseudonymizedResults">
         <dc:Bounds x="1950" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0h2eszv_di" bpmnElement="Gateway_0h2eszv" isMarkerVisible="true">
         <dc:Bounds x="1045" y="217" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1rzqqn0_di" bpmnElement="downloadResultSets">
+      <bpmndi:BPMNShape id="Activity_1rzqqn0_di" bpmnElement="downloadResults">
         <dc:Bounds x="1160" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0tps18n_di" bpmnElement="storeResultSets">
+      <bpmndi:BPMNShape id="Activity_0tps18n_di" bpmnElement="storeResults">
         <dc:Bounds x="2120" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0y1tjhz_di" bpmnElement="pseudonymizeResultSetWithoutRecordLinkage">
         <dc:Bounds x="1640" y="320" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0798gut_di" bpmnElement="checkReceivedResultSets">
+      <bpmndi:BPMNShape id="Activity_0798gut_di" bpmnElement="checkReceivedResults">
         <dc:Bounds x="1330" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1c7452s_di" bpmnElement="errorReceived">

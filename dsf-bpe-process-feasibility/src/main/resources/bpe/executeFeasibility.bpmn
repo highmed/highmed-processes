@@ -21,7 +21,7 @@
       <bpmn:incoming>SequenceFlow_14cn0vs</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1etju4m</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="EndEvent" name="send result to TTP">
+    <bpmn:endEvent id="EndEvent" name="send results to TTP">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeFeasibility/0.5.0</camunda:inputParameter>
@@ -71,7 +71,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0isxkuy" name="needs consent check" sourceRef="ExclusiveGateway_0bq7zdz" targetRef="filterByConsent">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsConsentCheck}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="filterByConsent" name="filter by consent" camunda:class="org.highmed.dsf.bpe.service.FilterQueryResultsByConsent">
+    <bpmn:serviceTask id="filterByConsent" name="filter results by consent" camunda:class="org.highmed.dsf.bpe.service.FilterResultsByConsent">
       <bpmn:incoming>SequenceFlow_0isxkuy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0kzp6tl</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -259,7 +259,7 @@
       <bpmndi:BPMNShape id="EndEvent_10xdh63_di" bpmnElement="EndEvent">
         <dc:Bounds x="2201" y="254" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2186" y="297" width="67" height="27" />
+          <dc:Bounds x="2184" y="297" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1pt9xhp_di" bpmnElement="checkQueries">
