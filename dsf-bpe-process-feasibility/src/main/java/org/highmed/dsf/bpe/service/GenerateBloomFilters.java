@@ -5,7 +5,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.OPENEHR_MIMETYPE_JSON;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI;
-import static org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnlyImpl.FILTER_ON_IDAT_NOT_FOUND_EXCEPTION;
+import static org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumnsImpl.FILTER_ON_IDAT_NOT_FOUND_EXCEPTION;
 
 import java.security.Key;
 import java.util.List;
@@ -29,8 +29,8 @@ import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGenerator;
 import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGeneratorImpl;
 import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGeneratorImpl.FieldBloomFilterLengths;
 import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGeneratorImpl.FieldWeights;
-import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnly;
-import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnlyImpl;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumnsImpl;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ResourceType;
@@ -91,7 +91,8 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 		BloomFilterConfig bloomFilterConfig = (BloomFilterConfig) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG);
 
-		ResultSetTranslatorToTtpRbfOnly resultSetTranslator = createResultSetTranslator(bloomFilterConfig);
+		ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns resultSetTranslator = createResultSetTranslator(
+				bloomFilterConfig);
 
 		List<QueryResult> translatedResults = results.getResults().stream()
 				.map(result -> translateAndCreateBinary(resultSetTranslator, result, securityIdentifier))
@@ -111,9 +112,10 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 			return (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER);
 	}
 
-	protected ResultSetTranslatorToTtpRbfOnly createResultSetTranslator(BloomFilterConfig bloomFilterConfig)
+	protected ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns createResultSetTranslator(
+			BloomFilterConfig bloomFilterConfig)
 	{
-		return new ResultSetTranslatorToTtpRbfOnlyImpl(ehrIdColumnPath,
+		return new ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumnsImpl(ehrIdColumnPath,
 				createRecordBloomFilterGenerator(bloomFilterConfig.getPermutationSeed(),
 						bloomFilterConfig.getHmacSha2Key(), bloomFilterConfig.getHmacSha3Key()),
 				masterPatientIndexClient, FILTER_ON_IDAT_NOT_FOUND_EXCEPTION);
@@ -127,8 +129,9 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 						bouncyCastleProvider));
 	}
 
-	private QueryResult translateAndCreateBinary(ResultSetTranslatorToTtpRbfOnly resultSetTranslator,
-			QueryResult result, String ttpIdentifier)
+	private QueryResult translateAndCreateBinary(
+			ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns resultSetTranslator, QueryResult result,
+			String ttpIdentifier)
 	{
 		ResultSet translatedResultSet = translate(resultSetTranslator, result.getResultSet());
 		String resultSetUrl = saveResultSetAsBinaryForTtp(translatedResultSet, ttpIdentifier);
@@ -136,7 +139,8 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSetUrl);
 	}
 
-	private ResultSet translate(ResultSetTranslatorToTtpRbfOnly resultSetTranslator, ResultSet resultSet)
+	private ResultSet translate(ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns resultSetTranslator,
+			ResultSet resultSet)
 	{
 		try
 		{

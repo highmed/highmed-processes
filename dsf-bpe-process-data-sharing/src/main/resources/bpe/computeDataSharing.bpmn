@@ -61,7 +61,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0t4lx4v" name="else" sourceRef="ExclusiveGateway_07e71aa" targetRef="pseudonymizeResultSetWithoutRecordLinkage">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="pseudonymizeResultSetWithRecordLinkage" name="pseudonymize result sets with record linkage" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithRecordLinkage">
+    <bpmn:serviceTask id="pseudonymizeResultSetWithRecordLinkage" name="pseudonymize result sets with record linkage" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeQueryResultsSecondOrderWithRecordLinkage">
       <bpmn:incoming>SequenceFlow_0calilw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_02zmrer</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -123,7 +123,7 @@
     <bpmn:sequenceFlow id="Flow_1wig1wj" sourceRef="selectResponseTargetMedic" targetRef="checkPseudonymizedResultSets" />
     <bpmn:sequenceFlow id="Flow_0uaqn1r" sourceRef="storeResultSets" targetRef="EndEventSuccess" />
     <bpmn:sequenceFlow id="Flow_115yfgb" sourceRef="pseudonymizeResultSetWithoutRecordLinkage" targetRef="ExclusiveGateway_1r8ow3i" />
-    <bpmn:serviceTask id="pseudonymizeResultSetWithoutRecordLinkage" name="pseudonymize result sets" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithoutRecordLinkage">
+    <bpmn:serviceTask id="pseudonymizeResultSetWithoutRecordLinkage" name="pseudonymize result sets" camunda:class="org.highmed.dsf.bpe.service.PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage">
       <bpmn:incoming>SequenceFlow_0t4lx4v</bpmn:incoming>
       <bpmn:outgoing>Flow_115yfgb</bpmn:outgoing>
     </bpmn:serviceTask>

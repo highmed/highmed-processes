@@ -3,6 +3,8 @@ package org.highmed.dsf.bpe.spring.config;
 import java.nio.file.Paths;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.highmed.consent.client.ConsentClient;
+import org.highmed.consent.client.ConsentClientFactory;
 import org.highmed.dsf.bpe.crypto.KeyConsumer;
 import org.highmed.dsf.bpe.crypto.KeyProvider;
 import org.highmed.dsf.bpe.crypto.SecretKeyConsumerImpl;
@@ -21,13 +23,16 @@ import org.highmed.dsf.bpe.service.DownloadDataSharingResources;
 import org.highmed.dsf.bpe.service.DownloadMultiMedicResultSets;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
 import org.highmed.dsf.bpe.service.DownloadSingleMedicResultSets;
+import org.highmed.dsf.bpe.service.EncryptQueryResults;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
 import org.highmed.dsf.bpe.service.ExtractQueries;
 import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
+import org.highmed.dsf.bpe.service.GenerateBloomFilters;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
 import org.highmed.dsf.bpe.service.ModifyQueries;
-import org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithRecordLinkage;
-import org.highmed.dsf.bpe.service.PseudonymizeResultSetsWithoutRecordLinkage;
+import org.highmed.dsf.bpe.service.PseudonymizeQueryResultsFirstOrder;
+import org.highmed.dsf.bpe.service.PseudonymizeQueryResultsSecondOrderWithRecordLinkage;
+import org.highmed.dsf.bpe.service.PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage;
 import org.highmed.dsf.bpe.service.SelectRequestTargets;
 import org.highmed.dsf.bpe.service.SelectResponseTargetMedic;
 import org.highmed.dsf.bpe.service.SelectResponseTargetTtp;
@@ -37,8 +42,6 @@ import org.highmed.dsf.bpe.service.StoreMultiMedicResultSetsForResearcher;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSetLinks;
 import org.highmed.dsf.bpe.service.StoreSingleMedicResultSets;
 import org.highmed.dsf.bpe.service.TranslateMultiMedicResultSets;
-import org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithRbf;
-import org.highmed.dsf.bpe.service.TranslateSingleMedicResultSetsWithoutRbf;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.group.GroupHelper;
@@ -49,6 +52,8 @@ import org.highmed.mpi.client.MasterPatientIndexClient;
 import org.highmed.mpi.client.MasterPatientIndexClientFactory;
 import org.highmed.openehr.client.OpenEhrClient;
 import org.highmed.openehr.client.OpenEhrClientFactory;
+import org.highmed.pseudonymization.client.PseudonymizationClient;
+import org.highmed.pseudonymization.client.PseudonymizationClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -64,6 +69,12 @@ public class DataSharingConfig
 {
 	@Autowired
 	private FhirWebserviceClientProvider fhirClientProvider;
+
+	@Autowired
+	private ConsentClientFactory consentClientFactory;
+
+	@Autowired
+	private PseudonymizationClientFactory pseudonymizationClientFactory;
 
 	@Autowired
 	private MasterPatientIndexClientFactory masterPatientIndexClientFactory;
@@ -215,17 +226,17 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public PseudonymizeResultSetsWithRecordLinkage pseudonymizeResultSetsWithRecordLinkage()
+	public PseudonymizeQueryResultsSecondOrderWithRecordLinkage pseudonymizeQueryResultsSecondOrderWithRecordLinkage()
 	{
-		return new PseudonymizeResultSetsWithRecordLinkage(fhirClientProvider, taskHelper, readAccessHelper,
-				keyConsumer(), objectMapper);
+		return new PseudonymizeQueryResultsSecondOrderWithRecordLinkage(fhirClientProvider, taskHelper,
+				readAccessHelper, keyConsumer(), objectMapper);
 	}
 
 	@Bean
-	public PseudonymizeResultSetsWithoutRecordLinkage pseudonymizeResultSetsWithoutRecordLinkage()
+	public PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage pseudonymizeQueryResultsSecondOrderWithoutRecordLinkage()
 	{
-		return new PseudonymizeResultSetsWithoutRecordLinkage(fhirClientProvider, taskHelper, readAccessHelper,
-				keyConsumer(), objectMapper);
+		return new PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage(fhirClientProvider, taskHelper,
+				readAccessHelper, keyConsumer(), objectMapper);
 	}
 
 	@Bean
@@ -296,31 +307,15 @@ public class DataSharingConfig
 	}
 
 	@Bean
+	public ConsentClient consentClient()
+	{
+		return consentClientFactory.createClient(environment::getProperty);
+	}
+
+	@Bean
 	public FilterQueryResultsByConsent filterQueryResultsByConsent()
 	{
-		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper);
-	}
-
-	@Bean
-	public KeyProvider keyProvider()
-	{
-		return new SecretKeyProviderImpl(organizationProvider, Paths.get(organizationKeystoreFile),
-				organizationKeystorePassword.toCharArray());
-	}
-
-	@Bean
-	public TranslateSingleMedicResultSetsWithRbf translateSingleMedicResultSetsWithRbf()
-	{
-		return new TranslateSingleMedicResultSetsWithRbf(fhirClientProvider, taskHelper, readAccessHelper,
-				organizationProvider, keyProvider(), ehrIdColumnPath, masterPatientIndexClient(),
-				bouncyCastleProvider());
-	}
-
-	@Bean
-	public TranslateSingleMedicResultSetsWithoutRbf translateSingleMedicResultSetsWithoutRbf()
-	{
-		return new TranslateSingleMedicResultSetsWithoutRbf(fhirClientProvider, taskHelper, readAccessHelper,
-				organizationProvider, keyProvider(), ehrIdColumnPath);
+		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper, consentClient());
 	}
 
 	@Bean
@@ -336,9 +331,43 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public StoreSingleMedicResultSets storeSingleMedicResultSets()
+	public GenerateBloomFilters generateBloomFilters()
 	{
-		return new StoreSingleMedicResultSets(fhirClientProvider, taskHelper, readAccessHelper, objectMapper);
+		return new GenerateBloomFilters(fhirClientProvider, taskHelper, readAccessHelper, masterPatientIndexClient(),
+				ehrIdColumnPath, bouncyCastleProvider());
+	}
+
+	@Bean
+	public PseudonymizationClient pseudonymizationClient()
+	{
+		return pseudonymizationClientFactory.createClient(environment::getProperty);
+	}
+
+	@Bean
+	public PseudonymizeQueryResultsFirstOrder pseudonymizeQueryResultsFirstOrder()
+	{
+		return new PseudonymizeQueryResultsFirstOrder(fhirClientProvider, taskHelper, readAccessHelper,
+				pseudonymizationClient());
+	}
+
+	@Bean
+	public KeyProvider keyProvider()
+	{
+		return new SecretKeyProviderImpl(organizationProvider, Paths.get(organizationKeystoreFile),
+				organizationKeystorePassword.toCharArray());
+	}
+
+	@Bean
+	public EncryptQueryResults encryptQueryResults()
+	{
+		return new EncryptQueryResults(fhirClientProvider, taskHelper, readAccessHelper, organizationProvider,
+				keyProvider(), ehrIdColumnPath);
+	}
+
+	@Bean
+	public SelectResponseTargetTtp selectResponseTargetTtp()
+	{
+		return new SelectResponseTargetTtp(fhirClientProvider, taskHelper, readAccessHelper, endpointProvider);
 	}
 
 	@Bean
@@ -348,9 +377,9 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public SelectResponseTargetTtp selectResponseTargetTtp()
+	public StoreSingleMedicResultSets storeSingleMedicResultSets()
 	{
-		return new SelectResponseTargetTtp(fhirClientProvider, taskHelper, readAccessHelper, endpointProvider);
+		return new StoreSingleMedicResultSets(fhirClientProvider, taskHelper, readAccessHelper, objectMapper);
 	}
 
 	@Bean

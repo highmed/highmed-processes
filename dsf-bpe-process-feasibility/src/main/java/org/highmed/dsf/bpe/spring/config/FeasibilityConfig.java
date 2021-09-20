@@ -1,6 +1,8 @@
 package org.highmed.dsf.bpe.spring.config;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.highmed.consent.client.ConsentClient;
+import org.highmed.consent.client.ConsentClientFactory;
 import org.highmed.dsf.bpe.message.SendMedicRequest;
 import org.highmed.dsf.bpe.message.SendMultiMedicErrors;
 import org.highmed.dsf.bpe.message.SendMultiMedicResults;
@@ -54,6 +56,9 @@ public class FeasibilityConfig
 {
 	@Autowired
 	private FhirWebserviceClientProvider fhirClientProvider;
+
+	@Autowired
+	private ConsentClientFactory consentClientFactory;
 
 	@Autowired
 	private MasterPatientIndexClientFactory masterPatientIndexClientFactory;
@@ -167,9 +172,15 @@ public class FeasibilityConfig
 	}
 
 	@Bean
+	public ConsentClient consentClient()
+	{
+		return consentClientFactory.createClient(environment::getProperty);
+	}
+
+	@Bean
 	public FilterQueryResultsByConsent filterQueryResultsByConsent()
 	{
-		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper);
+		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper, consentClient());
 	}
 
 	@Bean

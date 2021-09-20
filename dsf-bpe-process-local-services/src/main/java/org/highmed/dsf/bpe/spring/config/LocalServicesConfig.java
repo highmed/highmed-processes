@@ -1,6 +1,8 @@
 package org.highmed.dsf.bpe.spring.config;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.highmed.consent.client.ConsentClient;
+import org.highmed.consent.client.ConsentClientFactory;
 import org.highmed.dsf.bpe.service.CheckQueries;
 import org.highmed.dsf.bpe.service.CheckSingleMedicResults;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
@@ -32,6 +34,9 @@ public class LocalServicesConfig
 {
 	@Autowired
 	private FhirWebserviceClientProvider fhirClientProvider;
+
+	@Autowired
+	private ConsentClientFactory consentClientFactory;
 
 	@Autowired
 	private MasterPatientIndexClientFactory masterPatientIndexClientFactory;
@@ -85,9 +90,15 @@ public class LocalServicesConfig
 	}
 
 	@Bean
+	public ConsentClient consentClient()
+	{
+		return consentClientFactory.createClient(environment::getProperty);
+	}
+
+	@Bean
 	public FilterQueryResultsByConsent filterQueryResultsByConsent()
 	{
-		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper);
+		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper, consentClient());
 	}
 
 	@Bean

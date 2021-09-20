@@ -10,9 +10,10 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PseudonymizeResultSetsWithoutRecordLinkage extends PseudonymizeResultSets implements InitializingBean
+public class PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage extends PseudonymizeQueryResultsSecondOrder
+		implements InitializingBean
 {
-	public PseudonymizeResultSetsWithoutRecordLinkage(FhirWebserviceClientProvider clientProvider,
+	public PseudonymizeQueryResultsSecondOrderWithoutRecordLinkage(FhirWebserviceClientProvider clientProvider,
 			TaskHelper taskHelper, ReadAccessHelper readAccessHelper, KeyConsumer keyConsumer,
 			ObjectMapper psnObjectMapper)
 	{
