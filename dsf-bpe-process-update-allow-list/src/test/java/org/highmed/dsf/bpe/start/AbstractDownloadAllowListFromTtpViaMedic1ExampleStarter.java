@@ -5,7 +5,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ME
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST;
 import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST;
-import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST;
+import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1;
@@ -38,7 +38,7 @@ public abstract class AbstractDownloadAllowListFromTtpViaMedic1ExampleStarter
 		Bundle allowList = getAllowList(starter, ttpUrl);
 
 		Task task = new Task();
-		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST);
+		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST_AND_LATEST_VERSION);
 		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_DOWNLOAD_ALLOW_LIST_PROCESS_URI_AND_LATEST_VERSION);
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);

@@ -6,7 +6,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATIO
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.CODESYSTEM_HIGHMED_UPDATE_RESOURCE;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_ORGANIZATION_IDENTIFIER_SEARCH_PARAMETER;
-import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES;
+import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_TTP;
@@ -39,7 +39,7 @@ public abstract class AbstractUpdateResource3MedicTtpExampleStarter
 		Bundle allowList = getAllowList(starter, ttpUrl);
 
 		Task task = new Task();
-		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES);
+		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES_AND_LATEST_VERSION);
 		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES_PROCESS_URI_AND_LATEST_VERSION);
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
