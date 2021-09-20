@@ -13,8 +13,6 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_REQUEST_FORM_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_PARTICIPATING_TTP;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.EXTENSION_HIGHMED_QUERY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_AND_VERSION;
@@ -25,9 +23,11 @@ import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HI
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_3;
 import static org.highmed.dsf.bpe.start.ConstantsExampleStarters.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_TTP;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
+import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelperImpl;
 import org.hl7.fhir.r4.model.BooleanType;
@@ -48,18 +48,23 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 
 public abstract class AbstractRequestDataSharingFromMedicsViaMedic1ExampleStarter
 {
-	private final boolean NEEDS_CONSENT_CHECK = true;
-	private final boolean NEEDS_RECORD_LINKAGE = true;
+	private final boolean needsConsentCheck = false;
+	private final boolean needsRecordLinkage = false;
 
-	private static String REQUEST_FORM_REFERENCE = "https://foo/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
-	private static String CONTRACT_REFERENCE = "https://foo/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
-	private static String FEASIBILITY_REFERENCE = "https://foo/fhir/Task/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
+	private final String requestFormReference = "https://foo/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
+	private final String contractReference = "https://foo/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
+	private final String feasibilityReference = "https://foo/fhir/Task/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
 
-	private final String QUERY = "SELECT e/ehr_status/subject/external_ref/id/value as EHRID, "
+	private final String query = "SELECT e/ehr_status/subject/external_ref/id/value as EHRID, "
 			+ "v/items[at0024,'Bezeichnung']/value, v/items [at0001,'Messwert'], "
 			+ "v/items[at0006,'Dokumentationsdatum Untersuchung']/value FROM EHR e CONTAINS COMPOSITION c "
 			+ "CONTAINS CLUSTER v[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1] "
 			+ "WHERE v/items[at0024,'Bezeichnung']/value/value = 'Natrium' OFFSET 0 LIMIT 15;";
+
+	private final String[] medicIdentifier = new String[] { NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1,
+			NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_2,
+			NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_3 };
+	private final String ttpIdentifier = NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_TTP;
 
 	private final ReadAccessHelper readAccessHelper = new ReadAccessHelperImpl();
 
@@ -102,10 +107,11 @@ public abstract class AbstractRequestDataSharingFromMedicsViaMedic1ExampleStarte
 		group.setActual(false);
 		group.setActive(true);
 		group.addExtension().setUrl(EXTENSION_HIGHMED_QUERY)
-				.setValue(new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression(QUERY));
+				.setValue(new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression(query));
 		group.setName(name);
 
-		readAccessHelper.addAll(group);
+		Arrays.stream(medicIdentifier).forEach(i -> readAccessHelper.addOrganization(group, i));
+		readAccessHelper.addOrganization(group, ttpIdentifier);
 
 		return group;
 	}
@@ -124,31 +130,25 @@ public abstract class AbstractRequestDataSharingFromMedicsViaMedic1ExampleStarte
 		researchStudy.addEnrollment().setReference(group2.getIdElement().getIdPart());
 
 		researchStudy.addRelatedArtifact().setType(RelatedArtifact.RelatedArtifactType.DOCUMENTATION)
-				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_REQUEST_FORM_REFERENCE).setUrl(REQUEST_FORM_REFERENCE);
+				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_REQUEST_FORM_REFERENCE).setUrl(requestFormReference);
 		researchStudy.addRelatedArtifact().setType(RelatedArtifact.RelatedArtifactType.JUSTIFICATION)
-				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONTRACT_REFERENCE).setUrl(CONTRACT_REFERENCE);
+				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONTRACT_REFERENCE).setUrl(contractReference);
 		researchStudy.addRelatedArtifact().setType(RelatedArtifact.RelatedArtifactType.JUSTIFICATION)
 				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_FEASIBILITY_QUERY_REFERENCE)
-				.setUrl(FEASIBILITY_REFERENCE);
+				.setUrl(feasibilityReference);
 
-		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
-				.setValue(new Reference().setType(ResourceType.Organization.name())
-						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
-								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1)));
-		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
-				.setValue(new Reference().setType(ResourceType.Organization.name())
-						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
-								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_2)));
-		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
-				.setValue(new Reference().setType(ResourceType.Organization.name())
-						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
-								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_3)));
-		researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_TTP)
-				.setValue(new Reference().setType(ResourceType.Organization.name())
-						.setIdentifier(new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
-								.setValue(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_TTP)));
+		Arrays.stream(medicIdentifier).forEach(
+				i -> researchStudy.addExtension().setUrl(ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
+						new Reference().setType(ResourceType.Organization.name()).setIdentifier(
+								new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue(i))));
 
-		readAccessHelper.addAll(researchStudy);
+		researchStudy.addExtension().setUrl(ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP).setValue(
+				new Reference().setType(ResourceType.Organization.name()).setIdentifier(
+						new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
+								.setValue(ttpIdentifier)));
+
+		Arrays.stream(medicIdentifier).forEach(i -> readAccessHelper.addOrganization(researchStudy, i));
+		readAccessHelper.addOrganization(researchStudy, ttpIdentifier);
 
 		return researchStudy;
 	}
@@ -173,15 +173,14 @@ public abstract class AbstractRequestDataSharingFromMedicsViaMedic1ExampleStarte
 
 		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_MESSAGE_NAME)).getType()
 				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
-		task.addInput()
-				.setValue(new Reference().setReference(researchStudy.getIdElement().getIdPart())
-						.setType(ResourceType.ResearchStudy.name()))
-				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput().setValue(new Reference().setReference(researchStudy.getIdElement().getIdPart())
+						.setType(ResourceType.ResearchStudy.name())).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE);
-		task.addInput().setValue(new BooleanType(NEEDS_RECORD_LINKAGE)).getType().addCoding()
+		task.addInput().setValue(new BooleanType(needsRecordLinkage)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE);
-		task.addInput().setValue(new BooleanType(NEEDS_CONSENT_CHECK)).getType().addCoding()
+		task.addInput().setValue(new BooleanType(needsConsentCheck)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK);
 

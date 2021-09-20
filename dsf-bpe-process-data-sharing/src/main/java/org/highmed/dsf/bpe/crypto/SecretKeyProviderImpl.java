@@ -44,14 +44,14 @@ public class SecretKeyProviderImpl implements KeyProvider, InitializingBean
 
 		try
 		{
-			keystore = KeyStoreIo.readJceks(keystoreFile, keystorePassword);
+			keystore = KeyStoreIo.readPkcs12(keystoreFile, keystorePassword);
 		}
 		catch (FileNotFoundException | NoSuchFileException e)
 		{
 			logger.warn("Could not find keystore at {}, creating a new keystore containing a new organization key",
 					keystoreFile);
 
-			keystore = KeyStoreHelper.createJceks(keystorePassword);
+			keystore = KeyStoreHelper.createPkcs12(keystorePassword);
 			keystore.setKeyEntry(organizationProvider.getLocalIdentifierValue(), AesGcmUtil.generateAES256Key(),
 					keystorePassword, null);
 			KeyStoreIo.write(keystore, keystoreFile, keystorePassword);

@@ -49,10 +49,10 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 
 public abstract class AbstractRequestFeasibilityFromMedicsViaMedic1ExampleStarter
 {
-	private final boolean NEEDS_CONSENT_CHECK = true;
-	private final boolean NEEDS_RECORD_LINKAGE = true;
+	private final boolean needsConsentCheck = true;
+	private final boolean needsRecordLinkage = true;
 
-	private final String QUERY = "SELECT COUNT(e) FROM EHR e";
+	private final String query = "SELECT COUNT(e) FROM EHR e";
 
 	private final String[] medicIdentifier = new String[] { NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1,
 			NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_2,
@@ -100,7 +100,7 @@ public abstract class AbstractRequestFeasibilityFromMedicsViaMedic1ExampleStarte
 		group.setActual(false);
 		group.setActive(true);
 		group.addExtension().setUrl(EXTENSION_HIGHMED_QUERY)
-				.setValue(new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression(QUERY));
+				.setValue(new Expression().setLanguageElement(CODE_TYPE_AQL_QUERY).setExpression(query));
 		group.setName(name);
 
 		Arrays.stream(medicIdentifier).forEach(i -> readAccessHelper.addOrganization(group, i));
@@ -160,10 +160,10 @@ public abstract class AbstractRequestFeasibilityFromMedicsViaMedic1ExampleStarte
 						.setType(ResourceType.ResearchStudy.name()))
 				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE);
-		task.addInput().setValue(new BooleanType(NEEDS_RECORD_LINKAGE)).getType().addCoding()
+		task.addInput().setValue(new BooleanType(needsRecordLinkage)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE);
-		task.addInput().setValue(new BooleanType(NEEDS_CONSENT_CHECK)).getType().addCoding()
+		task.addInput().setValue(new BooleanType(needsConsentCheck)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK);
 

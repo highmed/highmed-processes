@@ -106,16 +106,16 @@ public class DataSharingConfig
 	@Autowired
 	private Environment environment;
 
-	@Value("${org.highmed.dsf.bpe.psn.organizationKey.keystore.file:psn/organization-keystore.jceks}")
+	@Value("${org.highmed.dsf.bpe.psn.organization.keystore:psn/organization-keystore.p12}")
 	private String organizationKeystoreFile;
 
-	@Value("${org.highmed.dsf.bpe.psn.organizationKey.keystore.password:password}")
+	@Value("${org.highmed.dsf.bpe.psn.organization.keystore.password:password}")
 	private String organizationKeystorePassword;
 
-	@Value("${org.highmed.dsf.bpe.psn.researchStudyKeys.keystore.file:psn/research-study-keystore.jceks}")
+	@Value("${org.highmed.dsf.bpe.psn.research.study.keystore:psn/research-study-keystore.p12}")
 	private String researchStudyKeystoreFile;
 
-	@Value("${org.highmed.dsf.bpe.psn.researchStudyKeys.keystore.password:password}")
+	@Value("${org.highmed.dsf.bpe.psn.research.study.keystore.password:password}")
 	private String getResearchStudyKeystorePassword;
 
 	@Value("${org.highmed.dsf.bpe.openehr.subject_external_id.path:/ehr_status/subject/external_ref/id/value}")

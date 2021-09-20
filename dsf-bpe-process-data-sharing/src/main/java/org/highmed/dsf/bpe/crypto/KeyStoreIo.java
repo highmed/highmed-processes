@@ -1,8 +1,5 @@
 package org.highmed.dsf.bpe.crypto;
 
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
-
 import static org.highmed.dsf.bpe.crypto.KeyStoreHelper.JCEKS;
 import static org.highmed.dsf.bpe.crypto.KeyStoreHelper.PKCS12;
 

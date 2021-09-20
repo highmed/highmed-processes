@@ -36,13 +36,13 @@ public class SecretKeyConsumerImpl implements KeyConsumer, InitializingBean
 
 		try
 		{
-			keystore = KeyStoreIo.readJceks(keystoreFile, keystorePassword);
+			keystore = KeyStoreIo.readPkcs12(keystoreFile, keystorePassword);
 		}
 		catch (FileNotFoundException | NoSuchFileException e)
 		{
 			logger.warn("Could not find keystore at {}, creating an empty keystore", keystoreFile);
 
-			keystore = KeyStoreHelper.createJceks(keystorePassword);
+			keystore = KeyStoreHelper.createPkcs12(keystorePassword);
 			KeyStoreIo.write(keystore, keystoreFile, keystorePassword);
 		}
 
