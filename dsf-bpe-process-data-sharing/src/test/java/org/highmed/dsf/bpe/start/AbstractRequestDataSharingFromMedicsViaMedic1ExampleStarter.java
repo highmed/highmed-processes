@@ -137,15 +137,14 @@ public abstract class AbstractRequestDataSharingFromMedicsViaMedic1ExampleStarte
 				.setLabel(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_FEASIBILITY_QUERY_REFERENCE)
 				.setUrl(feasibilityReference);
 
-		Arrays.stream(medicIdentifier).forEach(
-				i -> researchStudy.addExtension().setUrl(ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
-						new Reference().setType(ResourceType.Organization.name()).setIdentifier(
+		Arrays.stream(medicIdentifier)
+				.forEach(i -> researchStudy.addExtension().setUrl(ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
+						.setValue(new Reference().setType(ResourceType.Organization.name()).setIdentifier(
 								new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue(i))));
 
-		researchStudy.addExtension().setUrl(ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP).setValue(
-				new Reference().setType(ResourceType.Organization.name()).setIdentifier(
-						new Identifier().setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER)
-								.setValue(ttpIdentifier)));
+		researchStudy.addExtension().setUrl(ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP)
+				.setValue(new Reference().setType(ResourceType.Organization.name()).setIdentifier(new Identifier()
+						.setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue(ttpIdentifier)));
 
 		Arrays.stream(medicIdentifier).forEach(i -> readAccessHelper.addOrganization(researchStudy, i));
 		readAccessHelper.addOrganization(researchStudy, ttpIdentifier);
@@ -173,9 +172,10 @@ public abstract class AbstractRequestDataSharingFromMedicsViaMedic1ExampleStarte
 
 		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_MESSAGE_NAME)).getType()
 				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
-		task.addInput().setValue(new Reference().setReference(researchStudy.getIdElement().getIdPart())
-						.setType(ResourceType.ResearchStudy.name())).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
+		task.addInput()
+				.setValue(new Reference().setReference(researchStudy.getIdElement().getIdPart())
+						.setType(ResourceType.ResearchStudy.name()))
+				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE);
 		task.addInput().setValue(new BooleanType(needsRecordLinkage)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)

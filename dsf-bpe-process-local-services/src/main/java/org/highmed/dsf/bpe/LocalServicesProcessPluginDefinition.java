@@ -20,11 +20,11 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class LocalServicesProcessPluginDefinition implements ProcessPluginDefinition
 {
-	public static final String VERSION = "0.5.0";
+	public static final String VERSION = "0.6.0";
 
-	private static final String DEPENDENCY_DATA_SHARING_VERSION = "0.5.0";
-	private static final String DEPENDENCY_DATA_SHARING_NAME_AND_VERSION = "dsf-bpe-process-data-sharing-0.5.0";
-	private static final String DEPENDENCY_FEASIBILITY_NAME_AND_VERSION = "dsf-bpe-process-feasibility-0.5.0";
+	private static final String DEPENDENCY_DATA_SHARING_VERSION = "0.6.0";
+	private static final String DEPENDENCY_DATA_SHARING_NAME_AND_VERSION = "dsf-bpe-process-data-sharing-0.6.0";
+	private static final String DEPENDENCY_FEASIBILITY_NAME_AND_VERSION = "dsf-bpe-process-feasibility-0.6.0";
 
 	@Override
 	public String getName()
@@ -62,16 +62,16 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 			PropertyResolver resolver)
 	{
 		var aL = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-localServicesIntegration.xml");
-		var sTL = StructureDefinitionResource.file(
-				"fhir/StructureDefinition/highmed-task-local-services-integration.xml");
+		var sTL = StructureDefinitionResource
+				.file("fhir/StructureDefinition/highmed-task-local-services-integration.xml");
 
 		var cDS = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
 				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 		var vDS = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
 				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"highmedorg_localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, cDS, vDS));
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
+				.of("highmedorg_localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, cDS, vDS));
 
 		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
 				classLoader, resolver, resourcesByProcessKeyAndVersion);
