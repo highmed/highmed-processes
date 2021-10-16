@@ -41,6 +41,11 @@
 		<definition value="Boolean indicating if a data analysis needs consent check"/>
 	</concept>
 	<concept>
+		<code value="consortium-identifier"/>
+		<display value="Consortium Identifier"/>
+		<definition value="Consortium organization resource identifier"/>
+	</concept>
+	<concept>
 		<code value="bloom-filter-configuration"/>
 		<display value="Bloom Filter Configuration"/>
 		<definition value="Base64 binary encoded bloom filter configuration"/>

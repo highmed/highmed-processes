@@ -2,9 +2,9 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
-import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_TYPE;
-import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_MEDIC;
-import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_TTP;
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_ROLE;
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_MEDIC;
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_TTP;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM;
@@ -105,7 +105,7 @@ public class SelectRequestTargets extends AbstractServiceDelegate
 				.map(v -> (Reference) v).filter(Reference::hasIdentifier).map(Reference::getIdentifier)
 				.filter(Identifier::hasValue).map(Identifier::getValue)
 				.map(medicIdentifier -> Target.createBiDirectionalTarget(medicIdentifier,
-						getAddress(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_MEDIC, medicIdentifier),
+						getAddress(CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_MEDIC, medicIdentifier),
 						UUID.randomUUID().toString()))
 				.collect(Collectors.toList());
 
@@ -119,7 +119,7 @@ public class SelectRequestTargets extends AbstractServiceDelegate
 				.map(v -> (Reference) v).filter(Reference::hasIdentifier).map(Reference::getIdentifier)
 				.filter(Identifier::hasValue).map(Identifier::getValue)
 				.map(ttpIdentifier -> Target.createUniDirectionalTarget(ttpIdentifier,
-						getAddress(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_TTP, ttpIdentifier)))
+						getAddress(CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_TTP, ttpIdentifier)))
 				.findFirst().get();
 	}
 
@@ -127,7 +127,7 @@ public class SelectRequestTargets extends AbstractServiceDelegate
 	{
 		return endpointProvider
 				.getFirstConsortiumEndpointAdress(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM,
-						CODESYSTEM_HIGHMED_ORGANIZATION_TYPE, role, identifier)
+						CODESYSTEM_HIGHMED_ORGANIZATION_ROLE, role, identifier)
 				.get();
 	}
 }

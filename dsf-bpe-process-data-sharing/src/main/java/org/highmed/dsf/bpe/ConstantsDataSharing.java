@@ -23,6 +23,7 @@ public interface ConstantsDataSharing
 	String CODESYSTEM_HIGHMED_DATA_SHARING = "http://highmed.org/fhir/CodeSystem/data-sharing";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE = "research-study-reference";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_IDENTIFIER = "research-study-identifier";
+	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONSORTIUM_IDENTIFIER = "consortium-identifier";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE = "needs-record-linkage";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK = "needs-consent-check";
 	String CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG = "bloom-filter-configuration";
