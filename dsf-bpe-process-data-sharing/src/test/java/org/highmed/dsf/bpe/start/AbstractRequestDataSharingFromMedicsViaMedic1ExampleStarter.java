@@ -48,8 +48,8 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 
 public abstract class AbstractRequestDataSharingFromMedicsViaMedic1ExampleStarter
 {
-	private final boolean needsConsentCheck = false;
-	private final boolean needsRecordLinkage = false;
+	private final boolean needsConsentCheck = true;
+	private final boolean needsRecordLinkage = true;
 
 	private final String requestFormReference = "https://foo/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
 	private final String contractReference = "https://foo/fhir/Binary/9f747003-5d80-4313-b77f-d6dbe2ef4c55";
