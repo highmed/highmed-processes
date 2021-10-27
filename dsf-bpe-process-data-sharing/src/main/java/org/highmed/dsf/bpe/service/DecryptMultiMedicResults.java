@@ -16,6 +16,7 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variable.QueryResultsValues;
+import org.highmed.dsf.bpe.variable.SecretKeyWrapper;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -63,8 +64,9 @@ public class DecryptMultiMedicResults extends AbstractServiceDelegate implements
 
 	private SecretKey getMdatKey(DelegateExecution execution)
 	{
-		byte[] encodedKey = (byte[]) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
-		return new SecretKeySpec(encodedKey, "AES");
+		SecretKeyWrapper secretKeyWrapper = (SecretKeyWrapper) execution
+				.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
+		return secretKeyWrapper.getSecretKey();
 	}
 
 	private ResultSetTranslatorFromTtp createResultSetTranslator(String researchStudyIdentifier,

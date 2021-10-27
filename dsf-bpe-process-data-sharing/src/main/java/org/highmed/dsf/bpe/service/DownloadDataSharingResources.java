@@ -25,6 +25,8 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
+import org.highmed.dsf.bpe.variable.SecretKeyWrapper;
+import org.highmed.dsf.bpe.variable.SecretKeyWrapperValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -87,8 +89,8 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 		boolean needsRecordLinkage = getNeedsRecordLinkageCheck(task);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 
-		byte[] mdatKey = getMdatKey(task);
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, mdatKey);
+		SecretKeyWrapper secretKey = getMdatKey(task);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, SecretKeyWrapperValues.create(secretKey));
 
 		if (needsRecordLinkage)
 		{
@@ -204,13 +206,15 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 								+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 
-	private byte[] getMdatKey(Task task)
+	private SecretKeyWrapper getMdatKey(Task task)
 	{
-		return getTaskHelper()
+		byte[] bytes = getTaskHelper()
 				.getFirstInputParameterByteValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MDAT_AES_KEY)
 				.orElseThrow(() -> new IllegalArgumentException("mdat aes key is not set in task with id='"
 						+ task.getId() + "', this error should " + "have been caught by resource validation"));
+
+		return SecretKeyWrapper.fromAes256Key(bytes);
 	}
 
 	private BloomFilterConfig getBloomFilterConfig(Task task)

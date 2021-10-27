@@ -27,6 +27,8 @@ import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
 import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
+import org.highmed.dsf.bpe.variable.SecretKeyWrapper;
+import org.highmed.dsf.bpe.variable.SecretKeyWrapperValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.EndpointProvider;
@@ -35,7 +37,6 @@ import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.TargetValues;
 import org.highmed.dsf.fhir.variables.Targets;
 import org.highmed.dsf.fhir.variables.TargetsValues;
-import org.highmed.pseudonymization.crypto.AesGcmUtil;
 import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
@@ -89,8 +90,8 @@ public class SelectRequestTargets extends AbstractServiceDelegate implements Ini
 		Target ttpTarget = getTtpTarget(researchStudy);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(ttpTarget));
 
-		byte[] mdatKey = AesGcmUtil.generateAES256Key().getEncoded();
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, mdatKey);
+		SecretKeyWrapper secretKey = SecretKeyWrapper.newAes256Key();
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY, SecretKeyWrapperValues.create(secretKey));
 
 		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
 		if (Boolean.TRUE.equals(needsRecordLinkage))
