@@ -37,32 +37,32 @@ public class SendTtpRequest extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
 		Targets medicTargets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);
-		Stream<Task.ParameterComponent> inputMedicTargets = getTargetComponents(medicTargets);
+		Stream<Task.ParameterComponent> inputMedicTargets = createTargetComponents(medicTargets);
 
 		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
-		Task.ParameterComponent inputNeedsRecordLinkage = getRecordLinkageComponent(needsRecordLinkage);
+		Task.ParameterComponent inputNeedsRecordLinkage = createRecordLinkageComponent(needsRecordLinkage);
 
 		String researchStudyIdentifier = (String) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY_IDENTIFIER);
-		Task.ParameterComponent inputResearchStudyIdentifier = getInputResearchStudyIdentifierComponent(
+		Task.ParameterComponent inputResearchStudyIdentifier = createInputResearchStudyIdentifierComponent(
 				researchStudyIdentifier);
 
 		return Stream.concat(inputMedicTargets, Stream.of(inputNeedsRecordLinkage, inputResearchStudyIdentifier));
 	}
 
-	private Stream<Task.ParameterComponent> getTargetComponents(Targets targets)
+	private Stream<Task.ParameterComponent> createTargetComponents(Targets targets)
 	{
 		return targets.getEntries().stream().map(target -> getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY, target.getCorrelationKey()));
 	}
 
-	private Task.ParameterComponent getRecordLinkageComponent(boolean needsRecordLinkage)
+	private Task.ParameterComponent createRecordLinkageComponent(boolean needsRecordLinkage)
 	{
 		return getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 	}
 
-	private Task.ParameterComponent getInputResearchStudyIdentifierComponent(String researchStudyIdentifierValue)
+	private Task.ParameterComponent createInputResearchStudyIdentifierComponent(String researchStudyIdentifierValue)
 	{
 		Reference reference = new Reference().setType(ResourceType.ResearchStudy.name()).setIdentifier(new Identifier()
 				.setValue(researchStudyIdentifierValue).setSystem(NAMINGSYSTEM_HIGHMED_RESEARCH_STUDY_IDENTIFIER));

@@ -27,10 +27,15 @@ public abstract class SendResults extends AbstractTaskMessageSend
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendResults.class);
 
+	private final String resultSetReferenceCodeSystemValue;
+
 	public SendResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext)
+			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext,
+			String resultSetReferenceCodeSystemValue)
 	{
 		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
+
+		this.resultSetReferenceCodeSystemValue = resultSetReferenceCodeSystemValue;
 	}
 
 	@Override
@@ -40,17 +45,12 @@ public abstract class SendResults extends AbstractTaskMessageSend
 		return results.getResults().stream().map(this::toInput);
 	}
 
-	/**
-	 * @return the code system value that classifies the result set reference in the Task input that will be generated
-	 */
-	protected abstract String getResultSetReferenceCodeSystemValue();
-
 	private Task.ParameterComponent toInput(QueryResult result)
 	{
 		if (result.isIdResultSetUrlResult())
 		{
 			ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
-					getResultSetReferenceCodeSystemValue(), new Reference(result.getResultSetUrl()));
+					resultSetReferenceCodeSystemValue, new Reference(result.getResultSetUrl()));
 			input.addExtension(createCohortIdExtension(result.getCohortId()));
 			return input;
 		}

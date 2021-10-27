@@ -5,9 +5,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ER
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
@@ -21,11 +19,11 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class CheckResults extends AbstractServiceDelegate
+public abstract class AbstractCheckResults extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(CheckResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractCheckResults.class);
 
-	public CheckResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public AbstractCheckResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
@@ -49,29 +47,22 @@ public abstract class CheckResults extends AbstractServiceDelegate
 				.collect(Collectors.toList());
 	}
 
-	private boolean testResultAndAddPossibleError(QueryResult result, Task task)
+	/**
+	 * @param result
+	 *            not <code>null</code>
+	 * @param task
+	 *            not <code>null</code>
+	 * @return <code>true</code> if the supplied {@link QueryResult} passed all checks, <code>false</code> otherwise
+	 */
+	protected boolean testResultAndAddPossibleError(QueryResult result, Task task)
 	{
-		boolean hasFailingCheck = getChecks(result, task).map(check -> check.apply(result, task))
-				.anyMatch(Boolean.FALSE::equals);
-
-		return !hasFailingCheck;
+		return checkColumns(result, task) && checkRows(result, task);
 	}
 
 	/**
-	 * @param result
-	 *            the {@link QueryResult} that should be checked
-	 * @param task
-	 *            the task to which errors should be added as outputs if the check is not passed, use
-	 *            {@link #getChecks(QueryResult, Task)} to add the error output
-	 * @return a list of checks that should be performed for given {@link QueryResult}, each check returning
-	 *         <code>true</code> if the check is passed, <code>false</code> otherwise
-	 */
-	protected abstract Stream<BiFunction<QueryResult, Task, Boolean>> getChecks(QueryResult result, Task task);
-
-	/**
 	 * @param passedResults
-	 *            all {@link QueryResult} objects that passed the checks defined by
-	 *            {@link #getChecks(QueryResult, Task)}
+	 *            all {@link QueryResult} objects that passed the checks executed by
+	 *            {@link #testResultAndAddPossibleError(QueryResult, Task)}
 	 * @return a list of {@link QueryResult} objects after post processing
 	 */
 	protected List<QueryResult> postProcessAllPassingResults(List<QueryResult> passedResults)

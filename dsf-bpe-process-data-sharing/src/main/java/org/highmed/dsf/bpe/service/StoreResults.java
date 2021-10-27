@@ -115,10 +115,10 @@ public abstract class StoreResults extends AbstractServiceDelegate implements In
 		{
 			return openEhrObjectMapper.writeValueAsBytes(resultSet);
 		}
-		catch (JsonProcessingException e)
+		catch (JsonProcessingException exception)
 		{
-			logger.warn("Error while serializing ResultSet: " + e.getMessage(), e);
-			throw new RuntimeException(e);
+			logger.warn("Error while serializing ResultSet: " + exception.getMessage());
+			throw new RuntimeException(exception);
 		}
 	}
 
@@ -128,11 +128,11 @@ public abstract class StoreResults extends AbstractServiceDelegate implements In
 		{
 			return getFhirWebserviceClientProvider().getLocalWebserviceClient().withMinimalReturn().create(binary);
 		}
-		catch (Exception e)
+		catch (Exception exception)
 		{
 			logger.debug("Binary to create {}", FhirContext.forR4().newJsonParser().encodeResourceToString(binary));
-			logger.warn("Error while creating Binary resoruce: " + e.getMessage(), e);
-			throw e;
+			logger.warn("Error while creating Binary resoruce: " + exception.getMessage());
+			throw exception;
 		}
 	}
 }

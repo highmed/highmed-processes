@@ -26,17 +26,12 @@ import org.highmed.openehr.model.structure.ResultSet;
 import org.highmed.pseudonymization.crypto.AesGcmUtil;
 import org.highmed.pseudonymization.domain.PersonWithMdat;
 import org.highmed.pseudonymization.domain.PseudonymizedPersonWithMdat;
-import org.highmed.pseudonymization.domain.impl.MatchedPersonImpl;
 import org.highmed.pseudonymization.domain.impl.PseudonymizedPersonImpl;
 import org.highmed.pseudonymization.psn.PseudonymGenerator;
 import org.highmed.pseudonymization.psn.PseudonymGeneratorImpl;
-import org.highmed.pseudonymization.psn.PseudonymizedPersonFactory;
 import org.highmed.pseudonymization.recordlinkage.FederatedMatcher;
-import org.highmed.pseudonymization.recordlinkage.FederatedMatcherImpl;
 import org.highmed.pseudonymization.recordlinkage.MatchedPerson;
-import org.highmed.pseudonymization.recordlinkage.MatchedPersonFactory;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedic;
-import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedicNoRbfImpl;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToMedic;
 import org.highmed.pseudonymization.translation.ResultSetTranslatorToMedicImpl;
 import org.slf4j.Logger;
@@ -45,18 +40,27 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class PseudonymizeResultsSecondOrder extends AbstractServiceDelegate implements InitializingBean
+public abstract class AbstractPseudonymizeResultsSecondOrder extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(PseudonymizeResultsSecondOrder.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractPseudonymizeResultsSecondOrder.class);
 
 	private final KeyConsumer keyConsumer;
+
+	private final ResultSetTranslatorFromMedic resultSetTranslatorFromMedic;
+	private final FederatedMatcher<PersonWithMdat> federatedMatcher;
+
 	private final ObjectMapper psnObjectMapper;
 
-	public PseudonymizeResultsSecondOrder(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper, KeyConsumer keyConsumer, ObjectMapper psnObjectMapper)
+	public AbstractPseudonymizeResultsSecondOrder(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+			ReadAccessHelper readAccessHelper, KeyConsumer keyConsumer,
+			ResultSetTranslatorFromMedic resultSetTranslatorFromMedic,
+			FederatedMatcher<PersonWithMdat> federatedMatcher, ObjectMapper psnObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.keyConsumer = keyConsumer;
+		this.resultSetTranslatorFromMedic = resultSetTranslatorFromMedic;
+		this.federatedMatcher = federatedMatcher;
 		this.psnObjectMapper = psnObjectMapper;
 	}
 
@@ -64,7 +68,10 @@ public abstract class PseudonymizeResultsSecondOrder extends AbstractServiceDele
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+
 		Objects.requireNonNull(keyConsumer, "keyConsumer");
+		Objects.requireNonNull(resultSetTranslatorFromMedic, "resultSetTranslatorFromMedic");
+		Objects.requireNonNull(federatedMatcher, "federatedMatcher");
 		Objects.requireNonNull(psnObjectMapper, "psnObjectMapper");
 	}
 
@@ -98,15 +105,13 @@ public abstract class PseudonymizeResultsSecondOrder extends AbstractServiceDele
 	private QueryResults createFinalResults(String researchStudyIdentifier, SecretKey reserchStudyKey,
 			Map<String, List<QueryResult>> groupedResults)
 	{
-		ResultSetTranslatorFromMedic translatorFromMedic = createResultSetTranslatorFromMedic();
 		ResultSetTranslatorToMedic translatorToMedic = createResultSetTranslatorToMedic();
-		FederatedMatcher<PersonWithMdat> matcher = createFederatedMatcher();
 		PseudonymGenerator<PersonWithMdat, PseudonymizedPersonWithMdat> psnGenerator = createPseudonymGenerator(
 				researchStudyIdentifier, reserchStudyKey);
 
 		List<QueryResult> finalResults = groupedResults.entrySet().stream().filter(r -> !r.getValue().isEmpty())
-				.map(e -> translateMatchAndPseudonymize(translatorFromMedic, matcher, psnGenerator, translatorToMedic,
-						e.getKey(), e.getValue()))
+				.map(e -> translateMatchAndPseudonymize(resultSetTranslatorFromMedic, federatedMatcher, psnGenerator,
+						translatorToMedic, e.getKey(), e.getValue()))
 				.collect(Collectors.toList());
 
 		return new QueryResults(finalResults);
@@ -120,7 +125,7 @@ public abstract class PseudonymizeResultsSecondOrder extends AbstractServiceDele
 		logger.debug("Translating, matching and pseudonymizing results for cohort {}", cohortId);
 
 		List<List<PersonWithMdat>> persons = translateFromMedicResultSets(translatorFromMedic, results);
-		Set<MatchedPerson<PersonWithMdat>> matchedPersons = matchPersons(persons, matcher, translatorFromMedic);
+		Set<MatchedPerson<PersonWithMdat>> matchedPersons = matcher.matchPersons(persons);
 		List<PseudonymizedPersonWithMdat> pseudonymizedPersons = psnGenerator
 				.createPseudonymsAndShuffle(matchedPersons);
 		ResultSet resultSet = translateToMedicResultSet(results.get(0).getResultSet(), translatorToMedic,
@@ -142,20 +147,11 @@ public abstract class PseudonymizeResultsSecondOrder extends AbstractServiceDele
 		{
 			return translator.translate(toTranslate.getOrganizationIdentifier(), toTranslate.getResultSet());
 		}
-		catch (Exception e)
+		catch (Exception exception)
 		{
-			logger.warn("Error while translating ResultSet: " + e.getMessage(), e);
-			throw e;
+			logger.warn("Error while translating ResultSet: " + exception.getMessage());
+			throw exception;
 		}
-	}
-
-	private Set<MatchedPerson<PersonWithMdat>> matchPersons(List<List<PersonWithMdat>> persons,
-			FederatedMatcher<PersonWithMdat> matcher, ResultSetTranslatorFromMedic translator)
-	{
-		if (translator instanceof ResultSetTranslatorFromMedicNoRbfImpl)
-			return persons.stream().flatMap(List::stream).map(MatchedPersonImpl::new).collect(Collectors.toSet());
-		else
-			return matcher.matchPersons(persons);
 	}
 
 	private ResultSet translateToMedicResultSet(ResultSet toTranslate, ResultSetTranslatorToMedic translator,
@@ -167,34 +163,22 @@ public abstract class PseudonymizeResultsSecondOrder extends AbstractServiceDele
 			List<Column> columns = toTranslate.getColumns();
 			return translator.translate(meta, columns, pseudonymizedPersons);
 		}
-		catch (Exception e)
+		catch (Exception exception)
 		{
-			logger.warn("Error while translating ResultSet: " + e.getMessage(), e);
-			throw e;
+			logger.warn("Error while translating ResultSet: " + exception.getMessage());
+			throw exception;
 		}
 	}
-
-	/**
-	 * @return the {@link ResultSetTranslatorFromMedic} that should be used to translate the result sets
-	 */
-	protected abstract ResultSetTranslatorFromMedic createResultSetTranslatorFromMedic();
 
 	private ResultSetTranslatorToMedic createResultSetTranslatorToMedic()
 	{
 		return new ResultSetTranslatorToMedicImpl();
 	}
 
-	private FederatedMatcher<PersonWithMdat> createFederatedMatcher()
-	{
-		MatchedPersonFactory<PersonWithMdat> matchedPersonFactory = MatchedPersonImpl::new;
-		return new FederatedMatcherImpl<>(matchedPersonFactory);
-	}
-
 	private PseudonymGenerator<PersonWithMdat, PseudonymizedPersonWithMdat> createPseudonymGenerator(
 			String researchStudyIdentifier, SecretKey researchStudyKey)
 	{
-		PseudonymizedPersonFactory<PersonWithMdat, PseudonymizedPersonWithMdat> psnPersonFactory = PseudonymizedPersonImpl::new;
 		return new PseudonymGeneratorImpl<>(researchStudyIdentifier, researchStudyKey, psnObjectMapper,
-				psnPersonFactory);
+				PseudonymizedPersonImpl::new);
 	}
 }

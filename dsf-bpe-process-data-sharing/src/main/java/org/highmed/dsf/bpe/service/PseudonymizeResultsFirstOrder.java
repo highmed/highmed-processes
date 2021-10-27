@@ -71,7 +71,7 @@ public class PseudonymizeResultsFirstOrder extends AbstractServiceDelegate imple
 		}
 		catch (Exception exception)
 		{
-			logger.warn("Error while encrypting ResultSet: " + exception.getMessage(), exception);
+			logger.warn("Error while encrypting ResultSet: " + exception.getMessage());
 			throw exception;
 		}
 	}

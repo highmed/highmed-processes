@@ -54,6 +54,15 @@ import org.highmed.openehr.client.OpenEhrClient;
 import org.highmed.openehr.client.OpenEhrClientFactory;
 import org.highmed.pseudonymization.client.PseudonymizationClient;
 import org.highmed.pseudonymization.client.PseudonymizationClientFactory;
+import org.highmed.pseudonymization.domain.PersonWithMdat;
+import org.highmed.pseudonymization.domain.impl.MatchedPersonImpl;
+import org.highmed.pseudonymization.recordlinkage.AbstractMatcher;
+import org.highmed.pseudonymization.recordlinkage.FederatedMatcher;
+import org.highmed.pseudonymization.recordlinkage.FederatedMatcherImpl;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedicNoRbf;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedicNoRbfImpl;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedicWithRbf;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorFromMedicWithRbfImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -225,17 +234,42 @@ public class DataSharingConfig
 	}
 
 	@Bean
-	public PseudonymizeResultsSecondOrderWithRecordLinkage pseudonymizeQueryResultsSecondOrderWithRecordLinkage()
+	public ResultSetTranslatorFromMedicWithRbf resultSetTranslatorFromMedicWithRbf()
 	{
-		return new PseudonymizeResultsSecondOrderWithRecordLinkage(fhirClientProvider, taskHelper, readAccessHelper,
-				keyConsumer(), objectMapper);
+		return new ResultSetTranslatorFromMedicWithRbfImpl();
 	}
 
 	@Bean
-	public PseudonymizeResultsSecondOrderWithoutRecordLinkage pseudonymizeQueryResultsSecondOrderWithoutRecordLinkage()
+	public FederatedMatcher<PersonWithMdat> createFederatedMatcherStrategyMin()
+	{
+		return new FederatedMatcherImpl<>(MatchedPersonImpl::new, AbstractMatcher.MatchCalculatorStrategy.MIN);
+	}
+
+	@Bean
+	public PseudonymizeResultsSecondOrderWithRecordLinkage pseudonymizeResultsSecondOrderWithRecordLinkage()
+	{
+		return new PseudonymizeResultsSecondOrderWithRecordLinkage(fhirClientProvider, taskHelper, readAccessHelper,
+				keyConsumer(), resultSetTranslatorFromMedicWithRbf(), createFederatedMatcherStrategyMin(),
+				objectMapper);
+	}
+
+	@Bean
+	public ResultSetTranslatorFromMedicNoRbf resultSetTranslatorFromMedicNoRbf()
+	{
+		return new ResultSetTranslatorFromMedicNoRbfImpl();
+	}
+
+	@Bean
+	public FederatedMatcher<PersonWithMdat> createFederatedMatcherStrategyNone()
+	{
+		return new FederatedMatcherImpl<>(MatchedPersonImpl::new, AbstractMatcher.MatchCalculatorStrategy.NONE);
+	}
+
+	@Bean
+	public PseudonymizeResultsSecondOrderWithoutRecordLinkage pseudonymizeResultsSecondOrderWithoutRecordLinkage()
 	{
 		return new PseudonymizeResultsSecondOrderWithoutRecordLinkage(fhirClientProvider, taskHelper, readAccessHelper,
-				keyConsumer(), objectMapper);
+				keyConsumer(), resultSetTranslatorFromMedicNoRbf(), createFederatedMatcherStrategyNone(), objectMapper);
 	}
 
 	@Bean

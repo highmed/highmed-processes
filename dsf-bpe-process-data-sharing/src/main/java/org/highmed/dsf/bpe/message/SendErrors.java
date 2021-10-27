@@ -32,12 +32,12 @@ public abstract class SendErrors extends AbstractTaskMessageSend
 		Task task = getLeadingTaskFromExecutionVariables();
 		String taskUrl = new Reference(new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl() + "/Task",
 				task.getIdElement().getIdPart())).getReference();
-		String errorMessage = getErrorMessage(taskUrl);
+		String errorMessage = createErrorMessage(taskUrl);
 
 		ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_BPMN,
 				CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR, errorMessage);
 		return Stream.of(input);
 	}
 
-	protected abstract String getErrorMessage(String taskUrl);
+	protected abstract String createErrorMessage(String taskUrl);
 }

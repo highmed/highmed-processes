@@ -27,13 +27,13 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class DownloadResults extends AbstractServiceDelegate
+public abstract class AbstractDownloadResults extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(DownloadResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractDownloadResults.class);
 
 	private final ObjectMapper openEhrObjectMapper;
 
-	public DownloadResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public AbstractDownloadResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
@@ -87,10 +87,10 @@ public abstract class DownloadResults extends AbstractServiceDelegate
 			logger.info("Reading binary from {} with id {}", client.getBaseUrl(), id);
 			return client.readBinary(id, MediaType.valueOf(OPENEHR_MIMETYPE_JSON));
 		}
-		catch (Exception e)
+		catch (Exception exception)
 		{
-			logger.warn("Error while reading Binary resource: " + e.getMessage(), e);
-			throw e;
+			logger.warn("Error while reading Binary resource: " + exception.getMessage());
+			throw exception;
 		}
 	}
 
@@ -100,10 +100,10 @@ public abstract class DownloadResults extends AbstractServiceDelegate
 		{
 			return openEhrObjectMapper.readValue(content, ResultSet.class);
 		}
-		catch (IOException e)
+		catch (IOException exception)
 		{
-			logger.warn("Error while deserializing ResultSet: " + e.getMessage(), e);
-			throw new RuntimeException(e);
+			logger.warn("Error while deserializing ResultSet: " + exception.getMessage());
+			throw new RuntimeException(exception);
 		}
 	}
 }

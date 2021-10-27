@@ -41,16 +41,16 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
 		ResearchStudy researchStudy = (ResearchStudy) execution.getVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY);
-		ParameterComponent inputResearchStudyReference = getResearchStudyComponent(researchStudy);
+		ParameterComponent inputResearchStudyReference = createResearchStudyComponent(researchStudy);
 
 		boolean needsConsentCheck = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK);
-		ParameterComponent inputNeedsConsentCheck = getNeedsConsentCheckComponent(needsConsentCheck);
+		ParameterComponent inputNeedsConsentCheck = createNeedsConsentCheckComponent(needsConsentCheck);
 
 		boolean needsRecordLinkage = (boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
-		ParameterComponent inputNeedsRecordLinkage = getNeedsRecordLinkageComponent(needsRecordLinkage);
+		ParameterComponent inputNeedsRecordLinkage = createNeedsRecordLinkageComponent(needsRecordLinkage);
 
 		byte[] mdatKey = (byte[]) execution.getVariable(BPMN_EXECUTION_VARIABLE_MDAT_AES_KEY);
-		ParameterComponent inputMdatKey = getMdatKeyComponent(mdatKey);
+		ParameterComponent inputMdatKey = createMdatKeyComponent(mdatKey);
 
 		if (needsRecordLinkage)
 		{
@@ -68,7 +68,7 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 		}
 	}
 
-	private Task.ParameterComponent getResearchStudyComponent(ResearchStudy researchStudy)
+	private Task.ParameterComponent createResearchStudyComponent(ResearchStudy researchStudy)
 	{
 		IdType researchStudyId = new IdType(
 				getFhirWebserviceClientProvider().getLocalBaseUrl() + "/" + researchStudy.getId());
@@ -77,19 +77,19 @@ public class SendMedicRequest extends AbstractTaskMessageSend
 				new Reference().setReference(researchStudyId.toVersionless().getValueAsString()));
 	}
 
-	private Task.ParameterComponent getNeedsConsentCheckComponent(boolean needsConsentCheck)
+	private Task.ParameterComponent createNeedsConsentCheckComponent(boolean needsConsentCheck)
 	{
 		return getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK, needsConsentCheck);
 	}
 
-	private Task.ParameterComponent getNeedsRecordLinkageComponent(boolean needsRecordLinkage)
+	private Task.ParameterComponent createNeedsRecordLinkageComponent(boolean needsRecordLinkage)
 	{
 		return getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
 	}
 
-	private Task.ParameterComponent getMdatKeyComponent(byte[] mdatKey)
+	private Task.ParameterComponent createMdatKeyComponent(byte[] mdatKey)
 	{
 		return getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MDAT_AES_KEY, mdatKey);

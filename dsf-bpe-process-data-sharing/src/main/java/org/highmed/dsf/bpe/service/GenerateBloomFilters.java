@@ -116,7 +116,7 @@ public class GenerateBloomFilters extends AbstractServiceDelegate implements Ini
 		}
 		catch (Exception exception)
 		{
-			logger.warn("Error while generating bloom filter: " + exception.getMessage(), exception);
+			logger.warn("Error while generating bloom filter: " + exception.getMessage());
 			throw exception;
 		}
 	}

@@ -17,7 +17,7 @@ import org.hl7.fhir.r4.model.Task;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DownloadMultiMedicResults extends DownloadResults
+public class DownloadMultiMedicResults extends AbstractDownloadResults
 {
 	public DownloadMultiMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)

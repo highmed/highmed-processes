@@ -14,12 +14,7 @@ public class SendSingleMedicResults extends SendResults
 	public SendSingleMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext)
 	{
-		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
-	}
-
-	@Override
-	protected String getResultSetReferenceCodeSystemValue()
-	{
-		return CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE;
+		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE);
 	}
 }

@@ -46,32 +46,32 @@ public class FilterResultsByConsent extends AbstractServiceDelegate implements I
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
-		List<QueryResult> checkedResults = checkResults(results);
+		List<QueryResult> checkedResults = filterResultsByConsent(results);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(checkedResults)));
 	}
 
-	private List<QueryResult> checkResults(QueryResults results)
+	private List<QueryResult> filterResultsByConsent(QueryResults results)
 	{
-		return results.getResults().stream().map(result -> checkResult(result)).collect(Collectors.toList());
+		return results.getResults().stream().map(result -> filterResultByConsent(result)).collect(Collectors.toList());
 	}
 
-	private QueryResult checkResult(QueryResult result)
+	private QueryResult filterResultByConsent(QueryResult result)
 	{
-		ResultSet checkedResultSet = check(result.getResultSet());
+		ResultSet checkedResultSet = removeRowsWithoutConsent(result.getResultSet());
 		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), checkedResultSet);
 	}
 
-	private ResultSet check(ResultSet resultSet)
+	private ResultSet removeRowsWithoutConsent(ResultSet resultSet)
 	{
 		try
 		{
-			return consentClient.check(resultSet);
+			return consentClient.removeRowsWithoutConsent(resultSet);
 		}
 		catch (Exception exception)
 		{
-			logger.warn("Error while checking ResultSet: " + exception.getMessage(), exception);
+			logger.warn("Error while filtering ResultSet: " + exception.getMessage());
 			throw exception;
 		}
 	}

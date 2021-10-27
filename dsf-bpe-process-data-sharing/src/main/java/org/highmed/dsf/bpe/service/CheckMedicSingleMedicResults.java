@@ -7,8 +7,6 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ER
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_ERROR_CODE_SINGLE_MEDIC_DATA_SHARING_RESULT;
 
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.highmed.dsf.bpe.variable.QueryResult;
@@ -19,7 +17,7 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CheckMedicSingleMedicResults extends CheckResults
+public class CheckMedicSingleMedicResults extends AbstractCheckResults
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckMedicSingleMedicResults.class);
 
@@ -30,10 +28,9 @@ public class CheckMedicSingleMedicResults extends CheckResults
 	}
 
 	@Override
-	protected Stream<BiFunction<QueryResult, Task, Boolean>> getChecks(QueryResult result, Task task)
+	protected boolean testResultAndAddPossibleError(QueryResult result, Task task)
 	{
-		// TODO: define and implement further result set checks
-		return Stream.of(this::checkColumns, this::checkRows);
+		return super.testResultAndAddPossibleError(result, task); // TODO: define further checks
 	}
 
 	@Override

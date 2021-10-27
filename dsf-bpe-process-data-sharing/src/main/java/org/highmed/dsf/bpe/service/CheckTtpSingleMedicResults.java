@@ -19,7 +19,7 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CheckTtpSingleMedicResults extends CheckResults
+public class CheckTtpSingleMedicResults extends AbstractCheckResults
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckTtpSingleMedicResults.class);
 
@@ -30,10 +30,9 @@ public class CheckTtpSingleMedicResults extends CheckResults
 	}
 
 	@Override
-	protected Stream<BiFunction<QueryResult, Task, Boolean>> getChecks(QueryResult result, Task task)
+	protected boolean testResultAndAddPossibleError(QueryResult result, Task task)
 	{
-		// TODO: define and implement further result set checks
-		return Stream.of(this::checkColumns, this::checkRows);
+		return super.testResultAndAddPossibleError(result, task); // TODO: define further checks
 	}
 
 	@Override

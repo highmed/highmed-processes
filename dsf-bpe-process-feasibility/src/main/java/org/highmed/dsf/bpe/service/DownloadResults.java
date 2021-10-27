@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DownloadResults extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(DownloadResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractDownloadResults.class);
 
 	private final ObjectMapper openEhrObjectMapper;
 

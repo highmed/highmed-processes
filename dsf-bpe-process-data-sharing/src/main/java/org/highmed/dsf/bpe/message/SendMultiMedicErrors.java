@@ -16,7 +16,7 @@ public class SendMultiMedicErrors extends SendErrors
 	}
 
 	@Override
-	protected String getErrorMessage(String taskUrl)
+	protected String createErrorMessage(String taskUrl)
 	{
 		return "An error occurred while calculating the multi medic data sharing result for "
 				+ "all defined cohorts, see task with url='" + taskUrl + "'";

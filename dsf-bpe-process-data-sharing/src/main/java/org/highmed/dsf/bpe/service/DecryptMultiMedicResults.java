@@ -89,10 +89,10 @@ public class DecryptMultiMedicResults extends AbstractServiceDelegate implements
 		{
 			return translator.translate(toTranslate);
 		}
-		catch (Exception e)
+		catch (Exception exception)
 		{
-			logger.warn("Error while translating ResultSet: " + e.getMessage(), e);
-			throw e;
+			logger.warn("Error while translating ResultSet: " + exception.getMessage());
+			throw exception;
 		}
 	}
 }

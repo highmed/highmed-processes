@@ -28,7 +28,7 @@
 	</properties>
 
 	<name>highmed-processes</name>
-	<description>HiGHmed DSF HiGHmed Processes</description>
+	<description>Processes of the HiGHmed consortium to be deployed on the HiGHmed DSF</description>
 	<url>https://github.com/highmed/highmed-processes</url>
 
 	<scm>

@@ -141,12 +141,12 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 		{
 			logger.warn(
 					"Organizations with identifiers='{}' are part of feasibility research study with id='{}' but do "
-							+ "not belong to the consortium with id='{}'",
+							+ "not belong to the consortium with identifier='{}'",
 					identifiersWrongConsortium, researchStudyId, consortiumIdentifier);
 
 			throw new RuntimeException("Organizations with identifiers='" + identifiersWrongConsortium
 					+ "' are part of feasibility research study with id='" + researchStudyId
-					+ "' but do not belong to the consortium with id='" + consortiumIdentifier + "'");
+					+ "' but do not belong to the consortium with identifier='" + consortiumIdentifier + "'");
 		}
 	}
 
@@ -183,7 +183,7 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 		}
 		catch (Exception e)
 		{
-			logger.warn("Error while updating ResearchStudy resoruce: " + e.getMessage(), e);
+			logger.warn("Error while updating ResearchStudy resource: " + e.getMessage(), e);
 			throw e;
 		}
 	}

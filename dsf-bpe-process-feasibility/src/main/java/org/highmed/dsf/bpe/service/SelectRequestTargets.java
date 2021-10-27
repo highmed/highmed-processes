@@ -13,6 +13,7 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_N
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -41,7 +42,7 @@ import org.hl7.fhir.r4.model.ResearchStudy;
 
 public class SelectRequestTargets extends AbstractServiceDelegate
 {
-	private static final Random random = new Random();
+	private static final Random random = new SecureRandom();
 
 	private final EndpointProvider endpointProvider;
 	private final KeyGenerator hmacSha2Generator;
@@ -62,9 +63,9 @@ public class SelectRequestTargets extends AbstractServiceDelegate
 			hmacSha2Generator = KeyGenerator.getInstance("HmacSHA256", bouncyCastleProvider);
 			hmacSha3Generator = KeyGenerator.getInstance("HmacSHA3-256", bouncyCastleProvider);
 		}
-		catch (NoSuchAlgorithmException e)
+		catch (NoSuchAlgorithmException exception)
 		{
-			throw new RuntimeException(e);
+			throw new RuntimeException(exception);
 		}
 	}
 
