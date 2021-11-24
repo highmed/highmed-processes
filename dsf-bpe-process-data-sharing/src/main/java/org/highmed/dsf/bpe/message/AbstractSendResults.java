@@ -24,13 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.context.FhirContext;
 
-public abstract class SendResults extends AbstractTaskMessageSend
+public abstract class AbstractSendResults extends AbstractTaskMessageSend
 {
-	private static final Logger logger = LoggerFactory.getLogger(SendResults.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractSendResults.class);
 
 	private final String resultSetReferenceCodeSystemValue;
 
-	public SendResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public AbstractSendResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext,
 			String resultSetReferenceCodeSystemValue)
 	{

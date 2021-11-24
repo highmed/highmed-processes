@@ -9,7 +9,7 @@ import org.highmed.dsf.fhir.task.TaskHelper;
 
 import ca.uhn.fhir.context.FhirContext;
 
-public class SendSingleMedicResults extends SendResults
+public class SendSingleMedicResults extends AbstractSendResults
 {
 	public SendSingleMedicResults(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext)
