@@ -1,9 +1,9 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERIES;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
 import java.util.Map;
@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -57,14 +57,14 @@ public class ExecuteQueries extends AbstractServiceDelegate implements Initializ
 		Boolean needsRecordLinkage = (Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE);
 		boolean idQuery = Boolean.TRUE.equals(needsConsentCheck) || Boolean.TRUE.equals(needsRecordLinkage);
 
-		List<FeasibilityQueryResult> results = queries.entrySet().stream()
+		List<QueryResult> results = queries.entrySet().stream()
 				.map(entry -> executeQuery(entry.getKey(), entry.getValue(), idQuery)).collect(Collectors.toList());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(results)));
+				QueryResultsValues.create(new QueryResults(results)));
 	}
 
-	private FeasibilityQueryResult executeQuery(String cohortId, String cohortQuery, boolean idQuery)
+	private QueryResult executeQuery(String cohortId, String cohortQuery, boolean idQuery)
 	{
 		// TODO We might want to introduce a more complex result type to represent a count,
 		// errors and possible meta-data.
@@ -73,12 +73,12 @@ public class ExecuteQueries extends AbstractServiceDelegate implements Initializ
 
 		if (idQuery)
 		{
-			return FeasibilityQueryResult.idResult(organizationProvider.getLocalIdentifierValue(), cohortId, resultSet);
+			return QueryResult.idResult(organizationProvider.getLocalIdentifierValue(), cohortId, resultSet);
 		}
 		else
 		{
 			int count = Integer.parseInt(resultSet.getRow(0).get(0).getValueAsString());
-			return FeasibilityQueryResult.countResult(organizationProvider.getLocalIdentifierValue(), cohortId, count);
+			return QueryResult.countResult(organizationProvider.getLocalIdentifierValue(), cohortId, count);
 		}
 	}
 }

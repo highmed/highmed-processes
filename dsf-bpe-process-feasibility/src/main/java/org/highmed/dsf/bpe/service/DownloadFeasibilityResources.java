@@ -1,16 +1,17 @@
 package org.highmed.dsf.bpe.service;
 
+import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_TTP;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_COHORTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_COHORTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,10 +20,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.ConstantsBase;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.BloomFilterConfig;
-import org.highmed.dsf.bpe.variables.BloomFilterConfigValues;
+import org.highmed.dsf.bpe.variable.BloomFilterConfig;
+import org.highmed.dsf.bpe.variable.BloomFilterConfigValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -79,7 +79,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_COHORTS, FhirResourcesListValues.create(cohortDefinitions));
 
 		String ttpIdentifier = getTtpIdentifier(researchStudy, client);
-		execution.setVariable(ConstantsBase.BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER, ttpIdentifier);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER, ttpIdentifier);
 
 		boolean needsConsentCheck = getNeedsConsentCheck(task);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK, needsConsentCheck);
@@ -98,7 +98,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 	private IdType getResearchStudyId(Task task)
 	{
 		Reference researchStudyReference = getTaskHelper().getInputParameterReferenceValues(task,
-				CODESYSTEM_HIGHMED_FEASIBILITY, CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE)
+				CODESYSTEM_HIGHMED_DATA_SHARING, CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE)
 				.findFirst().get();
 
 		return new IdType(researchStudyReference.getReference());
@@ -172,8 +172,8 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 	private boolean getNeedsConsentCheck(Task task)
 	{
 		return getTaskHelper()
-				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK)
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK)
 				.orElseThrow(() -> new IllegalArgumentException("NeedsConsentCheck boolean is not set in task with id='"
 						+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
@@ -181,8 +181,8 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
 		return getTaskHelper()
-				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE)
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE)
 				.orElseThrow(
 						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
 								+ task.getId() + "', this error should " + "have been caught by resource validation"));
@@ -191,8 +191,8 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 	private BloomFilterConfig getBloomFilterConfig(Task task)
 	{
 		return BloomFilterConfig.fromBytes(getTaskHelper()
-				.getFirstInputParameterByteValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_BLOOM_FILTER_CONFIG)
+				.getFirstInputParameterByteValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_BLOOM_FILTER_CONFIG)
 				.orElseThrow(() -> new IllegalArgumentException("BloomFilterConfig byte[] is not set in task with id='"
 						+ task.getId() + "', this error should " + "have been caught by resource validation")));
 	}

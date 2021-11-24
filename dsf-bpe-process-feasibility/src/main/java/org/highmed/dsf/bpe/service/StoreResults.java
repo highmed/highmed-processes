@@ -1,11 +1,11 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -49,52 +49,49 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		boolean needsRecordLinkage = Boolean.TRUE
-				.equals((Boolean) execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE));
+				.equals(execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE));
 
 		Task task = getCurrentTaskFromExecutionVariables();
 
-		List<FeasibilityQueryResult> extendedResults = new ArrayList<>();
+		List<QueryResult> extendedResults = new ArrayList<>();
 		extendedResults.addAll(results.getResults());
 		extendedResults.addAll(getResults(task, needsRecordLinkage));
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(extendedResults)));
+				QueryResultsValues.create(new QueryResults(extendedResults)));
 	}
 
-	private List<FeasibilityQueryResult> getResults(Task task, boolean needsRecordLinkage)
+	private List<QueryResult> getResults(Task task, boolean needsRecordLinkage)
 	{
 		TaskHelper taskHelper = getTaskHelper();
 		Reference requester = task.getRequester();
 
 		if (needsRecordLinkage)
 		{
-			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-					CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT_REFERENCE, EXTENSION_HIGHMED_GROUP_ID)
+			return taskHelper.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+					CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SET_REFERENCE, EXTENSION_HIGHMED_GROUP_ID)
 					.map(input ->
 					{
 						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 						String resultSetUrl = ((Reference) input.getValue()).getReference();
 
-						return FeasibilityQueryResult.idResult(requester.getIdentifier().getValue(), cohortId,
-								resultSetUrl);
+						return QueryResult.idResult(requester.getIdentifier().getValue(), cohortId, resultSetUrl);
 					}).collect(Collectors.toList());
 		}
 		else
 		{
 			return taskHelper
-					.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-							CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_SINGLE_MEDIC_RESULT, EXTENSION_HIGHMED_GROUP_ID)
+					.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+							CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT, EXTENSION_HIGHMED_GROUP_ID)
 					.map(input ->
 					{
 						String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 						int cohortSize = ((UnsignedIntType) input.getValue()).getValue();
 
-						return FeasibilityQueryResult.countResult(requester.getIdentifier().getValue(), cohortId,
-								cohortSize);
+						return QueryResult.countResult(requester.getIdentifier().getValue(), cohortId, cohortSize);
 					}).collect(Collectors.toList());
 		}
 	}

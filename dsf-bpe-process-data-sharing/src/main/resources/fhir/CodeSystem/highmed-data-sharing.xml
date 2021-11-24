@@ -1,0 +1,105 @@
+<CodeSystem xmlns="http://hl7.org/fhir">
+	<meta>
+		<tag>
+			<system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+			<code value="ALL" />
+		</tag>
+	</meta>
+	<url value="http://highmed.org/fhir/CodeSystem/data-sharing"/>
+	<!-- version managed by bpe -->
+	<version value="${version}"/>
+	<name value="HiGHmed_Data_Sharing"/>
+	<title value="HiGHmed Data Sharing"/>
+	<!-- status managed by bpe -->
+	<status value="unknown"/>
+	<experimental value="false"/>
+	<date value="2021-08-24"/>
+	<publisher value="HiGHmed"/>
+	<description value="CodeSystem with standard values for HiGhmed data sharing processes"/>
+	<caseSensitive value="true"/>
+	<hierarchyMeaning value="grouped-by"/>
+	<versionNeeded value="false"/>
+	<content value="complete"/>
+	<concept>
+		<code value="research-study-reference"/>
+		<display value="Research Study Reference"/>
+		<definition value="Research study resource reference"/>
+	</concept>
+	<concept>
+		<code value="research-study-identifier"/>
+		<display value="Research Study Identifier"/>
+		<definition value="Research study resource unique identifier"/>
+	</concept>
+	<concept>
+		<code value="needs-record-linkage"/>
+		<display value="Needs Record Linkage"/>
+		<definition value="Boolean indicating if a data analysis needs record linkage"/>
+	</concept>
+	<concept>
+		<code value="needs-consent-check"/>
+		<display value="Needs Consent Check"/>
+		<definition value="Boolean indicating if a data analysis needs consent check"/>
+	</concept>
+	<concept>
+		<code value="consortium-identifier"/>
+		<display value="Consortium Identifier"/>
+		<definition value="Consortium organization resource identifier"/>
+	</concept>
+	<concept>
+		<code value="bloom-filter-configuration"/>
+		<display value="Bloom Filter Configuration"/>
+		<definition value="Base64 binary encoded bloom filter configuration"/>
+	</concept>
+	<concept>
+		<code value="mdat-aes-key"/>
+		<display value="MDAT AES Secret Key"/>
+		<definition value="Base64 binary encoded MDAT AES secret key"/>
+	</concept>
+	<concept>
+		<code value="medic-correlation-key"/>
+		<display value="MeDIC Correlation Key"/>
+		<definition value="MeDIC Correlation Key transferred to TTP for correlating incoming medic results"/>
+	</concept>
+	<concept>
+		<code value="single-medic-count-result"/>
+		<display value="Single MeDIC Count Result"/>
+		<definition value="Result of a single count query execution"/>
+	</concept>
+	<concept>
+		<code value="single-medic-result-set-reference"/>
+		<display value="Single MeDIC Result Set Reference"/>
+		<definition value="Reference to an openEHR ResultSet containing the result of a single query
+			execution and/or the record-bloom-filters of a single query execution"/>
+	</concept>
+	<concept>
+		<code value="multi-medic-count-result"/>
+		<display value="Multi MeDIC Result"/>
+		<definition value="Aggregated result of all single count query execution results"/>
+	</concept>
+	<concept>
+		<code value="multi-medic-result-set-reference"/>
+		<display value="Multi MeDIC Result Set Reference"/>
+		<definition value="Reference to an openEHR ResultSet containing the aggregated result of a all single query
+			execution ResultSets"/>
+	</concept>
+	<concept>
+		<code value="participating-medics"/>
+		<display value="Participating MeDICs"/>
+		<definition value="Count of all MeDICs who participated in a data sharing request"/>
+	</concept>
+	<concept>
+		<code value="request-form-reference"/>
+		<display value="Request Form Reference"/>
+		<definition value="Url to a Binary resource containing the request form"/>
+	</concept>
+	<concept>
+		<code value="contract-reference"/>
+		<display value="Contract Reference"/>
+		<definition value="Url to a Binary resource containing the data usage contract"/>
+	</concept>
+	<concept>
+		<code value="feasibility-query-reference"/>
+		<display value="Feasibility Query Reference"/>
+		<definition value="Url to a completed Task resource containing the feasibility query result"/>
+	</concept>
+</CodeSystem> 

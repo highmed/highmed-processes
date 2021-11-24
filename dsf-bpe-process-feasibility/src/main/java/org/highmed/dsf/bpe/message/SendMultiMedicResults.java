@@ -3,10 +3,10 @@ package org.highmed.dsf.bpe.message;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ERROR;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_MULTI_MEDIC_RESULT;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDICS_COUNT;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_COUNT_RESULT;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDICS;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -49,12 +49,12 @@ public class SendMultiMedicResults extends AbstractTaskMessageSend
 
 	private Stream<ParameterComponent> toInputs(FinalFeasibilityQueryResult result)
 	{
-		ParameterComponent input1 = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_MULTI_MEDIC_RESULT, result.getCohortSize());
+		ParameterComponent input1 = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_COUNT_RESULT, result.getCohortSize());
 		input1.addExtension(createCohortIdExtension(result.getCohortId()));
 
-		ParameterComponent input2 = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_FEASIBILITY,
-				CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_PARTICIPATING_MEDICS_COUNT, result.getParticipatingMedics());
+		ParameterComponent input2 = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDICS, result.getParticipatingMedics());
 		input2.addExtension(createCohortIdExtension(result.getCohortId()));
 
 		return Stream.of(input1, input2);

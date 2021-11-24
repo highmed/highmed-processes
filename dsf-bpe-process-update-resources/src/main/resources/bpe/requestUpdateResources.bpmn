@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0os0n0z" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
-  <bpmn:process id="highmedorg_requestUpdateResources" isExecutable="true" camunda:versionTag="0.5.0">
+  <bpmn:process id="highmedorg_requestUpdateResources" isExecutable="true" camunda:versionTag="0.6.0">
     <bpmn:sequenceFlow id="SequenceFlow_1ryplwc" sourceRef="StartEvent_1" targetRef="selectResourceAndTargets" />
     <bpmn:sequenceFlow id="SequenceFlow_1u4zxix" sourceRef="selectResourceAndTargets" targetRef="sendRequest" />
     <bpmn:endEvent id="EndEvent_1f9cjs7">
@@ -10,9 +10,9 @@
     <bpmn:sendTask id="sendRequest" name="sendRequest" camunda:class="org.highmed.dsf.bpe.message.SendRequest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeUpdateResources/0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeUpdateResources/0.6.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">executeUpdateResourcesMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-update-resources|0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-update-resources|0.6.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1u4zxix</bpmn:incoming>

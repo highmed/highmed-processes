@@ -1,8 +1,9 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERIES;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
+import static org.highmed.pseudonymization.openehr.Constants.EHRID_COLUMN_NAME;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,6 +69,6 @@ public class ModifyQueries extends AbstractServiceDelegate implements Initializi
 	protected String replaceSelectCountWithSelectMpiId(String value)
 	{
 		// TODO Implement correct replacement for default id query
-		return value.replace("SELECT COUNT(e)", "SELECT e" + ehrIdColumnPath + " as EHRID");
+		return value.replace("SELECT COUNT(e)", "SELECT e" + ehrIdColumnPath + " as " + EHRID_COLUMN_NAME);
 	}
 }

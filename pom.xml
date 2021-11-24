@@ -10,23 +10,25 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>dsf-bpe-process-data-sharing</module>
 		<module>dsf-bpe-process-feasibility</module>
 		<module>dsf-bpe-process-local-services</module>
 		<module>dsf-bpe-process-ping</module>
 		<module>dsf-bpe-process-update-allow-list</module>
 		<module>dsf-bpe-process-update-resources</module>
 	</modules>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<compileSource>11</compileSource>
 		<compileTarget>11</compileTarget>
 		
 		<main.basedir>${project.basedir}</main.basedir>
+		<dsf.version>0.6.0-SNAPSHOT</dsf.version>
 	</properties>
 
 	<name>highmed-processes</name>
-	<description>HiGHmed Processes</description>
+	<description>Processes of the HiGHmed consortium to be deployed on the HiGHmed DSF</description>
 	<url>https://github.com/highmed/highmed-processes</url>
 
 	<scm>
@@ -64,14 +66,19 @@
 			<dependency>
 				<groupId>org.highmed.dsf</groupId>
 				<artifactId>dsf-bpe-process-base</artifactId>
-				<version>0.5.2</version>
+				<version>${dsf.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.highmed.dsf</groupId>
 				<artifactId>dsf-fhir-validation</artifactId>
-				<version>0.5.2</version>
+				<version>${dsf.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.highmed.dsf</groupId>
+				<artifactId>dsf-bpe-process-data-sharing</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.highmed.dsf</groupId>
 				<artifactId>dsf-bpe-process-feasibility</artifactId>
@@ -127,7 +134,7 @@
 			<dependency>
 				<groupId>org.highmed.dsf</groupId>
 				<artifactId>dsf-bpe-process-base</artifactId>
-				<version>0.5.2</version>
+				<version>${dsf.version}</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -168,13 +175,11 @@
 						</archive>
 					</configuration>
 				</plugin>
-				<!--
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-shade-plugin</artifactId>
 					<version>3.2.4</version>
 				</plugin>
-				-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>

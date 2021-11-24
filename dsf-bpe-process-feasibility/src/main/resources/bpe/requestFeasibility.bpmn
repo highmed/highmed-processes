@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0inb4ax" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
-  <bpmn:process id="highmedorg_requestFeasibility" isExecutable="true" camunda:versionTag="0.5.0">
+  <bpmn:process id="highmedorg_requestFeasibility" isExecutable="true" camunda:versionTag="0.6.0">
     <bpmn:startEvent id="StartEvent" name="start">
       <bpmn:outgoing>SequenceFlow_11k77gx</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_10c2suu" messageRef="Message_1pq9qxp" />
@@ -12,9 +12,9 @@
     <bpmn:sendTask id="sendRequestToMedics" name="send request to medics" camunda:class="org.highmed.dsf.bpe.message.SendMedicRequest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibility/0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibility/0.6.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">executeFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-feasibility|0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-feasibility|0.6.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_035oihl</bpmn:incoming>
@@ -32,9 +32,9 @@
     <bpmn:intermediateThrowEvent id="sendCorreltationKeysToTTP" name="send correlation keys to TTP">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeFeasibility/0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeFeasibility/0.6.0</camunda:inputParameter>
           <camunda:inputParameter name="messageName">computeFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-compute-feasibility|0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-compute-feasibility|0.6.0</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0b5s4ef</bpmn:incoming>
@@ -44,7 +44,7 @@
     <bpmn:endEvent id="EndEvent" name="success">
       <bpmn:incoming>Flow_15k4oa2</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="checkFinalResult" name="check final result" camunda:class="org.highmed.dsf.bpe.service.CheckMultiMedicResults">
+    <bpmn:serviceTask id="checkFinalResults" name="check final results" camunda:class="org.highmed.dsf.bpe.service.CheckMultiMedicResults">
       <bpmn:incoming>Flow_0fd2zcr</bpmn:incoming>
       <bpmn:outgoing>Flow_0pn3dsm</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -70,14 +70,14 @@
       <bpmn:messageEventDefinition id="MessageEventDefinition_07z0ktw" messageRef="Message_1vrxfsk" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_113qgvb" sourceRef="Gateway_1elix41" targetRef="receiveFinalResultFromTTP" />
-    <bpmn:sequenceFlow id="Flow_0fd2zcr" sourceRef="receiveFinalResultFromTTP" targetRef="checkFinalResult" />
+    <bpmn:sequenceFlow id="Flow_0fd2zcr" sourceRef="receiveFinalResultFromTTP" targetRef="checkFinalResults" />
     <bpmn:sequenceFlow id="Flow_0xgrywb" sourceRef="receiveErrorFromTTP" targetRef="handelError" />
     <bpmn:exclusiveGateway id="Gateway_12ly33g">
       <bpmn:incoming>Flow_0pn3dsm</bpmn:incoming>
       <bpmn:incoming>Flow_0rkdr4f</bpmn:incoming>
       <bpmn:outgoing>Flow_15k4oa2</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0pn3dsm" sourceRef="checkFinalResult" targetRef="Gateway_12ly33g" />
+    <bpmn:sequenceFlow id="Flow_0pn3dsm" sourceRef="checkFinalResults" targetRef="Gateway_12ly33g" />
     <bpmn:sequenceFlow id="Flow_0rkdr4f" sourceRef="handelError" targetRef="Gateway_12ly33g" />
     <bpmn:sequenceFlow id="Flow_15k4oa2" sourceRef="Gateway_12ly33g" targetRef="EndEvent" />
   </bpmn:process>
@@ -175,7 +175,7 @@
           <dc:Bounds x="1450" y="245" width="40" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_00phx5l_di" bpmnElement="checkFinalResult">
+      <bpmndi:BPMNShape id="ServiceTask_00phx5l_di" bpmnElement="checkFinalResults">
         <dc:Bounds x="1190" y="100" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0g5gqtl_di" bpmnElement="handelError">
