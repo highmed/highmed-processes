@@ -43,7 +43,7 @@ public class SecretKeyWrapper
 	private final String algorithm;
 
 	@JsonCreator
-	public SecretKeyWrapper(@JsonProperty("bytes") byte[] bytes, @JsonProperty("algorithm") String algorithm)
+	private SecretKeyWrapper(@JsonProperty("bytes") byte[] bytes, @JsonProperty("algorithm") String algorithm)
 	{
 		this.bytes = bytes;
 		this.algorithm = algorithm;
