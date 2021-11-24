@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
@@ -39,6 +38,7 @@ public class DecryptMultiMedicResults extends AbstractServiceDelegate implements
 			ReadAccessHelper readAccessHelper, ObjectMapper openEhrObjectMapper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.openEhrObjectMapper = openEhrObjectMapper;
 	}
 
@@ -46,6 +46,7 @@ public class DecryptMultiMedicResults extends AbstractServiceDelegate implements
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+
 		Objects.requireNonNull(openEhrObjectMapper, "openEhrObjectMapper");
 	}
 

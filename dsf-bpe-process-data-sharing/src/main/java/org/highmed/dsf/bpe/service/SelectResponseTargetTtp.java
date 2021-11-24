@@ -15,7 +15,6 @@ import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.EndpointProvider;
-import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.TargetValues;
@@ -29,6 +28,7 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate
 			ReadAccessHelper readAccessHelper, EndpointProvider endpointProvider)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
+
 		this.endpointProvider = endpointProvider;
 	}
 
@@ -36,6 +36,7 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
+
 		Objects.requireNonNull(endpointProvider, "endpointProvider");
 	}
 
