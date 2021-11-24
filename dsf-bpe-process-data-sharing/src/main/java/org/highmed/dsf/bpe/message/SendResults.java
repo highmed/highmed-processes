@@ -4,6 +4,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -36,6 +37,14 @@ public abstract class SendResults extends AbstractTaskMessageSend
 		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 
 		this.resultSetReferenceCodeSystemValue = resultSetReferenceCodeSystemValue;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		super.afterPropertiesSet();
+
+		Objects.requireNonNull(resultSetReferenceCodeSystemValue, "resultSetReferenceCodeSystemValue");
 	}
 
 	@Override
