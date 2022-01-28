@@ -5,7 +5,7 @@
       <bpmn:outgoing>SequenceFlow_11k77gx</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_10c2suu" messageRef="Message_1pq9qxp" />
     </bpmn:startEvent>
-    <bpmn:serviceTask id="selectMultiMedicResultSharetTargets" name="select multi medic result share targets" camunda:class="org.highmed.dsf.bpe.service.SelectMultiMedicResultShareTargets">
+    <bpmn:serviceTask id="selectMultiMedicResultSharetTargets" name="select multi medic result share targets" camunda:class="org.highmed.dsf.bpe.service.SelectMultiMedicTargets">
       <bpmn:incoming>SequenceFlow_18ajfnh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0b5s4ef</bpmn:outgoing>
     </bpmn:serviceTask>

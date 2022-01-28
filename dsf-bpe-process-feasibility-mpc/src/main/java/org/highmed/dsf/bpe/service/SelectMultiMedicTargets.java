@@ -26,11 +26,11 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResearchStudy;
 
-public class SelectMultiMedicResultShareTargets extends AbstractServiceDelegate
+public class SelectMultiMedicTargets extends AbstractServiceDelegate
 {
 	private final EndpointProvider endpointProvider;
 
-	public SelectMultiMedicResultShareTargets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public SelectMultiMedicTargets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, EndpointProvider endpointProvider)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

@@ -66,7 +66,7 @@
       <bpmn:outgoing>Flow_15s0sha</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1p3ixg0" sourceRef="selectMultiMedicResultShareResponseTarget" targetRef="EndEvent" />
-    <bpmn:serviceTask id="selectMultiMedicResultShareResponseTarget" name="select multi medic result share response target" camunda:class="org.highmed.dsf.bpe.service.SelectMultiMedicResultShareResponseTarget">
+    <bpmn:serviceTask id="selectMultiMedicResultShareResponseTarget" name="select multi medic result share response target" camunda:class="org.highmed.dsf.bpe.service.SelectMultiMedicResultShareTarget">
       <bpmn:incoming>Flow_0bm0z7u</bpmn:incoming>
       <bpmn:outgoing>Flow_1p3ixg0</bpmn:outgoing>
     </bpmn:serviceTask>

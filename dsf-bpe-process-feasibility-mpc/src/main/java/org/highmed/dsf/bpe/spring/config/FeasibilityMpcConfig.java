@@ -16,8 +16,8 @@ import org.highmed.dsf.bpe.service.ExecuteQueries;
 import org.highmed.dsf.bpe.service.FilterResultsByConsent;
 import org.highmed.dsf.bpe.service.GenerateCountFromIds;
 import org.highmed.dsf.bpe.service.ModifyQueries;
-import org.highmed.dsf.bpe.service.SelectMultiMedicResultShareResponseTarget;
-import org.highmed.dsf.bpe.service.SelectMultiMedicResultShareTargets;
+import org.highmed.dsf.bpe.service.SelectMultiMedicResultShareTarget;
+import org.highmed.dsf.bpe.service.SelectMultiMedicTargets;
 import org.highmed.dsf.bpe.service.SelectSingleMedicResultShareTargets;
 import org.highmed.dsf.bpe.service.StoreResultsMultiMedicShare;
 import org.highmed.dsf.bpe.service.StoreResultsSingleMedicShare;
@@ -86,9 +86,9 @@ public class FeasibilityMpcConfig
 	}
 
 	@Bean
-	public SelectMultiMedicResultShareTargets selectMultiMedicResultShareTargets()
+	public SelectMultiMedicTargets selectMultiMedicTargets()
 	{
-		return new SelectMultiMedicResultShareTargets(fhirClientProvider, taskHelper, readAccessHelper,
+		return new SelectMultiMedicTargets(fhirClientProvider, taskHelper, readAccessHelper,
 				endpointProvider);
 	}
 
@@ -229,9 +229,9 @@ public class FeasibilityMpcConfig
 	}
 
 	@Bean
-	public SelectMultiMedicResultShareResponseTarget selectMultiMedicResultShareResponseTarget()
+	public SelectMultiMedicResultShareTarget selectMultiMedicResultShareTarget()
 	{
-		return new SelectMultiMedicResultShareResponseTarget(fhirClientProvider, taskHelper, readAccessHelper,
+		return new SelectMultiMedicResultShareTarget(fhirClientProvider, taskHelper, readAccessHelper,
 				endpointProvider);
 	}
 

@@ -40,7 +40,8 @@ public class FeasibilityMpcProcessPluginDefinition implements ProcessPluginDefin
 	@Override
 	public Stream<String> getBpmnFiles()
 	{
-		return Stream.of("bpe/requestFeasibilityMpc.bpmn", "bpe/executeFeasibilityMpc.bpmn");
+		return Stream.of("bpe/requestFeasibilityMpc.bpmn", "bpe/executeFeasibilityMpcSingleShare.bpmn",
+				"bpe/executeFeasibilityMpcMultiShare.bpmn");
 	}
 
 	@Override
@@ -60,26 +61,30 @@ public class FeasibilityMpcProcessPluginDefinition implements ProcessPluginDefin
 	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
 			PropertyResolver resolver)
 	{
-		var aExe = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeFeasibilityMpc.xml");
+		var aExeM = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeFeasibilityMpcMultiShare.xml");
+		var aExeS = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeFeasibilityMpcSingleShare.xml");
 		var aReq = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-requestFeasibilityMpc.xml");
 
 		var cDS = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
 				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
-		var sTExe = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-task-execute-feasibility-mpc.xml");
-		var sTReq = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-task-request-feasibility-mpc.xml");
-		var sTResM = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-task-multi-medic-result-share-feasibility-mpc.xml");
-		var sTResS = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-task-single-medic-result-share-feasibility-mpc.xml");
+		var sTExeM = StructureDefinitionResource.file(
+				"fhir/StructureDefinition/highmed-task-execute-feasibility-mpc-multi-share.xml");
+		var sTExeS = StructureDefinitionResource.file(
+				"fhir/StructureDefinition/highmed-task-execute-feasibility-mpc-single-share.xml");
+		var sTReq = StructureDefinitionResource.file(
+				"fhir/StructureDefinition/highmed-task-request-feasibility-mpc.xml");
+		var sTResM = StructureDefinitionResource.file(
+				"fhir/StructureDefinition/highmed-task-multi-medic-result-share-feasibility-mpc.xml");
+		var sTResS = StructureDefinitionResource.file(
+				"fhir/StructureDefinition/highmed-task-single-medic-result-share-feasibility-mpc.xml");
 
 		var vDS = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
 				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"highmedorg_executeFeasibilityMpc/" + VERSION, Arrays.asList(aExe, cDS, sTExe, sTResS, vDS),
+				"highmedorg_executeFeasibilityMpcMultiShare/" + VERSION, Arrays.asList(aExeM, cDS, sTExeM, sTResS, vDS),
+				"highmedorg_executeFeasibilityMpcSingleShare/" + VERSION, Arrays.asList(aExeS, cDS, sTExeS, vDS),
 				"highmedorg_requestFeasibilityMpc/" + VERSION, Arrays.asList(aReq, cDS, sTReq, sTResM, vDS));
 
 		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),

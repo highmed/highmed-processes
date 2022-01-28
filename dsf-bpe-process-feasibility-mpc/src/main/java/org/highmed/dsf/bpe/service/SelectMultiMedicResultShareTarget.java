@@ -18,11 +18,11 @@ import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.TargetValues;
 import org.springframework.beans.factory.InitializingBean;
 
-public class SelectMultiMedicResultShareResponseTarget extends AbstractServiceDelegate implements InitializingBean
+public class SelectMultiMedicResultShareTarget extends AbstractServiceDelegate implements InitializingBean
 {
 	private final EndpointProvider endpointProvider;
 
-	public SelectMultiMedicResultShareResponseTarget(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public SelectMultiMedicResultShareTarget(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, EndpointProvider endpointProvider)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
