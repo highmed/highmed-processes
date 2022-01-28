@@ -66,6 +66,11 @@
 		<definition value="Result of a single count query execution"/>
 	</concept>
 	<concept>
+		<code value="single-medic-result-share"/>
+		<display value="Single MeDIC MPC Result Share"/>
+		<definition value="MPC result share of a single count query execution"/>
+	</concept>
+	<concept>
 		<code value="single-medic-result-set-reference"/>
 		<display value="Single MeDIC Result Set Reference"/>
 		<definition value="Reference to an openEHR ResultSet containing the result of a single query
@@ -75,6 +80,11 @@
 		<code value="multi-medic-count-result"/>
 		<display value="Multi MeDIC Result"/>
 		<definition value="Aggregated result of all single count query execution results"/>
+	</concept>
+	<concept>
+		<code value="multi-medic-result-share"/>
+		<display value="Multi MeDIC MPC Result Share"/>
+		<definition value="Aggregated result of all received single count query execution result shares"/>
 	</concept>
 	<concept>
 		<code value="multi-medic-result-set-reference"/>
