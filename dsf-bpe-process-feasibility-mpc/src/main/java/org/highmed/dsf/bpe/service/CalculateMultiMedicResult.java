@@ -8,11 +8,11 @@ import org.highmed.dsf.fhir.task.TaskHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ComputeMultiMedicResultShare extends AbstractServiceDelegate
+public class CalculateMultiMedicResult extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(ComputeMultiMedicResultShare.class);
+	private static final Logger logger = LoggerFactory.getLogger(CalculateMultiMedicResult.class);
 
-	public ComputeMultiMedicResultShare(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public CalculateMultiMedicResult(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
@@ -21,6 +21,8 @@ public class ComputeMultiMedicResultShare extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		logger.info("EXECUTING: {}", ComputeMultiMedicResultShare.class.getName());
+		logger.info("EXECUTING: {}", CalculateMultiMedicResult.class.getName());
+
+		// TODO: calculate results
 	}
 }

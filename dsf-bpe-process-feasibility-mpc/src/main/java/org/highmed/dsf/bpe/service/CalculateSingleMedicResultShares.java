@@ -22,5 +22,7 @@ public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
 		logger.info("EXECUTING: {}", CalculateSingleMedicResultShares.class.getName());
+
+		// TODO: calculate single shares
 	}
 }

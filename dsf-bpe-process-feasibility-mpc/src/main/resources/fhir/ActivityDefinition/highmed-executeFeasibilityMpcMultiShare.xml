@@ -7,11 +7,11 @@
 	</meta>
 	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="executeFeasibilityMpcMessage"/>
+			<valueString value="executeFeasibilityMpcMultiShareMessage"/>
 		</extension>
 		<extension url="task-profile">
 			<valueCanonical
-					value="http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc|${version}"/>
+					value="http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc-multi-share|${version}"/>
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -145,12 +145,12 @@
 			</valueCoding>
 		</extension>
 	</extension>
-	<url value="http://highmed.org/bpe/Process/executeFeasibilityMpc"/>
+	<url value="http://highmed.org/bpe/Process/executeFeasibilityMpcMultiShare"/>
 	<!-- version managed by bpe -->
 	<version value="${version}"/>
-	<name value="ExecuteFeasibilityMpc"/>
-	<title value="Execute Feasibility Mpc"/>
-	<subtitle value="Feasibility Mpc Execution Process"/>
+	<name value="ExecuteFeasibilityMpcMultiShare"/>
+	<title value="Execute Feasibility Mpc Multi Share"/>
+	<subtitle value="Feasibility Mpc Multi Share Execution Process"/>
 	<!-- status managed by bpe -->
 	<status value="unknown"/>
 	<experimental value="false"/>
@@ -163,6 +163,6 @@
 			<value value="pmo@highmed.org"/>
 		</telecom>
 	</contact>
-	<description value="Process executes feasibility query and sends single medic result shares to each MeDIC, process receives single medic result shares from each MeDIC, process calculates multi medic result share and sends it to coordinating MeDIC"/>
+	<description value="Process receives single medic result shares from each MeDIC, process calculates multi medic result share and sends it to coordinating MeDIC"/>
 	<kind value="Task"/>
 </ActivityDefinition>

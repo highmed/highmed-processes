@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0inb4ax" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0inb4ax" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
   <bpmn:process id="highmedorg_requestFeasibilityMpc" isExecutable="true" camunda:versionTag="0.6.0">
     <bpmn:startEvent id="StartEvent" name="start">
       <bpmn:outgoing>SequenceFlow_11k77gx</bpmn:outgoing>
@@ -62,7 +62,7 @@
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1k1a943" sourceRef="sendRequestMultiShareToMedics" targetRef="sendRequestSingleShareToMedics" />
-    <bpmn:serviceTask id="Activity_044pdxe" name="calculate multimedic cohort size" camunda:class="org.highmed.dsf.bpe.service.CalculateMulitMedicResultShares">
+    <bpmn:serviceTask id="Activity_044pdxe" name="calculate multimedic cohort size" camunda:class="org.highmed.dsf.bpe.service.CalculateMultiMedicResult">
       <bpmn:incoming>Flow_161cxwt</bpmn:incoming>
       <bpmn:outgoing>Flow_08i18td</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -123,6 +123,10 @@
   <bpmn:error id="Error_0ttn640" name="errorMultiMedicFeasibilityMpcResult" errorCode="errorMultiMedicFeasibilityMpcResult" camunda:errorMessage="errorMultiMedicFeasibilityMpcResult" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_requestFeasibilityMpc">
+      <bpmndi:BPMNEdge id="Flow_1b19aj3_di" bpmnElement="Flow_1b19aj3">
+        <di:waypoint x="850" y="145" />
+        <di:waypoint x="910" y="145" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08i18td_di" bpmnElement="Flow_08i18td">
         <di:waypoint x="1720" y="145" />
         <di:waypoint x="1790" y="145" />
@@ -160,42 +164,20 @@
         <di:waypoint x="188" y="145" />
         <di:waypoint x="240" y="145" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1b19aj3_di" bpmnElement="Flow_1b19aj3">
-        <di:waypoint x="850" y="145" />
-        <di:waypoint x="910" y="145" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="StartEvent_1ozsjmr_di" bpmnElement="StartEvent">
         <dc:Bounds x="152" y="127" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="160" y="170" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_052xqjx_di" bpmnElement="downloadResearchStudyResource">
-        <dc:Bounds x="240" y="105" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0vfud44_di" bpmnElement="selectMultiMedicResultSharetTargets">
         <dc:Bounds x="410" y="105" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_044pdxe_di" bpmnElement="Activity_044pdxe">
-        <dc:Bounds x="1620" y="105" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1cv27w0_di" bpmnElement="Gateway_1cv27w0" isMarkerVisible="true">
-        <dc:Bounds x="1505" y="120" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0o1pue0_di" bpmnElement="Activity_0o1pue0">
-        <dc:Bounds x="1790" y="105" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0r58kgi_di" bpmnElement="Event_123lecz">
-        <dc:Bounds x="1962" y="127" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1961" y="170" width="40" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1uwfouh_di" bpmnElement="sendRequestSingleShareToMedics">
-        <dc:Bounds x="750" y="105" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SendTask_1pu8i9n_di" bpmnElement="sendRequestMultiShareToMedics">
         <dc:Bounds x="590" y="105" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_052xqjx_di" bpmnElement="downloadResearchStudyResource">
+        <dc:Bounds x="240" y="105" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0lcbiwk_di" bpmnElement="Activity_0lcbiwk" isExpanded="true">
         <dc:Bounds x="910" y="78" width="498" height="134" />
@@ -223,6 +205,24 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1xy6pw3_di" bpmnElement="Event_1xy6pw3">
         <dc:Bounds x="934" y="129" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_044pdxe_di" bpmnElement="Activity_044pdxe">
+        <dc:Bounds x="1620" y="105" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1cv27w0_di" bpmnElement="Gateway_1cv27w0" isMarkerVisible="true">
+        <dc:Bounds x="1505" y="120" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0o1pue0_di" bpmnElement="Activity_0o1pue0">
+        <dc:Bounds x="1790" y="105" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0r58kgi_di" bpmnElement="Event_123lecz">
+        <dc:Bounds x="1962" y="127" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1961" y="170" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1uwfouh_di" bpmnElement="sendRequestSingleShareToMedics">
+        <dc:Bounds x="750" y="105" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ih81k1_di" bpmnElement="Event_1ih81k1">
         <dc:Bounds x="1390" y="194" width="36" height="36" />

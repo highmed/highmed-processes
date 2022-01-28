@@ -37,6 +37,7 @@ public class SendSingleMedicResultShare extends AbstractTaskMessageSend
 	@Override
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
+		// TODO: use calculated single share
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		return results.getResults().stream().map(this::toInput);

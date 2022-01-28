@@ -4,12 +4,12 @@ import org.highmed.consent.client.ConsentClient;
 import org.highmed.consent.client.ConsentClientFactory;
 import org.highmed.dsf.bpe.message.*;
 import org.highmed.dsf.bpe.service.CalculateMulitMedicResultShares;
+import org.highmed.dsf.bpe.service.CalculateMultiMedicResult;
 import org.highmed.dsf.bpe.service.CalculateSingleMedicResultShares;
 import org.highmed.dsf.bpe.service.CheckFeasibilityMpcResources;
 import org.highmed.dsf.bpe.service.CheckMultiMedicResults;
 import org.highmed.dsf.bpe.service.CheckQueries;
 import org.highmed.dsf.bpe.service.CheckSingleMedicResultShares;
-import org.highmed.dsf.bpe.service.ComputeMultiMedicResultShare;
 import org.highmed.dsf.bpe.service.DownloadFeasibilityMpcResources;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
@@ -88,8 +88,7 @@ public class FeasibilityMpcConfig
 	@Bean
 	public SelectMultiMedicTargets selectMultiMedicTargets()
 	{
-		return new SelectMultiMedicTargets(fhirClientProvider, taskHelper, readAccessHelper,
-				endpointProvider);
+		return new SelectMultiMedicTargets(fhirClientProvider, taskHelper, readAccessHelper, endpointProvider);
 	}
 
 	@Bean
@@ -125,7 +124,11 @@ public class FeasibilityMpcConfig
 	}
 
 	//
-	// process executeFeasibilityMpc implementations
+	// process executeFeasibilityMpcSingleShare implementations
+	//
+
+	//
+	// process executeFeasibilityMpcMultiShare implementations
 	//
 
 	@Bean
@@ -223,9 +226,9 @@ public class FeasibilityMpcConfig
 	}
 
 	@Bean
-	public ComputeMultiMedicResultShare computeMultiMedicResultShare()
+	public CalculateMultiMedicResult calculateMultiMedicResult()
 	{
-		return new ComputeMultiMedicResultShare(fhirClientProvider, taskHelper, readAccessHelper);
+		return new CalculateMultiMedicResult(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
