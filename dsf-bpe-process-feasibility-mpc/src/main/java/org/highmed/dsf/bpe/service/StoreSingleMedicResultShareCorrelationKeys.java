@@ -13,8 +13,7 @@ import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variable.QueryResults;
-import org.highmed.dsf.bpe.variable.QueryResultsValues;
+import org.highmed.dsf.bpe.mpc.QueryResultShares;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -42,8 +41,7 @@ public class StoreSingleMedicResultShareCorrelationKeys extends AbstractServiceD
 		String correlationKey = getCorrelationKey(task);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_CORRELATION_KEY, correlationKey);
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES,
-				QueryResultsValues.create(new QueryResults(null)));
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES, new QueryResultShares(null));
 	}
 
 	private Targets getTargets(Task task)

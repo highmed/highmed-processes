@@ -3,8 +3,8 @@ package org.highmed.dsf.bpe.spring.config;
 import org.highmed.consent.client.ConsentClient;
 import org.highmed.consent.client.ConsentClientFactory;
 import org.highmed.dsf.bpe.message.*;
-import org.highmed.dsf.bpe.service.CalculateMulitMedicResultShares;
 import org.highmed.dsf.bpe.service.CalculateMultiMedicResult;
+import org.highmed.dsf.bpe.service.CalculateMultiMedicResultShares;
 import org.highmed.dsf.bpe.service.CalculateSingleMedicResultShares;
 import org.highmed.dsf.bpe.service.CheckFeasibilityMpcResources;
 import org.highmed.dsf.bpe.service.CheckMultiMedicResults;
@@ -112,9 +112,10 @@ public class FeasibilityMpcConfig
 	}
 
 	@Bean
-	public CalculateMulitMedicResultShares calculateMulitMedicResultShares()
+	public CalculateMultiMedicResultShares calculateMulitMedicResultShares()
 	{
-		return new CalculateMulitMedicResultShares(fhirClientProvider, taskHelper, readAccessHelper);
+		return new CalculateMultiMedicResultShares(fhirClientProvider, taskHelper, readAccessHelper,
+				organizationProvider);
 	}
 
 	@Bean

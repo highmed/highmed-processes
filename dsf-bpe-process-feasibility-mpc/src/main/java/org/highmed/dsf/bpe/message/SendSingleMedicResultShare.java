@@ -1,15 +1,15 @@
 package org.highmed.dsf.bpe.message;
 
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES;
 
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.variable.QueryResult;
-import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.mpc.QueryResultShare;
+import org.highmed.dsf.bpe.mpc.QueryResultShares;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -37,17 +37,23 @@ public class SendSingleMedicResultShare extends AbstractTaskMessageSend
 	@Override
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
-		// TODO: use calculated single share
-		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		String targetIdentifier = getTarget(execution).getTargetOrganizationIdentifierValue();
+		QueryResultShares shares = (QueryResultShares) execution
+				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES);
 
-		return results.getResults().stream().map(this::toInput);
+		return shares.getShares().stream().filter(s -> s.getOrganizationIdentifier().equals(targetIdentifier))
+				.map(this::toInput);
 	}
 
-	private Task.ParameterComponent toInput(QueryResult result)
+	private Task.ParameterComponent toInput(QueryResultShare share)
 	{
 		ParameterComponent input = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
-				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE, result.getCohortSize());
-		input.addExtension(createCohortIdExtension(result.getCohortId()));
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE,
+				share.getArithmeticShare().getValue().intValue());
+		input.addExtension(createCohortIdExtension(share.getCohortId()));
+
+		logger.info("Sending SingleMedicShare with cohortId={} and size={}", share.getCohortId(),
+				share.getArithmeticShare().getValue().intValue());
 
 		return input;
 	}

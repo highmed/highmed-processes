@@ -1,20 +1,22 @@
 package org.highmed.dsf.bpe.service;
 
+import static java.util.stream.Collectors.toList;
+
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE;
 import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variable.QueryResult;
-import org.highmed.dsf.bpe.variable.QueryResults;
-import org.highmed.dsf.bpe.variable.QueryResultsValues;
+import org.highmed.dsf.bpe.mpc.ArithmeticShare;
+import org.highmed.dsf.bpe.mpc.QueryResultShare;
+import org.highmed.dsf.bpe.mpc.QueryResultShares;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -38,22 +40,20 @@ public class StoreResultsSingleMedicShare extends AbstractServiceDelegate implem
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		logger.info("EXECUTING: {}", StoreResultsSingleMedicShare.class.getName());
-
-		QueryResults results = (QueryResults) execution
+		QueryResultShares shares = (QueryResultShares) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES);
 
 		Task task = getCurrentTaskFromExecutionVariables();
 
-		List<QueryResult> extendedResults = new ArrayList<>();
-		extendedResults.addAll(results.getResults());
-		extendedResults.addAll(getResults(task));
+		List<QueryResultShare> extendedShares = new ArrayList<>();
+		extendedShares.addAll(shares.getShares());
+		extendedShares.addAll(getShares(task));
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES,
-				QueryResultsValues.create(new QueryResults(extendedResults)));
+				new QueryResultShares(extendedShares));
 	}
 
-	private List<QueryResult> getResults(Task task)
+	private List<QueryResultShare> getShares(Task task)
 	{
 		TaskHelper taskHelper = getTaskHelper();
 		Reference requester = task.getRequester();
@@ -61,12 +61,16 @@ public class StoreResultsSingleMedicShare extends AbstractServiceDelegate implem
 		return taskHelper
 				.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE, EXTENSION_HIGHMED_GROUP_ID)
-				.map(input ->
-				{
-					String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
-					int cohortSize = ((UnsignedIntType) input.getValue()).getValue();
+				.map(input -> toQueryResultShare(requester, input)).collect(toList());
+	}
 
-					return QueryResult.countResult(requester.getIdentifier().getValue(), cohortId, cohortSize);
-				}).collect(Collectors.toList());
+	private QueryResultShare toQueryResultShare(Reference requester, Task.ParameterComponent input)
+	{
+		String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
+		String organizationIdentifier = requester.getIdentifier().getValue();
+		int shareSize = ((UnsignedIntType) input.getValue()).getValue();
+
+		return new QueryResultShare(cohortId, organizationIdentifier,
+				new ArithmeticShare(BigInteger.valueOf(shareSize)));
 	}
 }

@@ -56,7 +56,7 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_18n85hs" sourceRef="Activity_11idi2o" targetRef="Gateway_0atmr78" />
     <bpmn:sequenceFlow id="Flow_1688meb" sourceRef="Event_1qabwc2" targetRef="Gateway_0atmr78" />
-    <bpmn:serviceTask id="Activity_07k3fpm" name="calculate multi medic result shares" camunda:class="org.highmed.dsf.bpe.service.CalculateMulitMedicResultShares">
+    <bpmn:serviceTask id="Activity_07k3fpm" name="calculate multi medic result shares" camunda:class="org.highmed.dsf.bpe.service.CalculateMultiMedicResultShares">
       <bpmn:incoming>Flow_18sujdf</bpmn:incoming>
       <bpmn:outgoing>Flow_0bm0z7u</bpmn:outgoing>
     </bpmn:serviceTask>
