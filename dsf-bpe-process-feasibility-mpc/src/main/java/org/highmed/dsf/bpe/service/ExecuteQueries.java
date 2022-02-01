@@ -1,7 +1,6 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERIES;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
@@ -77,7 +76,7 @@ public class ExecuteQueries extends AbstractServiceDelegate implements Initializ
 		else
 		{
 			int count = Integer.parseInt(resultSet.getRow(0).get(0).getValueAsString());
-			return QueryResult.countResult(organizationProvider.getLocalIdentifierValue(), cohortId, count);
+			return QueryResult.mpcCountResult(organizationProvider.getLocalIdentifierValue(), cohortId, count);
 		}
 	}
 }

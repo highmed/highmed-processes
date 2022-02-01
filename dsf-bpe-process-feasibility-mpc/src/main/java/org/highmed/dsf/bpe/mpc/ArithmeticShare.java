@@ -5,6 +5,9 @@ import static org.highmed.dsf.bpe.mpc.ArithmeticSharing.DEFAULT_PRIME;
 import java.io.Serializable;
 import java.math.BigInteger;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author Tobias Kussel
  */
@@ -18,7 +21,8 @@ public class ArithmeticShare implements Serializable
 		this(value, DEFAULT_PRIME);
 	}
 
-	public ArithmeticShare(BigInteger value, BigInteger prime)
+	@JsonCreator
+	public ArithmeticShare(@JsonProperty("value") BigInteger value, @JsonProperty("prime") BigInteger prime)
 	{
 		this.value = value;
 		this.prime = prime;

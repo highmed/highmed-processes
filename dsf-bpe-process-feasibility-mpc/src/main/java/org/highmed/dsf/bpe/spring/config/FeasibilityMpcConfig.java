@@ -2,7 +2,10 @@ package org.highmed.dsf.bpe.spring.config;
 
 import org.highmed.consent.client.ConsentClient;
 import org.highmed.consent.client.ConsentClientFactory;
-import org.highmed.dsf.bpe.message.*;
+import org.highmed.dsf.bpe.message.SendMedicRequestMultiShare;
+import org.highmed.dsf.bpe.message.SendMedicRequestSingleShare;
+import org.highmed.dsf.bpe.message.SendMultiMedicResultShare;
+import org.highmed.dsf.bpe.message.SendSingleMedicResultShare;
 import org.highmed.dsf.bpe.service.CalculateMultiMedicResult;
 import org.highmed.dsf.bpe.service.CalculateMultiMedicResultShares;
 import org.highmed.dsf.bpe.service.CalculateSingleMedicResultShares;

@@ -14,10 +14,9 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.mpc.ArithmeticShare;
 import org.highmed.dsf.bpe.mpc.ArithmeticSharing;
-import org.highmed.dsf.bpe.mpc.QueryResultShare;
-import org.highmed.dsf.bpe.mpc.QueryResultShares;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -42,15 +41,15 @@ public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 		QueryResults queryResults = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 		Targets targets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);
 
-		List<QueryResultShare> shares = queryResults.getResults().stream()
+		List<QueryResult> shares = queryResults.getResults().stream()
 				.flatMap(queryResult -> toArithmeticSharesForCohortAndOrganization(queryResult, targets))
 				.collect(toList());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES, new QueryResultShares(shares));
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES,
+				QueryResultsValues.create(new QueryResults(shares)));
 	}
 
-	private Stream<QueryResultShare> toArithmeticSharesForCohortAndOrganization(QueryResult queryResult,
-			Targets targets)
+	private Stream<QueryResult> toArithmeticSharesForCohortAndOrganization(QueryResult queryResult, Targets targets)
 	{
 		List<Target> organizations = targets.getEntries();
 		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(organizations.size());
@@ -59,12 +58,8 @@ public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 		if (shares.size() != organizations.size())
 			throw new IllegalStateException("Number of shares does not match number of targets");
 
-		return IntStream.range(0, shares.size()).mapToObj(i -> new QueryResultShare(queryResult.getCohortId(),
-				organizations.get(i).getTargetOrganizationIdentifierValue(), shares.get(i)));
-	}
-
-	private int getNumberOfParticipatingMedics(DelegateExecution execution)
-	{
-		return ((Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS)).getEntries().size();
+		return IntStream.range(0, shares.size())
+				.mapToObj(i -> QueryResult.mpcCountResult(organizations.get(i).getTargetOrganizationIdentifierValue(),
+						queryResult.getCohortId(), shares.get(i).getValue().intValueExact()));
 	}
 }

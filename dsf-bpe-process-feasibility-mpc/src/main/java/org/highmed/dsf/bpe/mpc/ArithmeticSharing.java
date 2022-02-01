@@ -15,9 +15,11 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class ArithmeticSharing implements InitializingBean
 {
-	public static final BigInteger DEFAULT_PRIME = BigInteger.valueOf(2).pow(127).subtract(BigInteger.ONE);
+	private static final int MAX_POWER_FOR_INT = 31;
+	public static final BigInteger DEFAULT_PRIME = BigInteger.valueOf(2).pow(MAX_POWER_FOR_INT)
+			.subtract(BigInteger.ONE);
 
-	private final SecureRandom randomGenerator = new SecureRandom();
+	private static final SecureRandom RANDOM_GENERATOR = new SecureRandom();
 
 	private final BigInteger prime;
 	private final int numParties;
@@ -49,6 +51,16 @@ public class ArithmeticSharing implements InitializingBean
 		}
 	}
 
+	public int getNumParties()
+	{
+		return numParties;
+	}
+
+	public BigInteger getPrime()
+	{
+		return prime;
+	}
+
 	public List<ArithmeticShare> createShares(double secret, int fractionalBits)
 	{
 		return createShares(BigDecimal.valueOf(secret), fractionalBits);
@@ -68,11 +80,15 @@ public class ArithmeticSharing implements InitializingBean
 	{
 		BigInteger[] shares = new BigInteger[numParties];
 		shares[numParties - 1] = secret;
+
 		for (int i = 0; i != numParties - 1; i++)
 		{
-			shares[i] = getSignedBlind(127);
-			shares[numParties - 1] = shares[numParties - 1].add(prime).subtract(shares[i]);
+			shares[i] = getSignedBlind(MAX_POWER_FOR_INT);
+			shares[numParties - 1] = shares[numParties - 1].subtract(shares[i]);
 		}
+
+		shares[numParties - 1] = shares[numParties - 1].mod(prime);
+
 		ArithmeticShare[] result = new ArithmeticShare[numParties];
 		for (int i = 0; i != numParties; i++)
 		{
@@ -98,7 +114,7 @@ public class ArithmeticSharing implements InitializingBean
 
 	public int reconstructSecretToInt(List<ArithmeticShare> shares)
 	{
-		return reconstructSecret(shares).intValue();
+		return reconstructSecret(shares).intValueExact();
 	}
 
 	public BigInteger reconstructSecret(List<ArithmeticShare> shares)
@@ -128,9 +144,9 @@ public class ArithmeticSharing implements InitializingBean
 		if (bitlength < 2)
 			throw new IllegalArgumentException("Bitlength must be larger than 2");
 
-		BigInteger value = new BigInteger(bitlength - 1, randomGenerator);
+		BigInteger value = new BigInteger(bitlength - 1, RANDOM_GENERATOR);
 		byte[] randomByte = new byte[1];
-		randomGenerator.nextBytes(randomByte);
+		RANDOM_GENERATOR.nextBytes(randomByte);
 		int signum = Byte.valueOf(randomByte[0]).intValue() & 0x01;
 		if (signum == 1)
 			value = value.negate();

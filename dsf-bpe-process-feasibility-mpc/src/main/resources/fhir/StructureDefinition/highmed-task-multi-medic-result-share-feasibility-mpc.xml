@@ -116,7 +116,7 @@
     <element id="Task.input:multi-medic-result-share.value[x]">
       <path value="Task.input.value[x]" />
       <type>
-        <code value="unsignedInt" />
+        <code value="integer" />
       </type>
     </element>
   </differential>

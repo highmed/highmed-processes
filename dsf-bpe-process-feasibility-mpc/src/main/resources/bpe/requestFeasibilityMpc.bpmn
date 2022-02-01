@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0inb4ax" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0inb4ax" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
   <bpmn:process id="highmedorg_requestFeasibilityMpc" isExecutable="true" camunda:versionTag="0.6.0">
     <bpmn:startEvent id="StartEvent" name="start">
       <bpmn:outgoing>SequenceFlow_11k77gx</bpmn:outgoing>
@@ -62,7 +62,7 @@
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1k1a943" sourceRef="sendRequestMultiShareToMedics" targetRef="sendRequestSingleShareToMedics" />
-    <bpmn:serviceTask id="Activity_044pdxe" name="calculate multimedic cohort size" camunda:class="org.highmed.dsf.bpe.service.CalculateMultiMedicResult">
+    <bpmn:serviceTask id="calculateMultiMedicCohortSize" name="calculate multi medic cohort size" camunda:class="org.highmed.dsf.bpe.service.CalculateMultiMedicResult">
       <bpmn:incoming>Flow_161cxwt</bpmn:incoming>
       <bpmn:outgoing>Flow_08i18td</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -73,13 +73,13 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0w3k4vv" sourceRef="Activity_0lcbiwk" targetRef="Gateway_1cv27w0" />
     <bpmn:sequenceFlow id="Flow_0nau6pf" sourceRef="Event_1ih81k1" targetRef="Gateway_1cv27w0" />
-    <bpmn:sequenceFlow id="Flow_161cxwt" sourceRef="Gateway_1cv27w0" targetRef="Activity_044pdxe" />
-    <bpmn:serviceTask id="Activity_0o1pue0" name="check multimedic cohort size" camunda:class="org.highmed.dsf.bpe.service.CheckMultiMedicResults">
+    <bpmn:sequenceFlow id="Flow_161cxwt" sourceRef="Gateway_1cv27w0" targetRef="calculateMultiMedicCohortSize" />
+    <bpmn:serviceTask id="checkMultimedicCohortSize" name="check multimedic cohort size" camunda:class="org.highmed.dsf.bpe.service.CheckMultiMedicResults">
       <bpmn:incoming>Flow_08i18td</bpmn:incoming>
       <bpmn:outgoing>Flow_1atjmt6</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1atjmt6" sourceRef="Activity_0o1pue0" targetRef="Event_123lecz" />
-    <bpmn:sequenceFlow id="Flow_08i18td" sourceRef="Activity_044pdxe" targetRef="Activity_0o1pue0" />
+    <bpmn:sequenceFlow id="Flow_1atjmt6" sourceRef="checkMultimedicCohortSize" targetRef="Event_123lecz" />
+    <bpmn:sequenceFlow id="Flow_08i18td" sourceRef="calculateMultiMedicCohortSize" targetRef="checkMultimedicCohortSize" />
     <bpmn:endEvent id="Event_123lecz" name="success">
       <bpmn:extensionElements>
         <camunda:inputOutput>
@@ -206,13 +206,13 @@
       <bpmndi:BPMNShape id="Event_1xy6pw3_di" bpmnElement="Event_1xy6pw3">
         <dc:Bounds x="934" y="129" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_044pdxe_di" bpmnElement="Activity_044pdxe">
+      <bpmndi:BPMNShape id="Activity_044pdxe_di" bpmnElement="calculateMultiMedicCohortSize">
         <dc:Bounds x="1620" y="105" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1cv27w0_di" bpmnElement="Gateway_1cv27w0" isMarkerVisible="true">
         <dc:Bounds x="1505" y="120" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0o1pue0_di" bpmnElement="Activity_0o1pue0">
+      <bpmndi:BPMNShape id="Activity_0o1pue0_di" bpmnElement="checkMultimedicCohortSize">
         <dc:Bounds x="1790" y="105" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0r58kgi_di" bpmnElement="Event_123lecz">

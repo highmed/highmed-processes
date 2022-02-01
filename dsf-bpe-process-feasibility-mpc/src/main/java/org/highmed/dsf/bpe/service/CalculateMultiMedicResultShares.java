@@ -7,6 +7,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
 import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_MULTI_MEDIC_SHARES;
 import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -15,8 +16,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
 import org.highmed.dsf.bpe.mpc.ArithmeticShare;
 import org.highmed.dsf.bpe.mpc.ArithmeticSharing;
-import org.highmed.dsf.bpe.mpc.QueryResultShare;
-import org.highmed.dsf.bpe.mpc.QueryResultShares;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variable.QueryResultsValues;
@@ -50,7 +49,7 @@ public class CalculateMultiMedicResultShares extends AbstractServiceDelegate imp
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		QueryResultShares shares = (QueryResultShares) execution
+		QueryResults shares = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES);
 
 		Targets targets = ((Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS));
@@ -58,8 +57,8 @@ public class CalculateMultiMedicResultShares extends AbstractServiceDelegate imp
 		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(targets.getEntries().size());
 		String organizationIdentifier = organizationProvider.getLocalIdentifierValue();
 
-		Map<String, List<QueryResultShare>> byCohortId = shares.getShares().stream()
-				.collect(groupingBy(QueryResultShare::getCohortId));
+		Map<String, List<QueryResult>> byCohortId = shares.getResults().stream()
+				.collect(groupingBy(QueryResult::getCohortId));
 
 		List<QueryResult> reconstructedResults = byCohortId.entrySet().stream()
 				.map(group -> toReconstructedResult(arithmeticSharing, organizationIdentifier, group))
@@ -67,17 +66,21 @@ public class CalculateMultiMedicResultShares extends AbstractServiceDelegate imp
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_MULTI_MEDIC_SHARES,
 				QueryResultsValues.create(new QueryResults(reconstructedResults)));
-
 	}
 
 	private QueryResult toReconstructedResult(ArithmeticSharing arithmeticSharing, String organizationIdentifier,
-			Map.Entry<String, List<QueryResultShare>> group)
+			Map.Entry<String, List<QueryResult>> group)
 	{
 		String cohortId = group.getKey();
-		List<ArithmeticShare> toReconstruct = group.getValue().stream().map(QueryResultShare::getArithmeticShare)
+		List<ArithmeticShare> toReconstruct = group.getValue().stream().map(s -> toArithmeticShare(s.getCohortSize()))
 				.collect(toList());
 		int reconstructedResult = arithmeticSharing.reconstructSecretToInt(toReconstruct);
 
-		return QueryResult.countResult(organizationIdentifier, cohortId, reconstructedResult);
+		return QueryResult.mpcCountResult(organizationIdentifier, cohortId, reconstructedResult);
+	}
+
+	private ArithmeticShare toArithmeticShare(int share)
+	{
+		return new ArithmeticShare(BigInteger.valueOf(share));
 	}
 }

@@ -8,8 +8,8 @@ import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABL
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.mpc.QueryResultShare;
-import org.highmed.dsf.bpe.mpc.QueryResultShares;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -38,22 +38,21 @@ public class SendSingleMedicResultShare extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
 		String targetIdentifier = getTarget(execution).getTargetOrganizationIdentifierValue();
-		QueryResultShares shares = (QueryResultShares) execution
+		QueryResults shares = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES);
 
-		return shares.getShares().stream().filter(s -> s.getOrganizationIdentifier().equals(targetIdentifier))
+		return shares.getResults().stream().filter(s -> s.getOrganizationIdentifier().equals(targetIdentifier))
 				.map(this::toInput);
 	}
 
-	private Task.ParameterComponent toInput(QueryResultShare share)
+	private Task.ParameterComponent toInput(QueryResult share)
 	{
-		ParameterComponent input = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
-				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE,
-				share.getArithmeticShare().getValue().intValue());
+		ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
+				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE, share.getCohortSize());
 		input.addExtension(createCohortIdExtension(share.getCohortId()));
 
 		logger.info("Sending SingleMedicShare with cohortId={} and size={}", share.getCohortId(),
-				share.getArithmeticShare().getValue().intValue());
+				share.getCohortSize());
 
 		return input;
 	}

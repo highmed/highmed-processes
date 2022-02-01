@@ -29,6 +29,7 @@ import org.highmed.dsf.fhir.validation.ResourceValidatorImpl;
 import org.highmed.dsf.fhir.validation.ValidationSupportRule;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
@@ -270,12 +271,12 @@ public class TaskProfileTest
 		String groupId2 = "Group/" + UUID.randomUUID().toString();
 
 		ParameterComponent inSingleMedicResult1 = task.addInput();
-		inSingleMedicResult1.setValue(new UnsignedIntType(5)).getType().addCoding()
+		inSingleMedicResult1.setValue(new IntegerType(5)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE);
 		inSingleMedicResult1.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId1));
 		ParameterComponent inSingleMedicResult2 = task.addInput();
-		inSingleMedicResult2.setValue(new UnsignedIntType(10)).getType().addCoding()
+		inSingleMedicResult2.setValue(new IntegerType(10)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE);
 		inSingleMedicResult2.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId2));
@@ -321,12 +322,12 @@ public class TaskProfileTest
 		String groupId2 = "Group/" + UUID.randomUUID().toString();
 
 		ParameterComponent inSingleMedicResult1 = task.addInput();
-		inSingleMedicResult1.setValue(new UnsignedIntType(15)).getType().addCoding()
+		inSingleMedicResult1.setValue(new IntegerType(15)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SHARE);
 		inSingleMedicResult1.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId1));
 		ParameterComponent inSingleMedicResult2 = task.addInput();
-		inSingleMedicResult2.setValue(new UnsignedIntType(25)).getType().addCoding()
+		inSingleMedicResult2.setValue(new IntegerType(25)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SHARE);
 		inSingleMedicResult2.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId2));
