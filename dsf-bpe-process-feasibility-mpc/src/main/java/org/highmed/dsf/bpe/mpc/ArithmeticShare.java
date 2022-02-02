@@ -1,12 +1,9 @@
 package org.highmed.dsf.bpe.mpc;
 
-import static org.highmed.dsf.bpe.mpc.ArithmeticSharing.DEFAULT_PRIME;
+import static org.highmed.dsf.bpe.mpc.ArithmeticSharing.DEFAULT_RING_SIZE;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Tobias Kussel
@@ -14,18 +11,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ArithmeticShare implements Serializable
 {
 	private final BigInteger value;
-	private final BigInteger prime;
+	private final BigInteger ringSize;
 
 	public ArithmeticShare(BigInteger value)
 	{
-		this(value, DEFAULT_PRIME);
+		this(value, DEFAULT_RING_SIZE);
 	}
 
-	@JsonCreator
-	public ArithmeticShare(@JsonProperty("value") BigInteger value, @JsonProperty("prime") BigInteger prime)
+	public ArithmeticShare(BigInteger value, BigInteger ringSize)
 	{
 		this.value = value;
-		this.prime = prime;
+		this.ringSize = ringSize;
 	}
 
 	public BigInteger getValue()
@@ -33,9 +29,9 @@ public class ArithmeticShare implements Serializable
 		return value;
 	}
 
-	public BigInteger getPrime()
+	public BigInteger getRingSize()
 	{
-		return prime;
+		return ringSize;
 	}
 
 	@Override
@@ -46,20 +42,20 @@ public class ArithmeticShare implements Serializable
 		if (!(o instanceof ArithmeticShare))
 			return false;
 		ArithmeticShare as = (ArithmeticShare) o;
-		return as.value.equals(value) && as.prime.equals(prime);
+		return as.value.equals(value) && as.ringSize.equals(ringSize);
 	}
 
 	@Override
 	public int hashCode()
 	{
 		int result = value.hashCode();
-		result = 31 * result + prime.hashCode();
+		result = 31 * result + ringSize.hashCode();
 		return result;
 	}
 
 	@Override
 	public String toString()
 	{
-		return value + " mod " + prime;
+		return value + " mod " + ringSize;
 	}
 }

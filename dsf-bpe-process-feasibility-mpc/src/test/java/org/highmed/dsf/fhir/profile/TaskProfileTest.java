@@ -14,9 +14,20 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDICS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_COUNT_RESULT;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE;
-import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.*;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_EXECUTE_FEASIBILITY_MPC_MULTI_SHARE;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_EXECUTE_FEASIBILITY_MPC_MULTI_SHARE_MESSAGE_NAME;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_EXECUTE_FEASIBILITY_MPC_MULTI_SHARE_PROCESS_URI_AND_LATEST_VERSION;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_EXECUTE_FEASIBILITY_MPC_SINGLE_SHARE;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_EXECUTE_FEASIBILITY_MPC_SINGLE_SHARE_MESSAGE_NAME;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_EXECUTE_FEASIBILITY_MPC_SINGLE_SHARE_PROCESS_URI_AND_LATEST_VERSION;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_MULTI_MEDIC_RESULT_SHARE_FEASIBILITY_MPC;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_MULTI_MEDIC_RESULT_SHARE_FEASIBILITY_MPC_MESSAGE_NAME;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_MPC;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_MPC_MESSAGE_NAME;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_MPC_PROCESS_URI_AND_LATEST_VERSION;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_SHARE_FEASIBILITY_MPC;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_SHARE_FEASIBILITY_MPC_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.FeasibilityMpcProcessPluginDefinition.VERSION;
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +40,6 @@ import org.highmed.dsf.fhir.validation.ResourceValidatorImpl;
 import org.highmed.dsf.fhir.validation.ValidationSupportRule;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
@@ -271,12 +281,12 @@ public class TaskProfileTest
 		String groupId2 = "Group/" + UUID.randomUUID().toString();
 
 		ParameterComponent inSingleMedicResult1 = task.addInput();
-		inSingleMedicResult1.setValue(new IntegerType(5)).getType().addCoding()
+		inSingleMedicResult1.setValue(new UnsignedIntType(5)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE);
 		inSingleMedicResult1.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId1));
 		ParameterComponent inSingleMedicResult2 = task.addInput();
-		inSingleMedicResult2.setValue(new IntegerType(10)).getType().addCoding()
+		inSingleMedicResult2.setValue(new UnsignedIntType(10)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE);
 		inSingleMedicResult2.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId2));
@@ -322,12 +332,12 @@ public class TaskProfileTest
 		String groupId2 = "Group/" + UUID.randomUUID().toString();
 
 		ParameterComponent inSingleMedicResult1 = task.addInput();
-		inSingleMedicResult1.setValue(new IntegerType(15)).getType().addCoding()
+		inSingleMedicResult1.setValue(new UnsignedIntType(15)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SHARE);
 		inSingleMedicResult1.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId1));
 		ParameterComponent inSingleMedicResult2 = task.addInput();
-		inSingleMedicResult2.setValue(new IntegerType(25)).getType().addCoding()
+		inSingleMedicResult2.setValue(new UnsignedIntType(25)).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_DATA_SHARING)
 				.setCode(CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SHARE);
 		inSingleMedicResult2.addExtension(EXTENSION_HIGHMED_GROUP_ID, new Reference(groupId2));

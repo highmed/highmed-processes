@@ -47,12 +47,9 @@ public class SendSingleMedicResultShare extends AbstractTaskMessageSend
 
 	private Task.ParameterComponent toInput(QueryResult share)
 	{
-		ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
+		ParameterComponent input = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE, share.getCohortSize());
 		input.addExtension(createCohortIdExtension(share.getCohortId()));
-
-		logger.info("Sending SingleMedicShare with cohortId={} and size={}", share.getCohortId(),
-				share.getCohortSize());
 
 		return input;
 	}

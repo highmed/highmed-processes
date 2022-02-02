@@ -45,12 +45,9 @@ public class SendMultiMedicResultShare extends AbstractTaskMessageSend
 
 	private Task.ParameterComponent toInput(QueryResult result)
 	{
-		ParameterComponent input = getTaskHelper().createInput(CODESYSTEM_HIGHMED_DATA_SHARING,
+		ParameterComponent input = getTaskHelper().createInputUnsignedInt(CODESYSTEM_HIGHMED_DATA_SHARING,
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_MULTI_MEDIC_RESULT_SHARE, result.getCohortSize());
 		input.addExtension(createCohortIdExtension(result.getCohortId()));
-
-		logger.info("Sending MultiMedicShare with cohortId={} and size={}", result.getCohortId(),
-				result.getCohortSize());
 
 		return input;
 	}

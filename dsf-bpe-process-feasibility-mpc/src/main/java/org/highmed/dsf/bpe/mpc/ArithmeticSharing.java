@@ -16,33 +16,33 @@ import org.springframework.beans.factory.InitializingBean;
 public class ArithmeticSharing implements InitializingBean
 {
 	private static final int MAX_POWER_FOR_INT = 31;
-	public static final BigInteger DEFAULT_PRIME = BigInteger.valueOf(2).pow(MAX_POWER_FOR_INT)
+	public static final BigInteger DEFAULT_RING_SIZE = BigInteger.valueOf(2).pow(MAX_POWER_FOR_INT)
 			.subtract(BigInteger.ONE);
 
 	private static final SecureRandom RANDOM_GENERATOR = new SecureRandom();
 
-	private final BigInteger prime;
+	private final BigInteger ringSize;
 	private final int numParties;
 
 	public ArithmeticSharing(int numParties)
 	{
-		this(numParties, DEFAULT_PRIME);
+		this(numParties, DEFAULT_RING_SIZE);
 	}
 
-	public ArithmeticSharing(int numParties, BigInteger prime)
+	public ArithmeticSharing(int numParties, BigInteger ringSize)
 	{
-		this.prime = prime;
 		this.numParties = numParties;
+		this.ringSize = ringSize;
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
-		Objects.requireNonNull(prime, "prime");
+		Objects.requireNonNull(ringSize, "ringSize");
 
-		if (BigInteger.ZERO.compareTo(prime) >= 0)
+		if (BigInteger.ZERO.compareTo(ringSize) >= 0)
 		{
-			throw new IllegalArgumentException("prime < 1");
+			throw new IllegalArgumentException("ringSize < 1");
 		}
 
 		if (numParties <= 0)
@@ -56,19 +56,9 @@ public class ArithmeticSharing implements InitializingBean
 		return numParties;
 	}
 
-	public BigInteger getPrime()
+	public BigInteger getRingSize()
 	{
-		return prime;
-	}
-
-	public List<ArithmeticShare> createShares(double secret, int fractionalBits)
-	{
-		return createShares(BigDecimal.valueOf(secret), fractionalBits);
-	}
-
-	public List<ArithmeticShare> createShares(BigDecimal secret, int fractionalBits)
-	{
-		return createShares(convertToFixedPoint(secret, fractionalBits));
+		return ringSize;
 	}
 
 	public List<ArithmeticShare> createShares(int secret)
@@ -83,33 +73,19 @@ public class ArithmeticSharing implements InitializingBean
 
 		for (int i = 0; i != numParties - 1; i++)
 		{
-			shares[i] = getSignedBlind(MAX_POWER_FOR_INT);
+			shares[i] = getBlind(MAX_POWER_FOR_INT);
 			shares[numParties - 1] = shares[numParties - 1].subtract(shares[i]);
 		}
 
-		shares[numParties - 1] = shares[numParties - 1].mod(prime);
+		shares[numParties - 1] = shares[numParties - 1].mod(ringSize);
 
 		ArithmeticShare[] result = new ArithmeticShare[numParties];
 		for (int i = 0; i != numParties; i++)
 		{
-			result[i] = new ArithmeticShare(shares[i], prime);
+			result[i] = new ArithmeticShare(shares[i], ringSize);
 		}
 
 		return Arrays.asList(result);
-	}
-
-	public double reconstructToDouble(List<ArithmeticShare> shares, int fractionalBits, RoundingMode roundingMode)
-	{
-		return reconstructToBigDecimal(shares, fractionalBits, roundingMode).doubleValue();
-	}
-
-	public BigDecimal reconstructToBigDecimal(List<ArithmeticShare> shares, int fractionalBits,
-			RoundingMode roundingMode)
-	{
-		BigDecimal scaleFactor = BigDecimal.valueOf(2).pow(fractionalBits);
-		BigDecimal result = new BigDecimal(reconstructSecret(shares));
-
-		return result.divide(scaleFactor, roundingMode);
 	}
 
 	public int reconstructSecretToInt(List<ArithmeticShare> shares)
@@ -126,41 +102,24 @@ public class ArithmeticSharing implements InitializingBean
 		ArithmeticShare[] sharesArray = shares.toArray(new ArithmeticShare[0]);
 
 		BigInteger reconstruction = BigInteger.ZERO;
-		BigInteger first_prime = sharesArray[0].getPrime();
+		BigInteger firstRingSize = sharesArray[0].getRingSize();
 		for (int i = 0; i != sharesArray.length; i++)
 		{
-			if (!(sharesArray[i].getPrime().equals(first_prime)))
+			if (!(sharesArray[i].getRingSize().equals(firstRingSize)))
 			{
-				throw new IllegalArgumentException("Incompatible primes found!");
+				throw new IllegalArgumentException("Incompatible ringSizes found!");
 			}
-			reconstruction = reconstruction.add(sharesArray[i].getValue()).remainder(sharesArray[i].getPrime());
+			reconstruction = reconstruction.add(sharesArray[i].getValue()).remainder(sharesArray[i].getRingSize());
 		}
 
 		return reconstruction;
 	}
 
-	private BigInteger getSignedBlind(int bitlength) throws IllegalArgumentException
+	private BigInteger getBlind(int bitlength) throws IllegalArgumentException
 	{
 		if (bitlength < 2)
 			throw new IllegalArgumentException("Bitlength must be larger than 2");
 
-		BigInteger value = new BigInteger(bitlength - 1, RANDOM_GENERATOR);
-		byte[] randomByte = new byte[1];
-		RANDOM_GENERATOR.nextBytes(randomByte);
-		int signum = Byte.valueOf(randomByte[0]).intValue() & 0x01;
-		if (signum == 1)
-			value = value.negate();
-
-		return value;
-	}
-
-	private BigInteger convertToFixedPoint(BigDecimal value, int fractionalBits)
-	{
-		if (fractionalBits < 0)
-			throw new IllegalArgumentException("FractionalBits must be positive");
-
-		BigDecimal scaleFactor = BigDecimal.valueOf(2).pow(fractionalBits);
-
-		return value.multiply(scaleFactor).toBigInteger();
+		return new BigInteger(bitlength - 1, RANDOM_GENERATOR);
 	}
 }

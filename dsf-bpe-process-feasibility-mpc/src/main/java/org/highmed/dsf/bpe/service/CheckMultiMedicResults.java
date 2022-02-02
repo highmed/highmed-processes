@@ -65,9 +65,6 @@ public class CheckMultiMedicResults extends AbstractServiceDelegate
 				CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDICS, result.getParticipatingMedics());
 		output2.addExtension(createCohortIdExtension(result.getCohortId()));
 		toWrite.addOutput(output2);
-
-		logger.info("Storing MultiMedicResult with cohortId={} and size={}", result.getCohortId(),
-				result.getCohortSize());
 	}
 
 	private Extension createCohortIdExtension(String cohortId)

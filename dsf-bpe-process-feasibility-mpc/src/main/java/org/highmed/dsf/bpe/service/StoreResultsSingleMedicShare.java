@@ -18,9 +18,9 @@ import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
-import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
+import org.hl7.fhir.r4.model.UnsignedIntType;
 import org.springframework.beans.factory.InitializingBean;
 
 public class StoreResultsSingleMedicShare extends AbstractServiceDelegate implements InitializingBean
@@ -62,7 +62,7 @@ public class StoreResultsSingleMedicShare extends AbstractServiceDelegate implem
 	{
 		String cohortId = ((Reference) input.getExtension().get(0).getValue()).getReference();
 		String organizationIdentifier = requester.getIdentifier().getValue();
-		int shareSize = ((IntegerType) input.getValue()).getValue();
+		int shareSize = ((UnsignedIntType) input.getValue()).getValue();
 
 		return QueryResult.mpcCountResult(organizationIdentifier, cohortId, shareSize);
 	}
