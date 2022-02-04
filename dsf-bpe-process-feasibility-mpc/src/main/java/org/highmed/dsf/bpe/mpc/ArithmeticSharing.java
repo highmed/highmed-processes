@@ -120,6 +120,6 @@ public class ArithmeticSharing implements InitializingBean
 		if (bitlength < 2)
 			throw new IllegalArgumentException("Bitlength must be larger than 2");
 
-		return new BigInteger(bitlength - 1, RANDOM_GENERATOR);
+		return new BigInteger(bitlength, RANDOM_GENERATOR);
 	}
 }
