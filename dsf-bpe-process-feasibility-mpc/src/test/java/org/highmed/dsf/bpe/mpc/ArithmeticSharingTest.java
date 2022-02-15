@@ -3,6 +3,9 @@ package org.highmed.dsf.bpe.mpc;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,5 +56,81 @@ public class ArithmeticSharingTest
 						new ArithmeticShare(BigInteger.valueOf(multiMedicShareOrg3))));
 
 		assertEquals(60, total);
+	}
+
+	@Test
+	public void fiftyPartiesAndSecrets()
+	{
+		SecureRandom randomGenerator = new SecureRandom();
+
+		int numParties = 50;
+		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(numParties);
+
+		int maxSecret = arithmeticSharing.getRingSize().divide(BigInteger.valueOf(numParties)).intValueExact();
+
+		int[] secrets = new int[numParties];
+		List<List<ArithmeticShare>> shares = new ArrayList<>();
+
+		for (int i = 0; i < numParties; i++)
+		{
+			secrets[i] = randomGenerator.nextInt(maxSecret);
+			List<ArithmeticShare> sharesI = arithmeticSharing.createShares(secrets[i]);
+
+			shares.add(sharesI);
+		}
+
+		for (int i = 0; i < numParties; i++)
+		{
+			assertEquals(secrets[i], arithmeticSharing.reconstructSecretToInt(shares.get(i)));
+		}
+	}
+
+	@Test
+	public void homomorphicAddition()
+	{
+		SecureRandom randomGenerator = new SecureRandom();
+
+		int numParties = 5;
+		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(numParties);
+
+		int maxSecret = arithmeticSharing.getRingSize().divide(BigInteger.valueOf(numParties)).intValueExact();
+
+		int[] secrets = new int[numParties];
+		for (int i = 0; i < numParties; i++)
+		{
+			secrets[i] = randomGenerator.nextInt(maxSecret);
+		}
+
+		List<ArithmeticShare> shares1 = arithmeticSharing.createShares(secrets[0]);
+		List<ArithmeticShare> shares2 = arithmeticSharing.createShares(secrets[1]);
+		List<ArithmeticShare> shares3 = arithmeticSharing.createShares(secrets[2]);
+		List<ArithmeticShare> shares4 = arithmeticSharing.createShares(secrets[3]);
+		List<ArithmeticShare> shares5 = arithmeticSharing.createShares(secrets[4]);
+
+		List<Integer> sumShares = new ArrayList<>();
+		for (int i = 0; i < numParties; i++)
+		{
+			sumShares.add(arithmeticSharing.reconstructSecretToInt(
+					List.of(shares1.get(i), shares2.get(i), shares3.get(i), shares4.get(i), shares5.get(i))));
+		}
+
+		int reconstructedResult = arithmeticSharing.reconstructSecretToInt(
+				sumShares.stream().map(s -> new ArithmeticShare(BigInteger.valueOf(s))).collect(Collectors.toList()));
+
+		int cleartextResult = Arrays.stream(secrets).sum();
+
+		assertEquals(reconstructedResult, cleartextResult);
+	}
+
+	@Test
+	public void manyManyParties()
+	{
+		int secret = Integer.MAX_VALUE - 1;
+		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(54321);
+
+		List<ArithmeticShare> shares = arithmeticSharing.createShares(secret);
+		int reconstructed = arithmeticSharing.reconstructSecretToInt(shares);
+
+		assertEquals(secret, reconstructed);
 	}
 }
