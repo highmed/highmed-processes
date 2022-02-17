@@ -26,11 +26,11 @@ import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Targets;
 import org.springframework.beans.factory.InitializingBean;
 
-public class CalculateMultiMedicResultShares extends AbstractServiceDelegate implements InitializingBean
+public class CalculateMultiMedicResultShare extends AbstractServiceDelegate implements InitializingBean
 {
 	private final OrganizationProvider organizationProvider;
 
-	public CalculateMultiMedicResultShares(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public CalculateMultiMedicResultShare(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);

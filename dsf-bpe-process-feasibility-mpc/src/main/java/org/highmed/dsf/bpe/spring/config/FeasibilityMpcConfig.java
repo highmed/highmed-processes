@@ -7,7 +7,7 @@ import org.highmed.dsf.bpe.message.SendMedicRequestSingleShare;
 import org.highmed.dsf.bpe.message.SendMultiMedicResultShare;
 import org.highmed.dsf.bpe.message.SendSingleMedicResultShare;
 import org.highmed.dsf.bpe.service.CalculateMultiMedicResult;
-import org.highmed.dsf.bpe.service.CalculateMultiMedicResultShares;
+import org.highmed.dsf.bpe.service.CalculateMultiMedicResultShare;
 import org.highmed.dsf.bpe.service.CalculateSingleMedicResultShares;
 import org.highmed.dsf.bpe.service.CheckFeasibilityMpcResources;
 import org.highmed.dsf.bpe.service.CheckMultiMedicResults;
@@ -115,9 +115,9 @@ public class FeasibilityMpcConfig
 	}
 
 	@Bean
-	public CalculateMultiMedicResultShares calculateMulitMedicResultShares()
+	public CalculateMultiMedicResultShare calculateMulitMedicResultShare()
 	{
-		return new CalculateMultiMedicResultShares(fhirClientProvider, taskHelper, readAccessHelper,
+		return new CalculateMultiMedicResultShare(fhirClientProvider, taskHelper, readAccessHelper,
 				organizationProvider);
 	}
 

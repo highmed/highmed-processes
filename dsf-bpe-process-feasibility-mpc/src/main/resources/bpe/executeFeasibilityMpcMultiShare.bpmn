@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
   <bpmn:process id="highmedorg_executeFeasibilityMpcMultiShare" isExecutable="true" camunda:versionTag="0.6.0">
     <bpmn:startEvent id="StartEvent" name="start">
       <bpmn:outgoing>Flow_0zwnqdn</bpmn:outgoing>
@@ -56,23 +56,23 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_18n85hs" sourceRef="Activity_11idi2o" targetRef="Gateway_0atmr78" />
     <bpmn:sequenceFlow id="Flow_1688meb" sourceRef="Event_1qabwc2" targetRef="Gateway_0atmr78" />
-    <bpmn:serviceTask id="Activity_07k3fpm" name="calculate multi medic result shares" camunda:class="org.highmed.dsf.bpe.service.CalculateMultiMedicResultShares">
+    <bpmn:serviceTask id="calculateMultiMedicResultShare" name="calculate multi medic result share" camunda:class="org.highmed.dsf.bpe.service.CalculateMultiMedicResultShare">
       <bpmn:incoming>Flow_18sujdf</bpmn:incoming>
       <bpmn:outgoing>Flow_0bm0z7u</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0bm0z7u" sourceRef="Activity_07k3fpm" targetRef="selectMultiMedicResultShareResponseTarget" />
+    <bpmn:sequenceFlow id="Flow_0bm0z7u" sourceRef="calculateMultiMedicResultShare" targetRef="selectMultiMedicResultShareTarget" />
     <bpmn:serviceTask id="storeSingleMedicResultShareCorrelationKeys" name="store single medic result share correlation keys" camunda:class="org.highmed.dsf.bpe.service.StoreSingleMedicResultShareCorrelationKeys">
       <bpmn:incoming>Flow_0zwnqdn</bpmn:incoming>
       <bpmn:outgoing>Flow_15s0sha</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1p3ixg0" sourceRef="selectMultiMedicResultShareResponseTarget" targetRef="EndEvent" />
-    <bpmn:serviceTask id="selectMultiMedicResultShareResponseTarget" name="select multi medic result share response target" camunda:class="org.highmed.dsf.bpe.service.SelectMultiMedicResultShareTarget">
+    <bpmn:sequenceFlow id="Flow_1p3ixg0" sourceRef="selectMultiMedicResultShareTarget" targetRef="EndEvent" />
+    <bpmn:serviceTask id="selectMultiMedicResultShareTarget" name="select multi medic result share target" camunda:class="org.highmed.dsf.bpe.service.SelectMultiMedicResultShareTarget">
       <bpmn:incoming>Flow_0bm0z7u</bpmn:incoming>
       <bpmn:outgoing>Flow_1p3ixg0</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_15s0sha" sourceRef="storeSingleMedicResultShareCorrelationKeys" targetRef="Activity_11idi2o" />
     <bpmn:sequenceFlow id="Flow_0zwnqdn" sourceRef="StartEvent" targetRef="storeSingleMedicResultShareCorrelationKeys" />
-    <bpmn:sequenceFlow id="Flow_18sujdf" sourceRef="Gateway_0atmr78" targetRef="Activity_07k3fpm" />
+    <bpmn:sequenceFlow id="Flow_18sujdf" sourceRef="Gateway_0atmr78" targetRef="calculateMultiMedicResultShare" />
   </bpmn:process>
   <bpmn:message id="Message_1yz2a31" name="executeFeasibilityMpcMultiShareMessage" />
   <bpmn:message id="Message_1dr71re" name="resultMultiMedicFeasibilityMpcMessage" />
@@ -151,13 +151,13 @@
       <bpmndi:BPMNShape id="Gateway_0atmr78_di" bpmnElement="Gateway_0atmr78" isMarkerVisible="true">
         <dc:Bounds x="1005" y="122" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_07k3fpm_di" bpmnElement="Activity_07k3fpm">
+      <bpmndi:BPMNShape id="Activity_07k3fpm_di" bpmnElement="calculateMultiMedicResultShare">
         <dc:Bounds x="1110" y="107" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1r2389r_di" bpmnElement="storeSingleMedicResultShareCorrelationKeys">
         <dc:Bounds x="260" y="107" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_19ocdmp_di" bpmnElement="selectMultiMedicResultShareResponseTarget">
+      <bpmndi:BPMNShape id="Activity_19ocdmp_di" bpmnElement="selectMultiMedicResultShareTarget">
         <dc:Bounds x="1280" y="107" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1qabwc2_di" bpmnElement="Event_1qabwc2">

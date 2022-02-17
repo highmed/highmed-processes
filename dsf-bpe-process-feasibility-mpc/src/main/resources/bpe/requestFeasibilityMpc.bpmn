@@ -35,11 +35,11 @@
       <bpmn:endEvent id="Event_1j6g4x8">
         <bpmn:incoming>Flow_13lm9he</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:serviceTask id="Activity_0289vyo" name="temporarilly store multi medic result share" camunda:class="org.highmed.dsf.bpe.service.StoreResultsMultiMedicShare">
+      <bpmn:serviceTask id="temporarillyStoreMultiMedicResultShare" name="temporarilly store multi medic result share" camunda:class="org.highmed.dsf.bpe.service.StoreResultsMultiMedicShare">
         <bpmn:incoming>Flow_0j3mv3q</bpmn:incoming>
         <bpmn:outgoing>Flow_13lm9he</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:receiveTask id="Activity_1jnfv03" name="receive multi medic result share" messageRef="Message_1k57zqd">
+      <bpmn:receiveTask id="receiveMultiMedicResultShare" name="receive multi medic result share" messageRef="Message_1k57zqd">
         <bpmn:extensionElements>
           <camunda:inputOutput>
             <camunda:inputParameter name="correlationKey">${target.correlationKey}</camunda:inputParameter>
@@ -51,9 +51,9 @@
       <bpmn:startEvent id="Event_1xy6pw3">
         <bpmn:outgoing>Flow_0t3ex93</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:sequenceFlow id="Flow_13lm9he" sourceRef="Activity_0289vyo" targetRef="Event_1j6g4x8" />
-      <bpmn:sequenceFlow id="Flow_0j3mv3q" sourceRef="Activity_1jnfv03" targetRef="Activity_0289vyo" />
-      <bpmn:sequenceFlow id="Flow_0t3ex93" sourceRef="Event_1xy6pw3" targetRef="Activity_1jnfv03" />
+      <bpmn:sequenceFlow id="Flow_13lm9he" sourceRef="temporarillyStoreMultiMedicResultShare" targetRef="Event_1j6g4x8" />
+      <bpmn:sequenceFlow id="Flow_0j3mv3q" sourceRef="receiveMultiMedicResultShare" targetRef="temporarillyStoreMultiMedicResultShare" />
+      <bpmn:sequenceFlow id="Flow_0t3ex93" sourceRef="Event_1xy6pw3" targetRef="receiveMultiMedicResultShare" />
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="Event_1ih81k1" attachedToRef="Activity_0lcbiwk">
       <bpmn:outgoing>Flow_0nau6pf</bpmn:outgoing>
@@ -197,10 +197,10 @@
       <bpmndi:BPMNShape id="Event_1j6g4x8_di" bpmnElement="Event_1j6g4x8">
         <dc:Bounds x="1335" y="129" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0289vyo_di" bpmnElement="Activity_0289vyo">
+      <bpmndi:BPMNShape id="Activity_0289vyo_di" bpmnElement="temporarillyStoreMultiMedicResultShare">
         <dc:Bounds x="1187" y="107" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1jnfv03_di" bpmnElement="Activity_1jnfv03">
+      <bpmndi:BPMNShape id="Activity_1jnfv03_di" bpmnElement="receiveMultiMedicResultShare">
         <dc:Bounds x="1024" y="107" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1xy6pw3_di" bpmnElement="Event_1xy6pw3">
