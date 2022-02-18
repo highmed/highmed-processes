@@ -16,9 +16,10 @@ public class ArithmeticSharingTest
 	{
 		int numParties = 3;
 		int secret = 1000000000;
-		int maximalSecret = new ArithmeticSharing(numParties).getRingSize().shiftRight(numParties).intValueExact();
+		int maxSecret = new ArithmeticSharing(numParties).getRingSize().divide(BigInteger.valueOf(numParties))
+				.intValueExact();
 
-		if (secret > maximalSecret)
+		if (secret > maxSecret)
 		{
 			throw new IllegalStateException("Secret to big for numParties");
 		}

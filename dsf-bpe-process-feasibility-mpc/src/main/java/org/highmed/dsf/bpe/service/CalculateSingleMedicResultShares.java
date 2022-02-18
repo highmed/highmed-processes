@@ -6,6 +6,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -57,11 +58,11 @@ public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(numParties);
 
 		int secret = queryResult.getCohortSize();
-		int maximalSecret = arithmeticSharing.getRingSize().shiftRight(numParties).intValueExact();
+		int maxSecret = arithmeticSharing.getRingSize().divide(BigInteger.valueOf(numParties)).intValueExact();
 
-		if (secret > maximalSecret)
-			throw new IllegalStateException("Secret > maximalSecret (" + maximalSecret + ") for " + numParties
-					+ " participating organizations");
+		if (secret > maxSecret)
+			throw new IllegalStateException(
+					"Secret > maxSecret (" + maxSecret + ") for " + numParties + " participating organizations");
 
 		List<ArithmeticShare> shares = arithmeticSharing.createShares(secret);
 
