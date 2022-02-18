@@ -16,39 +16,39 @@ public class ArithmeticSharingTest
 	{
 		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(3);
 
-		List<ArithmeticShare> shares1 = arithmeticSharing.createShares(20);
-		List<ArithmeticShare> shares2 = arithmeticSharing.createShares(30);
-		List<ArithmeticShare> shares3 = arithmeticSharing.createShares(50);
+		List<ArithmeticShare> singleMedicSharesOrg1 = arithmeticSharing.createShares(10);
+		List<ArithmeticShare> singleMedicSharesOrg2 = arithmeticSharing.createShares(20);
+		List<ArithmeticShare> singleMedicSharesOrg3 = arithmeticSharing.createShares(30);
 
-		List<QueryResult> shares1q = shares1.stream()
+		List<QueryResult> queryResultsSingleMedicSharesOrg1 = singleMedicSharesOrg1.stream()
 				.map(s -> QueryResult.mpcCountResult("", "", s.getValue().intValueExact()))
 				.collect(Collectors.toList());
-		List<QueryResult> shares2q = shares2.stream()
+		List<QueryResult> queryResultsSingleMedicSharesOrg2 = singleMedicSharesOrg2.stream()
 				.map(s -> QueryResult.mpcCountResult("", "", s.getValue().intValueExact()))
 				.collect(Collectors.toList());
-		List<QueryResult> shares3q = shares3.stream()
+		List<QueryResult> queryResultsSingleMedicSharesOrg3 = singleMedicSharesOrg3.stream()
 				.map(s -> QueryResult.mpcCountResult("", "", s.getValue().intValueExact()))
 				.collect(Collectors.toList());
 
-		List<ArithmeticShare> shares1s = shares1q.stream()
+		List<ArithmeticShare> reconstrucedSingleMedicSharesOrg1 = queryResultsSingleMedicSharesOrg1.stream()
 				.map(q -> new ArithmeticShare(BigInteger.valueOf(q.getCohortSize()))).collect(Collectors.toList());
-		List<ArithmeticShare> shares2s = shares2q.stream()
+		List<ArithmeticShare> reconstrucedSingleMedicSharesOrg2 = queryResultsSingleMedicSharesOrg2.stream()
 				.map(q -> new ArithmeticShare(BigInteger.valueOf(q.getCohortSize()))).collect(Collectors.toList());
-		List<ArithmeticShare> shares3s = shares3q.stream()
+		List<ArithmeticShare> reconstrucedSingleMedicSharesOrg3 = queryResultsSingleMedicSharesOrg3.stream()
 				.map(q -> new ArithmeticShare(BigInteger.valueOf(q.getCohortSize()))).collect(Collectors.toList());
 
-		int reconstructed1 = arithmeticSharing
-				.reconstructSecretToInt(List.of(shares1s.get(0), shares2s.get(1), shares3s.get(2)));
-		int reconstructed2 = arithmeticSharing
-				.reconstructSecretToInt(List.of(shares1s.get(1), shares2s.get(2), shares3s.get(0)));
-		int reconstructed3 = arithmeticSharing
-				.reconstructSecretToInt(List.of(shares1s.get(2), shares2s.get(0), shares3s.get(1)));
+		int multiMedicShareOrg1 = arithmeticSharing
+				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(0), reconstrucedSingleMedicSharesOrg2.get(1), reconstrucedSingleMedicSharesOrg3.get(2)));
+		int multiMedicShareOrg2 = arithmeticSharing
+				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(1), reconstrucedSingleMedicSharesOrg2.get(2), reconstrucedSingleMedicSharesOrg3.get(0)));
+		int multiMedicShareOrg3 = arithmeticSharing
+				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(2), reconstrucedSingleMedicSharesOrg2.get(0), reconstrucedSingleMedicSharesOrg3.get(1)));
 
-		int total = arithmeticSharing
-				.reconstructSecretToInt(List.of(new ArithmeticShare(BigInteger.valueOf(reconstructed1)),
-						new ArithmeticShare(BigInteger.valueOf(reconstructed2)),
-						new ArithmeticShare(BigInteger.valueOf(reconstructed3))));
+		long total = arithmeticSharing
+				.reconstructSecretToInt(List.of(new ArithmeticShare(BigInteger.valueOf(multiMedicShareOrg1)),
+						new ArithmeticShare(BigInteger.valueOf(multiMedicShareOrg2)),
+						new ArithmeticShare(BigInteger.valueOf(multiMedicShareOrg3))));
 
-		assertEquals(100, total);
+		assertEquals(60, total);
 	}
 }
