@@ -38,11 +38,14 @@ public class ArithmeticSharingTest
 				.map(q -> new ArithmeticShare(BigInteger.valueOf(q.getCohortSize()))).collect(Collectors.toList());
 
 		int multiMedicShareOrg1 = arithmeticSharing
-				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(0), reconstrucedSingleMedicSharesOrg2.get(1), reconstrucedSingleMedicSharesOrg3.get(2)));
+				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(0),
+						reconstrucedSingleMedicSharesOrg2.get(1), reconstrucedSingleMedicSharesOrg3.get(2)));
 		int multiMedicShareOrg2 = arithmeticSharing
-				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(1), reconstrucedSingleMedicSharesOrg2.get(2), reconstrucedSingleMedicSharesOrg3.get(0)));
+				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(1),
+						reconstrucedSingleMedicSharesOrg2.get(2), reconstrucedSingleMedicSharesOrg3.get(0)));
 		int multiMedicShareOrg3 = arithmeticSharing
-				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(2), reconstrucedSingleMedicSharesOrg2.get(0), reconstrucedSingleMedicSharesOrg3.get(1)));
+				.reconstructSecretToInt(List.of(reconstrucedSingleMedicSharesOrg1.get(2),
+						reconstrucedSingleMedicSharesOrg2.get(0), reconstrucedSingleMedicSharesOrg3.get(1)));
 
 		long total = arithmeticSharing
 				.reconstructSecretToInt(List.of(new ArithmeticShare(BigInteger.valueOf(multiMedicShareOrg1)),
