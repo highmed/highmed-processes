@@ -11,6 +11,19 @@ import org.junit.Test;
 
 public class ArithmeticSharingTest
 {
+	@Test(expected = IllegalStateException.class)
+	public void testMaxSecret()
+	{
+		int numParties = 3;
+		int secret = 1000000000;
+		int maximalSecret = new ArithmeticSharing(numParties).getRingSize().shiftRight(numParties).intValueExact();
+
+		if (secret > maximalSecret)
+		{
+			throw new IllegalStateException("Secret to big for numParties");
+		}
+	}
+
 	@Test
 	public void arithmeticSharingValid()
 	{

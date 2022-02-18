@@ -52,13 +52,23 @@ public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 	private Stream<QueryResult> toArithmeticSharesForCohortAndOrganization(QueryResult queryResult, Targets targets)
 	{
 		List<Target> organizations = targets.getEntries();
-		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(organizations.size());
-		List<ArithmeticShare> shares = arithmeticSharing.createShares(queryResult.getCohortSize());
 
-		if (shares.size() != organizations.size())
+		int numParties = organizations.size();
+		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(numParties);
+
+		int secret = queryResult.getCohortSize();
+		int maximalSecret = arithmeticSharing.getRingSize().shiftRight(numParties).intValueExact();
+
+		if (secret > maximalSecret)
+			throw new IllegalStateException("Secret > maximalSecret (" + maximalSecret + ") for " + numParties
+					+ " participating organizations");
+
+		List<ArithmeticShare> shares = arithmeticSharing.createShares(secret);
+
+		if (shares.size() != numParties)
 			throw new IllegalStateException("Number of shares does not match number of targets");
 
-		return IntStream.range(0, shares.size())
+		return IntStream.range(0, numParties)
 				.mapToObj(i -> QueryResult.mpcCountResult(organizations.get(i).getTargetOrganizationIdentifierValue(),
 						queryResult.getCohortId(), shares.get(i).getValue().intValueExact()));
 	}
