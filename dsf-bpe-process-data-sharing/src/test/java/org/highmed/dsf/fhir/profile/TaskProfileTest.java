@@ -34,6 +34,7 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_TASK_REQU
 import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_TASK_REQUEST_DATA_SHARING_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_DATA_SHARING_MESSAGE_NAME;
+import static org.highmed.dsf.bpe.DataSharingProcessPluginDefinition.RELEASE_DATE;
 import static org.highmed.dsf.bpe.DataSharingProcessPluginDefinition.VERSION;
 import static org.junit.Assert.assertEquals;
 
@@ -71,7 +72,7 @@ public class TaskProfileTest
 	private static final Logger logger = LoggerFactory.getLogger(TaskProfileTest.class);
 
 	@ClassRule
-	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION,
+	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION, RELEASE_DATE,
 			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-group-0.5.0.xml",
 					"highmed-extension-group-id-0.5.0.xml", "highmed-research-study-0.5.0.xml",
 					"highmed-research-study-data-sharing.xml", "highmed-task-request-data-sharing.xml",

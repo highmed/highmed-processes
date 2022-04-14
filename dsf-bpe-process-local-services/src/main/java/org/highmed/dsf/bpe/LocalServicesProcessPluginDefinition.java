@@ -1,5 +1,6 @@
 package org.highmed.dsf.bpe;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import ca.uhn.fhir.context.FhirContext;
 public class LocalServicesProcessPluginDefinition implements ProcessPluginDefinition
 {
 	public static final String VERSION = "0.6.0";
+	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 4, 14);
 
 	private static final String DEPENDENCY_DATA_SHARING_VERSION = "0.6.0";
 	private static final String DEPENDENCY_DATA_SHARING_NAME_AND_VERSION = "dsf-bpe-process-data-sharing-0.6.0";
@@ -36,6 +38,12 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 	public String getVersion()
 	{
 		return VERSION;
+	}
+
+	@Override
+	public LocalDate getReleaseDate()
+	{
+		return RELEASE_DATE;
 	}
 
 	@Override
@@ -73,7 +81,8 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
 				.of("highmedorg_localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, cDS, vDS));
 
-		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
-				classLoader, resolver, resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, RELEASE_DATE,
+				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,
+				resourcesByProcessKeyAndVersion);
 	}
 }

@@ -10,7 +10,7 @@
 			<valueString value="executeDataSharingMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-execute-data-sharing|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-execute-data-sharing|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -75,14 +75,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/executeDataSharing" />
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="#{version}" />
 	<name value="ExecuteDataSharing" />
 	<title value="Execute Data Sharing" />
 	<subtitle value="Process to execute a data sharing query" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-08-24" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

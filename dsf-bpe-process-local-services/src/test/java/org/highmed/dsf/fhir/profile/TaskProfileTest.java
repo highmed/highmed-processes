@@ -12,6 +12,7 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_S
 import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES;
 import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsLocalServices.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI_AND_LATEST_VERSION;
+import static org.highmed.dsf.bpe.LocalServicesProcessPluginDefinition.RELEASE_DATE;
 import static org.highmed.dsf.bpe.LocalServicesProcessPluginDefinition.VERSION;
 import static org.junit.Assert.assertEquals;
 
@@ -40,7 +41,7 @@ public class TaskProfileTest
 	private static final Logger logger = LoggerFactory.getLogger(TaskProfileTest.class);
 
 	@ClassRule
-	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION,
+	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION, RELEASE_DATE,
 			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-group-0.5.0.xml",
 					"highmed-extension-group-id-0.5.0.xml", "highmed-extension-query-0.5.0.xml",
 					"highmed-task-local-services-integration.xml"),

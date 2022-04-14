@@ -10,7 +10,7 @@
 			<valueString value="requestFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-feasibility|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-feasibility|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -58,7 +58,7 @@
 			<valueString value="resultMultiMedicFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -106,7 +106,7 @@
 			<valueString value="errorMultiMedicFeasibilityMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -151,14 +151,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/requestFeasibility" />
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="#{version}" />
 	<name value="RequestFeasibility" />
 	<title value="Request feasibility" />
 	<subtitle value="Feasibility Request Process" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-08-24" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

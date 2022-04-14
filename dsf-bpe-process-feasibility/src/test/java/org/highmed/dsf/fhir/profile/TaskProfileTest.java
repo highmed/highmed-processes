@@ -33,6 +33,7 @@ import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQU
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_REQUEST_FEASIBILITY_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_FEASIBILITY;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_SINGLE_MEDIC_RESULT_FEASIBILITY_MESSAGE_NAME;
+import static org.highmed.dsf.bpe.FeasibilityProcessPluginDefinition.RELEASE_DATE;
 import static org.highmed.dsf.bpe.FeasibilityProcessPluginDefinition.VERSION;
 import static org.junit.Assert.assertEquals;
 
@@ -69,7 +70,7 @@ public class TaskProfileTest
 	private static final Logger logger = LoggerFactory.getLogger(TaskProfileTest.class);
 
 	@ClassRule
-	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION,
+	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION, RELEASE_DATE,
 			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-group-0.5.0.xml",
 					"highmed-extension-group-id-0.5.0.xml", "highmed-research-study-0.5.0.xml",
 					"highmed-task-request-feasibility.xml", "highmed-task-execute-feasibility.xml",
