@@ -10,7 +10,7 @@
 			<valueString value="requestFeasibilityMpcMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-feasibility-mpc|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-feasibility-mpc|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -58,7 +58,7 @@
 			<valueString value="resultShareMultiMedicFeasibilityMpcMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-share-feasibility-mpc|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-share-feasibility-mpc|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -123,14 +123,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/requestFeasibilityMpc" />
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="#{version}" />
 	<name value="RequestFeasibilityMpc" />
 	<title value="Request Feasibility Mpc" />
 	<subtitle value="Feasibility Mpc Request Process" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-08-24" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

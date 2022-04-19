@@ -7,11 +7,12 @@
   </meta>
   <url value="http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc-multi-share" />
   <!-- version managed by bpe -->
-  <version value="${version}" />
+  <version value="#{version}" />
   <name value="TaskExecuteFeasibilityMpcMultiShare" />
   <!-- status managed by bpe -->
   <status value="unknown" />
   <experimental value="false" />
+  <!-- date managed by bpe -->
   <date value="2021-08-24" />
   <fhirVersion value="4.0.1" />
   <kind value="resource" />
@@ -22,7 +23,7 @@
   <differential>
     <element id="Task.instantiatesUri">
       <path value="Task.instantiatesUri" />
-      <fixedUri value="http://highmed.org/bpe/Process/executeFeasibilityMpcMultiShare/${version}" />
+      <fixedUri value="http://highmed.org/bpe/Process/executeFeasibilityMpcMultiShare/#{version}" />
     </element>
     <element id="Task.input">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">

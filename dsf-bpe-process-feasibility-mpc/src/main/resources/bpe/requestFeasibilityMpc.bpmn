@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0inb4ax" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
-  <bpmn:process id="highmedorg_requestFeasibilityMpc" isExecutable="true" camunda:versionTag="0.6.0">
+  <bpmn:process id="highmedorg_requestFeasibilityMpc" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:startEvent id="StartEvent" name="start">
       <bpmn:outgoing>SequenceFlow_11k77gx</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_10c2suu" messageRef="Message_1pq9qxp" />
@@ -12,9 +12,9 @@
     <bpmn:sendTask id="sendRequestMultiShareToMedics" name="send request multi share to medics" camunda:class="org.highmed.dsf.bpe.message.SendMedicRequestMultiShare">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibilityMpcMultiShare/0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibilityMpcMultiShare/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">executeFeasibilityMpcMultiShareMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc-multi-share|0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc-multi-share|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0b5s4ef</bpmn:incoming>
@@ -83,9 +83,9 @@
     <bpmn:endEvent id="Event_123lecz" name="success">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibilityMpc/0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibilityMpc/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultMultiMedicFeasibilityMpcMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-FeasibilityMpc|0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-FeasibilityMpc|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1atjmt6</bpmn:incoming>
@@ -93,9 +93,9 @@
     <bpmn:sendTask id="sendRequestSingleShareToMedics" name="send request single share to medics" camunda:class="org.highmed.dsf.bpe.message.SendMedicRequestSingleShare">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibilityMpcSingleShare/0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibilityMpcSingleShare/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">executeFeasibilityMpcSingleShareMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc-single-share|0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc-single-share|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1k1a943</bpmn:incoming>

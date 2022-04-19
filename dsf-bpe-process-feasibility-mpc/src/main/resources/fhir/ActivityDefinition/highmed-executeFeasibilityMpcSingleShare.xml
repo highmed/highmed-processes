@@ -11,7 +11,7 @@
 		</extension>
 		<extension url="task-profile">
 			<valueCanonical
-					value="http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc-single-share|${version}"/>
+					value="http://highmed.org/fhir/StructureDefinition/task-execute-feasibility-mpc-single-share|#{version}"/>
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -79,14 +79,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/executeFeasibilityMpcSingleShare"/>
 	<!-- version managed by bpe -->
-	<version value="${version}"/>
+	<version value="#{version}"/>
 	<name value="ExecuteFeasibilityMpcSingleShare"/>
 	<title value="Execute Feasibility Mpc Single Share"/>
 	<subtitle value="Feasibility Mpc Single Share Execution Process"/>
 	<!-- status managed by bpe -->
 	<status value="unknown"/>
 	<experimental value="false"/>
-	<date value="2021-08-24"/>
+	<!-- date managed by bpe -->
+	<date value="#{date}"/>
 	<publisher value="HiGHmed"/>
 	<contact>
 		<name value="HiGHmed"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
-  <bpmn:process id="highmedorg_executeFeasibilityMpcMultiShare" isExecutable="true" camunda:versionTag="0.6.0">
+  <bpmn:process id="highmedorg_executeFeasibilityMpcMultiShare" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:startEvent id="StartEvent" name="start">
       <bpmn:outgoing>Flow_0zwnqdn</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0sjtzj6" messageRef="Message_1yz2a31" />
@@ -8,9 +8,9 @@
     <bpmn:endEvent id="EndEvent" name="send multi medic result share">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibilityMpc/0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibilityMpc/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultShareMultiMedicFeasibilityMpcMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-share-feasibility-mpc|0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-share-feasibility-mpc|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1p3ixg0</bpmn:incoming>

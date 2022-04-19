@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
-  <bpmn:process id="highmedorg_executeFeasibilityMpcSingleShare" isExecutable="true" camunda:versionTag="0.6.0">
+  <bpmn:process id="highmedorg_executeFeasibilityMpcSingleShare" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:serviceTask id="checkResults" name="check single medic result shares" camunda:class="org.highmed.dsf.bpe.service.CheckSingleMedicResultShares">
       <bpmn:incoming>Flow_08uzidj</bpmn:incoming>
       <bpmn:outgoing>Flow_0nknzne</bpmn:outgoing>
@@ -88,9 +88,9 @@
     <bpmn:sendTask id="sendSingleMedicResultShares" name="send single medic result shares" camunda:class="org.highmed.dsf.bpe.message.SendSingleMedicResultShare">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-share-feasibility-mpc|0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-share-feasibility-mpc|#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultShareSingleMedicFeasibilityMpcMessage</camunda:inputParameter>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibilityMpcMultiShare/0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibilityMpcMultiShare/#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0nknzne</bpmn:incoming>
