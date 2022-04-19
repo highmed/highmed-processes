@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class SecretKeyWrapperTest
+public class SecretKeyWrapperSerializationTest
 {
-	private static final Logger logger = LoggerFactory.getLogger(SecretKeyWrapperTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(SecretKeyWrapperSerializationTest.class);
 
 	@Test
 	public void testReadWriteJson() throws Exception

@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class BloomFilterConfigTest
+public class BloomFilterConfigSerializationTest
 {
-	private static final Logger logger = LoggerFactory.getLogger(BloomFilterConfigTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(BloomFilterConfigSerializationTest.class);
 
 	private static final byte[] b1 = Base64.getDecoder().decode("KLhuuy3lDSmo8A/mcYBBZJ+Xu+ok30qDGM4L0magwyY=");
 	private static final byte[] b2 = Base64.getDecoder().decode("VALdwRisuEsUBIXaqJ01L9lk0jJUSGm5ZBE+Ha5bm8c=");
