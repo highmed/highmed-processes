@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
-  <bpmn:process id="highmedorg_executeDataSharing" isExecutable="true" camunda:versionTag="0.6.0">
+  <bpmn:process id="highmedorg_executeDataSharing" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:serviceTask id="checkResults" name="check results" camunda:class="org.highmed.dsf.bpe.service.CheckMedicSingleMedicResults">
       <bpmn:incoming>Flow_1pzik8k</bpmn:incoming>
       <bpmn:outgoing>Flow_08925ay</bpmn:outgoing>
@@ -23,9 +23,9 @@
     <bpmn:endEvent id="EndEventSuccess" name="send results to TTP">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeDataSharing/0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeDataSharing/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultSingleMedicDataSharingMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-data-sharing|0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-data-sharing|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1611vr6</bpmn:incoming>

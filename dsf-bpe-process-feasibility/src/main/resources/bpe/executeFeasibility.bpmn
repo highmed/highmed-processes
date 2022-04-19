@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
-  <bpmn:process id="highmedorg_executeFeasibility" isExecutable="true" camunda:versionTag="0.6.0">
+  <bpmn:process id="highmedorg_executeFeasibility" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:serviceTask id="checkResults" name="check results" camunda:class="org.highmed.dsf.bpe.service.CheckSingleMedicResults">
       <bpmn:incoming>SequenceFlow_0q803rh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_04ouilq</bpmn:outgoing>
@@ -24,9 +24,9 @@
     <bpmn:endEvent id="EndEvent" name="send results to TTP">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeFeasibility/0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeFeasibility/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultSingleMedicFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-feasibility|0.6.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-single-medic-result-feasibility|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0ascyjc</bpmn:incoming>

@@ -1,11 +1,10 @@
 package org.highmed.dsf.fhir.profile;
 
+import static org.highmed.dsf.bpe.DataSharingProcessPluginDefinition.RELEASE_DATE;
 import static org.highmed.dsf.bpe.DataSharingProcessPluginDefinition.VERSION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
@@ -28,7 +27,7 @@ public class ActivityDefinitionProfileTest
 	private static final Logger logger = LoggerFactory.getLogger(ActivityDefinitionProfileTest.class);
 
 	@ClassRule
-	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION,
+	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION, RELEASE_DATE,
 			Arrays.asList("highmed-activity-definition-0.5.0.xml", "highmed-extension-process-authorization-0.5.0.xml",
 					"highmed-extension-process-authorization-consortium-role-0.5.0.xml",
 					"highmed-extension-process-authorization-organization-0.5.0.xml",
@@ -50,67 +49,53 @@ public class ActivityDefinitionProfileTest
 	@Test
 	public void testComputeFeasibilityValid() throws Exception
 	{
-		try (InputStream in = Files
-				.newInputStream(Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-computeDataSharing.xml")))
+		ActivityDefinition ad = validationRule.readActivityDefinition(
+				Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-computeDataSharing.xml"));
+
+		ValidationResult result = resourceValidator.validate(ad);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+
+		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier ->
 		{
-			ActivityDefinition ad = validationRule.getFhirContext().newXmlParser()
-					.parseResource(ActivityDefinition.class, in);
-
-			ValidationResult result = resourceValidator.validate(ad);
-			ValidationSupportRule.logValidationMessages(logger, result);
-
-			assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
-					|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
-
-			assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier ->
-			{
-				System.err.println("Org: " + orgIdentifier);
-				return true;
-			}, role ->
-			{
-				System.err.println("Role:" + role);
-				return true;
-			}));
-		}
+			System.err.println("Org: " + orgIdentifier);
+			return true;
+		}, role ->
+		{
+			System.err.println("Role:" + role);
+			return true;
+		}));
 	}
 
 	@Test
 	public void testExecuteFeasibilityValid() throws Exception
 	{
-		try (InputStream in = Files
-				.newInputStream(Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-executeDataSharing.xml")))
-		{
-			ActivityDefinition ad = validationRule.getFhirContext().newXmlParser()
-					.parseResource(ActivityDefinition.class, in);
+		ActivityDefinition ad = validationRule.readActivityDefinition(
+				Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-executeDataSharing.xml"));
 
-			ValidationResult result = resourceValidator.validate(ad);
-			ValidationSupportRule.logValidationMessages(logger, result);
+		ValidationResult result = resourceValidator.validate(ad);
+		ValidationSupportRule.logValidationMessages(logger, result);
 
-			assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
-					|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 
-			assertTrue(
-					processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier -> true, role -> true));
-		}
+		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier -> true, role -> true));
 	}
 
 	@Test
 	public void testRequestFeasibilityValid() throws Exception
 	{
-		try (InputStream in = Files
-				.newInputStream(Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-requestDataSharing.xml")))
-		{
-			ActivityDefinition ad = validationRule.getFhirContext().newXmlParser()
-					.parseResource(ActivityDefinition.class, in);
+		ActivityDefinition ad = validationRule.readActivityDefinition(
+				Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-requestDataSharing.xml"));
 
-			ValidationResult result = resourceValidator.validate(ad);
-			ValidationSupportRule.logValidationMessages(logger, result);
+		ValidationResult result = resourceValidator.validate(ad);
+		ValidationSupportRule.logValidationMessages(logger, result);
 
-			assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
-					|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 
-			assertTrue(
-					processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier -> true, role -> true));
-		}
+		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier -> true, role -> true));
 	}
 }

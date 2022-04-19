@@ -10,7 +10,7 @@
 			<valueString value="requestDataSharingMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-data-sharing|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-data-sharing|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -58,7 +58,7 @@
 			<valueString value="resultMultiMedicDataSharingMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-data-sharing|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-data-sharing|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -106,7 +106,7 @@
 			<valueString value="errorMultiMedicDataSharingMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-data-sharing|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-data-sharing|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -151,14 +151,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/requestDataSharing" />
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="#{version}" />
 	<name value="RequestDataSharing" />
 	<title value="Request Data Sharing" />
 	<subtitle value="Process to request data sharing" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-08-24" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

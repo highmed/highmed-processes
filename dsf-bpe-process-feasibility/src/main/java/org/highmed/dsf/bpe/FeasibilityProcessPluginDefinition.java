@@ -1,5 +1,6 @@
 package org.highmed.dsf.bpe;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import ca.uhn.fhir.context.FhirContext;
 public class FeasibilityProcessPluginDefinition implements ProcessPluginDefinition
 {
 	public static final String VERSION = "0.6.0";
+	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 4, 14);
 
 	private static final String DEPENDENCY_DATA_SHARING_VERSION = "0.6.0";
 	private static final String DEPENDENCY_DATA_SHARING_NAME_AND_VERSION = "dsf-bpe-process-data-sharing-0.6.0";
@@ -35,6 +37,12 @@ public class FeasibilityProcessPluginDefinition implements ProcessPluginDefiniti
 	public String getVersion()
 	{
 		return VERSION;
+	}
+
+	@Override
+	public LocalDate getReleaseDate()
+	{
+		return RELEASE_DATE;
 	}
 
 	@Override
@@ -83,7 +91,8 @@ public class FeasibilityProcessPluginDefinition implements ProcessPluginDefiniti
 				"highmedorg_executeFeasibility/" + VERSION, Arrays.asList(aExe, cDS, sTExe, vDS),
 				"highmedorg_requestFeasibility/" + VERSION, Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
 
-		return ResourceProvider.read(VERSION, () -> fhirContext.newXmlParser().setStripVersionsFromReferences(false),
-				classLoader, resolver, resourcesByProcessKeyAndVersion);
+		return ResourceProvider.read(VERSION, RELEASE_DATE,
+				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,
+				resourcesByProcessKeyAndVersion);
 	}
 }
