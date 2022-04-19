@@ -8,11 +8,14 @@ import java.util.Base64;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.highmed.dsf.bpe.variable.BloomFilterConfig;
+import org.highmed.dsf.fhir.json.ObjectMapperFactory;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ca.uhn.fhir.context.FhirContext;
 
 public class BloomFilterConfigSerializationTest
 {
@@ -25,16 +28,16 @@ public class BloomFilterConfigSerializationTest
 	@Test
 	public void testReadWriteJson() throws Exception
 	{
-		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper mapper = ObjectMapperFactory.createObjectMapper(FhirContext.forR4());
 
 		BloomFilterConfig bfc = new BloomFilterConfig(l, new SecretKeySpec(b1, "HmacSHA256"),
 				new SecretKeySpec(b2, "HmacSHA3-256"));
 
-		String value = objectMapper.writeValueAsString(bfc);
+		String value = mapper.writeValueAsString(bfc);
 
 		logger.debug("BloomFilterConfig: {}", value);
 
-		BloomFilterConfig readBfc = objectMapper.readValue(value, BloomFilterConfig.class);
+		BloomFilterConfig readBfc = mapper.readValue(value, BloomFilterConfig.class);
 
 		assertNotNull(readBfc);
 		assertEquals(bfc.getPermutationSeed(), readBfc.getPermutationSeed());

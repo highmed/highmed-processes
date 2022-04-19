@@ -1,14 +1,19 @@
 package org.highmed.dsf.bpe.variables;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.highmed.dsf.bpe.variable.SecretKeyWrapper;
+import org.highmed.dsf.fhir.json.ObjectMapperFactory;
 import org.highmed.pseudonymization.crypto.AesGcmUtil;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ca.uhn.fhir.context.FhirContext;
 
 public class SecretKeyWrapperSerializationTest
 {
@@ -17,15 +22,15 @@ public class SecretKeyWrapperSerializationTest
 	@Test
 	public void testReadWriteJson() throws Exception
 	{
-		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper mapper = ObjectMapperFactory.createObjectMapper(FhirContext.forR4());
 
 		SecretKeyWrapper key = SecretKeyWrapper.newAes256Key();
 
-		String value = objectMapper.writeValueAsString(key);
+		String value = mapper.writeValueAsString(key);
 
 		logger.debug("SecretKeyWrapper: {}", value);
 
-		SecretKeyWrapper readkey = objectMapper.readValue(value, SecretKeyWrapper.class);
+		SecretKeyWrapper readkey = mapper.readValue(value, SecretKeyWrapper.class);
 
 		assertNotNull(readkey);
 		assertEquals(key.getAlgorithm(), readkey.getAlgorithm());
@@ -36,17 +41,17 @@ public class SecretKeyWrapperSerializationTest
 	@Test
 	public void testReadWriteJsonFromBytes() throws Exception
 	{
-		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper mapper = ObjectMapperFactory.createObjectMapper(FhirContext.forR4());
 
 		byte[] bytes = AesGcmUtil.generateAES256Key().getEncoded();
 		SecretKeyWrapper key = SecretKeyWrapper.fromAes256Key(bytes);
 		assertArrayEquals(bytes, key.getBytes());
 
-		String value = objectMapper.writeValueAsString(key);
+		String value = mapper.writeValueAsString(key);
 
 		logger.debug("SecretKeyWrapper: {}", value);
 
-		SecretKeyWrapper readkey = objectMapper.readValue(value, SecretKeyWrapper.class);
+		SecretKeyWrapper readkey = mapper.readValue(value, SecretKeyWrapper.class);
 
 		assertNotNull(readkey);
 		assertEquals(key.getAlgorithm(), readkey.getAlgorithm());
