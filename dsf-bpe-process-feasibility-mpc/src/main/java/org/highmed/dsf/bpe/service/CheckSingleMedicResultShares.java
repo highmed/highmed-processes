@@ -21,6 +21,6 @@ public class CheckSingleMedicResultShares extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		logger.info("EXECUTING: {}", CheckSingleMedicResultShares.class.getName());
+		logger.warn("Checks not yet implemented");
 	}
 }
