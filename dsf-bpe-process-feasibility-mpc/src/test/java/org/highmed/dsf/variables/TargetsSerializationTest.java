@@ -1,6 +1,5 @@
 package org.highmed.dsf.variables;
 
-import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static org.junit.Assert.assertNotNull;
 
 import org.highmed.dsf.fhir.variables.Targets;
