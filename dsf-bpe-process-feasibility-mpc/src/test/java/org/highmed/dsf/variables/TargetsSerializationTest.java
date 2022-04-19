@@ -20,15 +20,4 @@ public class TargetsSerializationTest
 
 		assertNotNull(deserialized);
 	}
-
-	@Test
-	public void serializeDeserializeTargets2() throws Exception
-	{
-		ObjectMapper objectMapper = new ObjectMapper().configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-		String serialized = objectMapper.writeValueAsString(new Targets(null));
-		Targets deserialized = objectMapper.readValue(serialized, Targets.class);
-
-		assertNotNull(deserialized);
-	}
 }
