@@ -32,6 +32,7 @@ public class FinalFeasibilityMpcQueryResults
 			this.results.addAll(results);
 	}
 
+	@JsonProperty("results")
 	public List<FinalFeasibilityMpcQueryResult> getResults()
 	{
 		return Collections.unmodifiableList(results);
