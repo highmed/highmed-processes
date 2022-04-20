@@ -10,7 +10,7 @@
 			<valueString value="localServicesIntegrationMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-local-services-integration|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-local-services-integration|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -55,14 +55,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/localServicesIntegration" />
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="#{version}" />
 	<name value="LocalServicesIntegration" />
 	<title value="Local services integration" />
 	<subtitle value="Service integration process" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-08-24" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

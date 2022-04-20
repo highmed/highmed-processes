@@ -8,7 +8,6 @@ import org.highmed.dsf.fhir.variables.KeyDeserializer;
 import org.highmed.dsf.fhir.variables.KeySerializer;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -60,22 +59,24 @@ public class BloomFilterConfig
 		this.hmacSha3Key = hmacSha3Key;
 	}
 
+	@JsonProperty("permutationSeed")
 	public long getPermutationSeed()
 	{
 		return permutationSeed;
 	}
 
+	@JsonProperty("hmacSha2Key")
 	public Key getHmacSha2Key()
 	{
 		return hmacSha2Key;
 	}
 
+	@JsonProperty("hmacSha3Key")
 	public Key getHmacSha3Key()
 	{
 		return hmacSha3Key;
 	}
 
-	@JsonIgnore
 	public byte[] toBytes()
 	{
 		byte[] bytes = new byte[SEED_LENGTH + HMAC_SHA2_KEY_LENGTH + HMAC_SHA3_KEY_LENGTH];

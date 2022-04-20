@@ -13,6 +13,7 @@ import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROFILE_HIGHMED_TASK_
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROFILE_HIGHMED_TASK_REQUEST_UPDATE_RESOURCES_PROCESS_URI_AND_LATEST_VERSION;
+import static org.highmed.dsf.bpe.UpdateResourcesProcessPluginDefinition.RELEASE_DATE;
 import static org.highmed.dsf.bpe.UpdateResourcesProcessPluginDefinition.VERSION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -52,7 +53,7 @@ public class TaskProfileTest
 	private static final Logger logger = LoggerFactory.getLogger(TaskProfileTest.class);
 
 	@ClassRule
-	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION,
+	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION, RELEASE_DATE,
 			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-task-request-update-resources.xml",
 					"highmed-task-execute-update-resources.xml"),
 			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml",
@@ -66,7 +67,7 @@ public class TaskProfileTest
 	@Test
 	public void testGenerateSnapshotNotWorkingWithoutBaseSnapshot() throws Exception
 	{
-		var reader = new StructureDefinitionReader(validationRule.getFhirContext());
+		var reader = new StructureDefinitionReader(validationRule.getFhirContext(), VERSION, RELEASE_DATE);
 
 		StructureDefinition base = reader.readXml("/fhir/StructureDefinition/highmed-task-base-0.5.0.xml");
 		StructureDefinition differential = reader
