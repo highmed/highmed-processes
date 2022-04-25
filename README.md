@@ -32,7 +32,11 @@ Prerequisite: Java 11, Maven >= 3.6
 
   ```
   mvn clean install (-P copy-to-highmed-dsf-process)
-  ``` 
+  ```
+
+## Executing the Processes
+The HiGHmed DSF Wiki includes the section (Manual Integration Testing) [https://github.com/highmed/highmed-dsf/wiki/Build-and-Test-Project#manual-integration-testing-vms-for-docker-registry-3-medics-ttp], with detailed description on how to run the processes in a simulated setup consisting of 3 MeDIC and 1 TTP. Example implementations to start a process can be found in the respective Maven sub-modules under `src/test/java` in the package `org.highmed.dsf.bpe.start`.
+
 
 ## Implementing new Processes
 Instructions on how to implement a new process can be found in the HiGHmed DSF Wiki page with the name [Adding a new BPMN Process](https://github.com/highmed/highmed-dsf/wiki/Adding-BPMN-Processes).
