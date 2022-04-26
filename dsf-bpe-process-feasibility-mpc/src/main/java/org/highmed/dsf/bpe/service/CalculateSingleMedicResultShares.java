@@ -23,13 +23,9 @@ import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.Targets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(CalculateSingleMedicResultShares.class);
-
 	public CalculateSingleMedicResultShares(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{

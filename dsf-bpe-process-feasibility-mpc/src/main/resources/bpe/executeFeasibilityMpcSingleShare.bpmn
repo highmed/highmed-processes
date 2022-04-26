@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
   <bpmn:process id="highmedorg_executeFeasibilityMpcSingleShare" isExecutable="true" camunda:versionTag="#{version}">
-    <bpmn:serviceTask id="checkResults" name="check single medic result shares" camunda:class="org.highmed.dsf.bpe.service.CheckSingleMedicResultShares">
-      <bpmn:incoming>Flow_08uzidj</bpmn:incoming>
-      <bpmn:outgoing>Flow_0nknzne</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:serviceTask id="checkFeasibilityMpcResources" name="check feasibility resources" camunda:class="org.highmed.dsf.bpe.service.CheckFeasibilityMpcResources">
       <bpmn:incoming>Flow_1czhll7</bpmn:incoming>
       <bpmn:outgoing>Flow_1dnygeo</bpmn:outgoing>
@@ -93,7 +89,7 @@
           <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeFeasibilityMpcMultiShare/#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0nknzne</bpmn:incoming>
+      <bpmn:incoming>Flow_08uzidj</bpmn:incoming>
       <bpmn:outgoing>Flow_1tfx2ak</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics camunda:collection="${targets.entries}" camunda:elementVariable="target" />
     </bpmn:sendTask>
@@ -104,8 +100,7 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1tfx2ak" sourceRef="sendSingleMedicResultShares" targetRef="Event_1smcidr" />
     <bpmn:sequenceFlow id="Flow_1dnygeo" sourceRef="checkFeasibilityMpcResources" targetRef="checkQueries" />
-    <bpmn:sequenceFlow id="Flow_0nknzne" sourceRef="checkResults" targetRef="sendSingleMedicResultShares" />
-    <bpmn:sequenceFlow id="Flow_08uzidj" sourceRef="calculateSingleMedicResultShares" targetRef="checkResults" />
+    <bpmn:sequenceFlow id="Flow_08uzidj" sourceRef="calculateSingleMedicResultShares" targetRef="sendSingleMedicResultShares" />
     <bpmn:textAnnotation id="TextAnnotation_0euut3n">
       <bpmn:text>uac check, study definiton validity, type of cohort, ethics commitee vote, included medics, user authentication, rate limit, etc.</bpmn:text>
     </bpmn:textAnnotation>
@@ -117,13 +112,17 @@
   <bpmn:message id="Message_0qpomdh" name="resultShareMultiMedicFeasibilityMpcMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_executeFeasibilityMpcSingleShare">
+      <bpmndi:BPMNEdge id="Flow_08uzidj_di" bpmnElement="Flow_08uzidj">
+        <di:waypoint x="1940" y="272" />
+        <di:waypoint x="2010" y="272" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1dnygeo_di" bpmnElement="Flow_1dnygeo">
         <di:waypoint x="540" y="272" />
         <di:waypoint x="600" y="272" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tfx2ak_di" bpmnElement="Flow_1tfx2ak">
-        <di:waypoint x="2300" y="272" />
-        <di:waypoint x="2372" y="272" />
+        <di:waypoint x="2110" y="272" />
+        <di:waypoint x="2182" y="272" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1czhll7_di" bpmnElement="Flow_1czhll7">
         <di:waypoint x="360" y="272" />
@@ -195,14 +194,6 @@
         <di:waypoint x="1130" y="272" />
         <di:waypoint x="1195" y="272" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0nknzne_di" bpmnElement="Flow_0nknzne">
-        <di:waypoint x="2120" y="272" />
-        <di:waypoint x="2200" y="272" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08uzidj_di" bpmnElement="Flow_08uzidj">
-        <di:waypoint x="1940" y="272" />
-        <di:waypoint x="2020" y="272" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0jna5l2_di" bpmnElement="checkFeasibilityMpcResources">
         <dc:Bounds x="440" y="232" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -239,26 +230,23 @@
       <bpmndi:BPMNShape id="ServiceTask_17kpyle_di" bpmnElement="countIds">
         <dc:Bounds x="1520" y="101" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0u5pb4i_di" bpmnElement="executeQueries">
-        <dc:Bounds x="1030" y="232" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1smcidr_di" bpmnElement="Event_1smcidr">
-        <dc:Bounds x="2372" y="254" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
-        <dc:Bounds x="490" y="113" width="267" height="56" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_15aifhd_di" bpmnElement="selectResponseTargetTtp">
         <dc:Bounds x="1670" y="232" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0u5pb4i_di" bpmnElement="executeQueries">
+        <dc:Bounds x="1030" y="232" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0z7c65s_di" bpmnElement="calculateSingleMedicResultShares">
         <dc:Bounds x="1840" y="232" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0t2s0v7_di" bpmnElement="checkResults">
-        <dc:Bounds x="2020" y="232" width="100" height="80" />
+      <bpmndi:BPMNShape id="TextAnnotation_0euut3n_di" bpmnElement="TextAnnotation_0euut3n">
+        <dc:Bounds x="490" y="113" width="267" height="56" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0j0x0r2_di" bpmnElement="sendSingleMedicResultShares">
-        <dc:Bounds x="2200" y="232" width="100" height="80" />
+        <dc:Bounds x="2010" y="232" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1smcidr_di" bpmnElement="Event_1smcidr">
+        <dc:Bounds x="2182" y="254" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1ncewqu_di" bpmnElement="Association_1ncewqu">
         <di:waypoint x="460" y="230" />

@@ -12,7 +12,6 @@ import org.highmed.dsf.bpe.service.CalculateSingleMedicResultShares;
 import org.highmed.dsf.bpe.service.CheckFeasibilityMpcResources;
 import org.highmed.dsf.bpe.service.CheckMultiMedicResults;
 import org.highmed.dsf.bpe.service.CheckQueries;
-import org.highmed.dsf.bpe.service.CheckSingleMedicResultShares;
 import org.highmed.dsf.bpe.service.DownloadFeasibilityMpcResources;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
@@ -201,12 +200,6 @@ public class FeasibilityMpcConfig
 	public CalculateSingleMedicResultShares calculateSingleMedicResultShares()
 	{
 		return new CalculateSingleMedicResultShares(fhirClientProvider, taskHelper, readAccessHelper);
-	}
-
-	@Bean
-	public CheckSingleMedicResultShares checkSingleMedicResultShares()
-	{
-		return new CheckSingleMedicResultShares(fhirClientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean

@@ -24,13 +24,9 @@ import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Targets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CalculateMultiMedicResult extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(CalculateMultiMedicResult.class);
-
 	public CalculateMultiMedicResult(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper)
 	{

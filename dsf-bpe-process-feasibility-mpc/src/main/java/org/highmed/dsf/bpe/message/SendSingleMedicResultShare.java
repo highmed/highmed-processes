@@ -19,15 +19,11 @@ import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.ParameterComponent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.context.FhirContext;
 
 public class SendSingleMedicResultShare extends AbstractTaskMessageSend
 {
-	private static final Logger logger = LoggerFactory.getLogger(SendSingleMedicResultShare.class);
-
 	public SendSingleMedicResultShare(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext)
 	{
