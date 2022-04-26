@@ -4,13 +4,12 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONSORTIUM_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_MULTI_MEDIC_SHARES;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +18,8 @@ import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
@@ -73,8 +74,8 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 		boolean needsConsentCheck = getNeedsConsentCheck(task);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK, needsConsentCheck);
 
-		boolean needsRecordLinkage = getNeedsRecordLinkageCheck(task);
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE, needsRecordLinkage);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_MULTI_MEDIC_SHARES,
+				QueryResultsValues.create(new QueryResults(null)));
 	}
 
 	private IdType getResearchStudyId(Task task)
@@ -140,12 +141,12 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 		if (!identifiersWrongConsortium.isEmpty())
 		{
 			logger.warn(
-					"Organizations with identifiers='{}' are part of feasibility research study with id='{}' but do "
+					"Organizations with identifiers='{}' are part of FeasibilityMpc research study with id='{}' but do "
 							+ "not belong to the consortium with identifier='{}'",
 					identifiersWrongConsortium, researchStudyId, consortiumIdentifier);
 
 			throw new RuntimeException("Organizations with identifiers='" + identifiersWrongConsortium
-					+ "' are part of feasibility research study with id='" + researchStudyId
+					+ "' are part of FeasibilityMpc research study with id='" + researchStudyId
 					+ "' but do not belong to the consortium with identifier='" + consortiumIdentifier + "'");
 		}
 	}
@@ -160,7 +161,7 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 			identifiersConsortium.forEach(identifier ->
 			{
 				logger.warn(
-						"Adding missing organization with identifier='{}' to feasibility research study with id='{}'",
+						"Adding missing organization with identifier='{}' to FeasibilityMpc research study with id='{}'",
 						identifier, researchStudy.getId());
 
 				researchStudy.addExtension().setUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).setValue(
@@ -205,15 +206,5 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK)
 				.orElseThrow(() -> new IllegalArgumentException("NeedsConsentCheck boolean is not set in task with id='"
 						+ task.getId() + "', this error should have been caught by resource validation"));
-	}
-
-	private boolean getNeedsRecordLinkageCheck(Task task)
-	{
-		return getTaskHelper()
-				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
-						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE)
-				.orElseThrow(
-						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
-								+ task.getId() + "', this error should " + "have been caught by resource validation"));
 	}
 }

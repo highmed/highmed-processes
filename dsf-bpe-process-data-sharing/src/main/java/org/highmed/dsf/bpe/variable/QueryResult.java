@@ -21,6 +21,11 @@ public class QueryResult
 		return new QueryResult(organizationIdentifier, cohortId, cohortSize, null, null);
 	}
 
+	public static QueryResult mpcCountResult(String organizationIdentifier, String cohortId, int cohortSize)
+	{
+		return new QueryResult(organizationIdentifier, cohortId, cohortSize, null, null);
+	}
+
 	public static QueryResult idResult(String organizationIdentifier, String cohortId, ResultSet resultSet)
 	{
 		return new QueryResult(organizationIdentifier, cohortId, -1, resultSet, null);
