@@ -13,7 +13,7 @@
   <status value="unknown" />
   <experimental value="false" />
   <!-- date managed by bpe -->
-  <date value="2021-08-24" />
+  <date value="#{date}" />
   <fhirVersion value="4.0.1" />
   <kind value="resource" />
   <abstract value="false" />
