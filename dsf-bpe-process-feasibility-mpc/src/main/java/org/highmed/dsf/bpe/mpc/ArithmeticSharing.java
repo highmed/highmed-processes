@@ -6,12 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.beans.factory.InitializingBean;
-
 /**
  * @author Tobias Kussel
  */
-public class ArithmeticSharing implements InitializingBean
+public class ArithmeticSharing
 {
 	private static final int MAX_POWER_FOR_INT = 31;
 	public static final BigInteger DEFAULT_RING_SIZE = BigInteger.valueOf(2).pow(MAX_POWER_FOR_INT)
@@ -29,24 +27,16 @@ public class ArithmeticSharing implements InitializingBean
 
 	public ArithmeticSharing(int numParties, BigInteger ringSize)
 	{
-		this.numParties = numParties;
-		this.ringSize = ringSize;
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception
-	{
 		Objects.requireNonNull(ringSize, "ringSize");
 
 		if (BigInteger.ZERO.compareTo(ringSize) >= 0)
-		{
 			throw new IllegalArgumentException("ringSize < 1");
-		}
 
-		if (numParties <= 0)
-		{
+		if (numParties < 1)
 			throw new IllegalArgumentException("numParties < 1");
-		}
+
+		this.numParties = numParties;
+		this.ringSize = ringSize;
 	}
 
 	public int getNumParties()

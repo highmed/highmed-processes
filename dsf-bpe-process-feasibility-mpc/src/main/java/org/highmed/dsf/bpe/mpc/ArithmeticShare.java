@@ -2,13 +2,12 @@ package org.highmed.dsf.bpe.mpc;
 
 import static org.highmed.dsf.bpe.mpc.ArithmeticSharing.DEFAULT_RING_SIZE;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
  * @author Tobias Kussel
  */
-public class ArithmeticShare implements Serializable
+public class ArithmeticShare
 {
 	private final BigInteger value;
 	private final BigInteger ringSize;
@@ -32,25 +31,6 @@ public class ArithmeticShare implements Serializable
 	public BigInteger getRingSize()
 	{
 		return ringSize;
-	}
-
-	@Override
-	public boolean equals(Object o)
-	{
-		if (o == this)
-			return true;
-		if (!(o instanceof ArithmeticShare))
-			return false;
-		ArithmeticShare as = (ArithmeticShare) o;
-		return as.value.equals(value) && as.ringSize.equals(ringSize);
-	}
-
-	@Override
-	public int hashCode()
-	{
-		int result = value.hashCode();
-		result = 31 * result + ringSize.hashCode();
-		return result;
 	}
 
 	@Override
