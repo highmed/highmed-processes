@@ -12,6 +12,11 @@ public class ArithmeticShare
 	private final BigInteger value;
 	private final BigInteger ringSize;
 
+	public ArithmeticShare(long value)
+	{
+		this(BigInteger.valueOf(value), DEFAULT_RING_SIZE);
+	}
+
 	public ArithmeticShare(BigInteger value)
 	{
 		this(value, DEFAULT_RING_SIZE);

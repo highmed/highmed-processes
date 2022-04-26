@@ -1,8 +1,5 @@
 package org.highmed.dsf.bpe.service;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
-
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_MULTI_MEDIC_SHARES;
@@ -10,6 +7,7 @@ import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABL
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
@@ -44,10 +42,10 @@ public class CalculateMultiMedicResult extends AbstractServiceDelegate
 		ArithmeticSharing arithmeticSharing = new ArithmeticSharing(targets.getEntries().size());
 
 		Map<String, List<QueryResult>> byCohortId = shares.getResults().stream()
-				.collect(groupingBy(QueryResult::getCohortId));
+				.collect(Collectors.groupingBy(QueryResult::getCohortId));
 
 		List<FinalFeasibilityMpcQueryResult> reconstructedResults = byCohortId.entrySet().stream()
-				.map(group -> toReconstructedResult(arithmeticSharing, group)).collect(toList());
+				.map(group -> toReconstructedResult(arithmeticSharing, group)).collect(Collectors.toList());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS, FinalFeasibilityMpcQueryResultsValues
 				.create(new FinalFeasibilityMpcQueryResults(reconstructedResults)));
@@ -57,15 +55,11 @@ public class CalculateMultiMedicResult extends AbstractServiceDelegate
 			Map.Entry<String, List<QueryResult>> group)
 	{
 		String cohortId = group.getKey();
-		List<ArithmeticShare> toReconstruct = group.getValue().stream().map(s -> toArithmeticShare(s.getCohortSize()))
-				.collect(toList());
+		ArithmeticShare[] toReconstruct = group.getValue().stream().map(QueryResult::getCohortSize)
+				.map(ArithmeticShare::new).toArray(ArithmeticShare[]::new);
+
 		int reconstructedResult = arithmeticSharing.reconstructSecretToInt(toReconstruct);
 
 		return new FinalFeasibilityMpcQueryResult(cohortId, arithmeticSharing.getNumParties(), reconstructedResult);
-	}
-
-	private ArithmeticShare toArithmeticShare(int share)
-	{
-		return new ArithmeticShare(BigInteger.valueOf(share));
 	}
 }

@@ -1,7 +1,5 @@
 package org.highmed.dsf.bpe.service;
 
-import static java.util.stream.Collectors.toList;
-
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_GROUP_ID;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE;
@@ -9,6 +7,7 @@ import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABL
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
@@ -55,7 +54,7 @@ public class StoreResultsSingleMedicShare extends AbstractServiceDelegate implem
 		return taskHelper
 				.getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_SINGLE_MEDIC_RESULT_SHARE, EXTENSION_HIGHMED_GROUP_ID)
-				.map(input -> toQueryResultShare(requester, input)).collect(toList());
+				.map(input -> toQueryResultShare(requester, input)).collect(Collectors.toList());
 	}
 
 	private QueryResult toQueryResultShare(Reference requester, Task.ParameterComponent input)

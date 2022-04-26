@@ -2,8 +2,6 @@ package org.highmed.dsf.bpe.mpc;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -49,17 +47,17 @@ public class ArithmeticSharing
 		return ringSize;
 	}
 
-	public List<ArithmeticShare> createShares(int secret)
+	public ArithmeticShare[] createShares(int secret)
 	{
 		return createShares(BigInteger.valueOf(secret));
 	}
 
-	public List<ArithmeticShare> createShares(BigInteger secret)
+	public ArithmeticShare[] createShares(BigInteger secret)
 	{
 		BigInteger[] shares = new BigInteger[numParties];
 		shares[numParties - 1] = secret;
 
-		for (int i = 0; i != numParties - 1; i++)
+		for (int i = 0; i < numParties - 1; i++)
 		{
 			shares[i] = getBlind(MAX_POWER_FOR_INT);
 			shares[numParties - 1] = shares[numParties - 1].subtract(shares[i]);
@@ -68,36 +66,34 @@ public class ArithmeticSharing
 		shares[numParties - 1] = shares[numParties - 1].mod(ringSize);
 
 		ArithmeticShare[] result = new ArithmeticShare[numParties];
-		for (int i = 0; i != numParties; i++)
+		for (int i = 0; i < numParties; i++)
 		{
 			result[i] = new ArithmeticShare(shares[i], ringSize);
 		}
 
-		return Arrays.asList(result);
+		return result;
 	}
 
-	public int reconstructSecretToInt(List<ArithmeticShare> shares)
+	public int reconstructSecretToInt(ArithmeticShare[] shares)
 	{
 		return reconstructSecret(shares).intValueExact();
 	}
 
-	public BigInteger reconstructSecret(List<ArithmeticShare> shares)
+	public BigInteger reconstructSecret(ArithmeticShare[] shares)
 	{
-		if (shares.size() != numParties)
+		if (shares.length != numParties)
 			throw new IllegalArgumentException("Number of provided ArithmeticShares does not match numParties, shares="
-					+ shares.size() + " ,numParties=" + numParties);
-
-		ArithmeticShare[] sharesArray = shares.toArray(new ArithmeticShare[0]);
+					+ shares.length + " ,numParties=" + numParties);
 
 		BigInteger reconstruction = BigInteger.ZERO;
-		BigInteger firstRingSize = sharesArray[0].getRingSize();
-		for (int i = 0; i != sharesArray.length; i++)
+		BigInteger firstRingSize = shares[0].getRingSize();
+		for (int i = 0; i < shares.length; i++)
 		{
-			if (!(sharesArray[i].getRingSize().equals(firstRingSize)))
+			if (!(shares[i].getRingSize().equals(firstRingSize)))
 			{
 				throw new IllegalArgumentException("Incompatible ringSizes found!");
 			}
-			reconstruction = reconstruction.add(sharesArray[i].getValue()).remainder(sharesArray[i].getRingSize());
+			reconstruction = reconstruction.add(shares[i].getValue()).remainder(shares[i].getRingSize());
 		}
 
 		return reconstruction;

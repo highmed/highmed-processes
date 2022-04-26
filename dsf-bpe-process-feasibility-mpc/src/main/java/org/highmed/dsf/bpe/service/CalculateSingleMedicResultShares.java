@@ -1,13 +1,12 @@
 package org.highmed.dsf.bpe.service;
 
-import static java.util.stream.Collectors.toList;
-
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
 import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibilityMpc.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -40,7 +39,7 @@ public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 
 		List<QueryResult> shares = queryResults.getResults().stream()
 				.flatMap(queryResult -> toArithmeticSharesForCohortAndOrganization(queryResult, targets))
-				.collect(toList());
+				.collect(Collectors.toList());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES,
 				QueryResultsValues.create(new QueryResults(shares)));
@@ -60,13 +59,13 @@ public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 			throw new IllegalStateException(
 					"Secret > maxSecret (" + maxSecret + ") for " + numParties + " participating organizations");
 
-		List<ArithmeticShare> shares = arithmeticSharing.createShares(secret);
+		ArithmeticShare[] shares = arithmeticSharing.createShares(secret);
 
-		if (shares.size() != numParties)
+		if (shares.length != numParties)
 			throw new IllegalStateException("Number of shares does not match number of targets");
 
 		return IntStream.range(0, numParties)
 				.mapToObj(i -> QueryResult.mpcCountResult(organizations.get(i).getTargetOrganizationIdentifierValue(),
-						queryResult.getCohortId(), shares.get(i).getValue().intValueExact()));
+						queryResult.getCohortId(), shares[i].getValue().intValueExact()));
 	}
 }
