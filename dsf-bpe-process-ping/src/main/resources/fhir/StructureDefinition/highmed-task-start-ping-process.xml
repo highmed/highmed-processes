@@ -59,5 +59,44 @@
       <sliceName value="correlation-key" />
       <max value="0" />
     </element>
+    <element id="Task.output:business-key-out">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
+      <path value="Task.output" />
+      <sliceName value="business-key-out" />
+      <max value="1" />
+    </element>
+    <element id="Task.output:business-key-out.type">
+      <path value="Task.output.type" />
+      <binding>
+        <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+          <valueString value="TaskOutputParameterType" />
+        </extension>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/bpmn-message" />
+      </binding>
+    </element>
+    <element id="Task.output:business-key-out.type.coding">
+      <path value="Task.output.type.coding" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="Task.output:business-key-out.type.coding.system">
+      <path value="Task.output.type.coding.system" />
+      <min value="1" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/bpmn-message" />
+    </element>
+    <element id="Task.output:business-key-out.type.coding.code">
+      <path value="Task.output.type.coding.code" />
+      <min value="1" />
+      <fixedCode value="business-key" />
+    </element>
+    <element id="Task.output:business-key-out.value[x]">
+      <path value="Task.output.value[x]" />
+      <type>
+        <code value="string" />
+      </type>
+    </element>
   </differential>
 </StructureDefinition>

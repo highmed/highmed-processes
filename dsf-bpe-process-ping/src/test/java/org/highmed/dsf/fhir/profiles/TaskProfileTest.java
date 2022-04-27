@@ -64,6 +64,20 @@ public class TaskProfileTest
 	}
 
 	@Test
+	public void testTaskStartPingProcessProfileValidWithOutput() throws Exception
+	{
+		Task task = createValidTaskStartPingProcess();
+		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY);
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
 	public void testTaskStartPingProcessProfileNotValid1() throws Exception
 	{
 		Task task = createValidTaskStartPingProcess();
