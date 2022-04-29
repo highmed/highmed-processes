@@ -52,6 +52,7 @@ public class SendPing extends AbstractTaskMessageSend
 						toRemove.getTargetOrganizationIdentifierValue(), "endpoint-identifier", exception.getMessage());
 			}
 
+			// TODO: does not work if Targets are not updated
 			execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, targets);
 		}
 
@@ -78,6 +79,7 @@ public class SendPing extends AbstractTaskMessageSend
 						"endpoint-identifier", CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_REACHABLE);
 			}
 
+			// TODO: does not work if Task is not updated
 			execution.setVariable(BPMN_EXECUTION_VARIABLE_LEADING_TASK, task);
 		}
 
