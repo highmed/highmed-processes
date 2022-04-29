@@ -2,6 +2,7 @@ package org.highmed.dsf.bpe.spring.config;
 
 import org.highmed.dsf.bpe.message.SendPing;
 import org.highmed.dsf.bpe.message.SendPong;
+import org.highmed.dsf.bpe.service.LogNoResponse;
 import org.highmed.dsf.bpe.service.LogPing;
 import org.highmed.dsf.bpe.service.LogPong;
 import org.highmed.dsf.bpe.service.SelectPingTargets;
@@ -60,6 +61,12 @@ public class PingConfig
 	public LogPong logPong()
 	{
 		return new LogPong(clientProvider, taskHelper, readAccessHelper);
+	}
+
+	@Bean
+	public LogNoResponse logNoResponse()
+	{
+		return new LogNoResponse(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean

@@ -15,7 +15,6 @@ import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.Targets;
-import org.highmed.dsf.fhir.variables.TargetsValues;
 import org.springframework.beans.factory.InitializingBean;
 
 public class SelectPingTargets extends AbstractServiceDelegate implements InitializingBean
@@ -48,6 +47,6 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 				.map(e -> Target.createBiDirectionalTarget(e.getKey(), e.getValue(), UUID.randomUUID().toString()))
 				.collect(Collectors.toList());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(new Targets(targets)));
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, new Targets(targets));
 	}
 }

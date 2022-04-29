@@ -20,4 +20,16 @@ public interface ConstantsPing
 	String PROFILE_HIGHMED_TASK_PONG_PROCESS_URI = PROCESS_HIGHMED_URI_BASE + "pong/";
 	String PROFILE_HIGHMED_TASK_PONG_PROCESS_URI_AND_LATEST_VERSION = PROFILE_HIGHMED_TASK_PONG_PROCESS_URI + VERSION;
 	String PROFILE_HIGHMED_TASK_PONG_MESSAGE_NAME = "pongMessage";
+
+	String CODESYSTEM_HIGHMED_PING = "http://highmed.org/fhir/CodeSystem/ping";
+	String CODESYSTEM_HIGHMED_PING_VALUE_PING_RESPONSE = "ping-response";
+
+	String CODESYSTEM_HIGHMED_PING_RESPONSE = "http://highmed.org/fhir/CodeSystem/ping-response";
+	String CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_RECEIVED = "received";
+	String CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_MISSING = "missing";
+	String CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_REACHABLE = "not-reachable";
+	String CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_ALLOWED = "not-allowed";
+
+	String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "http://highmed.org/fhir/StructureDefinition/extension-organization-identifier";
+	String EXTENSION_URL_ENDPOINT_IDENTIFIER = "http://highmed.org/fhir/StructureDefinition/extension-endpoint-identifier";
 }
