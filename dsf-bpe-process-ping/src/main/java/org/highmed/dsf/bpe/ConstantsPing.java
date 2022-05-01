@@ -23,6 +23,8 @@ public interface ConstantsPing
 
 	String CODESYSTEM_HIGHMED_PING = "http://highmed.org/fhir/CodeSystem/ping";
 	String CODESYSTEM_HIGHMED_PING_VALUE_PING_RESPONSE = "ping-response";
+	String CODESYSTEM_HIGHMED_PING_VALUE_ENDPOINT_IDENTIFIER = "endpoint-identifier";
+	String CODESYSTEM_HIGHMED_PING_VALUE_TARGET_ENDPOINTS = "target-endpoints";
 
 	String CODESYSTEM_HIGHMED_PING_RESPONSE = "http://highmed.org/fhir/CodeSystem/ping-response";
 	String CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_RECEIVED = "received";
@@ -30,6 +32,9 @@ public interface ConstantsPing
 	String CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_REACHABLE = "not-reachable";
 	String CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_ALLOWED = "not-allowed";
 
-	String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "http://highmed.org/fhir/StructureDefinition/extension-organization-identifier";
-	String EXTENSION_URL_ENDPOINT_IDENTIFIER = "http://highmed.org/fhir/StructureDefinition/extension-endpoint-identifier";
+	String EXTENSION_URL_PING_RESPONSE = "http://highmed.org/fhir/StructureDefinition/extension-ping-response";
+	String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
+	String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";
+	String EXTENSION_URL_ENDPOINT_IDENTIFIER = "endpoint-identifier";
+	String EXTENSION_URL_ERROR_MESSAGE = "error-message";
 }

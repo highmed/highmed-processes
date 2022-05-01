@@ -24,6 +24,16 @@
 	<concept>
 		<code value="ping-response" />
 		<display value="Ping Response" />
-		<definition value="The response status of a pinged organization" />
+		<definition value="Response status of a pinged organization" />
+	</concept>
+	<concept>
+		<code value="endpoint-identifier" />
+		<display value="Endpoint Identifier" />
+		<definition value="Identifier of enpoint expecting pong (response) message" />
+	</concept>
+	<concept>
+		<code value="target-endpoints" />
+		<display value="Target Endpoints" />
+		<definition value="Ping target endpoints, search query resulting in match or include results with Endpoint resources" />
 	</concept>
 </CodeSystem> 

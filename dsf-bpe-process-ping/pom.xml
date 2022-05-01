@@ -21,6 +21,11 @@
 			<artifactId>dsf-bpe-process-base</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+    		<groupId>org.springframework</groupId>
+    		<artifactId>spring-web</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		
 		<dependency>
 			<groupId>de.hs-heilbronn.mi</groupId>

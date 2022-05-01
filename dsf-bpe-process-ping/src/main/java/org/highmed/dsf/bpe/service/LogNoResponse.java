@@ -4,9 +4,11 @@ import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_LEADING_
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_MISSING;
 
+import java.util.Objects;
+
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.util.PingResponseHelper;
+import org.highmed.dsf.bpe.util.PingResponseGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -20,11 +22,22 @@ public class LogNoResponse extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(LogNoResponse.class);
 
+	private final PingResponseGenerator responseGenerator;
+
 	public LogNoResponse(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper)
+			ReadAccessHelper readAccessHelper, PingResponseGenerator responseGenerator)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
 
+		this.responseGenerator = responseGenerator;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		super.afterPropertiesSet();
+
+		Objects.requireNonNull(responseGenerator, "responseGenerator");
 	}
 
 	@Override
@@ -40,10 +53,9 @@ public class LogNoResponse extends AbstractServiceDelegate
 
 	private void logAndAddResponseToTask(Task task, Target target)
 	{
-		// TODO: after new Target class is available, replace "endpoint-identifier" with actual value from target
-		logger.warn("PONG from organization {} (endpoint {}) missing", target.getTargetOrganizationIdentifierValue(),
-				"endpoint-identifier");
-		PingResponseHelper.addResponseToTask(task, target.getTargetOrganizationIdentifierValue(), "endpoint-identifier",
-				CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_MISSING);
+		logger.warn("PONG from organization {} (endpoint {}) missing", target.getOrganizationIdentifierValue(),
+				target.getEndpointIdentifierValue());
+
+		task.addOutput(responseGenerator.createOutput(target, CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_MISSING));
 	}
 }

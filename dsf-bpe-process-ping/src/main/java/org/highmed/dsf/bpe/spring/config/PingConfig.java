@@ -7,6 +7,7 @@ import org.highmed.dsf.bpe.service.LogPing;
 import org.highmed.dsf.bpe.service.LogPong;
 import org.highmed.dsf.bpe.service.SelectPingTargets;
 import org.highmed.dsf.bpe.service.SelectPongTarget;
+import org.highmed.dsf.bpe.util.PingResponseGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.EndpointProvider;
@@ -40,9 +41,16 @@ public class PingConfig
 	private FhirContext fhirContext;
 
 	@Bean
+	public PingResponseGenerator responseGenerator()
+	{
+		return new PingResponseGenerator();
+	}
+
+	@Bean
 	public SendPing sendPing()
 	{
-		return new SendPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
+		return new SendPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext,
+				endpointProvider, responseGenerator());
 	}
 
 	@Bean
@@ -60,19 +68,19 @@ public class PingConfig
 	@Bean
 	public LogPong logPong()
 	{
-		return new LogPong(clientProvider, taskHelper, readAccessHelper);
+		return new LogPong(clientProvider, taskHelper, readAccessHelper, responseGenerator());
 	}
 
 	@Bean
 	public LogNoResponse logNoResponse()
 	{
-		return new LogNoResponse(clientProvider, taskHelper, readAccessHelper);
+		return new LogNoResponse(clientProvider, taskHelper, readAccessHelper, responseGenerator());
 	}
 
 	@Bean
 	public SelectPingTargets selectPingTargets()
 	{
-		return new SelectPingTargets(clientProvider, taskHelper, readAccessHelper, endpointProvider);
+		return new SelectPingTargets(clientProvider, taskHelper, readAccessHelper, organizationProvider);
 	}
 
 	@Bean

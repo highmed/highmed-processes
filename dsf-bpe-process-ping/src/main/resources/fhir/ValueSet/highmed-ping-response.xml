@@ -5,22 +5,22 @@
 			<code value="ALL" />
 		</tag>
 	</meta>
-	<url value="http://highmed.org/fhir/ValueSet/ping" />
+	<url value="http://highmed.org/fhir/ValueSet/ping-response" />
 	<!-- version managed by bpe -->
 	<version value="#{version}" />
-	<name value="HiGHmed_Ping" />
-	<title value="HiGHmed Ping" />
+	<name value="HiGHmed_Ping_Response" />
+	<title value="HiGHmed Ping Response" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
 	<!-- date managed by bpe -->
 	<date value="#{date}" />
 	<publisher value="HiGHmed" />
-	<description value="ValueSet with standard values for the process ping" />
+	<description value="ValueSet with ping response status values" />
 	<immutable value="true" />
 	<compose>
 		<include>
-			<system value="http://highmed.org/fhir/CodeSystem/ping" />
+			<system value="http://highmed.org/fhir/CodeSystem/ping-response" />
 		</include>
 	</compose>
 </ValueSet> 

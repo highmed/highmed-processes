@@ -16,7 +16,7 @@
 	<!-- date managed by bpe -->
 	<date value="#{date}" />
 	<publisher value="HiGHmed" />
-	<description value="CodeSystem with values of the ping response status" />
+	<description value="CodeSystem with ping response status values" />
 	<caseSensitive value="true" />
 	<hierarchyMeaning value="grouped-by" />
 	<versionNeeded value="false" />
