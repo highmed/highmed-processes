@@ -52,7 +52,7 @@ public class LogPong extends AbstractServiceDelegate
 
 		Task leading = getLeadingTaskFromExecutionVariables();
 		leading.addOutput(responseGenerator.createOutput(target, CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_RECEIVED));
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_LEADING_TASK, leading);
+		updateLeadingTaskInExecutionVariables(leading);
 
 		Targets targets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);
 		targets = targets.removeByEndpointIdentifierValue(target.getEndpointIdentifierValue());

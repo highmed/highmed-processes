@@ -27,6 +27,7 @@ import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.Targets;
+import org.highmed.dsf.fhir.variables.TargetsValues;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Endpoint;
@@ -105,7 +106,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 					UUID.randomUUID().toString());
 		}).collect(Collectors.toList());
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, new Targets(targets));
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(new Targets(targets)));
 	}
 
 	private Optional<UriComponents> getTargetEndpointsSearchParameter()

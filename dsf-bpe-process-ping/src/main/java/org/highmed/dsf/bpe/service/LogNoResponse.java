@@ -12,6 +12,7 @@ import org.highmed.dsf.bpe.util.PingResponseGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
+import org.highmed.dsf.fhir.variables.FhirResourceValues;
 import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.Targets;
 import org.hl7.fhir.r4.model.Task;
@@ -48,7 +49,7 @@ public class LogNoResponse extends AbstractServiceDelegate
 		Targets targets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);
 		targets.getEntries().forEach(t -> logAndAddResponseToTask(task, t));
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_LEADING_TASK, task);
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_LEADING_TASK, FhirResourceValues.create(task));
 	}
 
 	private void logAndAddResponseToTask(Task task, Target target)

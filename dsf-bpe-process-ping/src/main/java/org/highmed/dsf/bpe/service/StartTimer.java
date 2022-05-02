@@ -16,6 +16,7 @@ import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
+import org.highmed.dsf.fhir.variables.TargetValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,10 +47,10 @@ public class StartTimer extends AbstractServiceDelegate
 		logger.debug("Setting variable '{}' to {}", BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, timerInterval);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, Variables.stringValue(timerInterval));
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET,
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(
 				Target.createUniDirectionalTarget(organizationProvider.getLocalIdentifierValue(),
 						endpointProvider.getLocalEndpointIdentifier().getValue(),
-						endpointProvider.getLocalEndpointAddress()));
+						endpointProvider.getLocalEndpointAddress())));
 	}
 
 	private String getTimerInterval()
