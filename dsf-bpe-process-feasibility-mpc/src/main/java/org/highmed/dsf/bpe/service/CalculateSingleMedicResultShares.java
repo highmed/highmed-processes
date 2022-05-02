@@ -65,7 +65,7 @@ public class CalculateSingleMedicResultShares extends AbstractServiceDelegate
 			throw new IllegalStateException("Number of shares does not match number of targets");
 
 		return IntStream.range(0, numParties)
-				.mapToObj(i -> QueryResult.mpcCountResult(organizations.get(i).getTargetOrganizationIdentifierValue(),
+				.mapToObj(i -> QueryResult.mpcCountResult(organizations.get(i).getOrganizationIdentifierValue(),
 						queryResult.getCohortId(), shares[i].getValue().intValueExact()));
 	}
 }

@@ -6,6 +6,7 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_ROLE;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_TTP;
+import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ENDPOINT_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM;
 
 import java.util.Objects;
@@ -18,6 +19,8 @@ import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
 import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.TargetValues;
+import org.hl7.fhir.r4.model.Endpoint;
+import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -47,12 +50,12 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate implements 
 		String ttpIdentifier = (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER);
 		String correlationKey = getCorrelationKey(execution);
 
-		Target ttpTarget = Target.createBiDirectionalTarget(ttpIdentifier,
-				endpointProvider.getFirstConsortiumEndpointAdress(
-						NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM,
-						CODESYSTEM_HIGHMED_ORGANIZATION_ROLE, CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_TTP,
-						ttpIdentifier).get(),
-				correlationKey);
+		Endpoint endpoint = endpointProvider.getFirstConsortiumEndpoint(
+				NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM, CODESYSTEM_HIGHMED_ORGANIZATION_ROLE,
+				CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_TTP, ttpIdentifier).get();
+
+		Target ttpTarget = Target.createBiDirectionalTarget(ttpIdentifier, getEndpointIdentifierValue(endpoint),
+				endpoint.getAddress(), correlationKey);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(ttpTarget));
 	}
@@ -66,5 +69,12 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate implements 
 						CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY)
 				.orElseThrow(() -> new IllegalStateException(
 						"No correlation key found, this error should have been caught by resource validation"));
+	}
+
+	private String getEndpointIdentifierValue(Endpoint endpoint)
+	{
+		return endpoint.getIdentifier().stream()
+				.filter(i -> NAMINGSYSTEM_HIGHMED_ENDPOINT_IDENTIFIER.equals(i.getSystem())).findFirst()
+				.map(Identifier::getValue).get();
 	}
 }
