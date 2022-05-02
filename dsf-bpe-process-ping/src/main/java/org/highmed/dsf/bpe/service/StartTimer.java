@@ -47,8 +47,8 @@ public class StartTimer extends AbstractServiceDelegate
 		logger.debug("Setting variable '{}' to {}", BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, timerInterval);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, Variables.stringValue(timerInterval));
 
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(
-				Target.createUniDirectionalTarget(organizationProvider.getLocalIdentifierValue(),
+		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET,
+				TargetValues.create(Target.createUniDirectionalTarget(organizationProvider.getLocalIdentifierValue(),
 						endpointProvider.getLocalEndpointIdentifier().getValue(),
 						endpointProvider.getLocalEndpointAddress())));
 	}
