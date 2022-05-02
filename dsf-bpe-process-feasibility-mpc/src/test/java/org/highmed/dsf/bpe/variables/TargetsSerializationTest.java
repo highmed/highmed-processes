@@ -25,7 +25,8 @@ public class TargetsSerializationTest
 	{
 		ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper(FhirContext.forR4());
 
-		Target target = Target.createUniDirectionalTarget("identifier", "endpoint");
+		Target target = Target.createUniDirectionalTarget("target.org", "endpoint.target.org",
+				"https://endpoint.target.org/fhir");
 		Targets targets = new Targets(List.of(target));
 
 		String serialized = objectMapper.writeValueAsString(targets);
@@ -37,9 +38,9 @@ public class TargetsSerializationTest
 		assertNotNull(deserialized);
 		assertEquals(1, deserialized.getEntries().size());
 		assertNotNull(deserialized.getEntries().get(0));
-		assertEquals(deserialized.getEntries().get(0).getTargetOrganizationIdentifierValue(),
-				target.getTargetOrganizationIdentifierValue());
-		assertEquals(deserialized.getEntries().get(0).getTargetEndpointUrl(), target.getTargetEndpointUrl());
+		assertEquals(deserialized.getEntries().get(0).getOrganizationIdentifierValue(),
+				target.getOrganizationIdentifierValue());
+		assertEquals(deserialized.getEntries().get(0).getEndpointUrl(), target.getEndpointUrl());
 		assertEquals(deserialized.getEntries().get(0).getCorrelationKey(), target.getCorrelationKey());
 	}
 }
