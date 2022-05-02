@@ -73,7 +73,7 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 		List<Target> targets = getTaskHelper()
 				.getInputParameterStringValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,
 						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_PARTICIPATING_MEDIC_CORRELATION_KEY)
-				.map(correlationKey -> Target.createBiDirectionalTarget("", "", correlationKey))
+				.map(correlationKey -> Target.createBiDirectionalTarget("", "", "", correlationKey))
 				.collect(Collectors.toList());
 
 		return new Targets(targets);

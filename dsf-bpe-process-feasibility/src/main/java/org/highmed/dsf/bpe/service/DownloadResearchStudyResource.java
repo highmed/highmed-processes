@@ -183,7 +183,7 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 		}
 		catch (Exception e)
 		{
-			logger.warn("Error while updating ResearchStudy resource: " + e.getMessage(), e);
+			logger.warn("Error while updating ResearchStudy resource: " + e.getMessage());
 			throw e;
 		}
 	}

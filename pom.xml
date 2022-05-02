@@ -12,6 +12,7 @@
 	<modules>
 		<module>dsf-bpe-process-data-sharing</module>
 		<module>dsf-bpe-process-feasibility</module>
+		<module>dsf-bpe-process-feasibility-mpc</module>
 		<module>dsf-bpe-process-local-services</module>
 		<module>dsf-bpe-process-ping</module>
 		<module>dsf-bpe-process-update-allow-list</module>
@@ -81,6 +82,11 @@
 			<dependency>
 				<groupId>org.highmed.dsf</groupId>
 				<artifactId>dsf-bpe-process-feasibility</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.highmed.dsf</groupId>
+				<artifactId>dsf-bpe-process-feasibility-mpc</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
