@@ -47,6 +47,21 @@ public class ActivityDefinitionProfileTest
 	private final ProcessAuthorizationHelper processAuthorizationHelper = new ProcessAuthorizationHelperImpl();
 
 	@Test
+	public void testAutostartValid() throws Exception
+	{
+		ActivityDefinition ad = validationRule
+				.readActivityDefinition(Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-autostart.xml"));
+
+		ValidationResult result = resourceValidator.validate(ad);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+
+		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier -> true, role -> true));
+	}
+
+	@Test
 	public void testPingValid() throws Exception
 	{
 		ActivityDefinition ad = validationRule

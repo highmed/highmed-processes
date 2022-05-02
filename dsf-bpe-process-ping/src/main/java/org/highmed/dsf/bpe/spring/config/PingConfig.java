@@ -2,11 +2,14 @@ package org.highmed.dsf.bpe.spring.config;
 
 import org.highmed.dsf.bpe.message.SendPing;
 import org.highmed.dsf.bpe.message.SendPong;
+import org.highmed.dsf.bpe.message.SendStartPing;
 import org.highmed.dsf.bpe.service.LogNoResponse;
 import org.highmed.dsf.bpe.service.LogPing;
 import org.highmed.dsf.bpe.service.LogPong;
 import org.highmed.dsf.bpe.service.SelectPingTargets;
 import org.highmed.dsf.bpe.service.SelectPongTarget;
+import org.highmed.dsf.bpe.service.StartTimer;
+import org.highmed.dsf.bpe.service.StopTimer;
 import org.highmed.dsf.bpe.util.PingResponseGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
@@ -39,6 +42,24 @@ public class PingConfig
 
 	@Autowired
 	private FhirContext fhirContext;
+
+	@Bean
+	public StartTimer startTimer()
+	{
+		return new StartTimer(clientProvider, taskHelper, readAccessHelper, organizationProvider, endpointProvider);
+	}
+
+	@Bean
+	public SendStartPing sendStartPing()
+	{
+		return new SendStartPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
+	}
+
+	@Bean
+	public StopTimer stopTimer()
+	{
+		return new StopTimer(clientProvider, taskHelper, readAccessHelper);
+	}
 
 	@Bean
 	public PingResponseGenerator responseGenerator()

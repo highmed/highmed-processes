@@ -43,7 +43,7 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 	@Override
 	public Stream<String> getBpmnFiles()
 	{
-		return Stream.of("bpe/ping.bpmn", "bpe/pong.bpmn");
+		return Stream.of("bpe/autostart.bpmn", "bpe/ping.bpmn", "bpe/pong.bpmn");
 	}
 
 	@Override
@@ -56,9 +56,14 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
 			PropertyResolver resolver)
 	{
+		var aAutostart = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-autostart.xml");
 		var aPing = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-ping.xml");
 		var aPong = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-pong.xml");
 
+		var tStartAutostart = StructureDefinitionResource
+				.file("fhir/StructureDefinition/highmed-task-start-autostart.xml");
+		var tStopAutostart = StructureDefinitionResource
+				.file("fhir/StructureDefinition/highmed-task-stop-autostart.xml");
 		var tStartPing = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-start-ping-process.xml");
 		var tPong = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-pong.xml");
@@ -72,7 +77,9 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var vPing = ValueSetResource.file("fhir/ValueSet/highmed-ping.xml");
 		var vPingResponse = ValueSetResource.file("fhir/ValueSet/highmed-ping-response.xml");
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of("highmedorg_ping/" + VERSION,
+		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
+				"highmedorg_autostartPing/" + VERSION,
+				Arrays.asList(aAutostart, tStartAutostart, tStopAutostart, cPing, vPing), "highmedorg_ping/" + VERSION,
 				Arrays.asList(aPing, tStartPing, ePingResponse, tPong, cPing, cPingResponse, vPing, vPingResponse),
 				"highmedorg_pong/" + VERSION, Arrays.asList(aPong, tPing));
 

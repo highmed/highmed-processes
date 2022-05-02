@@ -96,7 +96,6 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		Stream<Endpoint> remoteTargetEndpointsWithActiveOrganization = targetEndpoints
 				.filter(e -> getOrganizationIdentifier(e, organizationIdentifierByOrganizationId).isPresent());
 
-
 		List<Target> targets = remoteTargetEndpointsWithActiveOrganization.map(e ->
 		{
 			String organizationIdentifier = getOrganizationIdentifier(e, organizationIdentifierByOrganizationId).get();

@@ -29,11 +29,16 @@
 	<concept>
 		<code value="endpoint-identifier" />
 		<display value="Endpoint Identifier" />
-		<definition value="Identifier of enpoint expecting pong (response) message" />
+		<definition value="Identifier of endpoint expecting pong (response) message" />
 	</concept>
 	<concept>
 		<code value="target-endpoints" />
 		<display value="Target Endpoints" />
 		<definition value="Ping target endpoints, search query resulting in match or include results with Endpoint resources" />
+	</concept>
+	<concept>
+		<code value="timer-interval" />
+		<display value="Timer Interval" />
+		<definition value="Interval between two autostarts of the ping process" />
 	</concept>
 </CodeSystem> 
