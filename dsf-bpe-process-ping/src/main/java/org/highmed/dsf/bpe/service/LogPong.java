@@ -2,13 +2,13 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
-import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_RECEIVED;
+import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PING_SEND;
 
 import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.util.PingResponseGenerator;
+import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -23,10 +23,10 @@ public class LogPong extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(LogPong.class);
 
-	private final PingResponseGenerator responseGenerator;
+	private final PingStatusGenerator responseGenerator;
 
 	public LogPong(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper, PingResponseGenerator responseGenerator)
+			ReadAccessHelper readAccessHelper, PingStatusGenerator responseGenerator)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
 
@@ -50,7 +50,8 @@ public class LogPong extends AbstractServiceDelegate
 				target.getEndpointIdentifierValue());
 
 		Task leading = getLeadingTaskFromExecutionVariables();
-		leading.addOutput(responseGenerator.createOutput(target, CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_RECEIVED));
+		leading.addOutput(
+				responseGenerator.createPingStatusOutput(target, CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PING_SEND));
 		updateLeadingTaskInExecutionVariables(leading);
 
 		Targets targets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);

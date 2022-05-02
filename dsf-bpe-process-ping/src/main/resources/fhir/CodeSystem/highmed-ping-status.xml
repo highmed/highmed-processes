@@ -1,0 +1,49 @@
+<CodeSystem xmlns="http://hl7.org/fhir">
+	<meta>
+		<tag>
+			<system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+			<code value="ALL" />
+		</tag>
+	</meta>
+	<url value="http://highmed.org/fhir/CodeSystem/ping-status" />
+	<!-- version managed by bpe -->
+	<version value="#{version}" />
+	<name value="HiGHmed_Ping_Status" />
+	<title value="HiGHmed Ping Status" />
+	<!-- status managed by bpe -->
+	<status value="unknown" />
+	<experimental value="false" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
+	<publisher value="HiGHmed" />
+	<description value="CodeSystem with ping/pong status values" />
+	<caseSensitive value="true" />
+	<hierarchyMeaning value="grouped-by" />
+	<versionNeeded value="false" />
+	<content value="complete" />
+	<concept>
+		<code value="missing" />
+		<display value="Missing" />
+		<definition value="No pong received from target organization" />
+	</concept>
+	<concept>
+		<code value="not-allowed" />
+		<display value="Not allowed" />
+		<definition value="Not allowed to start pong-process at target organization" />
+	</concept>
+	<concept>
+		<code value="not-reachable" />
+		<display value="Not reachable" />
+		<definition value="Ping could not be sent to target organization" />
+	</concept>
+	<concept>
+		<code value="ping-send" />
+		<display value="Ping send" />
+		<definition value="Ping successfully sent to target organization" />
+	</concept>
+	<concept>
+		<code value="pong-send" />
+		<display value="Pong send" />
+		<definition value="Pong successfully sent to target organization" />
+	</concept>
+</CodeSystem> 

@@ -5,7 +5,7 @@
       <code value="ALL"/>
     </tag>
   </meta>
-  <url value="http://highmed.org/fhir/StructureDefinition/extension-ping-response"/>
+  <url value="http://highmed.org/fhir/StructureDefinition/extension-ping-status"/>
   <!-- version managed by bpe -->
   <version value="#{version}" />
   <name value="PingResponse"/>
@@ -124,7 +124,7 @@
     </element>
     <element id="Extension.url">
       <path value="Extension.url"/>
-      <fixedUri value="http://highmed.org/fhir/StructureDefinition/extension-ping-response"/>
+      <fixedUri value="http://highmed.org/fhir/StructureDefinition/extension-ping-status"/>
     </element>
     <element id="Extension.value[x]">
       <path value="Extension.value[x]"/>

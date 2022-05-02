@@ -2,13 +2,14 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_LEADING_TASK;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
-import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_MISSING;
+import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_MISSING;
 
 import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.util.PingResponseGenerator;
+import org.highmed.dsf.bpe.logging.ErrorLogger;
+import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -23,14 +24,16 @@ public class LogNoResponse extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(LogNoResponse.class);
 
-	private final PingResponseGenerator responseGenerator;
+	private final PingStatusGenerator responseGenerator;
+	private final ErrorLogger errorLogger;
 
 	public LogNoResponse(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper, PingResponseGenerator responseGenerator)
+			ReadAccessHelper readAccessHelper, PingStatusGenerator responseGenerator, ErrorLogger errorLogger)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
 
 		this.responseGenerator = responseGenerator;
+		this.errorLogger = errorLogger;
 	}
 
 	@Override
@@ -39,6 +42,7 @@ public class LogNoResponse extends AbstractServiceDelegate
 		super.afterPropertiesSet();
 
 		Objects.requireNonNull(responseGenerator, "responseGenerator");
+		Objects.requireNonNull(errorLogger, "errorLogger");
 	}
 
 	@Override
@@ -57,6 +61,8 @@ public class LogNoResponse extends AbstractServiceDelegate
 		logger.warn("PONG from organization {} (endpoint {}) missing", target.getOrganizationIdentifierValue(),
 				target.getEndpointIdentifierValue());
 
-		task.addOutput(responseGenerator.createOutput(target, CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_MISSING));
+		task.addOutput(
+				responseGenerator.createPingStatusOutput(target, CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_MISSING));
+		errorLogger.logPingStatus(target, CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_MISSING);
 	}
 }

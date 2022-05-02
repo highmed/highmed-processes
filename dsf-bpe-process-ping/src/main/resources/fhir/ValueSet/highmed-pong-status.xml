@@ -1,0 +1,38 @@
+<ValueSet xmlns="http://hl7.org/fhir">
+	<meta>
+		<tag>
+			<system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+			<code value="ALL" />
+		</tag>
+	</meta>
+	<url value="http://highmed.org/fhir/ValueSet/pong-status" />
+	<!-- version managed by bpe -->
+	<version value="#{version}" />
+	<name value="HiGHmed_Pong_Status" />
+	<title value="HiGHmed Pong Status" />
+	<!-- status managed by bpe -->
+	<status value="unknown" />
+	<experimental value="false" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
+	<publisher value="HiGHmed" />
+	<description value="ValueSet with pong status values" />
+	<immutable value="true" />
+	<compose>
+		<include>
+			<system value="http://highmed.org/fhir/CodeSystem/ping-status" />
+			<concept>
+				<code value="not-allowed" />
+				<display value="Not allowed" />
+			</concept>
+			<concept>
+				<code value="not-reachable" />
+				<display value="Not reachable" />
+			</concept>
+			<concept>
+				<code value="pong-send" />
+				<display value="Pong send" />
+			</concept>
+		</include>
+	</compose>
+</ValueSet> 

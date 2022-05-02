@@ -16,7 +16,7 @@
 	<!-- date managed by bpe -->
 	<date value="#{date}" />
 	<publisher value="HiGHmed" />
-	<description value="ValueSet with standard values for the process ping" />
+	<description value="ValueSet with standard values for the process ping/pong" />
 	<immutable value="true" />
 	<compose>
 		<include>

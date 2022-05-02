@@ -16,15 +16,20 @@
 	<!-- date managed by bpe -->
 	<date value="#{date}" />
 	<publisher value="HiGHmed" />
-	<description value="CodeSystem with standard values for the process ping" />
+	<description value="CodeSystem with standard values for the process ping/pong" />
 	<caseSensitive value="true" />
 	<hierarchyMeaning value="grouped-by" />
 	<versionNeeded value="false" />
 	<content value="complete" />
 	<concept>
-		<code value="ping-response" />
-		<display value="Ping Response" />
-		<definition value="Response status of a pinged organization" />
+		<code value="ping-status" />
+		<display value="Ping Status" />
+		<definition value="Ping status of target organization" />
+	</concept>
+	<concept>
+		<code value="pong-status" />
+		<display value="Pong Status" />
+		<definition value="Pong status of target organization" />
 	</concept>
 	<concept>
 		<code value="endpoint-identifier" />

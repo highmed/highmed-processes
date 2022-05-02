@@ -7,7 +7,8 @@ import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_ME
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ENDPOINT_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING;
-import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_REACHABLE;
+import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_REACHABLE;
+import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_SEND;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_VALUE_ENDPOINT_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_VALUE_TARGET_ENDPOINTS;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_VALUE_TIMER_INTERVAL;
@@ -33,7 +34,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
-import org.highmed.dsf.bpe.util.PingResponseGenerator;
+import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.validation.ResourceValidator;
 import org.highmed.dsf.fhir.validation.ResourceValidatorImpl;
 import org.highmed.dsf.fhir.validation.ValidationSupportRule;
@@ -61,11 +62,11 @@ public class TaskProfileTest
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION, RELEASE_DATE,
 			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-task-start-autostart.xml",
 					"highmed-task-stop-autostart.xml", "highmed-task-start-ping-process.xml", "highmed-task-ping.xml",
-					"highmed-task-pong.xml", "highmed-extension-ping-response.xml"),
+					"highmed-task-pong.xml", "highmed-extension-ping-status.xml"),
 			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml", "highmed-ping.xml",
-					"highmed-ping-response.xml"),
+					"highmed-ping-status.xml"),
 			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml", "highmed-ping.xml",
-					"highmed-ping-response.xml"));
+					"highmed-ping-status.xml", "highmed-pong-status.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
 			validationRule.getValidationSupport());
@@ -211,7 +212,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileValidWithBusinessKeyAndPingResponseOutput() throws Exception
+	public void testTaskStartPingProcessProfileValidWithBusinessKeyAndPingStatusOutput() throws Exception
 	{
 		Task task = createValidTaskStartPingProcess();
 		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
@@ -219,8 +220,8 @@ public class TaskProfileTest
 
 		Target target = Target.createBiDirectionalTarget("target.org", "endpoint.target.org",
 				"https://endpoint.target.org/fhir", UUID.randomUUID().toString());
-		task.addOutput(new PingResponseGenerator().createOutput(target,
-				CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_REACHABLE, "some error message"));
+		task.addOutput(new PingStatusGenerator().createPingStatusOutput(target,
+				CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_REACHABLE, "some error message"));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -299,6 +300,22 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
+	@Test
+	public void testTaskPingValidWithPingStatusOutput() throws Exception
+	{
+		Task task = createValidTaskPing();
+		task.addOutput(new PingStatusGenerator().createPongStatusOutput(
+				Target.createBiDirectionalTarget("target.org", "endpoint.target.org",
+						"https://endpoint.target.org/fhir", UUID.randomUUID().toString()),
+				CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_SEND));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
 	private Task createValidTaskPing()
 	{
 		Task task = new Task();
@@ -320,7 +337,7 @@ public class TaskProfileTest
 				.setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY);
 		task.addInput()
 				.setValue(new Reference().setIdentifier(new Identifier()
-						.setSystem(NAMINGSYSTEM_HIGHMED_ENDPOINT_IDENTIFIER).setValue("endpoint.org.com"))
+						.setSystem(NAMINGSYSTEM_HIGHMED_ENDPOINT_IDENTIFIER).setValue("endpoint.target.org"))
 						.setType(ResourceType.Endpoint.name()))
 				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_PING)
 				.setCode(CODESYSTEM_HIGHMED_PING_VALUE_ENDPOINT_IDENTIFIER);

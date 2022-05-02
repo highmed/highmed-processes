@@ -1,5 +1,6 @@
 package org.highmed.dsf.bpe.spring.config;
 
+import org.highmed.dsf.bpe.logging.ErrorLogger;
 import org.highmed.dsf.bpe.message.SendPing;
 import org.highmed.dsf.bpe.message.SendPong;
 import org.highmed.dsf.bpe.message.SendStartPing;
@@ -10,7 +11,7 @@ import org.highmed.dsf.bpe.service.SelectPingTargets;
 import org.highmed.dsf.bpe.service.SelectPongTarget;
 import org.highmed.dsf.bpe.service.StartTimer;
 import org.highmed.dsf.bpe.service.StopTimer;
-import org.highmed.dsf.bpe.util.PingResponseGenerator;
+import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.EndpointProvider;
@@ -62,22 +63,29 @@ public class PingConfig
 	}
 
 	@Bean
-	public PingResponseGenerator responseGenerator()
+	public PingStatusGenerator responseGenerator()
 	{
-		return new PingResponseGenerator();
+		return new PingStatusGenerator();
+	}
+
+	@Bean
+	public ErrorLogger errorLogger()
+	{
+		return new ErrorLogger();
 	}
 
 	@Bean
 	public SendPing sendPing()
 	{
 		return new SendPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext,
-				endpointProvider, responseGenerator());
+				endpointProvider, responseGenerator(), errorLogger());
 	}
 
 	@Bean
 	public SendPong sendPong()
 	{
-		return new SendPong(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
+		return new SendPong(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext,
+				responseGenerator(), errorLogger());
 	}
 
 	@Bean
@@ -95,7 +103,7 @@ public class PingConfig
 	@Bean
 	public LogNoResponse logNoResponse()
 	{
-		return new LogNoResponse(clientProvider, taskHelper, readAccessHelper, responseGenerator());
+		return new LogNoResponse(clientProvider, taskHelper, readAccessHelper, responseGenerator(), errorLogger());
 	}
 
 	@Bean

@@ -1,8 +1,8 @@
 package org.highmed.dsf.bpe.message;
 
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING;
-import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_ALLOWED;
-import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_REACHABLE;
+import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_ALLOWED;
+import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_REACHABLE;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_VALUE_ENDPOINT_IDENTIFIER;
 
 import java.util.Objects;
@@ -12,7 +12,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.util.PingResponseGenerator;
+import org.highmed.dsf.bpe.logging.ErrorLogger;
+import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.EndpointProvider;
@@ -30,16 +31,18 @@ import ca.uhn.fhir.context.FhirContext;
 public class SendPing extends AbstractTaskMessageSend
 {
 	private final EndpointProvider endpointProvider;
-	private final PingResponseGenerator responseGenerator;
+	private final PingStatusGenerator statusGenerator;
+	private final ErrorLogger errorLogger;
 
 	public SendPing(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext,
-			EndpointProvider endpointProvider, PingResponseGenerator responseGenerator)
+			EndpointProvider endpointProvider, PingStatusGenerator statusGenerator, ErrorLogger errorLogger)
 	{
 		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 
 		this.endpointProvider = endpointProvider;
-		this.responseGenerator = responseGenerator;
+		this.statusGenerator = statusGenerator;
+		this.errorLogger = errorLogger;
 	}
 
 	@Override
@@ -48,7 +51,8 @@ public class SendPing extends AbstractTaskMessageSend
 		super.afterPropertiesSet();
 
 		Objects.requireNonNull(endpointProvider, "endpointProvider");
-		Objects.requireNonNull(responseGenerator, "responseGenerator");
+		Objects.requireNonNull(statusGenerator, "statusGenerator");
+		Objects.requireNonNull(errorLogger, "errorLogger");
 	}
 
 	@Override
@@ -68,22 +72,27 @@ public class SendPing extends AbstractTaskMessageSend
 
 		if (task != null)
 		{
-			String responseCode = CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_REACHABLE;
+			String statusCode = CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_REACHABLE;
 			if (exception instanceof WebApplicationException)
 			{
 				WebApplicationException webApplicationException = (WebApplicationException) exception;
 				if (webApplicationException.getResponse() != null && webApplicationException.getResponse()
 						.getStatus() == Response.Status.FORBIDDEN.getStatusCode())
 				{
-					responseCode = CODESYSTEM_HIGHMED_PING_RESPONSE_VALUE_NOT_ALLOWED;
+					statusCode = CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_ALLOWED;
 				}
 			}
 
-			task.addOutput(responseGenerator.createOutput(target, responseCode, createErrorMessage(exception)));
+			String specialErrorMessage = createErrorMessage(exception);
+
+			task.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, specialErrorMessage));
 			updateLeadingTaskInExecutionVariables(task);
+
+			errorLogger.logPingStatus(target, statusCode, specialErrorMessage);
 		}
 
 		super.handleSendTaskError(exception, errorMessage);
+
 	}
 
 	@Override
