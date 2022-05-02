@@ -18,16 +18,19 @@ public class FinalFeasibilityQueryResult
 		this.cohortSize = cohortSize;
 	}
 
+	@JsonProperty("cohortId")
 	public String getCohortId()
 	{
 		return cohortId;
 	}
 
+	@JsonProperty("participatingMedics")
 	public int getParticipatingMedics()
 	{
 		return participatingMedics;
 	}
 
+	@JsonProperty("cohortSize")
 	public int getCohortSize()
 	{
 		return cohortSize;

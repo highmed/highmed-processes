@@ -3,7 +3,6 @@ package org.highmed.dsf.bpe.variable;
 import org.highmed.openehr.model.structure.ResultSet;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class QueryResult
@@ -19,6 +18,11 @@ public class QueryResult
 		if (cohortSize < 0)
 			throw new IllegalArgumentException("cohortSize >= 0 expected");
 
+		return new QueryResult(organizationIdentifier, cohortId, cohortSize, null, null);
+	}
+
+	public static QueryResult mpcCountResult(String organizationIdentifier, String cohortId, int cohortSize)
+	{
 		return new QueryResult(organizationIdentifier, cohortId, cohortSize, null, null);
 	}
 
@@ -44,44 +48,46 @@ public class QueryResult
 		this.resultSetUrl = resultSetUrl;
 	}
 
+	@JsonProperty("organizationIdentifier")
 	public String getOrganizationIdentifier()
 	{
 		return organizationIdentifier;
 	}
 
+	@JsonProperty("cohortId")
 	public String getCohortId()
 	{
 		return cohortId;
 	}
 
+	@JsonProperty("cohortSize")
 	public int getCohortSize()
 	{
 		return cohortSize;
 	}
 
+	@JsonProperty("resultSet")
 	public ResultSet getResultSet()
 	{
 		return resultSet;
 	}
 
+	@JsonProperty("resultSetUrl")
 	public String getResultSetUrl()
 	{
 		return resultSetUrl;
 	}
 
-	@JsonIgnore
 	public boolean isCohortSizeResult()
 	{
 		return resultSet == null && resultSetUrl == null;
 	}
 
-	@JsonIgnore
 	public boolean isIdResultSetResult()
 	{
 		return resultSet != null && resultSetUrl == null;
 	}
 
-	@JsonIgnore
 	public boolean isIdResultSetUrlResult()
 	{
 		return resultSet == null && resultSetUrl != null;

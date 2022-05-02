@@ -32,6 +32,7 @@ public class FinalFeasibilityQueryResults
 			this.results.addAll(results);
 	}
 
+	@JsonProperty("results")
 	public List<FinalFeasibilityQueryResult> getResults()
 	{
 		return Collections.unmodifiableList(results);

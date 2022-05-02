@@ -31,6 +31,7 @@ public class QueryResults
 			this.results.addAll(results);
 	}
 
+	@JsonProperty("results")
 	public List<QueryResult> getResults()
 	{
 		return Collections.unmodifiableList(results);
