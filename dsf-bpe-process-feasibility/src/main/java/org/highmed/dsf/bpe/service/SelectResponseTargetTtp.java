@@ -53,7 +53,7 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate implements 
 		Endpoint endpoint = endpointProvider.getFirstConsortiumEndpoint(
 				NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM, CODESYSTEM_HIGHMED_ORGANIZATION_ROLE,
 				CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_TTP, ttpIdentifier).get();
-		
+
 		Target ttpTarget = Target.createBiDirectionalTarget(ttpIdentifier, getEndpointIdentifierValue(endpoint),
 				endpoint.getAddress(), correlationKey);
 

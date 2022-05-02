@@ -50,7 +50,7 @@ public class SelectMultiMedicResultShareTarget extends AbstractServiceDelegate i
 		Endpoint endpoint = endpointProvider.getFirstConsortiumEndpoint(
 				NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM, CODESYSTEM_HIGHMED_ORGANIZATION_ROLE,
 				CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_MEDIC, identifier).get();
-		
+
 		Target medicTarget = Target.createBiDirectionalTarget(identifier, getEndpointIdentifierValue(endpoint),
 				endpoint.getAddress(), correlationKey);
 
