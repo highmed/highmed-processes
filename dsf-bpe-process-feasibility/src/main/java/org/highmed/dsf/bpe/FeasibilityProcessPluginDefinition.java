@@ -1,5 +1,9 @@
 package org.highmed.dsf.bpe;
 
+import static org.highmed.dsf.bpe.ConstantsFeasibility.PROCESS_NAME_FULL_COMPUTE_FEASIBILITY;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.PROCESS_NAME_FULL_EXECUTE_FEASIBILITY;
+import static org.highmed.dsf.bpe.ConstantsFeasibility.PROCESS_NAME_FULL_REQUEST_FEASIBILITY;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -67,29 +71,29 @@ public class FeasibilityProcessPluginDefinition implements ProcessPluginDefiniti
 	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
 			PropertyResolver resolver)
 	{
+		var c = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
+
 		var aCom = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-computeFeasibility.xml");
 		var aExe = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeFeasibility.xml");
 		var aReq = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-requestFeasibility.xml");
 
-		var cDS = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
-				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
-
-		var sTCom = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-compute-feasibility.xml");
-		var sTErr = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-error-feasibility.xml");
-		var sTExe = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-execute-feasibility.xml");
-		var sTResM = StructureDefinitionResource
+		var sCom = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-compute-feasibility.xml");
+		var sErr = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-error-feasibility.xml");
+		var sExe = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-execute-feasibility.xml");
+		var sResM = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-multi-medic-result-feasibility.xml");
-		var sTReq = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-request-feasibility.xml");
-		var sTResS = StructureDefinitionResource
+		var sReq = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-request-feasibility.xml");
+		var sResS = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-single-medic-result-feasibility.xml");
 
-		var vDS = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+		var v = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
 				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"highmedorg_computeFeasibility/" + VERSION, Arrays.asList(aCom, cDS, sTCom, sTResS, vDS),
-				"highmedorg_executeFeasibility/" + VERSION, Arrays.asList(aExe, cDS, sTExe, vDS),
-				"highmedorg_requestFeasibility/" + VERSION, Arrays.asList(aReq, cDS, sTReq, sTResM, sTErr, vDS));
+				PROCESS_NAME_FULL_COMPUTE_FEASIBILITY + "/" + VERSION, Arrays.asList(c, aCom, sCom, sResS, v),
+				PROCESS_NAME_FULL_EXECUTE_FEASIBILITY + "/" + VERSION, Arrays.asList(c, aExe, sExe, v),
+				PROCESS_NAME_FULL_REQUEST_FEASIBILITY + "/" + VERSION, Arrays.asList(c, aReq, sReq, sResM, sErr, v));
 
 		return ResourceProvider.read(VERSION, RELEASE_DATE,
 				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,

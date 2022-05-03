@@ -1,5 +1,8 @@
 package org.highmed.dsf.bpe;
 
+import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROCESS_NAME_FULL_EXECUTE_UPDATE_RESOURCES;
+import static org.highmed.dsf.bpe.ConstantsUpdateResources.PROCESS_NAME_FULL_REQUEST_UPDATE_RESOURCES;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -56,18 +59,21 @@ public class UpdateResourcesProcessPluginDefinition implements ProcessPluginDefi
 	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
 			PropertyResolver resolver)
 	{
+		var c = CodeSystemResource.file("fhir/CodeSystem/highmed-update-resources.xml");
+
 		var aExec = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeUpdateResources.xml");
 		var aReq = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-requestUpdateResources.xml");
-		var c = CodeSystemResource.file("fhir/CodeSystem/highmed-update-resources.xml");
+
 		var sExec = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-execute-update-resources.xml");
 		var sReq = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-request-update-resources.xml");
+
 		var v = ValueSetResource.file("fhir/ValueSet/highmed-update-resources.xml");
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"highmedorg_executeUpdateResources/" + VERSION, Arrays.asList(aExec, c, sExec, v),
-				"highmedorg_requestUpdateResources/" + VERSION, Arrays.asList(aReq, c, sReq, v));
+				PROCESS_NAME_FULL_EXECUTE_UPDATE_RESOURCES + "/" + VERSION, Arrays.asList(c, aExec, sExec, v),
+				PROCESS_NAME_FULL_REQUEST_UPDATE_RESOURCES + "/" + VERSION, Arrays.asList(c, aReq, sReq, v));
 
 		return ResourceProvider.read(VERSION, RELEASE_DATE,
 				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,

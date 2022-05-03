@@ -1,8 +1,8 @@
 package org.highmed.dsf.bpe;
 
-import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_FULL_NAME_PING;
-import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_FULL_NAME_PING_AUTOSTART;
-import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_FULL_NAME_PONG;
+import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_NAME_FULL_PING;
+import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART;
+import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_NAME_FULL_PONG;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -67,14 +67,14 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var cPing = CodeSystemResource.file("fhir/CodeSystem/highmed-ping.xml");
 		var cPingStatus = CodeSystemResource.file("fhir/CodeSystem/highmed-ping-status.xml");
 
-		var ePingStatus = StructureDefinitionResource
+		var sPingStatus = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-extension-ping-status.xml");
-		var tPing = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-ping.xml");
-		var tPong = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-pong.xml");
-		var tStartPing = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-start-ping.xml");
-		var tStartPingAutostart = StructureDefinitionResource
+		var sPing = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-ping.xml");
+		var sPong = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-pong.xml");
+		var sStartPing = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-start-ping.xml");
+		var sStartPingAutostart = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-start-ping-autostart.xml");
-		var tStopPingAutostart = StructureDefinitionResource
+		var sStopPingAutostart = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-stop-ping-autostart.xml");
 
 		var vPing = ValueSetResource.file("fhir/ValueSet/highmed-ping.xml");
@@ -82,12 +82,12 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var vPongStatus = ValueSetResource.file("fhir/ValueSet/highmed-pong-status.xml");
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				PROCESS_FULL_NAME_PING + "/" + VERSION,
-				Arrays.asList(aPing, cPing, cPingStatus, ePingStatus, tStartPing, tPong, vPing, vPingStatus),
-				PROCESS_FULL_NAME_PING_AUTOSTART + "/" + VERSION,
-				Arrays.asList(aPingAutostart, cPing, tStartPingAutostart, tStopPingAutostart, vPing),
-				PROCESS_FULL_NAME_PONG + "/" + VERSION,
-				Arrays.asList(aPong, cPing, cPingStatus, ePingStatus, tPing, vPing, vPongStatus));
+				PROCESS_NAME_FULL_PING + "/" + VERSION,
+				Arrays.asList(aPing, cPing, cPingStatus, sPingStatus, sStartPing, sPong, vPing, vPingStatus),
+				PROCESS_NAME_FULL_PING_AUTOSTART + "/" + VERSION,
+				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, vPing),
+				PROCESS_NAME_FULL_PONG + "/" + VERSION,
+				Arrays.asList(aPong, cPing, cPingStatus, sPingStatus, sPing, vPing, vPongStatus));
 
 		return ResourceProvider.read(VERSION, RELEASE_DATE,
 				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,

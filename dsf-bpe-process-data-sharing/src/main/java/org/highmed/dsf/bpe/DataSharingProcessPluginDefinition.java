@@ -1,5 +1,9 @@
 package org.highmed.dsf.bpe;
 
+import static org.highmed.dsf.bpe.ConstantsDataSharing.PROCESS_NAME_FULL_COMPUTE_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.PROCESS_NAME_FULL_EXECUTE_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.PROCESS_NAME_FULL_REQUEST_DATA_SHARING;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -57,31 +61,31 @@ public class DataSharingProcessPluginDefinition implements ProcessPluginDefiniti
 	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
 			PropertyResolver resolver)
 	{
+		var c = CodeSystemResource.file("fhir/CodeSystem/highmed-data-sharing.xml");
+
 		var aCom = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-computeDataSharing.xml");
 		var aExe = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-executeDataSharing.xml");
 		var aReq = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-requestDataSharing.xml");
 
-		var cDS = CodeSystemResource.file("fhir/CodeSystem/highmed-data-sharing.xml");
-
 		var sRSDS = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-research-study-data-sharing.xml");
-		var sTCom = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-compute-data-sharing.xml");
-		var sTExe = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-execute-data-sharing.xml");
-		var sTErrM = StructureDefinitionResource
+		var sCom = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-compute-data-sharing.xml");
+		var sExe = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-execute-data-sharing.xml");
+		var sErrM = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-multi-medic-error-data-sharing.xml");
-		var sTResM = StructureDefinitionResource
+		var sResM = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-multi-medic-result-data-sharing.xml");
-		var sTReq = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-request-data-sharing.xml");
-		var sTResS = StructureDefinitionResource
+		var sReq = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-request-data-sharing.xml");
+		var sResS = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-single-medic-result-data-sharing.xml");
 
-		var vDS = ValueSetResource.file("fhir/ValueSet/highmed-data-sharing.xml");
+		var v = ValueSetResource.file("fhir/ValueSet/highmed-data-sharing.xml");
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"highmedorg_computeDataSharing/" + VERSION, Arrays.asList(aCom, cDS, sTCom, sTResS, vDS),
-				"highmedorg_executeDataSharing/" + VERSION, Arrays.asList(aExe, cDS, sTExe, sRSDS, vDS),
-				"highmedorg_requestDataSharing/" + VERSION,
-				Arrays.asList(aReq, cDS, sTReq, sRSDS, sTResM, sTErrM, vDS));
+				PROCESS_NAME_FULL_COMPUTE_DATA_SHARING + "/" + VERSION, Arrays.asList(c, aCom, sCom, sResS, v),
+				PROCESS_NAME_FULL_EXECUTE_DATA_SHARING + "/" + VERSION, Arrays.asList(c, aExe, sExe, sRSDS, v),
+				PROCESS_NAME_FULL_REQUEST_DATA_SHARING + "/" + VERSION,
+				Arrays.asList(c, aReq, sReq, sRSDS, sResM, sErrM, v));
 
 		return ResourceProvider.read(VERSION, RELEASE_DATE,
 				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,
