@@ -114,6 +114,20 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
+	@Test
+	public void testTaskStartAutostartProcessProfileNotValidTimerInterval() throws Exception
+	{
+		Task task = createValidTaskStartAutostartProcess();
+		task.addInput().setValue(new StringType("invalid_duration")).getType().addCoding()
+				.setSystem(CODESYSTEM_HIGHMED_PING).setCode(CODESYSTEM_HIGHMED_PING_VALUE_TIMER_INTERVAL);
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(1, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
 	private Task createValidTaskStartAutostartProcess()
 	{
 		Task task = new Task();
