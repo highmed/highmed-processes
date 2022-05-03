@@ -7,10 +7,10 @@
 	</meta>
 	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="startAutostartPingProcessMessage" />
+			<valueString value="startPingAutostart" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-autostart-ping-process|#{version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping-autostart|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -27,10 +27,10 @@
 	</extension>
 	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="stopAutostartPingProcessMessage" />
+			<valueString value="stopPingAutostart" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-stop-autostart-ping-process|#{version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-stop-ping-autostart|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -45,11 +45,11 @@
 			</valueCoding>
 		</extension>
 	</extension>
-	<url value="http://highmed.org/bpe/Process/autostartPing" />
+	<url value="http://highmed.org/bpe/Process/pingAutostart" />
 	<!-- version managed by bpe -->
 	<version value="#{version}" />
-	<name value="Autostart Ping" />
-	<title value="Autostart PING process" />
+	<name value="Ping Autostart" />
+	<title value="PING Autostart process" />
 	<subtitle value="Autostart Communication Testing Process" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />

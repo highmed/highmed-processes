@@ -5,10 +5,10 @@
       <code value="ALL" />
     </tag>
   </meta>
-  <url value="http://highmed.org/fhir/StructureDefinition/task-start-autostart-ping-process" />
+  <url value="http://highmed.org/fhir/StructureDefinition/task-start-ping-autostart" />
   <!-- version managed by bpe -->
   <version value="#{version}" />
-  <name value="TaskStartAutostartPingProcess" />
+  <name value="TaskStartPingAutostart" />
   <!-- status managed by bpe -->
   <status value="unknown" />
   <experimental value="false" />
@@ -23,7 +23,7 @@
   <differential>
     <element id="Task.instantiatesUri">
       <path value="Task.instantiatesUri" />
-      <fixedUri value="http://highmed.org/bpe/Process/autostartPing/#{version}" />
+      <fixedUri value="http://highmed.org/bpe/Process/pingAutostart/#{version}" />
     </element>
     <element id="Task.input">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -42,7 +42,7 @@
     </element>
     <element id="Task.input:message-name.value[x]">
       <path value="Task.input.value[x]" />
-      <fixedString value="startAutostartPingProcessMessage" />
+      <fixedString value="startPingAutostart" />
     </element>
     <element id="Task.input:business-key">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">

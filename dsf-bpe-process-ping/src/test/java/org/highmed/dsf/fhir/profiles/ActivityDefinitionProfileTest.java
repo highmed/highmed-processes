@@ -49,8 +49,8 @@ public class ActivityDefinitionProfileTest
 	@Test
 	public void testAutostartValid() throws Exception
 	{
-		ActivityDefinition ad = validationRule
-				.readActivityDefinition(Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-autostart.xml"));
+		ActivityDefinition ad = validationRule.readActivityDefinition(
+				Paths.get("src/main/resources/fhir/ActivityDefinition/highmed-ping-autostart.xml"));
 
 		ValidationResult result = resourceValidator.validate(ad);
 		ValidationSupportRule.logValidationMessages(logger, result);

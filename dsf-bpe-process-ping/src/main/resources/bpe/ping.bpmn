@@ -11,7 +11,7 @@
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/pong/#{version}</camunda:inputParameter>
-          <camunda:inputParameter name="messageName">pingMessage</camunda:inputParameter>
+          <camunda:inputParameter name="messageName">ping</camunda:inputParameter>
           <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-ping|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -69,8 +69,8 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1mpgmm5" sourceRef="BoundaryEvent_0s1l6j2" targetRef="logNoResponse" />
   </bpmn:process>
-  <bpmn:message id="Message_10o3b8y" name="pongMessage" />
-  <bpmn:message id="Message_1pklz6t" name="startPingProcessMessage" />
+  <bpmn:message id="Message_10o3b8y" name="pong" />
+  <bpmn:message id="Message_1pklz6t" name="startPing" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_ping">
       <bpmndi:BPMNEdge id="Flow_1mpgmm5_di" bpmnElement="Flow_1mpgmm5">

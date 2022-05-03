@@ -5,10 +5,10 @@
       <code value="ALL" />
     </tag>
   </meta>
-  <url value="http://highmed.org/fhir/StructureDefinition/task-start-ping-process" />
+  <url value="http://highmed.org/fhir/StructureDefinition/task-start-ping" />
   <!-- version managed by bpe -->
   <version value="#{version}" />
-  <name value="TaskStartProcess" />
+  <name value="TaskStartPing" />
   <!-- status managed by bpe -->
   <status value="unknown" />
   <experimental value="false" />
@@ -42,7 +42,7 @@
     </element>
     <element id="Task.input:message-name.value[x]">
       <path value="Task.input.value[x]" />
-      <fixedString value="startPingProcessMessage" />
+      <fixedString value="startPing" />
     </element>
     <element id="Task.input:correlation-key">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">

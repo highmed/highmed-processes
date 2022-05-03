@@ -18,14 +18,14 @@ import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_PING_PROCES
 import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_PONG_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_PONG_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_PONG_TASK;
-import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_AUTOSTART;
-import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_AUTOSTART_MESSAGE_NAME;
-import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_PING;
+import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_PING_AUTOSTART;
+import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_PING_AUTOSTART_MESSAGE_NAME;
+import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_PING_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_START_PING_MESSAGE_NAME;
-import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_STOP_AUTOSTART;
-import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_STOP_AUTOSTART_MESSAGE_NAME;
-import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_STOP_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION;
+import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_STOP_PING_AUTOSTART;
+import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_STOP_PING_AUTOSTART_MESSAGE_NAME;
+import static org.highmed.dsf.bpe.ConstantsPing.PROFILE_HIGHMED_TASK_STOP_PING_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION;
 import static org.highmed.dsf.bpe.PingProcessPluginDefinition.RELEASE_DATE;
 import static org.highmed.dsf.bpe.PingProcessPluginDefinition.VERSION;
 import static org.junit.Assert.assertEquals;
@@ -60,9 +60,9 @@ public class TaskProfileTest
 
 	@ClassRule
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION, RELEASE_DATE,
-			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-task-start-autostart.xml",
-					"highmed-task-stop-autostart.xml", "highmed-task-start-ping-process.xml", "highmed-task-ping.xml",
-					"highmed-task-pong.xml", "highmed-extension-ping-status.xml"),
+			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-extension-ping-status.xml", "highmed-task-ping.xml",
+					"highmed-task-pong.xml", "highmed-task-start-ping.xml", "highmed-task-start-ping-autostart.xml",
+					"highmed-task-stop-ping-autostart.xml"),
 			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml", "highmed-ping.xml",
 					"highmed-ping-status.xml"),
 			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml", "highmed-ping.xml",
@@ -131,8 +131,8 @@ public class TaskProfileTest
 	private Task createValidTaskStartAutostartProcess()
 	{
 		Task task = new Task();
-		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_START_AUTOSTART);
-		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_START_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION);
+		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_START_PING_AUTOSTART);
+		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_START_PING_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION);
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
@@ -141,7 +141,7 @@ public class TaskProfileTest
 		task.getRestriction().addRecipient().setType(ResourceType.Organization.name()).getIdentifier()
 				.setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue("TTP");
 
-		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_START_AUTOSTART_MESSAGE_NAME)).getType()
+		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_START_PING_AUTOSTART_MESSAGE_NAME)).getType()
 				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY);
@@ -164,8 +164,8 @@ public class TaskProfileTest
 	private Task createValidTaskStopAutostartProcess()
 	{
 		Task task = new Task();
-		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_STOP_AUTOSTART);
-		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_STOP_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION);
+		task.getMeta().addProfile(PROFILE_HIGHMED_TASK_STOP_PING_AUTOSTART);
+		task.setInstantiatesUri(PROFILE_HIGHMED_TASK_STOP_PING_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION);
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
@@ -174,8 +174,8 @@ public class TaskProfileTest
 		task.getRestriction().addRecipient().setType(ResourceType.Organization.name()).getIdentifier()
 				.setSystem(NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER).setValue("TTP");
 
-		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_STOP_AUTOSTART_MESSAGE_NAME)).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
+		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_STOP_PING_AUTOSTART_MESSAGE_NAME)).getType()
+				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
 				.setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY);
 

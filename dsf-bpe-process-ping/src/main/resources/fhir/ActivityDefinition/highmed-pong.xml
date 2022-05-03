@@ -7,7 +7,7 @@
 	</meta>
 	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="pingMessage" />
+			<valueString value="ping" />
 		</extension>
 		<extension url="task-profile">
 			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-ping|#{version}" />

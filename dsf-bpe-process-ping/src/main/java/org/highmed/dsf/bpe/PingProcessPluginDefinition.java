@@ -1,5 +1,9 @@
 package org.highmed.dsf.bpe;
 
+import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_FULL_NAME_PING;
+import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_FULL_NAME_PING_AUTOSTART;
+import static org.highmed.dsf.bpe.ConstantsPing.PROCESS_FULL_NAME_PONG;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +47,7 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 	@Override
 	public Stream<String> getBpmnFiles()
 	{
-		return Stream.of("bpe/autostart.bpmn", "bpe/ping.bpmn", "bpe/pong.bpmn");
+		return Stream.of("bpe/ping-autostart.bpmn", "bpe/ping.bpmn", "bpe/pong.bpmn");
 	}
 
 	@Override
@@ -56,34 +60,34 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
 			PropertyResolver resolver)
 	{
-		var aAutostart = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-autostart.xml");
 		var aPing = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-ping.xml");
+		var aPingAutostart = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-ping-autostart.xml");
 		var aPong = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-pong.xml");
-
-		var tStartAutostart = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-task-start-autostart.xml");
-		var tStopAutostart = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-task-stop-autostart.xml");
-		var tStartPing = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-task-start-ping-process.xml");
-		var tPong = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-pong.xml");
-		var tPing = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-ping.xml");
-		var ePingStatus = StructureDefinitionResource
-				.file("fhir/StructureDefinition/highmed-extension-ping-status.xml");
 
 		var cPing = CodeSystemResource.file("fhir/CodeSystem/highmed-ping.xml");
 		var cPingStatus = CodeSystemResource.file("fhir/CodeSystem/highmed-ping-status.xml");
+
+		var ePingStatus = StructureDefinitionResource
+				.file("fhir/StructureDefinition/highmed-extension-ping-status.xml");
+		var tPing = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-ping.xml");
+		var tPong = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-pong.xml");
+		var tStartPing = StructureDefinitionResource.file("fhir/StructureDefinition/highmed-task-start-ping.xml");
+		var tStartPingAutostart = StructureDefinitionResource
+				.file("fhir/StructureDefinition/highmed-task-start-ping-autostart.xml");
+		var tStopPingAutostart = StructureDefinitionResource
+				.file("fhir/StructureDefinition/highmed-task-stop-ping-autostart.xml");
 
 		var vPing = ValueSetResource.file("fhir/ValueSet/highmed-ping.xml");
 		var vPingStatus = ValueSetResource.file("fhir/ValueSet/highmed-ping-status.xml");
 		var vPongStatus = ValueSetResource.file("fhir/ValueSet/highmed-pong-status.xml");
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				"highmedorg_autostartPing/" + VERSION,
-				Arrays.asList(aAutostart, tStartAutostart, tStopAutostart, cPing, vPing), "highmedorg_ping/" + VERSION,
-				Arrays.asList(aPing, tStartPing, ePingStatus, tPong, cPing, cPingStatus, vPing, vPingStatus),
-				"highmedorg_pong/" + VERSION,
-				Arrays.asList(aPong, tPing, ePingStatus, cPing, cPingStatus, vPing, vPongStatus));
+				PROCESS_FULL_NAME_PING + "/" + VERSION,
+				Arrays.asList(aPing, cPing, cPingStatus, ePingStatus, tStartPing, tPong, vPing, vPingStatus),
+				PROCESS_FULL_NAME_PING_AUTOSTART + "/" + VERSION,
+				Arrays.asList(aPingAutostart, cPing, tStartPingAutostart, tStopPingAutostart, vPing),
+				PROCESS_FULL_NAME_PONG + "/" + VERSION,
+				Arrays.asList(aPong, cPing, cPingStatus, ePingStatus, tPing, vPing, vPongStatus));
 
 		return ResourceProvider.read(VERSION, RELEASE_DATE,
 				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,
