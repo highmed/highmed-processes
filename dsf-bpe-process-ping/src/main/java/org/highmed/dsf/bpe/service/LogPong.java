@@ -2,7 +2,7 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
-import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PING_SEND;
+import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_RECEIVED;
 
 import java.util.Objects;
 
@@ -51,7 +51,7 @@ public class LogPong extends AbstractServiceDelegate
 
 		Task leading = getLeadingTaskFromExecutionVariables();
 		leading.addOutput(
-				responseGenerator.createPingStatusOutput(target, CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PING_SEND));
+				responseGenerator.createPingStatusOutput(target, CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_RECEIVED));
 		updateLeadingTaskInExecutionVariables(leading);
 
 		Targets targets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);

@@ -1,7 +1,8 @@
 <ValueSet xmlns="http://hl7.org/fhir">
 	<meta>
 		<tag>
-			<system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+			<system
+				value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
 			<code value="ALL" />
 		</tag>
 	</meta>
@@ -22,10 +23,6 @@
 		<include>
 			<system value="http://highmed.org/fhir/CodeSystem/ping-status" />
 			<concept>
-				<code value="missing" />
-				<display value="Missing" />
-			</concept>
-			<concept>
 				<code value="not-allowed" />
 				<display value="Not allowed" />
 			</concept>
@@ -34,8 +31,12 @@
 				<display value="Not reachable" />
 			</concept>
 			<concept>
-				<code value="ping-send" />
-				<display value="Ping send" />
+				<code value="pong-missing" />
+				<display value="Pong missing" />
+			</concept>
+			<concept>
+				<code value="pong-received" />
+				<display value="Pong received" />
 			</concept>
 		</include>
 	</compose>

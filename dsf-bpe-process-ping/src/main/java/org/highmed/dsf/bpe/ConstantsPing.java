@@ -44,10 +44,10 @@ public interface ConstantsPing
 	String CODESYSTEM_HIGHMED_PING_VALUE_TIMER_INTERVAL = "timer-interval";
 
 	String CODESYSTEM_HIGHMED_PING_STATUS = "http://highmed.org/fhir/CodeSystem/ping-status";
-	String CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_MISSING = "pong-missing";
 	String CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_ALLOWED = "not-allowed";
 	String CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_REACHABLE = "not-reachable";
-	String CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PING_SEND = "ping-send";
+	String CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_MISSING = "pong-missing";
+	String CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
 	String CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_SEND = "pong-send";
 
 	String EXTENSION_URL_PING_STATUS = "http://highmed.org/fhir/StructureDefinition/extension-ping-status";

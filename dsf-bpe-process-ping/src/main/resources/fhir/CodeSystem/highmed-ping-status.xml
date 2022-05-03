@@ -22,11 +22,6 @@
 	<versionNeeded value="false" />
 	<content value="complete" />
 	<concept>
-		<code value="missing" />
-		<display value="Missing" />
-		<definition value="No pong received from target organization" />
-	</concept>
-	<concept>
 		<code value="not-allowed" />
 		<display value="Not allowed" />
 		<definition value="Not allowed to start pong-process at target organization" />
@@ -37,9 +32,14 @@
 		<definition value="Ping could not be sent to target organization" />
 	</concept>
 	<concept>
-		<code value="ping-send" />
-		<display value="Ping send" />
-		<definition value="Ping successfully sent to target organization" />
+		<code value="pong-missing" />
+		<display value="Pong missing" />
+		<definition value="No pong received from target organization" />
+	</concept>
+	<concept>
+		<code value="pong-received" />
+		<display value="Pong received" />
+		<definition value="Pong received from target organization" />
 	</concept>
 	<concept>
 		<code value="pong-send" />
