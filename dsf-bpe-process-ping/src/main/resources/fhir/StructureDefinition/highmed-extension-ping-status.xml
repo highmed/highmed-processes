@@ -1,0 +1,134 @@
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <tag>
+      <system value="http://highmed.org/fhir/CodeSystem/read-access-tag"/>
+      <code value="ALL"/>
+    </tag>
+  </meta>
+  <url value="http://highmed.org/fhir/StructureDefinition/extension-ping-status"/>
+  <!-- version managed by bpe -->
+  <version value="#{version}" />
+  <name value="PingResponse"/>
+  <!-- status managed by bpe -->
+  <status value="unknown" />
+  <experimental value="false" />
+  <!-- date managed by bpe -->
+  <date value="#{date}" />
+  <fhirVersion value="4.0.1"/>
+  <kind value="complex-type"/>
+  <abstract value="false"/>
+  <context>
+    <type value="element"/>
+    <expression value="Task.output"/>
+  </context>
+  <type value="Extension"/>
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Extension"/>
+  <derivation value="constraint"/>
+  <differential>
+    <element id="Extension.extension">
+      <path value="Extension.extension"/>
+      <slicing>
+        <discriminator>
+          <type value="value"/>
+          <path value="url"/>
+        </discriminator>
+        <rules value="open"/>
+      </slicing>
+      <min value="3"/>
+    </element>
+    <element id="Extension.extension:correlation-key">
+      <path value="Extension.extension"/>
+      <sliceName value="correlation-key"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:correlation-key.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="correlation-key"/>
+    </element>
+    <element id="Extension.extension:correlation-key.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <min value="1"/>
+      <type>
+        <code value="string"/>
+      </type>
+    </element>
+    <element id="Extension.extension:organization-identifier">
+      <path value="Extension.extension"/>
+      <sliceName value="organization-identifier"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:organization-identifier.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="organization-identifier"/>
+    </element>
+    <element id="Extension.extension:organization-identifier.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <min value="1"/>
+      <type>
+        <code value="Identifier"/>
+      </type>
+    </element>
+    <element id="Extension.extension:organization-identifier.value[x].system">
+      <path value="Extension.extension.value[x].system"/>
+      <min value="1"/>
+      <fixedUri value="http://highmed.org/sid/organization-identifier"/>
+    </element>
+    <element id="Extension.extension:organization-identifier.value[x].value">
+      <path value="Extension.extension.value[x].value"/>
+      <min value="1"/>
+    </element>
+    <element id="Extension.extension:endpoint-identifier">
+      <path value="Extension.extension"/>
+      <sliceName value="endpoint-identifier"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:endpoint-identifier.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="endpoint-identifier"/>
+    </element>
+    <element id="Extension.extension:endpoint-identifier.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <min value="1"/>
+      <type>
+        <code value="Identifier"/>
+      </type>
+    </element>
+    <element id="Extension.extension:endpoint-identifier.value[x].system">
+      <path value="Extension.extension.value[x].system"/>
+      <min value="1"/>
+      <fixedUri value="http://highmed.org/sid/endpoint-identifier"/>
+    </element>
+    <element id="Extension.extension:endpoint-identifier.value[x].value">
+      <path value="Extension.extension.value[x].value"/>
+      <min value="1"/>
+    </element>
+    <element id="Extension.extension:error-message">
+      <path value="Extension.extension"/>
+      <sliceName value="error-message"/>
+      <min value="0"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:error-message.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="error-message"/>
+    </element>
+    <element id="Extension.extension:error-message.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <min value="1"/>
+      <type>
+        <code value="string"/>
+      </type>
+    </element>
+    <element id="Extension.url">
+      <path value="Extension.url"/>
+      <fixedUri value="http://highmed.org/fhir/StructureDefinition/extension-ping-status"/>
+    </element>
+    <element id="Extension.value[x]">
+      <path value="Extension.value[x]"/>
+      <max value="0"/>
+    </element>
+  </differential>
+</StructureDefinition>

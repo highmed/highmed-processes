@@ -7,10 +7,10 @@
 	</meta>
 	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="startPingProcessMessage" />
+			<valueString value="startPing" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping-process|#{version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -27,7 +27,7 @@
 	</extension>
 	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="pongMessage" />
+			<valueString value="pong" />
 		</extension>
 		<extension url="task-profile">
 			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-pong|#{version}" />

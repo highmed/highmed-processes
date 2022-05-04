@@ -1,0 +1,69 @@
+<ActivityDefinition xmlns="http://hl7.org/fhir">
+	<meta>
+		<tag>
+			<system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+			<code value="ALL" />
+		</tag>
+	</meta>
+	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
+		<extension url="message-name">
+			<valueString value="startPingAutostart" />
+		</extension>
+		<extension url="task-profile">
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping-autostart|#{version}" />
+		</extension>
+		<extension url="requester">
+			<valueCoding>
+				<system value="http://highmed.org/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
+		<extension url="recipient">
+			<valueCoding>
+				<system value="http://highmed.org/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
+	</extension>
+	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
+		<extension url="message-name">
+			<valueString value="stopPingAutostart" />
+		</extension>
+		<extension url="task-profile">
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-stop-ping-autostart|#{version}" />
+		</extension>
+		<extension url="requester">
+			<valueCoding>
+				<system value="http://highmed.org/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
+		<extension url="recipient">
+			<valueCoding>
+				<system value="http://highmed.org/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
+	</extension>
+	<url value="http://highmed.org/bpe/Process/pingAutostart" />
+	<!-- version managed by bpe -->
+	<version value="#{version}" />
+	<name value="Ping Autostart" />
+	<title value="PING Autostart process" />
+	<subtitle value="Autostart Communication Testing Process" />
+	<!-- status managed by bpe -->
+	<status value="unknown" />
+	<experimental value="false" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
+	<publisher value="HiGHmed" />
+	<contact>
+		<name value="HiGHmed" />
+		<telecom>
+			<system value="email" />
+			<value value="pmo@highmed.org" />
+		</telecom>
+	</contact>
+	<description value="Process to autostart sending PING messages to remote Organizations and to receive corresponding PONG messages in a predefined interval" />
+	<kind value="Task" />
+</ActivityDefinition>

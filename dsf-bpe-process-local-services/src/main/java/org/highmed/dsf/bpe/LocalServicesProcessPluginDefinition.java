@@ -1,5 +1,7 @@
 package org.highmed.dsf.bpe;
 
+import static org.highmed.dsf.bpe.ConstantsLocalServices.PROCESS_NAME_FULL_LOCAL_SERVICES_INTEGRATION;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -69,17 +71,19 @@ public class LocalServicesProcessPluginDefinition implements ProcessPluginDefini
 	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
 			PropertyResolver resolver)
 	{
-		var aL = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-localServicesIntegration.xml");
-		var sTL = StructureDefinitionResource
+		var c = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
+
+		var a = ActivityDefinitionResource.file("fhir/ActivityDefinition/highmed-localServicesIntegration.xml");
+
+		var s = StructureDefinitionResource
 				.file("fhir/StructureDefinition/highmed-task-local-services-integration.xml");
 
-		var cDS = CodeSystemResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
-				"http://highmed.org/fhir/CodeSystem/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
-		var vDS = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
+		var v = ValueSetResource.dependency(DEPENDENCY_DATA_SHARING_NAME_AND_VERSION,
 				"http://highmed.org/fhir/ValueSet/data-sharing", DEPENDENCY_DATA_SHARING_VERSION);
 
 		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map
-				.of("highmedorg_localServicesIntegration/" + VERSION, Arrays.asList(aL, sTL, cDS, vDS));
+				.of(PROCESS_NAME_FULL_LOCAL_SERVICES_INTEGRATION + "/" + VERSION, Arrays.asList(c, a, s, v));
 
 		return ResourceProvider.read(VERSION, RELEASE_DATE,
 				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,
