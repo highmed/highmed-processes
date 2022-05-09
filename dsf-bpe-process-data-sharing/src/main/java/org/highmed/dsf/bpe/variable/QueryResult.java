@@ -3,6 +3,7 @@ package org.highmed.dsf.bpe.variable;
 import org.highmed.openehr.model.structure.ResultSet;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class QueryResult
@@ -78,16 +79,19 @@ public class QueryResult
 		return resultSetUrl;
 	}
 
+	@JsonIgnore
 	public boolean isCohortSizeResult()
 	{
 		return resultSet == null && resultSetUrl == null;
 	}
 
+	@JsonIgnore
 	public boolean isIdResultSetResult()
 	{
 		return resultSet != null && resultSetUrl == null;
 	}
 
+	@JsonIgnore
 	public boolean isIdResultSetUrlResult()
 	{
 		return resultSet == null && resultSetUrl != null;

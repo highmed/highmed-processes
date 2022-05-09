@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SecretKeyWrapper
@@ -48,6 +49,7 @@ public class SecretKeyWrapper
 		this.algorithm = algorithm;
 	}
 
+	@JsonIgnore
 	public SecretKey getSecretKey()
 	{
 		return new SecretKeySpec(bytes, algorithm);
