@@ -7,12 +7,13 @@
   </meta>
   <url value="http://highmed.org/fhir/StructureDefinition/task-execute-feasibility" />
   <!-- version managed by bpe -->
-  <version value="${version}" />
+  <version value="#{version}" />
   <name value="TaskExecuteFeasibility" />
   <!-- status managed by bpe -->
   <status value="unknown" />
   <experimental value="false" />
-  <date value="2021-08-24" />
+  <!-- date managed by bpe -->
+  <date value="#{date}" />
   <fhirVersion value="4.0.1" />
   <kind value="resource" />
   <abstract value="false" />
@@ -22,7 +23,7 @@
   <differential>
     <element id="Task.instantiatesUri">
       <path value="Task.instantiatesUri" />
-      <fixedUri value="http://highmed.org/bpe/Process/executeFeasibility/${version}" />
+      <fixedUri value="http://highmed.org/bpe/Process/executeFeasibility/#{version}" />
     </element>
     <element id="Task.input">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -75,7 +76,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:research-study.type.coding">
@@ -86,7 +87,7 @@
     <element id="Task.input:research-study.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:research-study.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -116,7 +117,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:needs-record-linkage.type.coding">
@@ -127,7 +128,7 @@
     <element id="Task.input:needs-record-linkage.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:needs-record-linkage.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -156,7 +157,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:needs-consent-check.type.coding">
@@ -167,7 +168,7 @@
     <element id="Task.input:needs-consent-check.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:needs-consent-check.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -196,7 +197,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/feasibility" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
       </binding>
     </element>
     <element id="Task.input:bloom-filter-configuration.type.coding">
@@ -207,7 +208,7 @@
     <element id="Task.input:bloom-filter-configuration.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://highmed.org/fhir/CodeSystem/feasibility" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/data-sharing" />
     </element>
     <element id="Task.input:bloom-filter-configuration.type.coding.code">
       <path value="Task.input.type.coding.code" />

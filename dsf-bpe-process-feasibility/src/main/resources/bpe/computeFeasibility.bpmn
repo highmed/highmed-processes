@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1yff9tp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
-  <bpmn:process id="highmedorg_computeFeasibility" isExecutable="true" camunda:versionTag="0.5.0">
+  <bpmn:process id="highmedorg_computeFeasibility" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:subProcess id="SubProcess_1gopxt4">
       <bpmn:incoming>SequenceFlow_1lfe4wr</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0xxpamp</bpmn:outgoing>
@@ -42,12 +42,12 @@
       <bpmn:outgoing>SequenceFlow_01pjftq</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_08676wn" />
     </bpmn:startEvent>
-    <bpmn:endEvent id="EndEventSuccess" name="send final result to leading MeDIC">
+    <bpmn:endEvent id="EndEventSuccess" name="send final results to leading MeDIC">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibility/0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibility/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">resultMultiMedicFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility|0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-result-feasibility|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1r6dq8y</bpmn:incoming>
@@ -66,7 +66,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0t4lx4v" name="else" sourceRef="ExclusiveGateway_07e71aa" targetRef="calculateMultimedicCohortSize">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0calilw" name="needs record linkage" sourceRef="ExclusiveGateway_07e71aa" targetRef="downloadResultSets">
+    <bpmn:sequenceFlow id="SequenceFlow_0calilw" name="needs record linkage" sourceRef="ExclusiveGateway_07e71aa" targetRef="downloadResults">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsRecordLinkage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="executeRecordLink" name="execute record link" camunda:class="org.highmed.dsf.bpe.service.ExecuteRecordLink">
@@ -87,8 +87,8 @@
       <bpmn:incoming>Flow_1ixeke2</bpmn:incoming>
       <bpmn:outgoing>Flow_1k0sqwo</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0zp76kj" sourceRef="downloadResultSets" targetRef="executeRecordLink" />
-    <bpmn:serviceTask id="downloadResultSets" name="download ResultSets" camunda:class="org.highmed.dsf.bpe.service.DownloadResultSets">
+    <bpmn:sequenceFlow id="SequenceFlow_0zp76kj" sourceRef="downloadResults" targetRef="executeRecordLink" />
+    <bpmn:serviceTask id="downloadResults" name="download results" camunda:class="org.highmed.dsf.bpe.service.DownloadResults">
       <bpmn:incoming>SequenceFlow_0calilw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0zp76kj</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -96,15 +96,15 @@
     <bpmn:endEvent id="EndEventError" name="send error to leading MeDIC">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibility/0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/requestFeasibility/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">errorMultiMedicFeasibilityMessage</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility|0.5.0</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-multi-medic-error-feasibility|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1tmnvhl</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_19y5diw" messageRef="Message_0kix95m" camunda:class="org.highmed.dsf.bpe.message.SendMultiMedicErrors" />
     </bpmn:endEvent>
-    <bpmn:serviceTask id="checkComputedResults" name="check computed result" camunda:class="org.highmed.dsf.bpe.service.CheckTtpComputedMultiMedicResults">
+    <bpmn:serviceTask id="checkComputedResults" name="check computed results" camunda:class="org.highmed.dsf.bpe.service.CheckTtpComputedMultiMedicResults">
       <bpmn:incoming>Flow_1k0sqwo</bpmn:incoming>
       <bpmn:outgoing>Flow_1r6dq8y</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -245,7 +245,7 @@
       <bpmndi:BPMNShape id="ServiceTask_0uk3eyz_di" bpmnElement="selectResponseTargetMedic">
         <dc:Bounds x="1540" y="202" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_09wyp6g_di" bpmnElement="downloadResultSets">
+      <bpmndi:BPMNShape id="ServiceTask_09wyp6g_di" bpmnElement="downloadResults">
         <dc:Bounds x="1230" y="86" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1hmug5i_di" bpmnElement="EndEventError">

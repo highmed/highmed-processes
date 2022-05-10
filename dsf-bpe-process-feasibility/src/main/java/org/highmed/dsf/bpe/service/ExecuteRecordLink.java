@@ -1,7 +1,7 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 
 import java.util.List;
 import java.util.Map;
@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResult;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResults;
 import org.highmed.dsf.bpe.variables.FinalFeasibilityQueryResultsValues;
@@ -52,11 +52,10 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
-		Map<String, List<FeasibilityQueryResult>> byCohortId = results.getResults().stream()
-				.collect(Collectors.groupingBy(FeasibilityQueryResult::getCohortId));
+		Map<String, List<QueryResult>> byCohortId = results.getResults().stream()
+				.collect(Collectors.groupingBy(QueryResult::getCohortId));
 
 		FederatedMatcherImpl<PersonWithMdat> matcher = createMatcher();
 
@@ -68,7 +67,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 	}
 
 	private FinalFeasibilityQueryResult match(FederatedMatcherImpl<PersonWithMdat> matcher, String cohortId,
-			List<FeasibilityQueryResult> results)
+			List<QueryResult> results)
 	{
 		logger.debug("Matching results for cohort {}", cohortId);
 
@@ -81,7 +80,7 @@ public class ExecuteRecordLink extends AbstractServiceDelegate
 				toInt(matchedPersons.size()));
 	}
 
-	private List<PersonWithMdat> translate(FeasibilityQueryResult result)
+	private List<PersonWithMdat> translate(QueryResult result)
 	{
 		return translator.translate(result.getOrganizationIdentifier(), result.getResultSet());
 	}

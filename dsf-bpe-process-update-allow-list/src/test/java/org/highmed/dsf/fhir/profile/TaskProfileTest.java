@@ -11,6 +11,7 @@ import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.PROFILE_HIGHMED_TASK_
 import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.PROFILE_HIGHMED_TASK_UPDATE_ALLOW_LIST;
 import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.PROFILE_HIGHMED_TASK_UPDATE_ALLOW_LIST_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsUpdateAllowList.PROFILE_HIGHMED_TASK_UPDATE_ALLOW_LIST_PROCESS_URI_AND_LATEST_VERSION;
+import static org.highmed.dsf.bpe.UpdateAllowListProcessPluginDefinition.RELEASE_DATE;
 import static org.highmed.dsf.bpe.UpdateAllowListProcessPluginDefinition.VERSION;
 import static org.junit.Assert.assertEquals;
 
@@ -41,7 +42,7 @@ public class TaskProfileTest
 	private static final Logger logger = LoggerFactory.getLogger(TaskProfileTest.class);
 
 	@ClassRule
-	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION,
+	public static final ValidationSupportRule validationRule = new ValidationSupportRule(VERSION, RELEASE_DATE,
 			Arrays.asList("highmed-task-base-0.5.0.xml", "highmed-task-update-allow-list.xml",
 					"highmed-task-download-allow-list.xml"),
 			Arrays.asList("highmed-read-access-tag-0.5.0.xml", "highmed-bpmn-message-0.5.0.xml",

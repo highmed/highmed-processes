@@ -10,7 +10,7 @@
 			<valueString value="updateAllowListMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-update-allow-list|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-update-allow-list|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -39,14 +39,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/updateAllowList" />
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="#{version}" />
 	<name value="UpdateAllowList" />
 	<title value="Update Allow List" />
 	<subtitle value="Update Allow List Bundle Process" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-08-24" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

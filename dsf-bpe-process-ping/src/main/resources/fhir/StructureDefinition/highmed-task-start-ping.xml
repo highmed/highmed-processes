@@ -1,0 +1,199 @@
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <tag>
+      <system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+      <code value="ALL" />
+    </tag>
+  </meta>
+  <url value="http://highmed.org/fhir/StructureDefinition/task-start-ping" />
+  <!-- version managed by bpe -->
+  <version value="#{version}" />
+  <name value="TaskStartPing" />
+  <!-- status managed by bpe -->
+  <status value="unknown" />
+  <experimental value="false" />
+  <!-- date managed by bpe -->
+  <date value="#{date}" />
+  <fhirVersion value="4.0.1" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="Task" />
+  <baseDefinition value="http://highmed.org/fhir/StructureDefinition/task-base" />
+  <derivation value="constraint" />
+  <differential>
+    <element id="Task.instantiatesUri">
+      <path value="Task.instantiatesUri" />
+      <fixedUri value="http://highmed.org/bpe/Process/ping/#{version}" />
+    </element>
+    <element id="Task.input">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
+      <path value="Task.input" />
+      <min value="1" />
+      <max value="3" />
+    </element>
+    <element id="Task.input:message-name">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
+      <path value="Task.input" />
+      <sliceName value="message-name" />
+    </element>
+    <element id="Task.input:message-name.value[x]">
+      <path value="Task.input.value[x]" />
+      <fixedString value="startPing" />
+    </element>
+    <element id="Task.input:correlation-key">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
+      <path value="Task.input" />
+      <sliceName value="correlation-key" />
+      <max value="0" />
+    </element>
+    <element id="Task.input:target-endpoints">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
+      <path value="Task.input" />
+      <sliceName value="target-endpoints" />
+      <min value="0" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:target-endpoints.type">
+      <path value="Task.input.type" />
+      <binding>
+        <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+          <valueString value="TaskInputParameterType" />
+        </extension>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping" />
+      </binding>
+    </element>
+    <element id="Task.input:target-endpoints.type.coding">
+      <path value="Task.input.type.coding" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:target-endpoints.type.coding.system">
+      <path value="Task.input.type.coding.system" />
+      <min value="1" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/ping" />
+    </element>
+    <element id="Task.input:target-endpoints.type.coding.code">
+      <path value="Task.input.type.coding.code" />
+      <min value="1" />
+      <fixedCode value="target-endpoints" />
+    </element>
+    <element id="Task.input:target-endpoints.value[x]">
+      <path value="Task.input.value[x]" />
+      <type>
+        <code value="string" />
+      </type>
+    </element>
+    <element id="Task.output:business-key-out">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
+      <path value="Task.output" />
+      <sliceName value="business-key-out" />
+      <max value="1" />
+    </element>
+    <element id="Task.output:business-key-out.type">
+      <path value="Task.output.type" />
+      <binding>
+        <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+          <valueString value="TaskOutputParameterType" />
+        </extension>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/bpmn-message" />
+      </binding>
+    </element>
+    <element id="Task.output:business-key-out.type.coding">
+      <path value="Task.output.type.coding" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="Task.output:business-key-out.type.coding.system">
+      <path value="Task.output.type.coding.system" />
+      <min value="1" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/bpmn-message" />
+    </element>
+    <element id="Task.output:business-key-out.type.coding.code">
+      <path value="Task.output.type.coding.code" />
+      <min value="1" />
+      <fixedCode value="business-key" />
+    </element>
+    <element id="Task.output:business-key-out.value[x]">
+      <path value="Task.output.value[x]" />
+      <type>
+        <code value="string" />
+      </type>
+    </element>
+    <element id="Task.output:ping-status">
+      <path value="Task.output"/>
+      <sliceName value="ping-status"/>
+    </element>
+    <element id="Task.output:ping-status.extension">
+      <path value="Task.output.extension" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="url" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+    </element>
+    <element id="Task.output:ping-status.extension:ping-status-extension">
+      <path value="Task.output.extension" />
+      <sliceName value="ping-status-extension" />
+      <min value="1" />
+      <type>
+        <code value="Extension" />
+        <profile value="http://highmed.org/fhir/StructureDefinition/extension-ping-status" />
+      </type>
+    </element>
+    <element id="Task.output:ping-status.type">
+      <path value="Task.output.type"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping"/>
+      </binding>
+    </element>
+    <element id="Task.output:ping-status.type.coding">
+      <path value="Task.output.type.coding"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.output:ping-status.type.coding.system">
+      <path value="Task.output.type.coding.system"/>
+      <min value="1"/>
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/ping"/>
+    </element>
+    <element id="Task.output:ping-status.type.coding.code">
+      <path value="Task.output.type.coding.code"/>
+      <min value="1"/>
+      <fixedCode value="ping-status"/>
+    </element>
+    <element id="Task.output:ping-status.value[x]">
+      <path value="Task.output.value[x]"/>
+      <type>
+        <code value="Coding"/>
+      </type>
+    </element>
+    <element id="Task.output:ping-status.value[x].system">
+      <path value="Task.output.value[x].system"/>
+      <min value="1"/>
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/ping-status"/>
+    </element>
+    <element id="Task.output:ping-status.value[x].code">
+      <path value="Task.output.value[x].code"/>
+      <min value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping-status"/>
+      </binding>
+    </element>
+  </differential>
+</StructureDefinition>

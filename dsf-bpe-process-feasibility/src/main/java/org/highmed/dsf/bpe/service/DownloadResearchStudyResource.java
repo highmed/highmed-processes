@@ -1,16 +1,18 @@
 package org.highmed.dsf.bpe.service;
 
-import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_MEDIC;
+import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_MEDIC;
 import static org.highmed.dsf.bpe.ConstantsBase.EXTENSION_HIGHMED_PARTICIPATING_MEDIC;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONSORTIUM_IDENTIFIER;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -62,7 +64,10 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 		IdType researchStudyId = getResearchStudyId(task);
 		FhirWebserviceClient client = getFhirWebserviceClientProvider().getLocalWebserviceClient();
 		ResearchStudy researchStudy = getResearchStudy(researchStudyId, client);
-		researchStudy = addMissingOrganizations(researchStudy, client);
+		String consortiumIdentifier = getConsortiumIdentifier(task);
+
+		researchStudy = checkConsortiumAffiliationAndAddMissingOrganizations(researchStudy, consortiumIdentifier,
+				client);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_RESEARCH_STUDY, researchStudy);
 
 		boolean needsConsentCheck = getNeedsConsentCheck(task);
@@ -75,8 +80,8 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 	private IdType getResearchStudyId(Task task)
 	{
 		Reference researchStudyReference = getTaskHelper()
-				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_RESEARCH_STUDY_REFERENCE)
+				.getInputParameterReferenceValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_RESEARCH_STUDY_REFERENCE)
 				.findFirst()
 				.orElseThrow(() -> new IllegalArgumentException("ResearchStudy reference is not set in task with id='"
 						+ task.getId() + "', this error should " + "have been caught by resource validation"));
@@ -98,23 +103,61 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 		}
 	}
 
-	private ResearchStudy addMissingOrganizations(ResearchStudy researchStudy, FhirWebserviceClient client)
+	private ResearchStudy checkConsortiumAffiliationAndAddMissingOrganizations(ResearchStudy researchStudy,
+			String consortiumIdentifier, FhirWebserviceClient client)
 	{
-		List<String> identifiers = organizationProvider
-				.getOrganizationsByType(CODESYSTEM_HIGHMED_ORGANIZATION_TYPE_VALUE_MEDIC)
+		List<String> identifiersConsortium = getOrganizationIdentifiersOfConsortium(consortiumIdentifier);
+		List<String> identifiersResearchStudy = getOrganizationIdentifiersOfResearchStudy(researchStudy);
+
+		checkConsortiumAffiliation(identifiersConsortium, identifiersResearchStudy, researchStudy.getId(),
+				consortiumIdentifier);
+
+		return addMissingOrganizations(identifiersConsortium, identifiersResearchStudy, researchStudy, client);
+	}
+
+	private List<String> getOrganizationIdentifiersOfConsortium(String consortiumIdentifier)
+	{
+		return organizationProvider
+				.getOrganizationsByConsortiumAndRole(consortiumIdentifier,
+						CODESYSTEM_HIGHMED_ORGANIZATION_ROLE_VALUE_MEDIC)
 				.flatMap(o -> o.getIdentifier().stream())
 				.filter(i -> NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER.equals(i.getSystem())).map(i -> i.getValue())
 				.collect(Collectors.toList());
+	}
 
-		List<String> existingIdentifiers = researchStudy.getExtensionsByUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC)
-				.stream().filter(e -> e.getValue() instanceof Reference).map(e -> (Reference) e.getValue())
+	private List<String> getOrganizationIdentifiersOfResearchStudy(ResearchStudy researchStudy)
+	{
+		return researchStudy.getExtensionsByUrl(EXTENSION_HIGHMED_PARTICIPATING_MEDIC).stream()
+				.filter(e -> e.getValue() instanceof Reference).map(e -> (Reference) e.getValue())
 				.map(r -> r.getIdentifier().getValue()).collect(Collectors.toList());
+	}
 
-		identifiers.removeAll(existingIdentifiers);
-
-		if (!identifiers.isEmpty())
+	private void checkConsortiumAffiliation(List<String> identifiersConsortium, List<String> identifiersResearchStudy,
+			String researchStudyId, String consortiumIdentifier)
+	{
+		List<String> identifiersWrongConsortium = new ArrayList<>(identifiersResearchStudy);
+		identifiersWrongConsortium.removeAll(identifiersConsortium);
+		if (!identifiersWrongConsortium.isEmpty())
 		{
-			identifiers.forEach(identifier ->
+			logger.warn(
+					"Organizations with identifiers='{}' are part of feasibility research study with id='{}' but do "
+							+ "not belong to the consortium with identifier='{}'",
+					identifiersWrongConsortium, researchStudyId, consortiumIdentifier);
+
+			throw new RuntimeException("Organizations with identifiers='" + identifiersWrongConsortium
+					+ "' are part of feasibility research study with id='" + researchStudyId
+					+ "' but do not belong to the consortium with identifier='" + consortiumIdentifier + "'");
+		}
+	}
+
+	private ResearchStudy addMissingOrganizations(List<String> identifiersConsortium,
+			List<String> identifiersResearchStudy, ResearchStudy researchStudy, FhirWebserviceClient client)
+	{
+		identifiersConsortium.removeAll(identifiersResearchStudy);
+
+		if (!identifiersConsortium.isEmpty())
+		{
+			identifiersConsortium.forEach(identifier ->
 			{
 				logger.warn(
 						"Adding missing organization with identifier='{}' to feasibility research study with id='{}'",
@@ -140,25 +183,35 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 		}
 		catch (Exception e)
 		{
-			logger.warn("Error while updating ResearchStudy resoruce: " + e.getMessage(), e);
+			logger.warn("Error while updating ResearchStudy resource: " + e.getMessage());
 			throw e;
 		}
+	}
+
+	private String getConsortiumIdentifier(Task task)
+	{
+		return getTaskHelper()
+				.getFirstInputParameterReferenceValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_CONSORTIUM_IDENTIFIER)
+				.orElseThrow(() -> new IllegalArgumentException("ConsortiumIdentifier is not set in task with id='"
+						+ task.getId() + "', this error should have been caught by resource validation"))
+				.getIdentifier().getValue();
 	}
 
 	private boolean getNeedsConsentCheck(Task task)
 	{
 		return getTaskHelper()
-				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_CONSENT_CHECK)
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_CONSENT_CHECK)
 				.orElseThrow(() -> new IllegalArgumentException("NeedsConsentCheck boolean is not set in task with id='"
-						+ task.getId() + "', this error should " + "have been caught by resource validation"));
+						+ task.getId() + "', this error should have been caught by resource validation"));
 	}
 
 	private boolean getNeedsRecordLinkageCheck(Task task)
 	{
 		return getTaskHelper()
-				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_FEASIBILITY,
-						CODESYSTEM_HIGHMED_FEASIBILITY_VALUE_NEEDS_RECORD_LINKAGE)
+				.getFirstInputParameterBooleanValue(task, CODESYSTEM_HIGHMED_DATA_SHARING,
+						CODESYSTEM_HIGHMED_DATA_SHARING_VALUE_NEEDS_RECORD_LINKAGE)
 				.orElseThrow(
 						() -> new IllegalArgumentException("NeedsRecordLinkage boolean is not set in task with id='"
 								+ task.getId() + "', this error should " + "have been caught by resource validation"));

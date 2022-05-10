@@ -2,12 +2,14 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_BUNDLE_ID;
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS;
+import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ENDPOINT_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.CODESYSTEM_HIGHMED_UPDATE_RESOURCE;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE;
 import static org.highmed.dsf.bpe.ConstantsUpdateResources.CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_ORGANIZATION_IDENTIFIER_SEARCH_PARAMETER;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,7 @@ import org.highmed.dsf.fhir.variables.Target;
 import org.highmed.dsf.fhir.variables.Targets;
 import org.highmed.dsf.fhir.variables.TargetsValues;
 import org.hl7.fhir.r4.model.Endpoint;
+import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
@@ -85,11 +88,22 @@ public class SelectResourceAndTargets extends AbstractServiceDelegate implements
 				.collect(Collectors.toList());
 
 		List<Target> targets = targetIdentifierSearchParameters.stream()
-				.flatMap(organizationProvider::searchRemoteOrganizationsIdentifiers)
-				.map(identifier -> Target.createUniDirectionalTarget(identifier.getValue(),
-						endpointProvider.getFirstDefaultEndpoint(identifier.getValue()).filter(Endpoint::hasAddress)
-								.map(Endpoint::getAddress).orElse(null)))
-				.filter(t -> t.getTargetEndpointUrl() != null).collect(Collectors.toList());
+				.flatMap(organizationProvider::searchRemoteOrganizationsIdentifiers).map(identifier ->
+				{
+					Optional<Endpoint> endpoint = endpointProvider.getFirstDefaultEndpoint(identifier.getValue());
+					return Target.createUniDirectionalTarget(identifier.getValue(),
+							getEndpointIdentifierValue(endpoint).orElse(null),
+							endpoint.filter(Endpoint::hasAddress).map(Endpoint::getAddress).orElse(null));
+				}).filter(t -> t.getEndpointIdentifierValue() != null && t.getEndpointUrl() != null)
+				.collect(Collectors.toList());
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(new Targets(targets)));
+	}
+
+	private Optional<String> getEndpointIdentifierValue(Optional<Endpoint> endpoint)
+	{
+		return endpoint
+				.flatMap(e -> e.getIdentifier().stream()
+						.filter(i -> NAMINGSYSTEM_HIGHMED_ENDPOINT_IDENTIFIER.equals(i.getSystem())).findFirst())
+				.map(Identifier::getValue);
 	}
 }

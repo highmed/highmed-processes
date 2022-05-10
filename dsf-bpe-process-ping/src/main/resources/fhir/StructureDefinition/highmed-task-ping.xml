@@ -7,12 +7,13 @@
   </meta>
   <url value="http://highmed.org/fhir/StructureDefinition/task-ping" />
   <!-- version managed by bpe -->
-  <version value="${version}" />
+  <version value="#{version}" />
   <name value="TaskPing" />
   <!-- status managed by bpe -->
   <status value="unknown" />
   <experimental value="false" />
-  <date value="2021-08-24" />
+  <!-- date managed by bpe -->
+  <date value="#{date}" />
   <fhirVersion value="4.0.1" />
   <kind value="resource" />
   <abstract value="false" />
@@ -22,15 +23,15 @@
   <differential>
     <element id="Task.instantiatesUri">
       <path value="Task.instantiatesUri" />
-      <fixedUri value="http://highmed.org/bpe/Process/pong/${version}" />
+      <fixedUri value="http://highmed.org/bpe/Process/pong/#{version}" />
     </element>
     <element id="Task.input">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
         <valueString value="Parameter" />
       </extension>
       <path value="Task.input" />
-      <min value="3" />
-      <max value="3" />
+      <min value="4" />
+      <max value="4" />
     </element>
     <element id="Task.input:message-name">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -41,7 +42,7 @@
     </element>
     <element id="Task.input:message-name.value[x]">
       <path value="Task.input.value[x]" />
-      <fixedString value="pingMessage" />
+      <fixedString value="ping" />
     </element>
     <element id="Task.input:business-key">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -58,6 +59,127 @@
       <path value="Task.input" />
       <sliceName value="correlation-key" />
       <min value="1" />
+    </element>
+    <element id="Task.input:endpoint-identifier">
+      <path value="Task.input" />
+      <sliceName value="endpoint-identifier" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:endpoint-identifier.type">
+      <path value="Task.input.type" />
+      <binding>
+        <strength value="required" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping" />
+      </binding>
+    </element>
+    <element id="Task.input:endpoint-identifier.type.coding">
+      <path value="Task.input.type.coding" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:endpoint-identifier.type.coding.system">
+      <path value="Task.input.type.coding.system" />
+      <min value="1" />
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/ping" />
+    </element>
+    <element id="Task.input:endpoint-identifier.type.coding.code">
+      <path value="Task.input.type.coding.code" />
+      <min value="1" />
+      <fixedCode value="endpoint-identifier" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x]">
+      <path value="Task.input.value[x]" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://highmed.org/fhir/StructureDefinition/endpoint" />
+      </type>
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].reference">
+      <path value="Task.input.value[x].reference" />
+      <min value="0" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].type">
+      <path value="Task.input.value[x].type" />
+      <max value="1" />
+      <fixedUri value="Endpoint" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].identifier">
+      <path value="Task.input.value[x].identifier" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].identifier.system">
+      <path value="Task.input.value[x].identifier.system" />
+      <min value="1" />
+      <fixedUri value="http://highmed.org/sid/endpoint-identifier" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].identifier.value">
+      <path value="Task.input.value[x].identifier.value" />
+      <min value="1" />
+    </element>
+    <element id="Task.output:pong-status">
+      <path value="Task.output"/>
+      <sliceName value="pong-status"/>
+    </element>
+    <element id="Task.output:pong-status.extension">
+      <path value="Task.output.extension" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="url" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+    </element>
+    <element id="Task.output:pong-status.extension:pong-status-extension">
+      <path value="Task.output.extension" />
+      <sliceName value="pong-status-extension" />
+      <min value="1" />
+      <type>
+        <code value="Extension" />
+        <profile value="http://highmed.org/fhir/StructureDefinition/extension-ping-status" />
+      </type>
+    </element>
+    <element id="Task.output:pong-status.type">
+      <path value="Task.output.type"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping"/>
+      </binding>
+    </element>
+    <element id="Task.output:pong-status.type.coding">
+      <path value="Task.output.type.coding"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.output:pong-status.type.coding.system">
+      <path value="Task.output.type.coding.system"/>
+      <min value="1"/>
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/ping"/>
+    </element>
+    <element id="Task.output:pong-status.type.coding.code">
+      <path value="Task.output.type.coding.code"/>
+      <min value="1"/>
+      <fixedCode value="pong-status"/>
+    </element>
+    <element id="Task.output:pong-status.value[x]">
+      <path value="Task.output.value[x]"/>
+      <type>
+        <code value="Coding"/>
+      </type>
+    </element>
+    <element id="Task.output:pong-status.value[x].system">
+      <path value="Task.output.value[x].system"/>
+      <min value="1"/>
+      <fixedUri value="http://highmed.org/fhir/CodeSystem/ping-status"/>
+    </element>
+    <element id="Task.output:pong-status.value[x].code">
+      <path value="Task.output.value[x].code"/>
+      <min value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://highmed.org/fhir/ValueSet/pong-status"/>
+      </binding>
     </element>
   </differential>
 </StructureDefinition>

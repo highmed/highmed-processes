@@ -10,7 +10,7 @@
 			<valueString value="requestUpdateResourcesMessage" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-update-resources|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-request-update-resources|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -39,14 +39,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/requestUpdateResources" />
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="#{version}" />
 	<name value="RequestUpdateResources" />
 	<title value="Request Update of Resources" />
 	<subtitle value="Process to Request a Bundle Download" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-08-24" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

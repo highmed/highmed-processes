@@ -1,0 +1,26 @@
+<ValueSet xmlns="http://hl7.org/fhir">
+	<meta>
+		<tag>
+			<system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+			<code value="ALL" />
+		</tag>
+	</meta>
+	<url value="http://highmed.org/fhir/ValueSet/ping" />
+	<!-- version managed by bpe -->
+	<version value="#{version}" />
+	<name value="HiGHmed_Ping" />
+	<title value="HiGHmed Ping" />
+	<!-- status managed by bpe -->
+	<status value="unknown" />
+	<experimental value="false" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
+	<publisher value="HiGHmed" />
+	<description value="ValueSet with standard values for the process ping/pong" />
+	<immutable value="true" />
+	<compose>
+		<include>
+			<system value="http://highmed.org/fhir/CodeSystem/ping" />
+		</include>
+	</compose>
+</ValueSet> 

@@ -1,0 +1,49 @@
+<CodeSystem xmlns="http://hl7.org/fhir">
+	<meta>
+		<tag>
+			<system value="http://highmed.org/fhir/CodeSystem/read-access-tag" />
+			<code value="ALL" />
+		</tag>
+	</meta>
+	<url value="http://highmed.org/fhir/CodeSystem/ping" />
+	<!-- version managed by bpe -->
+	<version value="#{version}" />
+	<name value="HiGHmed_Ping" />
+	<title value="HiGHmed Ping" />
+	<!-- status managed by bpe -->
+	<status value="unknown" />
+	<experimental value="false" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
+	<publisher value="HiGHmed" />
+	<description value="CodeSystem with standard values for the process ping/pong" />
+	<caseSensitive value="true" />
+	<hierarchyMeaning value="grouped-by" />
+	<versionNeeded value="false" />
+	<content value="complete" />
+	<concept>
+		<code value="ping-status" />
+		<display value="Ping Status" />
+		<definition value="Ping status of target organization" />
+	</concept>
+	<concept>
+		<code value="pong-status" />
+		<display value="Pong Status" />
+		<definition value="Pong status of target organization" />
+	</concept>
+	<concept>
+		<code value="endpoint-identifier" />
+		<display value="Endpoint Identifier" />
+		<definition value="Identifier of endpoint expecting pong (response) message" />
+	</concept>
+	<concept>
+		<code value="target-endpoints" />
+		<display value="Target Endpoints" />
+		<definition value="Ping target endpoints, search query resulting in match or include results with Endpoint resources" />
+	</concept>
+	<concept>
+		<code value="timer-interval" />
+		<display value="Timer Interval" />
+		<definition value="Interval between two autostarts of the ping process" />
+	</concept>
+</CodeSystem> 

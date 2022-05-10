@@ -2,10 +2,10 @@ package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsBase.OPENEHR_MIMETYPE_JSON;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
-import static org.highmed.dsf.bpe.ConstantsFeasibility.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG;
+import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_VARIABLE_QUERY_RESULTS;
 import static org.highmed.dsf.bpe.ConstantsFeasibility.PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI;
-import static org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnlyImpl.FILTER_ON_IDAT_NOT_FOUND_EXCEPTION;
+import static org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumnsImpl.FILTER_ON_IDAT_NOT_FOUND_EXCEPTION;
 
 import java.security.Key;
 import java.util.List;
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.variables.BloomFilterConfig;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResult;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResults;
-import org.highmed.dsf.bpe.variables.FeasibilityQueryResultsValues;
+import org.highmed.dsf.bpe.variable.BloomFilterConfig;
+import org.highmed.dsf.bpe.variable.QueryResult;
+import org.highmed.dsf.bpe.variable.QueryResults;
+import org.highmed.dsf.bpe.variable.QueryResultsValues;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
@@ -29,8 +29,8 @@ import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGenerator;
 import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGeneratorImpl;
 import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGeneratorImpl.FieldBloomFilterLengths;
 import org.highmed.pseudonymization.bloomfilter.RecordBloomFilterGeneratorImpl.FieldWeights;
-import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnly;
-import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpRbfOnlyImpl;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns;
+import org.highmed.pseudonymization.translation.ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumnsImpl;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ResourceType;
@@ -84,22 +84,22 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		FeasibilityQueryResults results = (FeasibilityQueryResults) execution
-				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
+		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
 		String securityIdentifier = getSecurityIdentifier(execution);
 
 		BloomFilterConfig bloomFilterConfig = (BloomFilterConfig) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_BLOOM_FILTER_CONFIG);
 
-		ResultSetTranslatorToTtpRbfOnly resultSetTranslator = createResultSetTranslator(bloomFilterConfig);
+		ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns resultSetTranslator = createResultSetTranslator(
+				bloomFilterConfig);
 
-		List<FeasibilityQueryResult> translatedResults = results.getResults().stream()
+		List<QueryResult> translatedResults = results.getResults().stream()
 				.map(result -> translateAndCreateBinary(resultSetTranslator, result, securityIdentifier))
 				.collect(Collectors.toList());
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
-				FeasibilityQueryResultsValues.create(new FeasibilityQueryResults(translatedResults)));
+				QueryResultsValues.create(new QueryResults(translatedResults)));
 	}
 
 	private String getSecurityIdentifier(DelegateExecution execution)
@@ -112,9 +112,10 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 			return (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER);
 	}
 
-	protected ResultSetTranslatorToTtpRbfOnly createResultSetTranslator(BloomFilterConfig bloomFilterConfig)
+	protected ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns createResultSetTranslator(
+			BloomFilterConfig bloomFilterConfig)
 	{
-		return new ResultSetTranslatorToTtpRbfOnlyImpl(ehrIdColumnPath,
+		return new ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumnsImpl(ehrIdColumnPath,
 				createRecordBloomFilterGenerator(bloomFilterConfig.getPermutationSeed(),
 						bloomFilterConfig.getHmacSha2Key(), bloomFilterConfig.getHmacSha3Key()),
 				masterPatientIndexClient, FILTER_ON_IDAT_NOT_FOUND_EXCEPTION);
@@ -128,16 +129,18 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 						bouncyCastleProvider));
 	}
 
-	private FeasibilityQueryResult translateAndCreateBinary(ResultSetTranslatorToTtpRbfOnly resultSetTranslator,
-			FeasibilityQueryResult result, String ttpIdentifier)
+	private QueryResult translateAndCreateBinary(
+			ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns resultSetTranslator, QueryResult result,
+			String ttpIdentifier)
 	{
 		ResultSet translatedResultSet = translate(resultSetTranslator, result.getResultSet());
 		String resultSetUrl = saveResultSetAsBinaryForTtp(translatedResultSet, ttpIdentifier);
 
-		return FeasibilityQueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSetUrl);
+		return QueryResult.idResult(result.getOrganizationIdentifier(), result.getCohortId(), resultSetUrl);
 	}
 
-	private ResultSet translate(ResultSetTranslatorToTtpRbfOnly resultSetTranslator, ResultSet resultSet)
+	private ResultSet translate(ResultSetTranslatorToTtpCreateRbfOnlyDropOtherColumns resultSetTranslator,
+			ResultSet resultSet)
 	{
 		try
 		{
@@ -167,10 +170,10 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 		{
 			return openEhrObjectMapper.writeValueAsBytes(resultSet);
 		}
-		catch (JsonProcessingException e)
+		catch (JsonProcessingException exception)
 		{
-			logger.warn("Error while serializing ResultSet: " + e.getMessage(), e);
-			throw new RuntimeException(e);
+			logger.warn("Error while serializing ResultSet: " + exception.getMessage());
+			throw new RuntimeException(exception);
 		}
 	}
 
@@ -180,11 +183,11 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 		{
 			return getFhirWebserviceClientProvider().getLocalWebserviceClient().withMinimalReturn().create(binary);
 		}
-		catch (Exception e)
+		catch (Exception exception)
 		{
 			logger.debug("Binary to create {}", FhirContext.forR4().newJsonParser().encodeResourceToString(binary));
-			logger.warn("Error while creating Binary resoruce: " + e.getMessage(), e);
-			throw e;
+			logger.warn("Error while creating Binary resource: " + exception.getMessage());
+			throw exception;
 		}
 	}
 }

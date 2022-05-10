@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1flneil" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
+  <bpmn:process id="highmedorg_requestDataSharing" isExecutable="true" camunda:versionTag="#{version}">
+    <bpmn:sequenceFlow id="Flow_0dd6nmz" sourceRef="StartEvent" targetRef="downloadResearchStudyResource" />
+    <bpmn:sequenceFlow id="Flow_06otxko" sourceRef="downloadResearchStudyResource" targetRef="selectRequestTargetsAndGenerateKeys" />
+    <bpmn:startEvent id="StartEvent" name="start">
+      <bpmn:outgoing>Flow_0dd6nmz</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_18bbyt6" messageRef="Message_1oeg3sw" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="downloadResearchStudyResource" name="download research study resource" camunda:class="org.highmed.dsf.bpe.service.DownloadResearchStudyResource">
+      <bpmn:incoming>Flow_0dd6nmz</bpmn:incoming>
+      <bpmn:outgoing>Flow_06otxko</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0cx3xe1" sourceRef="selectRequestTargetsAndGenerateKeys" targetRef="sendCorreltationKeysToTTP" />
+    <bpmn:sendTask id="sendRequestToMedics" name="send request to medics" camunda:class="org.highmed.dsf.bpe.message.SendMedicRequest">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/executeDataSharing/#{version}</camunda:inputParameter>
+          <camunda:inputParameter name="messageName">executeDataSharingMessage</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-execute-data-sharing|#{version}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_18ie7l6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lw96cm</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${targets.entries}" camunda:elementVariable="target" />
+    </bpmn:sendTask>
+    <bpmn:intermediateCatchEvent id="receiveMultiMediclResultFromTtp" name="receive multi MeDIC results from TTP">
+      <bpmn:incoming>Flow_1q5jnli</bpmn:incoming>
+      <bpmn:outgoing>Flow_1gf3n6o</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0ox92uc" messageRef="Message_1a3ewlk" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="receiveErrorFromTtp" name="receive error from TTP">
+      <bpmn:incoming>Flow_1harl90</bpmn:incoming>
+      <bpmn:outgoing>Flow_1id9r0h</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1romt26" messageRef="Message_0j6r7o2" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:eventBasedGateway id="Gateway_160gkf1">
+      <bpmn:incoming>Flow_1lw96cm</bpmn:incoming>
+      <bpmn:outgoing>Flow_1q5jnli</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1harl90</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:serviceTask id="checkResults" name="check results" camunda:class="org.highmed.dsf.bpe.service.CheckMedicMultiMedicResults">
+      <bpmn:incoming>Flow_1m59ov0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rwo9pn</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="handleError" name="handle error" camunda:class="org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults">
+      <bpmn:incoming>Flow_1id9r0h</bpmn:incoming>
+      <bpmn:outgoing>Flow_1s74o06</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0nlbalq">
+      <bpmn:incoming>Flow_1s74o06</bpmn:incoming>
+      <bpmn:incoming>Flow_1rnnd6d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0amk6ah</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="EndEvent" name="success">
+      <bpmn:incoming>Flow_0amk6ah</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1q5jnli" sourceRef="Gateway_160gkf1" targetRef="receiveMultiMediclResultFromTtp" />
+    <bpmn:sequenceFlow id="Flow_1gf3n6o" sourceRef="receiveMultiMediclResultFromTtp" targetRef="downloadResults" />
+    <bpmn:sequenceFlow id="Flow_1harl90" sourceRef="Gateway_160gkf1" targetRef="receiveErrorFromTtp" />
+    <bpmn:sequenceFlow id="Flow_1id9r0h" sourceRef="receiveErrorFromTtp" targetRef="handleError" />
+    <bpmn:sequenceFlow id="Flow_0rwo9pn" sourceRef="checkResults" targetRef="storeResults" />
+    <bpmn:sequenceFlow id="Flow_1s74o06" sourceRef="handleError" targetRef="Gateway_0nlbalq" />
+    <bpmn:sequenceFlow id="Flow_0amk6ah" sourceRef="Gateway_0nlbalq" targetRef="EndEvent" />
+    <bpmn:sequenceFlow id="Flow_1lw96cm" sourceRef="sendRequestToMedics" targetRef="Gateway_160gkf1" />
+    <bpmn:intermediateThrowEvent id="sendCorreltationKeysToTTP" name="send correlation keys to TTP">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/computeDataSharing/#{version}</camunda:inputParameter>
+          <camunda:inputParameter name="messageName">computeDataSharingMessage</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-compute-data-sharing|#{version}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0cx3xe1</bpmn:incoming>
+      <bpmn:outgoing>Flow_18ie7l6</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1boxiz4" messageRef="Message_0a5typw" camunda:class="org.highmed.dsf.bpe.message.SendTtpRequest" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_18ie7l6" sourceRef="sendCorreltationKeysToTTP" targetRef="sendRequestToMedics" />
+    <bpmn:serviceTask id="selectRequestTargetsAndGenerateKeys" name="select request targets and generate keys" camunda:class="org.highmed.dsf.bpe.service.SelectRequestTargets">
+      <bpmn:incoming>Flow_06otxko</bpmn:incoming>
+      <bpmn:outgoing>Flow_0cx3xe1</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="downloadResults" name="download results" camunda:class="org.highmed.dsf.bpe.service.DownloadMultiMedicResults">
+      <bpmn:incoming>Flow_1gf3n6o</bpmn:incoming>
+      <bpmn:outgoing>Flow_025quhl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_025quhl" sourceRef="downloadResults" targetRef="decryptResults" />
+    <bpmn:sequenceFlow id="Flow_1rnnd6d" sourceRef="storeResults" targetRef="Gateway_0nlbalq" />
+    <bpmn:serviceTask id="storeResults" name="store results" camunda:class="org.highmed.dsf.bpe.service.StoreMultiMedicResultsForResearcher">
+      <bpmn:incoming>Flow_0rwo9pn</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rnnd6d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1m59ov0" sourceRef="decryptResults" targetRef="checkResults" />
+    <bpmn:serviceTask id="decryptResults" name="decrypt results" camunda:class="org.highmed.dsf.bpe.service.DecryptMultiMedicResults">
+      <bpmn:incoming>Flow_025quhl</bpmn:incoming>
+      <bpmn:outgoing>Flow_1m59ov0</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmn:message id="Message_1oeg3sw" name="requestDataSharingMessage" />
+  <bpmn:message id="Message_1a3ewlk" name="resultMultiMedicDataSharingMessage" />
+  <bpmn:message id="Message_0j6r7o2" name="errorMultiMedicDataSharingMessage" />
+  <bpmn:message id="Message_0a5typw" name="computeDataSharingMessage" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_requestDataSharing">
+      <bpmndi:BPMNEdge id="Flow_1m59ov0_di" bpmnElement="Flow_1m59ov0">
+        <di:waypoint x="1380" y="140" />
+        <di:waypoint x="1440" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rnnd6d_di" bpmnElement="Flow_1rnnd6d">
+        <di:waypoint x="1690" y="140" />
+        <di:waypoint x="1730" y="140" />
+        <di:waypoint x="1730" y="202" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_025quhl_di" bpmnElement="Flow_025quhl">
+        <di:waypoint x="1220" y="140" />
+        <di:waypoint x="1280" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18ie7l6_di" bpmnElement="Flow_18ie7l6">
+        <di:waypoint x="688" y="227" />
+        <di:waypoint x="760" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lw96cm_di" bpmnElement="Flow_1lw96cm">
+        <di:waypoint x="860" y="227" />
+        <di:waypoint x="915" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0amk6ah_di" bpmnElement="Flow_0amk6ah">
+        <di:waypoint x="1755" y="227" />
+        <di:waypoint x="1822" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1s74o06_di" bpmnElement="Flow_1s74o06">
+        <di:waypoint x="1220" y="300" />
+        <di:waypoint x="1730" y="300" />
+        <di:waypoint x="1730" y="252" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rwo9pn_di" bpmnElement="Flow_0rwo9pn">
+        <di:waypoint x="1540" y="140" />
+        <di:waypoint x="1590" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1id9r0h_di" bpmnElement="Flow_1id9r0h">
+        <di:waypoint x="1058" y="300" />
+        <di:waypoint x="1120" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1harl90_di" bpmnElement="Flow_1harl90">
+        <di:waypoint x="940" y="252" />
+        <di:waypoint x="940" y="300" />
+        <di:waypoint x="1022" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gf3n6o_di" bpmnElement="Flow_1gf3n6o">
+        <di:waypoint x="1058" y="140" />
+        <di:waypoint x="1120" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1q5jnli_di" bpmnElement="Flow_1q5jnli">
+        <di:waypoint x="940" y="202" />
+        <di:waypoint x="940" y="140" />
+        <di:waypoint x="1022" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cx3xe1_di" bpmnElement="Flow_0cx3xe1">
+        <di:waypoint x="570" y="227" />
+        <di:waypoint x="652" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06otxko_di" bpmnElement="Flow_06otxko">
+        <di:waypoint x="380" y="227" />
+        <di:waypoint x="470" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dd6nmz_di" bpmnElement="Flow_0dd6nmz">
+        <di:waypoint x="215" y="227" />
+        <di:waypoint x="280" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_023a6cf_di" bpmnElement="StartEvent">
+        <dc:Bounds x="179" y="209" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="186" y="252" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17quup8_di" bpmnElement="downloadResearchStudyResource">
+        <dc:Bounds x="280" y="187" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1bpkypl_di" bpmnElement="sendRequestToMedics">
+        <dc:Bounds x="760" y="187" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0bxieya_di" bpmnElement="receiveMultiMediclResultFromTtp">
+        <dc:Bounds x="1022" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1005" y="80" width="70" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0jt3zpu_di" bpmnElement="receiveErrorFromTtp">
+        <dc:Bounds x="1022" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1009" y="325" width="62" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_160gkf1_di" bpmnElement="Gateway_160gkf1">
+        <dc:Bounds x="915" y="202" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1sx3j2g_di" bpmnElement="checkResults">
+        <dc:Bounds x="1440" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0t7mxic_di" bpmnElement="handleError">
+        <dc:Bounds x="1120" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0nlbalq_di" bpmnElement="Gateway_0nlbalq" isMarkerVisible="true">
+        <dc:Bounds x="1705" y="202" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1vgrk6d_di" bpmnElement="EndEvent">
+        <dc:Bounds x="1822" y="209" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1820" y="252" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1c9txf8_di" bpmnElement="sendCorreltationKeysToTTP">
+        <dc:Bounds x="652" y="209" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="631" y="252" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wzn9by_di" bpmnElement="selectRequestTargetsAndGenerateKeys">
+        <dc:Bounds x="470" y="187" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09oplxx_di" bpmnElement="downloadResults">
+        <dc:Bounds x="1120" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1a9tjil_di" bpmnElement="storeResults">
+        <dc:Bounds x="1590" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lqm4kz_di" bpmnElement="decryptResults">
+        <dc:Bounds x="1280" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

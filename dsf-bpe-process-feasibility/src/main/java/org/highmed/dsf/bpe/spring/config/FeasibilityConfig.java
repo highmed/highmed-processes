@@ -1,6 +1,8 @@
 package org.highmed.dsf.bpe.spring.config;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.highmed.consent.client.ConsentClient;
+import org.highmed.consent.client.ConsentClientFactory;
 import org.highmed.dsf.bpe.message.SendMedicRequest;
 import org.highmed.dsf.bpe.message.SendMultiMedicErrors;
 import org.highmed.dsf.bpe.message.SendMultiMedicResults;
@@ -14,10 +16,10 @@ import org.highmed.dsf.bpe.service.CheckSingleMedicResults;
 import org.highmed.dsf.bpe.service.CheckTtpComputedMultiMedicResults;
 import org.highmed.dsf.bpe.service.DownloadFeasibilityResources;
 import org.highmed.dsf.bpe.service.DownloadResearchStudyResource;
-import org.highmed.dsf.bpe.service.DownloadResultSets;
+import org.highmed.dsf.bpe.service.DownloadResults;
 import org.highmed.dsf.bpe.service.ExecuteQueries;
 import org.highmed.dsf.bpe.service.ExecuteRecordLink;
-import org.highmed.dsf.bpe.service.FilterQueryResultsByConsent;
+import org.highmed.dsf.bpe.service.FilterResultsByConsent;
 import org.highmed.dsf.bpe.service.GenerateBloomFilters;
 import org.highmed.dsf.bpe.service.GenerateCountFromIds;
 import org.highmed.dsf.bpe.service.HandleErrorMultiMedicResults;
@@ -56,6 +58,9 @@ public class FeasibilityConfig
 	private FhirWebserviceClientProvider fhirClientProvider;
 
 	@Autowired
+	private ConsentClientFactory consentClientFactory;
+
+	@Autowired
 	private MasterPatientIndexClientFactory masterPatientIndexClientFactory;
 
 	@Autowired
@@ -85,7 +90,7 @@ public class FeasibilityConfig
 	@Autowired
 	private Environment environment;
 
-	@Value("${org.highmed.dsf.bpe.openehr.subject_external_id.path:/ehr_status/subject/external_ref/id/value}")
+	@Value("${org.highmed.dsf.bpe.openehr.subject.external.id.path:/ehr_status/subject/external_ref/id/value}")
 	private String ehrIdColumnPath;
 
 	//
@@ -167,9 +172,15 @@ public class FeasibilityConfig
 	}
 
 	@Bean
-	public FilterQueryResultsByConsent filterQueryResultsByConsent()
+	public ConsentClient consentClient()
 	{
-		return new FilterQueryResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper);
+		return consentClientFactory.createClient(environment::getProperty);
+	}
+
+	@Bean
+	public FilterResultsByConsent filterResultsByConsent()
+	{
+		return new FilterResultsByConsent(fhirClientProvider, taskHelper, readAccessHelper, consentClient());
 	}
 
 	@Bean
@@ -239,9 +250,9 @@ public class FeasibilityConfig
 	}
 
 	@Bean
-	public DownloadResultSets downloadResultSets()
+	public DownloadResults downloadResults()
 	{
-		return new DownloadResultSets(fhirClientProvider, taskHelper, readAccessHelper, objectMapper);
+		return new DownloadResults(fhirClientProvider, taskHelper, readAccessHelper, objectMapper);
 	}
 
 	@Bean

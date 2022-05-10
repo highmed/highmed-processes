@@ -7,10 +7,10 @@
 	</meta>
 	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="startPingProcessMessage" />
+			<valueString value="startPing" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping-process|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-start-ping|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -27,10 +27,10 @@
 	</extension>
 	<extension url="http://highmed.org/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="pongMessage" />
+			<valueString value="pong" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-pong|${version}" />
+			<valueCanonical value="http://highmed.org/fhir/StructureDefinition/task-pong|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -47,14 +47,15 @@
 	</extension>
 	<url value="http://highmed.org/bpe/Process/ping" />
 	<!-- version managed by bpe -->
-	<version value="${version}" />
+	<version value="#{version}" />
 	<name value="Ping" />
 	<title value="PING process" />
 	<subtitle value="Communication Testing Process" />
 	<!-- status managed by bpe -->
 	<status value="unknown" />
 	<experimental value="false" />
-	<date value="2021-08-24" />
+	<!-- date managed by bpe -->
+	<date value="#{date}" />
 	<publisher value="HiGHmed" />
 	<contact>
 		<name value="HiGHmed" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0drkcb5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.8.1">
-  <bpmn:process id="highmedorg_localServicesIntegration" isExecutable="true" camunda:versionTag="0.5.0">
+  <bpmn:process id="highmedorg_localServicesIntegration" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:serviceTask id="checkResults" name="check results" camunda:class="org.highmed.dsf.bpe.service.CheckSingleMedicResults">
       <bpmn:incoming>SequenceFlow_0q803rh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_04ouilq</bpmn:outgoing>
@@ -44,7 +44,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0isxkuy" name="needs consent check" sourceRef="ExclusiveGateway_0bq7zdz" targetRef="filterByConsent">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needsConsentCheck == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="filterByConsent" name="filter by consent" camunda:class="org.highmed.dsf.bpe.service.FilterQueryResultsByConsent">
+    <bpmn:serviceTask id="filterByConsent" name="filter by consent" camunda:class="org.highmed.dsf.bpe.service.FilterResultsByConsent">
       <bpmn:incoming>SequenceFlow_0isxkuy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0kzp6tl</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -101,7 +101,7 @@
       <bpmn:incoming>Flow_1yjkp7k</bpmn:incoming>
       <bpmn:outgoing>Flow_125i149</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="storeResult" name="store result" camunda:class="org.highmed.dsf.bpe.service.StoreResult">
+    <bpmn:serviceTask id="storeResult" name="store results" camunda:class="org.highmed.dsf.bpe.service.StoreResults">
       <bpmn:incoming>SequenceFlow_04ouilq</bpmn:incoming>
       <bpmn:outgoing>Flow_0m4rhl9</bpmn:outgoing>
     </bpmn:serviceTask>
