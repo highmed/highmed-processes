@@ -33,16 +33,17 @@ public abstract class AbstractCheckResults extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution)
 	{
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
-		List<QueryResult> filteredResults = filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(results);
-		List<QueryResult> postProcessedResults = postProcessAllPassingResults(filteredResults);
+		List<QueryResult> filteredResults = filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(execution, results);
+		List<QueryResult> postProcessedResults = postProcessAllPassingResults(execution, filteredResults);
 
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS,
 				QueryResultsValues.create(new QueryResults(postProcessedResults)));
 	}
 
-	private List<QueryResult> filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(QueryResults results)
+	private List<QueryResult> filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(DelegateExecution execution,
+			QueryResults results)
 	{
-		Task task = getLeadingTaskFromExecutionVariables();
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 		return results.getResults().stream().filter(r -> testResultAndAddPossibleError(r, task))
 				.collect(Collectors.toList());
 	}
@@ -60,12 +61,15 @@ public abstract class AbstractCheckResults extends AbstractServiceDelegate
 	}
 
 	/**
+	 * @param execution
+	 *            not <code>null</code>
 	 * @param passedResults
 	 *            all {@link QueryResult} objects that passed the checks executed by
 	 *            {@link #testResultAndAddPossibleError(QueryResult, Task)}
 	 * @return a list of {@link QueryResult} objects after post processing
 	 */
-	protected List<QueryResult> postProcessAllPassingResults(List<QueryResult> passedResults)
+	protected List<QueryResult> postProcessAllPassingResults(DelegateExecution execution,
+			List<QueryResult> passedResults)
 	{
 		return passedResults;
 	}

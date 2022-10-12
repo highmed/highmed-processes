@@ -23,8 +23,8 @@ public class HandleErrorMultiMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
-		Task currentTask = getCurrentTaskFromExecutionVariables();
-		Task leadingTask = getLeadingTaskFromExecutionVariables();
+		Task currentTask = getCurrentTaskFromExecutionVariables(execution);
+		Task leadingTask = getLeadingTaskFromExecutionVariables(execution);
 
 		currentTask.getInput().stream().filter(this::isErrorInput)
 				.forEach(input -> transformToOutput(currentTask.getId(), input, leadingTask));

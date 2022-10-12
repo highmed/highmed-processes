@@ -9,6 +9,7 @@ import static org.highmed.dsf.bpe.ConstantsDataSharing.BPMN_EXECUTION_ERROR_CODE
 import java.util.List;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.variable.QueryResult;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
@@ -34,17 +35,18 @@ public class CheckMedicSingleMedicResults extends AbstractCheckResults
 	}
 
 	@Override
-	protected List<QueryResult> postProcessAllPassingResults(List<QueryResult> passedResults)
+	protected List<QueryResult> postProcessAllPassingResults(DelegateExecution execution,
+			List<QueryResult> passedResults)
 	{
-		if (!atLeastOneResultExists(passedResults))
+		if (!atLeastOneResultExists(execution, passedResults))
 			throw new BpmnError(BPMN_EXECUTION_ERROR_CODE_SINGLE_MEDIC_DATA_SHARING_RESULT);
 
 		return passedResults;
 	}
 
-	private boolean atLeastOneResultExists(List<QueryResult> results)
+	private boolean atLeastOneResultExists(DelegateExecution execution, List<QueryResult> results)
 	{
-		Task leadingTask = getLeadingTaskFromExecutionVariables();
+		Task leadingTask = getLeadingTaskFromExecutionVariables(execution);
 		String taskId = leadingTask.getId();
 		String businessKey = getTaskHelper().getFirstInputParameterStringValue(leadingTask, CODESYSTEM_HIGHMED_BPMN,
 				CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY).orElse(null);

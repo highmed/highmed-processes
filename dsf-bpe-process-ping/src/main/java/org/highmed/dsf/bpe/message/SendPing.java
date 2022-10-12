@@ -65,10 +65,10 @@ public class SendPing extends AbstractTaskMessageSend
 	}
 
 	@Override
-	protected void handleSendTaskError(Exception exception, String errorMessage)
+	protected void handleSendTaskError(DelegateExecution execution, Exception exception, String errorMessage)
 	{
-		Target target = getTarget();
-		Task task = getLeadingTaskFromExecutionVariables();
+		Target target = getTarget(execution);
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 
 		if (task != null)
 		{
@@ -86,12 +86,12 @@ public class SendPing extends AbstractTaskMessageSend
 			String specialErrorMessage = createErrorMessage(exception);
 
 			task.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, specialErrorMessage));
-			updateLeadingTaskInExecutionVariables(task);
+			updateLeadingTaskInExecutionVariables(execution, task);
 
 			errorLogger.logPingStatus(target, statusCode, specialErrorMessage);
 		}
 
-		super.handleSendTaskError(exception, errorMessage);
+		super.handleSendTaskError(execution, exception, errorMessage);
 
 	}
 

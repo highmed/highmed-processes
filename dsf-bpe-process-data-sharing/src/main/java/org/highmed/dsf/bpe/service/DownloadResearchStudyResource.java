@@ -52,7 +52,7 @@ public class DownloadResearchStudyResource extends AbstractServiceDelegate imple
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
-		Task task = getLeadingTaskFromExecutionVariables();
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 		FhirWebserviceClient client = getFhirWebserviceClientProvider().getLocalWebserviceClient();
 
 		IdType researchStudyId = getResearchStudyId(task);

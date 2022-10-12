@@ -26,7 +26,8 @@ public class SendStartPing extends AbstractTaskMessageSend
 	@Override
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
-		return getLeadingTaskFromExecutionVariables().getInput().stream().filter(Task.ParameterComponent::hasType)
+		return getLeadingTaskFromExecutionVariables(execution).getInput().stream()
+				.filter(Task.ParameterComponent::hasType)
 				.filter(i -> i.getType().getCoding().stream()
 						.anyMatch(c -> CODESYSTEM_HIGHMED_PING.equals(c.getSystem())
 								&& CODESYSTEM_HIGHMED_PING_VALUE_TARGET_ENDPOINTS.equals(c.getCode())));

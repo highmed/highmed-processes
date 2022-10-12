@@ -28,7 +28,7 @@ public class DownloadMultiMedicResults extends AbstractDownloadResults
 	@Override
 	protected List<QueryResult> getQueryResults(DelegateExecution execution)
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 		Reference requester = task.getRequester();
 
 		return getTaskHelper().getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,

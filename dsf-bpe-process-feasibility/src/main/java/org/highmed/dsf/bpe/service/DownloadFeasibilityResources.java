@@ -66,7 +66,7 @@ public class DownloadFeasibilityResources extends AbstractServiceDelegate implem
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		IdType researchStudyId = getResearchStudyId(task);
 		FhirWebserviceClient client = getWebserviceClient(researchStudyId);

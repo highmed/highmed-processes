@@ -33,7 +33,7 @@ public class SendSingleMedicResultShare extends AbstractTaskMessageSend
 	@Override
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
 	{
-		String targetIdentifier = getTarget().getOrganizationIdentifierValue();
+		String targetIdentifier = getTarget(execution).getOrganizationIdentifierValue();
 		QueryResults shares = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_SINGLE_MEDIC_SHARES);
 

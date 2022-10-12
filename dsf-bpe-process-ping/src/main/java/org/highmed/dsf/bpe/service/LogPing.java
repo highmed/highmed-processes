@@ -22,7 +22,7 @@ public class LogPing extends AbstractServiceDelegate
 	@Override
 	public void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		logger.info("PING from {}", task.getRequester().getIdentifier().getValue());
 	}
