@@ -35,7 +35,7 @@ public class CheckSingleMedicResults extends AbstractServiceDelegate
 	{
 		QueryResults results = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
 
-		Task currentTask = getCurrentTaskFromExecutionVariables();
+		Task currentTask = getCurrentTaskFromExecutionVariables(execution);
 		List<QueryResult> filteredResults = filterErroneousResultsAndAddErrorsToCurrentTaskOutputs(results,
 				currentTask);
 

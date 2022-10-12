@@ -44,7 +44,7 @@ public class SelectMultiMedicResultShareTarget extends AbstractServiceDelegate i
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		String identifier = getLeadingTaskFromExecutionVariables().getRequester().getIdentifier().getValue();
+		String identifier = getLeadingTaskFromExecutionVariables(execution).getRequester().getIdentifier().getValue();
 		String correlationKey = (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_CORRELATION_KEY);
 
 		Endpoint endpoint = endpointProvider.getFirstConsortiumEndpoint(

@@ -36,7 +36,7 @@ public class StoreResultsMultiMedicShare extends AbstractServiceDelegate impleme
 		QueryResults results = (QueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS_MULTI_MEDIC_SHARES);
 
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		List<QueryResult> extendedResults = new ArrayList<>();
 		extendedResults.addAll(results.getResults());

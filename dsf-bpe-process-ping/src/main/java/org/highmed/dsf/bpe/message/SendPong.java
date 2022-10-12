@@ -51,17 +51,17 @@ public class SendPong extends AbstractTaskMessageSend
 	{
 		super.doExecute(execution);
 
-		Target target = getTarget();
-		Task task = getLeadingTaskFromExecutionVariables();
+		Target target = getTarget(execution);
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 		task.addOutput(statusGenerator.createPongStatusOutput(target, CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_SEND));
-		updateLeadingTaskInExecutionVariables(task);
+		updateLeadingTaskInExecutionVariables(execution, task);
 	}
 
 	@Override
-	protected void handleEndEventError(Exception exception, String errorMessage)
+	protected void handleEndEventError(DelegateExecution execution, Exception exception, String errorMessage)
 	{
-		Target target = getTarget();
-		Task task = getLeadingTaskFromExecutionVariables();
+		Target target = getTarget(execution);
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 
 		if (task != null)
 		{
@@ -79,12 +79,12 @@ public class SendPong extends AbstractTaskMessageSend
 			String specialErrorMessage = createErrorMessage(exception);
 
 			task.addOutput(statusGenerator.createPongStatusOutput(target, statusCode, specialErrorMessage));
-			updateLeadingTaskInExecutionVariables(task);
+			updateLeadingTaskInExecutionVariables(execution, task);
 
 			errorLogger.logPongStatus(target, statusCode, specialErrorMessage);
 		}
 
-		super.handleEndEventError(exception, errorMessage);
+		super.handleEndEventError(execution, exception, errorMessage);
 	}
 
 	private String createErrorMessage(Exception exception)

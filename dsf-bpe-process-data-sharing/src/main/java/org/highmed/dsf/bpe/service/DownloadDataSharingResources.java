@@ -68,7 +68,7 @@ public class DownloadDataSharingResources extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		IdType researchStudyId = getResearchStudyId(task);
 		FhirWebserviceClient client = getWebserviceClient(researchStudyId);

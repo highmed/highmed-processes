@@ -35,8 +35,8 @@ public class StoreMultiMedicResultsForResearcher extends StoreResults
 	@Override
 	protected List<QueryResult> postProcessStoredResults(List<QueryResult> storedResults, DelegateExecution execution)
 	{
-		Task currentTask = getCurrentTaskFromExecutionVariables();
-		Task leadingTask = getLeadingTaskFromExecutionVariables();
+		Task currentTask = getCurrentTaskFromExecutionVariables(execution);
+		Task leadingTask = getLeadingTaskFromExecutionVariables(execution);
 
 		storedResults.forEach(result -> addOutput(leadingTask, result));
 

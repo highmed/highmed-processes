@@ -104,7 +104,7 @@ public class GenerateBloomFilters extends AbstractServiceDelegate
 
 	private String getSecurityIdentifier(DelegateExecution execution)
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		if (task.getInstantiatesUri().startsWith(PROFILE_HIGHMED_TASK_LOCAL_SERVICES_PROCESS_URI))
 			return task.getRequester().getIdentifier().getValue();

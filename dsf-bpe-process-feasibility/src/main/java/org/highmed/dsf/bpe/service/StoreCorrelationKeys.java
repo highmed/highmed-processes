@@ -33,7 +33,7 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		List<Target> targets = getTaskHelper()
 				.getInputParameterStringValues(task, CODESYSTEM_HIGHMED_DATA_SHARING,

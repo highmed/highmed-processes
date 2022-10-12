@@ -67,11 +67,11 @@ public class SendMultiMedicResults extends AbstractTaskMessageSend
 
 	private Stream<ParameterComponent> getErrorInput(DelegateExecution execution)
 	{
-		List<Task.TaskOutputComponent> outputs = getLeadingTaskFromExecutionVariables().getOutput();
+		List<Task.TaskOutputComponent> outputs = getLeadingTaskFromExecutionVariables(execution).getOutput();
 
 		if (hasErrorOutput(outputs))
 		{
-			Task task = getLeadingTaskFromExecutionVariables();
+			Task task = getLeadingTaskFromExecutionVariables(execution);
 
 			String taskUrl = new Reference(new IdType(getFhirWebserviceClientProvider().getLocalBaseUrl() + "/Task",
 					task.getIdElement().getIdPart())).getReference();
