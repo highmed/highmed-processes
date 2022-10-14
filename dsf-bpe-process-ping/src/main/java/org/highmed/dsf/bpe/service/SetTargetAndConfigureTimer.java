@@ -1,12 +1,14 @@
 package org.highmed.dsf.bpe.service;
 
 import static org.highmed.dsf.bpe.ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGET;
-import static org.highmed.dsf.bpe.ConstantsPing.BPMN_EXECUTION_VARIABLE_STOP_TIMER;
 import static org.highmed.dsf.bpe.ConstantsPing.BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING_VALUE_TIMER_INTERVAL;
 import static org.highmed.dsf.bpe.ConstantsPing.TIMER_INTERVAL_DEFAULT_VALUE;
 
+import java.util.Objects;
+
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.variable.Variables;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
@@ -20,14 +22,14 @@ import org.highmed.dsf.fhir.variables.TargetValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StartTimer extends AbstractServiceDelegate
+public class SetTargetAndConfigureTimer extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(StartTimer.class);
+	private static final Logger logger = LoggerFactory.getLogger(SetTargetAndConfigureTimer.class);
 
 	private final OrganizationProvider organizationProvider;
 	private final EndpointProvider endpointProvider;
 
-	public StartTimer(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
+	public SetTargetAndConfigureTimer(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider,
 			EndpointProvider endpointProvider)
 	{
@@ -38,11 +40,17 @@ public class StartTimer extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution) throws Exception
+	public void afterPropertiesSet() throws Exception
 	{
-		logger.debug("Setting variable '{}' to false", BPMN_EXECUTION_VARIABLE_STOP_TIMER);
-		execution.setVariable(BPMN_EXECUTION_VARIABLE_STOP_TIMER, Variables.booleanValue(false));
+		super.afterPropertiesSet();
 
+		Objects.requireNonNull(organizationProvider, "organizationProvider");
+		Objects.requireNonNull(endpointProvider, "endpointProvider");
+	}
+
+	@Override
+	protected void doExecute(DelegateExecution execution) throws BpmnError, Exception
+	{
 		String timerInterval = getTimerInterval(execution);
 		logger.debug("Setting variable '{}' to {}", BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, timerInterval);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, Variables.stringValue(timerInterval));

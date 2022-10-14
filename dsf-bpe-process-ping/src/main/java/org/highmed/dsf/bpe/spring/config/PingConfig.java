@@ -9,8 +9,7 @@ import org.highmed.dsf.bpe.service.LogPing;
 import org.highmed.dsf.bpe.service.LogPong;
 import org.highmed.dsf.bpe.service.SelectPingTargets;
 import org.highmed.dsf.bpe.service.SelectPongTarget;
-import org.highmed.dsf.bpe.service.StartTimer;
-import org.highmed.dsf.bpe.service.StopTimer;
+import org.highmed.dsf.bpe.service.SetTargetAndConfigureTimer;
 import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
@@ -45,21 +44,16 @@ public class PingConfig
 	private FhirContext fhirContext;
 
 	@Bean
-	public StartTimer startTimer()
+	public SetTargetAndConfigureTimer setTargetAndConfigureTimer()
 	{
-		return new StartTimer(clientProvider, taskHelper, readAccessHelper, organizationProvider, endpointProvider);
+		return new SetTargetAndConfigureTimer(clientProvider, taskHelper, readAccessHelper, organizationProvider,
+				endpointProvider);
 	}
 
 	@Bean
 	public SendStartPing sendStartPing()
 	{
 		return new SendStartPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
-	}
-
-	@Bean
-	public StopTimer stopTimer()
-	{
-		return new StopTimer(clientProvider, taskHelper, readAccessHelper);
 	}
 
 	@Bean
