@@ -1,7 +1,6 @@
 package org.highmed.dsf.bpe.start;
 
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN;
-import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY;
 import static org.highmed.dsf.bpe.ConstantsBase.CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME;
 import static org.highmed.dsf.bpe.ConstantsBase.NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER;
 import static org.highmed.dsf.bpe.ConstantsPing.CODESYSTEM_HIGHMED_PING;
@@ -22,8 +21,6 @@ import org.hl7.fhir.r4.model.Task.TaskStatus;
 
 public abstract class AbstractStartAutostartPing3MedicFromTtpExampleStarter
 {
-	public static final String BUSINESS_KEY = "95decd83-eb93-410b-b0df-6046256edd7d";
-
 	protected void main(String[] args, String baseUrl) throws Exception
 	{
 		Task task = createStartResource();
@@ -47,8 +44,6 @@ public abstract class AbstractStartAutostartPing3MedicFromTtpExampleStarter
 
 		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_START_PING_AUTOSTART_MESSAGE_NAME)).getType()
 				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
-		task.addInput().setValue(new StringType(BUSINESS_KEY)).getType().addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN)
-				.setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY);
 		task.addInput().setValue(new StringType("Endpoint?identifier=http://highmed.org/sid/endpoint-identifier|"))
 				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_PING)
 				.setCode(CODESYSTEM_HIGHMED_PING_VALUE_TARGET_ENDPOINTS);
