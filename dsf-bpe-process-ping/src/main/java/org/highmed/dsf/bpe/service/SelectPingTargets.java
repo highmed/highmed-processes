@@ -69,10 +69,10 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	@Override
 	public void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getLeadingTaskFromExecutionVariables();
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 		task.addOutput(getTaskHelper().createOutput(CODESYSTEM_HIGHMED_BPMN, CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY,
 				execution.getBusinessKey()));
-		updateLeadingTaskInExecutionVariables(task);
+		updateLeadingTaskInExecutionVariables(execution, task);
 
 		// String localAddress = endpointProvider.getLocalEndpoint().getAddress();
 		// List<Target> targets = endpointProvider.getDefaultEndpointsByOrganizationIdentifier().entrySet().stream()
@@ -84,7 +84,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		// e.getValue().getAddress(), UUID.randomUUID().toString()))
 		// .collect(Collectors.toList());
 
-		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter().map(this::searchForEndpoints)
+		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(execution).map(this::searchForEndpoints)
 				.orElse(allEndpoints());
 
 		Map<String, Identifier> organizationIdentifierByOrganizationId = organizationProvider.getRemoteOrganizations()
@@ -109,9 +109,9 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(new Targets(targets)));
 	}
 
-	private Optional<UriComponents> getTargetEndpointsSearchParameter()
+	private Optional<UriComponents> getTargetEndpointsSearchParameter(DelegateExecution execution)
 	{
-		Task task = getLeadingTaskFromExecutionVariables();
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 		return getTaskHelper()
 				.getFirstInputParameterStringValue(task, CODESYSTEM_HIGHMED_PING,
 						CODESYSTEM_HIGHMED_PING_VALUE_TARGET_ENDPOINTS)

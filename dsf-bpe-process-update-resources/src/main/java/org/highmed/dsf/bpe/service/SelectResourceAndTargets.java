@@ -62,7 +62,7 @@ public class SelectResourceAndTargets extends AbstractServiceDelegate implements
 	@Override
 	public void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 		List<Reference> references = getTaskHelper().getInputParameterReferenceValues(task,
 				CODESYSTEM_HIGHMED_UPDATE_RESOURCE, CODESYSTEM_HIGHMED_UPDATE_RESOURCE_VALUE_BUNDLE_REFERENCE)
 				.collect(Collectors.toList());

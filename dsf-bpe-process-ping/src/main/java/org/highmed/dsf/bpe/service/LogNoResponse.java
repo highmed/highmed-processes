@@ -48,7 +48,7 @@ public class LogNoResponse extends AbstractServiceDelegate
 	@Override
 	public void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getLeadingTaskFromExecutionVariables();
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 
 		Targets targets = (Targets) execution.getVariable(BPMN_EXECUTION_VARIABLE_TARGETS);
 		targets.getEntries().forEach(t -> logAndAddResponseToTask(task, t));

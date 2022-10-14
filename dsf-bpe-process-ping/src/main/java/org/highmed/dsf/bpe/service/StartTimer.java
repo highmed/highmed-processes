@@ -43,7 +43,7 @@ public class StartTimer extends AbstractServiceDelegate
 		logger.debug("Setting variable '{}' to false", BPMN_EXECUTION_VARIABLE_STOP_TIMER);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_STOP_TIMER, Variables.booleanValue(false));
 
-		String timerInterval = getTimerInterval();
+		String timerInterval = getTimerInterval(execution);
 		logger.debug("Setting variable '{}' to {}", BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, timerInterval);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, Variables.stringValue(timerInterval));
 
@@ -53,10 +53,11 @@ public class StartTimer extends AbstractServiceDelegate
 						endpointProvider.getLocalEndpointAddress())));
 	}
 
-	private String getTimerInterval()
+	private String getTimerInterval(DelegateExecution execution)
 	{
-		return getTaskHelper().getFirstInputParameterStringValue(getLeadingTaskFromExecutionVariables(),
-				CODESYSTEM_HIGHMED_PING, CODESYSTEM_HIGHMED_PING_VALUE_TIMER_INTERVAL)
+		return getTaskHelper()
+				.getFirstInputParameterStringValue(getLeadingTaskFromExecutionVariables(execution),
+						CODESYSTEM_HIGHMED_PING, CODESYSTEM_HIGHMED_PING_VALUE_TIMER_INTERVAL)
 				.orElse(TIMER_INTERVAL_DEFAULT_VALUE);
 	}
 }

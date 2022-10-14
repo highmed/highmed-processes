@@ -22,8 +22,8 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class UpdateResourcesProcessPluginDefinition implements ProcessPluginDefinition
 {
-	public static final String VERSION = "0.6.0";
-	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 4, 14);
+	public static final String VERSION = "0.7.0";
+	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 10, 17);
 
 	@Override
 	public String getName()

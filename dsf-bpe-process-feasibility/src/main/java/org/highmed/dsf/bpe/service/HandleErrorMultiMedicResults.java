@@ -21,8 +21,8 @@ public class HandleErrorMultiMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task currentTask = getCurrentTaskFromExecutionVariables();
-		Task leadingTask = getLeadingTaskFromExecutionVariables();
+		Task currentTask = getCurrentTaskFromExecutionVariables(execution);
+		Task leadingTask = getLeadingTaskFromExecutionVariables(execution);
 
 		currentTask.getInput().forEach(input ->
 		{

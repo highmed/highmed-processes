@@ -43,7 +43,8 @@ public class SelectResponseTargetMedic extends AbstractServiceDelegate implement
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		String medicIndentifier = getLeadingTaskFromExecutionVariables().getRequester().getIdentifier().getValue();
+		String medicIndentifier = getLeadingTaskFromExecutionVariables(execution).getRequester().getIdentifier()
+				.getValue();
 
 		Endpoint endpoint = endpointProvider.getFirstConsortiumEndpoint(
 				NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM, CODESYSTEM_HIGHMED_ORGANIZATION_ROLE,
