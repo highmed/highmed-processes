@@ -58,7 +58,7 @@ public class SetTargetAndConfigureTimer extends AbstractServiceDelegate
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET,
 				TargetValues.create(Target.createUniDirectionalTarget(organizationProvider.getLocalIdentifierValue(),
 						endpointProvider.getLocalEndpointIdentifier().getValue(),
-						endpointProvider.getLocalEndpointAddress())));
+						getFhirWebserviceClientProvider().getLocalBaseUrl())));
 	}
 
 	private String getTimerInterval(DelegateExecution execution)
