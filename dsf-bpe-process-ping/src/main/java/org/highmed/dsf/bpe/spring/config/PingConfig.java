@@ -1,12 +1,13 @@
 package org.highmed.dsf.bpe.spring.config;
 
-import org.highmed.dsf.bpe.logging.ErrorLogger;
+import org.highmed.dsf.bpe.mail.ErrorMailService;
 import org.highmed.dsf.bpe.message.SendPing;
 import org.highmed.dsf.bpe.message.SendPong;
 import org.highmed.dsf.bpe.message.SendStartPing;
 import org.highmed.dsf.bpe.service.LogNoResponse;
 import org.highmed.dsf.bpe.service.LogPing;
 import org.highmed.dsf.bpe.service.LogPong;
+import org.highmed.dsf.bpe.service.MailService;
 import org.highmed.dsf.bpe.service.SelectPingTargets;
 import org.highmed.dsf.bpe.service.SelectPongTarget;
 import org.highmed.dsf.bpe.service.SetTargetAndConfigureTimer;
@@ -16,7 +17,9 @@ import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
+import org.highmed.dsf.tools.generator.ProcessDocumentation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -43,6 +46,17 @@ public class PingConfig
 	@Autowired
 	private FhirContext fhirContext;
 
+	@Autowired
+	private MailService mailService;
+
+	@ProcessDocumentation(description = "To enable a mail being send if the ping process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "highmedorg_ping")
+	@Value("${org.highmed.dsf.bpe.ping.mail.onPingProcessFailed:false}")
+	boolean sendPingProcessFailedMail;
+
+	@ProcessDocumentation(description = "To enable a mail being send if the pong process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "highmedorg_pong")
+	@Value("${org.highmed.dsf.bpe.ping.mail.onPongProcessFailed:false}")
+	boolean sendPongProcessFailedMail;
+
 	@Bean
 	public SetTargetAndConfigureTimer setTargetAndConfigureTimer()
 	{
@@ -63,9 +77,10 @@ public class PingConfig
 	}
 
 	@Bean
-	public ErrorLogger errorLogger()
+	public ErrorMailService errorLogger()
 	{
-		return new ErrorLogger();
+		return new ErrorMailService(mailService, clientProvider, organizationProvider.getLocalIdentifierValue(),
+				sendPingProcessFailedMail, sendPongProcessFailedMail);
 	}
 
 	@Bean

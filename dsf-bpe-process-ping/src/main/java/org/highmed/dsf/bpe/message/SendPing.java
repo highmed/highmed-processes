@@ -15,7 +15,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.highmed.dsf.bpe.logging.ErrorLogger;
+import org.highmed.dsf.bpe.mail.ErrorMailService;
 import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
@@ -37,11 +37,11 @@ import ca.uhn.fhir.context.FhirContext;
 public class SendPing extends AbstractTaskMessageSend
 {
 	private final PingStatusGenerator statusGenerator;
-	private final ErrorLogger errorLogger;
+	private final ErrorMailService errorLogger;
 
 	public SendPing(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext,
-			PingStatusGenerator statusGenerator, ErrorLogger errorLogger)
+			PingStatusGenerator statusGenerator, ErrorMailService errorLogger)
 	{
 		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
 
@@ -90,11 +90,13 @@ public class SendPing extends AbstractTaskMessageSend
 			task.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, specialErrorMessage));
 			updateLeadingTaskInExecutionVariables(execution, task);
 
-			errorLogger.logPingStatus(target, statusCode, specialErrorMessage);
+			if (CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
+				errorLogger.endpointNotReachableForPing(task.getIdElement(), target, specialErrorMessage);
+			else if (CODESYSTEM_HIGHMED_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
+				errorLogger.endpointReachablePingForbidden(task.getIdElement(), target, specialErrorMessage);
 		}
 
 		super.handleSendTaskError(execution, exception, errorMessage);
-
 	}
 
 	@Override

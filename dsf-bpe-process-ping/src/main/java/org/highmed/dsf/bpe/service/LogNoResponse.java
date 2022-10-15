@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.highmed.dsf.bpe.delegate.AbstractServiceDelegate;
-import org.highmed.dsf.bpe.logging.ErrorLogger;
+import org.highmed.dsf.bpe.mail.ErrorMailService;
 import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
@@ -25,10 +25,10 @@ public class LogNoResponse extends AbstractServiceDelegate
 	private static final Logger logger = LoggerFactory.getLogger(LogNoResponse.class);
 
 	private final PingStatusGenerator responseGenerator;
-	private final ErrorLogger errorLogger;
+	private final ErrorMailService errorLogger;
 
 	public LogNoResponse(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper, PingStatusGenerator responseGenerator, ErrorLogger errorLogger)
+			ReadAccessHelper readAccessHelper, PingStatusGenerator responseGenerator, ErrorMailService errorLogger)
 	{
 		super(clientProvider, taskHelper, readAccessHelper);
 
@@ -63,6 +63,6 @@ public class LogNoResponse extends AbstractServiceDelegate
 
 		task.addOutput(
 				responseGenerator.createPingStatusOutput(target, CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_MISSING));
-		errorLogger.logPingStatus(target, CODESYSTEM_HIGHMED_PING_STATUS_VALUE_PONG_MISSING);
+		errorLogger.pongMessageNotReceived(task.getIdElement(), target);
 	}
 }
