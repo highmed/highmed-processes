@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,6 +34,7 @@ import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Endpoint;
 import org.hl7.fhir.r4.model.Endpoint.EndpointStatus;
 import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Organization;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
@@ -45,10 +47,10 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 {
 	private static final Logger logger = LoggerFactory.getLogger(SelectPingTargets.class);
 
-	private final OrganizationProvider organizationProvider;
-
 	private static final Pattern endpointResouceTypes = Pattern.compile(
 			"Endpoint|HealthcareService|ImagingStudy|InsurancePlan|Location|Organization|OrganizationAffiliation|PractitionerRole");
+
+	private final OrganizationProvider organizationProvider;
 
 	public SelectPingTargets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
 			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider)
@@ -74,21 +76,10 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 				execution.getBusinessKey()));
 		updateLeadingTaskInExecutionVariables(execution, task);
 
-		// String localAddress = endpointProvider.getLocalEndpoint().getAddress();
-		// List<Target> targets = endpointProvider.getDefaultEndpointsByOrganizationIdentifier().entrySet().stream()
-		// .filter(a -> !localAddress.equals(a.getValue().getAddress()))
-		// .map(e -> Target.createBiDirectionalTarget(e.getKey(),
-		// e.getValue().getIdentifier().stream()
-		// .filter(i -> NAMINGSYSTEM_HIGHMED_ENDPOINT_IDENTIFIER.equals(i.getSystem())).findFirst()
-		// .map(Identifier::getValue).get(),
-		// e.getValue().getAddress(), UUID.randomUUID().toString()))
-		// .collect(Collectors.toList());
-
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(execution).map(this::searchForEndpoints)
-				.orElse(allEndpoints());
+				.orElse(allEndpointsNotLocal());
 
-		Map<String, Identifier> organizationIdentifierByOrganizationId = organizationProvider.getRemoteOrganizations()
-				.stream()
+		Map<String, Identifier> organizationIdentifierByOrganizationId = getAllActiveOrganizations()
 				.collect(Collectors.toMap(o -> o.getIdElement().getIdPart(),
 						o -> o.getIdentifier().stream()
 								.filter(i -> NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER.equals(i.getSystem()))
@@ -167,9 +158,14 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		}
 	}
 
-	private Stream<Endpoint> allEndpoints()
+	private Stream<Endpoint> allEndpointsNotLocal()
 	{
-		return allEndpoints(1, 0);
+		return allEndpoints(1, 0).filter(isLocalEndpoint().negate());
+	}
+
+	private Predicate<? super Endpoint> isLocalEndpoint()
+	{
+		return e -> Objects.equals(getFhirWebserviceClientProvider().getLocalBaseUrl(), e.getAddress());
 	}
 
 	private Stream<Endpoint> allEndpoints(int page, int currentTotal)
@@ -216,5 +212,35 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	private Optional<String> getEndpointAddress(Endpoint endpoint)
 	{
 		return endpoint.hasAddress() ? Optional.of(endpoint.getAddress()) : Optional.empty();
+	}
+
+	private Stream<Organization> getAllActiveOrganizations()
+	{
+		return getActiveOrganizations(1, 0);
+	}
+
+	private Stream<Organization> getActiveOrganizations(int page, int currentTotal)
+	{
+		Map<String, List<String>> queryParameters = new HashMap<String, List<String>>();
+		queryParameters.put("active", Collections.singletonList("true"));
+		queryParameters.put("_page", Collections.singletonList(String.valueOf(page)));
+
+		Bundle searchResult = getFhirWebserviceClientProvider().getLocalWebserviceClient()
+				.searchWithStrictHandling(Organization.class, queryParameters);
+
+		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
+			return Stream.concat(toOrganization(searchResult),
+					getActiveOrganizations(page + 1, currentTotal + searchResult.getEntry().size()));
+		else
+			return toOrganization(searchResult);
+	}
+
+	private Stream<Organization> toOrganization(Bundle searchResult)
+	{
+		Objects.requireNonNull(searchResult, "searchResult");
+
+		return searchResult.getEntry().stream().filter(BundleEntryComponent::hasResource)
+				.filter(e -> e.getResource() instanceof Organization).map(e -> (Organization) e.getResource())
+				.filter(e -> e.getActive());
 	}
 }

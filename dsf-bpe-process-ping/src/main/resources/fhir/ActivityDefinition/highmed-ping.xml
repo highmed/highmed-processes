@@ -38,6 +38,12 @@
 				<code value="REMOTE_ALL" />
 			</valueCoding>
 		</extension>
+		<extension url="requester">
+			<valueCoding>
+				<system value="http://highmed.org/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
 		<extension url="recipient">
 			<valueCoding>
 				<system value="http://highmed.org/fhir/CodeSystem/process-authorization" />

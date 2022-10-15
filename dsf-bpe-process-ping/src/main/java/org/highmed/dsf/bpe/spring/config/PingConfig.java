@@ -78,7 +78,7 @@ public class PingConfig
 	public SendPing sendPing()
 	{
 		return new SendPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext,
-				endpointProvider, responseGenerator(), errorLogger());
+				responseGenerator(), errorLogger());
 	}
 
 	@Bean
