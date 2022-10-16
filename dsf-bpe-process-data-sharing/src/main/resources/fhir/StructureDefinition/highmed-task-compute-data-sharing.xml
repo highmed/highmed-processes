@@ -75,7 +75,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:medic-correlation-key.type.coding">
@@ -115,7 +115,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:needs-record-linkage.type.coding">
@@ -155,7 +155,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:research-study-identifier.type.coding">

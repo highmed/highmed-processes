@@ -76,7 +76,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping|#{version}" />
       </binding>
     </element>
     <element id="Task.input:target-endpoints.type.coding">
@@ -116,7 +116,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping|#{version}" />
       </binding>
     </element>
     <element id="Task.input:timer-interval.type.coding">

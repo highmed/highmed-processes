@@ -77,7 +77,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:research-study.type.coding">
@@ -118,7 +118,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:needs-consent-check.type.coding">

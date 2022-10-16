@@ -76,7 +76,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:research-study-reference.type.coding">
@@ -125,7 +125,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:consortium-identifier.type.coding">
@@ -174,7 +174,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:needs-record-linkage.type.coding">
@@ -214,7 +214,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.input:needs-consent-check.type.coding">
@@ -268,7 +268,7 @@
           <valueString value="TaskOutputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.output:participating-medics.type.coding">
@@ -322,7 +322,7 @@
           <valueString value="TaskOutputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="Task.output:multi-medic-count-result.type.coding">
