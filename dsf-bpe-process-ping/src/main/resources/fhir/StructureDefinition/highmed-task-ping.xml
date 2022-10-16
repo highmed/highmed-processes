@@ -70,7 +70,7 @@
       <path value="Task.input.type" />
       <binding>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping|#{version}" />
       </binding>
     </element>
     <element id="Task.input:endpoint-identifier.type.coding">
@@ -137,14 +137,14 @@
       <min value="1" />
       <type>
         <code value="Extension" />
-        <profile value="http://highmed.org/fhir/StructureDefinition/extension-ping-status" />
+        <profile value="http://highmed.org/fhir/StructureDefinition/extension-ping-status|#{version}" />
       </type>
     </element>
     <element id="Task.output:pong-status.type">
       <path value="Task.output.type"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping"/>
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping|#{version}"/>
       </binding>
     </element>
     <element id="Task.output:pong-status.type.coding">
@@ -178,7 +178,7 @@
       <min value="1"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://highmed.org/fhir/ValueSet/pong-status"/>
+        <valueSet value="http://highmed.org/fhir/ValueSet/pong-status|#{version}"/>
       </binding>
     </element>
   </differential>

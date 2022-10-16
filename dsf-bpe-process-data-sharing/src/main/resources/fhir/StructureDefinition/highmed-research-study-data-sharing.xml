@@ -47,7 +47,7 @@
       <fixedString value="request-form-reference" />
       <binding>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="ResearchStudy.relatedArtifact:request-form-reference.url">
@@ -70,7 +70,7 @@
       <fixedString value="contract-reference" />
       <binding>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="ResearchStudy.relatedArtifact:contract-reference.url">
@@ -93,7 +93,7 @@
       <fixedString value="feasibility-query-reference" />
       <binding>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/data-sharing|#{version}" />
       </binding>
     </element>
     <element id="ResearchStudy.relatedArtifact:feasibility-query-reference.url">
