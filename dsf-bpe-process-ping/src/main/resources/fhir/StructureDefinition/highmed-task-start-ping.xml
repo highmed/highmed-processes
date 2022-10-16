@@ -68,7 +68,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping|#{version}" />
       </binding>
     </element>
     <element id="Task.input:target-endpoints.type.coding">
@@ -151,14 +151,14 @@
       <min value="1" />
       <type>
         <code value="Extension" />
-        <profile value="http://highmed.org/fhir/StructureDefinition/extension-ping-status" />
+        <profile value="http://highmed.org/fhir/StructureDefinition/extension-ping-status|#{version}" />
       </type>
     </element>
     <element id="Task.output:ping-status.type">
       <path value="Task.output.type"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping"/>
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping|#{version}"/>
       </binding>
     </element>
     <element id="Task.output:ping-status.type.coding">
@@ -192,7 +192,7 @@
       <min value="1"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping-status"/>
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping-status|#{version}"/>
       </binding>
     </element>
   </differential>

@@ -59,7 +59,7 @@
       <path value="Task.input.type" />
       <binding>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/update-allow-list" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/update-allow-list|#{version}" />
       </binding>
     </element>
     <element id="Task.input:bundle-reference.type.coding">
