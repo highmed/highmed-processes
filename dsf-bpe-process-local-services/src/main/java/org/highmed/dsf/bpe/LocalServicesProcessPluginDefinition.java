@@ -24,11 +24,11 @@ import ca.uhn.fhir.context.FhirContext;
 public class LocalServicesProcessPluginDefinition implements ProcessPluginDefinition
 {
 	public static final String VERSION = "0.6.0";
-	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 5, 10);
+	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 10, 17);
 
 	private static final String DEPENDENCY_DATA_SHARING_VERSION = "0.6.0";
-	private static final String DEPENDENCY_DATA_SHARING_NAME_AND_VERSION = "dsf-bpe-process-data-sharing-0.6.0";
-	private static final String DEPENDENCY_FEASIBILITY_NAME_AND_VERSION = "dsf-bpe-process-feasibility-0.6.0";
+	private static final String DEPENDENCY_DATA_SHARING_NAME_AND_VERSION = "dsf-bpe-process-data-sharing-0.6.0.1";
+	private static final String DEPENDENCY_FEASIBILITY_NAME_AND_VERSION = "dsf-bpe-process-feasibility-0.6.0.1";
 
 	@Override
 	public String getName()
