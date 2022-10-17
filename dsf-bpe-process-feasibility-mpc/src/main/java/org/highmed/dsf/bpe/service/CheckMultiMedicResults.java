@@ -28,7 +28,7 @@ public class CheckMultiMedicResults extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task leadingTask = getLeadingTaskFromExecutionVariables();
+		Task leadingTask = getLeadingTaskFromExecutionVariables(execution);
 
 		FinalFeasibilityMpcQueryResults results = (FinalFeasibilityMpcQueryResults) execution
 				.getVariable(BPMN_EXECUTION_VARIABLE_FINAL_QUERY_RESULTS);

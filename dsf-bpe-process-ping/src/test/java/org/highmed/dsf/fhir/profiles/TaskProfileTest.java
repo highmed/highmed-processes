@@ -143,8 +143,6 @@ public class TaskProfileTest
 
 		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_START_PING_AUTOSTART_MESSAGE_NAME)).getType()
 				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
-		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY);
 
 		return task;
 	}
@@ -176,8 +174,6 @@ public class TaskProfileTest
 
 		task.addInput().setValue(new StringType(PROFILE_HIGHMED_TASK_STOP_PING_AUTOSTART_MESSAGE_NAME)).getType()
 				.addCoding().setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_MESSAGE_NAME);
-		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
-				.setSystem(CODESYSTEM_HIGHMED_BPMN).setCode(CODESYSTEM_HIGHMED_BPMN_VALUE_BUSINESS_KEY);
 
 		return task;
 	}

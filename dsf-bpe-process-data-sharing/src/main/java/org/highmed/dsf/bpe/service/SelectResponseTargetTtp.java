@@ -47,7 +47,7 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution)
 	{
 		String ttpIdentifier = (String) execution.getVariable(BPMN_EXECUTION_VARIABLE_TTP_IDENTIFIER);
-		String correlationKey = getCorrelationKey();
+		String correlationKey = getCorrelationKey(execution);
 
 		Endpoint endpoint = endpointProvider.getFirstConsortiumEndpoint(
 				NAMINGSYSTEM_HIGHMED_ORGANIZATION_IDENTIFIER_HIGHMED_CONSORTIUM, CODESYSTEM_HIGHMED_ORGANIZATION_ROLE,
@@ -59,9 +59,9 @@ public class SelectResponseTargetTtp extends AbstractServiceDelegate
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGET, TargetValues.create(ttpTarget));
 	}
 
-	private String getCorrelationKey()
+	private String getCorrelationKey(DelegateExecution execution)
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 		return getTaskHelper()
 				.getFirstInputParameterStringValue(task, CODESYSTEM_HIGHMED_BPMN,
 						CODESYSTEM_HIGHMED_BPMN_VALUE_CORRELATION_KEY)

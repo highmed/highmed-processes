@@ -34,7 +34,7 @@ public class StoreSingleMedicResultShareCorrelationKeys extends AbstractServiceD
 	@Override
 	protected void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		Targets targets = getTargets(task);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_TARGETS, TargetsValues.create(targets));

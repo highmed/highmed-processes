@@ -6,7 +6,7 @@
 
 	<groupId>org.highmed.dsf</groupId>
 	<artifactId>dsf-bpe-highmed-processes-pom</artifactId>
-	<version>0.6.0</version>
+	<version>0.6.0.1</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -25,7 +25,7 @@
 		<compileTarget>11</compileTarget>
 		
 		<main.basedir>${project.basedir}</main.basedir>
-		<dsf.version>0.6.0</dsf.version>
+		<dsf.version>0.9.0</dsf.version>
 	</properties>
 
 	<name>highmed-processes</name>
@@ -66,6 +66,11 @@
 			<dependency>
 				<groupId>org.highmed.dsf</groupId>
 				<artifactId>dsf-bpe-process-base</artifactId>
+				<version>${dsf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.highmed.dsf</groupId>
+				<artifactId>dsf-tools-documentation-generator</artifactId>
 				<version>${dsf.version}</version>
 			</dependency>
 			<dependency>
@@ -214,6 +219,11 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>buildnumber-maven-plugin</artifactId>
 					<version>1.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>3.0.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

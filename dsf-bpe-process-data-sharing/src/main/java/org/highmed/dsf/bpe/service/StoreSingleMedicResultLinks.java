@@ -33,7 +33,7 @@ public class StoreSingleMedicResultLinks extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution)
 	{
 		QueryResults currentResults = (QueryResults) execution.getVariable(BPMN_EXECUTION_VARIABLE_QUERY_RESULTS);
-		List<QueryResult> newResults = getNewResults();
+		List<QueryResult> newResults = getNewResults(execution);
 
 		List<QueryResult> extendedResults = Stream.of(currentResults.getResults(), newResults)
 				.flatMap(Collection::stream).collect(Collectors.toList());
@@ -42,9 +42,9 @@ public class StoreSingleMedicResultLinks extends AbstractServiceDelegate
 				QueryResultsValues.create(new QueryResults(extendedResults)));
 	}
 
-	private List<QueryResult> getNewResults()
+	private List<QueryResult> getNewResults(DelegateExecution execution)
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 		Reference requester = task.getRequester();
 
 		return getTaskHelper().getInputParameterWithExtension(task, CODESYSTEM_HIGHMED_DATA_SHARING,

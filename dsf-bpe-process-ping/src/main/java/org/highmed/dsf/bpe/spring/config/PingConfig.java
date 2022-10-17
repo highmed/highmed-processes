@@ -1,23 +1,25 @@
 package org.highmed.dsf.bpe.spring.config;
 
-import org.highmed.dsf.bpe.logging.ErrorLogger;
+import org.highmed.dsf.bpe.mail.ErrorMailService;
 import org.highmed.dsf.bpe.message.SendPing;
 import org.highmed.dsf.bpe.message.SendPong;
 import org.highmed.dsf.bpe.message.SendStartPing;
 import org.highmed.dsf.bpe.service.LogNoResponse;
 import org.highmed.dsf.bpe.service.LogPing;
 import org.highmed.dsf.bpe.service.LogPong;
+import org.highmed.dsf.bpe.service.MailService;
 import org.highmed.dsf.bpe.service.SelectPingTargets;
 import org.highmed.dsf.bpe.service.SelectPongTarget;
-import org.highmed.dsf.bpe.service.StartTimer;
-import org.highmed.dsf.bpe.service.StopTimer;
+import org.highmed.dsf.bpe.service.SetTargetAndConfigureTimer;
 import org.highmed.dsf.bpe.util.PingStatusGenerator;
 import org.highmed.dsf.fhir.authorization.read.ReadAccessHelper;
 import org.highmed.dsf.fhir.client.FhirWebserviceClientProvider;
 import org.highmed.dsf.fhir.organization.EndpointProvider;
 import org.highmed.dsf.fhir.organization.OrganizationProvider;
 import org.highmed.dsf.fhir.task.TaskHelper;
+import org.highmed.dsf.tools.generator.ProcessDocumentation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,10 +46,22 @@ public class PingConfig
 	@Autowired
 	private FhirContext fhirContext;
 
+	@Autowired
+	private MailService mailService;
+
+	@ProcessDocumentation(description = "To enable a mail being send if the ping process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "highmedorg_ping")
+	@Value("${org.highmed.dsf.bpe.ping.mail.onPingProcessFailed:false}")
+	boolean sendPingProcessFailedMail;
+
+	@ProcessDocumentation(description = "To enable a mail being send if the pong process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "highmedorg_pong")
+	@Value("${org.highmed.dsf.bpe.ping.mail.onPongProcessFailed:false}")
+	boolean sendPongProcessFailedMail;
+
 	@Bean
-	public StartTimer startTimer()
+	public SetTargetAndConfigureTimer setTargetAndConfigureTimer()
 	{
-		return new StartTimer(clientProvider, taskHelper, readAccessHelper, organizationProvider, endpointProvider);
+		return new SetTargetAndConfigureTimer(clientProvider, taskHelper, readAccessHelper, organizationProvider,
+				endpointProvider);
 	}
 
 	@Bean
@@ -57,28 +71,23 @@ public class PingConfig
 	}
 
 	@Bean
-	public StopTimer stopTimer()
-	{
-		return new StopTimer(clientProvider, taskHelper, readAccessHelper);
-	}
-
-	@Bean
 	public PingStatusGenerator responseGenerator()
 	{
 		return new PingStatusGenerator();
 	}
 
 	@Bean
-	public ErrorLogger errorLogger()
+	public ErrorMailService errorLogger()
 	{
-		return new ErrorLogger();
+		return new ErrorMailService(mailService, clientProvider, organizationProvider.getLocalIdentifierValue(),
+				sendPingProcessFailedMail, sendPongProcessFailedMail);
 	}
 
 	@Bean
 	public SendPing sendPing()
 	{
 		return new SendPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext,
-				endpointProvider, responseGenerator(), errorLogger());
+				responseGenerator(), errorLogger());
 	}
 
 	@Bean
