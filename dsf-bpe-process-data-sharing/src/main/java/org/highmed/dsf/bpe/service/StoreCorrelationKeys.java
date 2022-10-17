@@ -36,7 +36,7 @@ public class StoreCorrelationKeys extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution)
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		String leadingMedicIdentifier = getLeadingMedicIdentifier(task);
 		execution.setVariable(BPMN_EXECUTION_VARIABLE_LEADING_MEDIC_IDENTIFIER, leadingMedicIdentifier);

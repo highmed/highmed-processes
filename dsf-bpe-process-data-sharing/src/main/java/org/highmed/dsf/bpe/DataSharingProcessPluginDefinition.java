@@ -24,8 +24,8 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class DataSharingProcessPluginDefinition implements ProcessPluginDefinition
 {
-	public static final String VERSION = "0.6.0";
-	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 5, 10);
+	public static final String VERSION = "0.7.0";
+	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 10, 18);
 
 	@Override
 	public String getName()

@@ -90,7 +90,7 @@ public class UpdateAllowList extends AbstractServiceDelegate implements Initiali
 				Map.of("identifier", Collections.singletonList(CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST + "|"
 						+ CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST)));
 
-		Task task = getLeadingTaskFromExecutionVariables();
+		Task task = getLeadingTaskFromExecutionVariables(execution);
 		task.addOutput().setValue(new Reference(new IdType("Bundle", result.getIdPart(), result.getVersionIdPart())))
 				.getType().addCoding().setSystem(CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST)
 				.setCode(CODESYSTEM_HIGHMED_UPDATE_ALLOW_LIST_VALUE_ALLOW_LIST);

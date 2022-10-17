@@ -48,7 +48,7 @@ public class UpdateResources extends AbstractServiceDelegate implements Initiali
 	@Override
 	public void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 		IdType bundleId = getBundleId(task);
 
 		Bundle bundle = (Bundle) execution.getVariable(BPMN_EXECUTION_VARIABLE_BUNDLE);

@@ -30,8 +30,8 @@
         <valueString value="Parameter" />
       </extension>
       <path value="Task.input" />
-      <min value="2" />
-      <max value="4" />
+      <min value="1" />
+      <max value="3" />
     </element>
     <element id="Task.input:message-name">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -50,7 +50,7 @@
       </extension>
       <path value="Task.input" />
       <sliceName value="business-key" />
-      <max value="1" />
+      <max value="0" />
     </element>
     <element id="Task.input:correlation-key">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -76,7 +76,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping|#{version}" />
       </binding>
     </element>
     <element id="Task.input:target-endpoints.type.coding">
@@ -116,7 +116,7 @@
           <valueString value="TaskInputParameterType" />
         </extension>
         <strength value="required" />
-        <valueSet value="http://highmed.org/fhir/ValueSet/ping" />
+        <valueSet value="http://highmed.org/fhir/ValueSet/ping|#{version}" />
       </binding>
     </element>
     <element id="Task.input:timer-interval.type.coding">

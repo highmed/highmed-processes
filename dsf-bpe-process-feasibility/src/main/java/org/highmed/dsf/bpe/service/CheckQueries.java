@@ -54,7 +54,7 @@ public class CheckQueries extends AbstractServiceDelegate implements Initializin
 
 		Map<String, String> queries = new HashMap<>();
 
-		Task leadingTask = getLeadingTaskFromExecutionVariables();
+		Task leadingTask = getLeadingTaskFromExecutionVariables(execution);
 		cohorts.forEach(group ->
 		{
 			String aqlQuery = groupHelper.extractAqlQuery(group);

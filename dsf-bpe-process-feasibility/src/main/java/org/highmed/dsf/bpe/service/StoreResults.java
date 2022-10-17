@@ -54,7 +54,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		boolean needsRecordLinkage = Boolean.TRUE
 				.equals(execution.getVariable(BPMN_EXECUTION_VARIABLE_NEEDS_RECORD_LINKAGE));
 
-		Task task = getCurrentTaskFromExecutionVariables();
+		Task task = getCurrentTaskFromExecutionVariables(execution);
 
 		List<QueryResult> extendedResults = new ArrayList<>();
 		extendedResults.addAll(results.getResults());
