@@ -1,3 +1,13 @@
+## Deprecation Notice
+
+This repository is no longer maintained. Development of the **Ping-Pong** and **Update-Allow-List** porcess plugins has been moved to [datasharingframework/dsf-process-ping-pong](https://github.com/datasharingframework/dsf-process-ping-pong) and [datasharingframework/dsf-process-allow-list](https://github.com/datasharingframework/dsf-process-allow-list) respectively.
+
+Further information on the Data Sharing Framework can be found on the new project website: https://dsf.dev
+
+We would like to thank everyone who has contributed to this repository with code contributions, issues or comments.
+
+---
+
 # HiGHmed Processes 
 
 ![Java CI Build with Maven](https://github.com/highmed/highmed-processes/workflows/Java%20CI%20Build%20with%20Maven/badge.svg)
